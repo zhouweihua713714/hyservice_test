@@ -8,7 +8,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-describe('test/auth/signup.e2e.spec.ts', () => {
+describe('test/auth/signUp.e2e.spec.ts', () => {
   // 引入全局变量
   let app: INestApplication;
   let authService: AuthService;
@@ -36,58 +36,58 @@ describe('test/auth/signup.e2e.spec.ts', () => {
       code: code,
     });
   });
-  test('should not POST /auth/signup without valid information', async () => {
+  test('should not POST /auth/signUp without valid information', async () => {
     //delete code
     await codesRepository.delete({ mobile });
     // make request
     const result = await request(app.getHttpServer())
-      .post('/auth/signup')
+      .post('/auth/signUp')
       .send({ mobile: 'mobile', code: 'code', password: 'password' });
     //use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(10003);
   });
-  test('should not POST /auth/signup without sending code', async () => {
+  test('should not POST /auth/signUp without sending code', async () => {
     //delete code
     await codesRepository.delete({ mobile: mobile });
     // make request
     const result = await request(app.getHttpServer())
-      .post('/auth/signup')
+      .post('/auth/signUp')
       .send({ mobile, code, password });
     //use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(10004);
   });
-  test('should not POST /auth/signup with expired code', async () => {
+  test('should not POST /auth/signUp with expired code', async () => {
     //update code
     await codesRepository.update(mobile, {
       sentAt: new Date(new Date().getTime() - 60000),
     });
     // make request
     const result = await request(app.getHttpServer())
-      .post('/auth/signup')
+      .post('/auth/signUp')
       .send({ mobile, code: code, password });
     //use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(10005);
   });
-  test('should not POST /auth/signup with wrong code', async () => {
+  test('should not POST /auth/signUp with wrong code', async () => {
     //update code
     await codesRepository.update(mobile, {
       sentAt: new Date(new Date().getTime() - 60000),
     });
     // make request
     const result = await request(app.getHttpServer())
-      .post('/auth/signup')
+      .post('/auth/signUp')
       .send({ mobile, code: '111111', password });
     //use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(10005);
   });
-  test('should POST /auth/signup', async () => {
+  test('should POST /auth/signUp', async () => {
     // make request
     const result = await request(app.getHttpServer())
-      .post('/auth/signup')
+      .post('/auth/signUp')
       .send({ mobile, password, code });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);

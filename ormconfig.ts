@@ -1,4 +1,3 @@
-
 module.exports = {    
     type: process.env.POSTGRES_DB_TYPE || 'postgres',
     host: process.env.POSTGRES_DB_HOST || '127.0.0.1',

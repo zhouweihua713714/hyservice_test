@@ -1,4 +1,4 @@
-import { Gender_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { Gender_Types_Enum } from '@/common/enums/common.enum';
 import { bhash } from '@/common/utils';
 import { Logins } from '@/entities/Logins';
 import { Users } from '@/entities/Users';
@@ -12,7 +12,6 @@ import { Repository } from 'typeorm';
 type ParamsType = {
   mobile: string;
   password?: string;
-  type?: string;
 };
 
 export type CreateUserRetType = {
@@ -24,7 +23,7 @@ export type CreateUserRetType = {
 };
 
 export const createUser = async (
-  { mobile, password = '12345678', type = User_Types_Enum.User }: ParamsType,
+  { mobile, password = '12345678'}: ParamsType,
   authService: AuthService,
   module: TestingModule
 ): Promise<CreateUserRetType> => {
@@ -41,7 +40,6 @@ export const createUser = async (
     gender: Gender_Types_Enum.Unknown,
     name: faker.name.findName().slice(0, 19),
     info: {},
-    type,
   } as unknown as Partial<Users>);
   const user = await usersRepository.save(userInfo);
   // create login

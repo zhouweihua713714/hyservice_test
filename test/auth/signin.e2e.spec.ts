@@ -1,5 +1,5 @@
 import { AppModule } from '@/app.module';
-import { Paper_Types_Enum, User_Status_Enum } from '@/common/enums/common.enum';
+import { User_Status_Enum } from '@/common/enums/common.enum';
 import { Users } from '@/entities/Users';
 // import { AuthModule } from '@/modules/auth/auth.module';
 import { AuthService } from '@/modules/auth/auth.service';
@@ -9,11 +9,7 @@ import request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
-  createNodes,
-  CreateNodesRetType,
   createUser,
-  createUserExercise,
-  createUserPaperType,
   CreateUserRetType,
   genMobile,
 } from '../testUtils';
@@ -24,7 +20,6 @@ describe('test/auth/signIn.e2e.spec.ts', () => {
   let authService: AuthService;
   let module: TestingModule;
   let userRet: CreateUserRetType;
-  let nodesSet: CreateNodesRetType;
   let usersRepository;
   // mock arguments
   const mobile = genMobile();
@@ -41,27 +36,6 @@ describe('test/auth/signIn.e2e.spec.ts', () => {
     await app.init();
     // 构造测试数据
     userRet = await createUser({ mobile, password }, authService, module);
-    // create user paper type
-    await createUserPaperType(
-      {
-        userId: userRet.user.id,
-        paperType: Paper_Types_Enum.MathOne,
-      },
-      module
-    );
-
-    // create nodes
-    nodesSet = await createNodes(module);
-
-    // create  user exercise
-    await createUserExercise(
-      {
-        userId: userRet.user.id,
-        nodeId: nodesSet.nodes[1].id,
-        paperType: Paper_Types_Enum.MathOne,
-      },
-      module
-    );
   });
   test('should not POST /auth/signIn if mobile not found', async () => {
     // make request
@@ -91,15 +65,11 @@ describe('test/auth/signIn.e2e.spec.ts', () => {
     expect(result.body.code).toBe(200);
     expect(result.body.message).toBe('ok');
     expect(result.body.data.mobile).toBe(mobile);
-    expect(result.body.data.type).toBeTruthy();
-    expect(result.body.data.exerciseId).toBeTruthy();
   });
   test('should not POST /auth/signIn if account is disabled', async () => {
     // update user
     await usersRepository.update(userRet.user.id, {
-      status: {
-        enumId: User_Status_Enum.Disabled,
-      },
+      status:  User_Status_Enum.Disabled,
     });
     // make request
     const result = await request(app.getHttpServer())
@@ -112,7 +82,6 @@ describe('test/auth/signIn.e2e.spec.ts', () => {
   afterEach(async () => {
     // delete user
     await userRet.finalize();
-    await nodesSet.finalize();
     if (app) {
       await app.close();
     }

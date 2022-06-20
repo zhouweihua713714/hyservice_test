@@ -1,8 +1,8 @@
 {
   "name": "hy-server",
   "version": "1.0.0",
-  "description": "its services built with nest architecture",
-  "author": "ccnu",
+  "description": "hy services built with nest architecture",
+  "author": "hana",
   "private": true,
   "license": "UNLICENSED",
 
@@ -22,7 +22,7 @@
     "test:watch": "jest --runInBand --watch",
     "test:cov": "jest --runInBand --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "typeorm": "ts-node node_modules/typeorm/cli.js  -f ormconfig",
+    "typeorm": "ts-node node_modules/typeorm/cli.js  -f ormConfig",
     "migration:generate": "yarn run typeorm migration:generate -d src/migrations -n",
     "migration:create": "yarn run typeorm migration:create -d src/migrations -n",
     "migration:revert": "yarn run typeorm migration:revert"

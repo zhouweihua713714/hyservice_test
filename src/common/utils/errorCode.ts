@@ -93,7 +93,7 @@ export const ErrorCode = {
       code: 10012,
       message: '该账号已经被停用, 请联系管理员',
     },
-    USER_NOT_SIGNUP_ERROR: {
+    USER_NOT_signUp_ERROR: {
       code: 10013,
       message: '该手机未在本站注册或手机验证码输入错误',
     },
@@ -101,7 +101,7 @@ export const ErrorCode = {
       code: 10014,
       message: '用户名/密码错误或手机号未在本站注册',
     },
-    SIGNUP_ERROR: {
+    signUp_ERROR: {
       code: 10015,
       message: '注册失败',
     },

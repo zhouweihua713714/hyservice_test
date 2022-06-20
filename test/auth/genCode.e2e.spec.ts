@@ -7,7 +7,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-describe('test/auth/signup.e2e.spec.ts', () => {
+describe('test/auth/signUp.e2e.spec.ts', () => {
   // 引入全局变量
   let app: INestApplication;
   let authService: AuthService;

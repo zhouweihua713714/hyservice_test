@@ -75,7 +75,6 @@ describe('test/auth/modifyPassword.e2e.spec.ts', () => {
     expect(loginResult.body.code).toBe(200);
     expect(loginResult.body.message).toBe('ok');
     expect(loginResult.body.data.mobile).toBe(mobile);
-    expect(loginResult.body.data.type).toBeTruthy();
   });
 
   afterEach(async () => {

@@ -49,7 +49,7 @@ describe('test/files/oss/launch.e2e.spec.ts', () => {
     expect(result.status).toBe(HttpStatus.UNAUTHORIZED);
   });
 
-  test('should POST /file/launch after signup', async () => {
+  test('should POST /file/launch after signUp', async () => {
     // make request
     const result = await request(app.getHttpServer())
       .post('/file/launch/')
@@ -66,7 +66,6 @@ describe('test/files/oss/launch.e2e.spec.ts', () => {
       JSON.stringify({
         id: userRet.user.id,
         status: userRet.user.status,
-        type: userRet.user.type,
         timestamp: Date.now(),
       }),
       config.get<string>('encode.secretKey') || '',

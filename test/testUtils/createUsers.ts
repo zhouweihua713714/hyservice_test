@@ -1,4 +1,4 @@
-import { Gender_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { Gender_Types_Enum } from '@/common/enums/common.enum';
 import { Users } from '@/entities/Users';
 import { TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -19,7 +19,6 @@ export type CreateUsersRetType = {
   users: {
     id: string;
     authorization: string;
-    type: { enumId: string };
   }[];
   finalize: () => void;
 };
@@ -37,16 +36,11 @@ export const createUsers = async ({
   // get user data
   const userData = types.map((type) => {
     return {
-      type: {
-        enumId: type ? type : User_Types_Enum.User,
-      },
       mobile: faker.phone.phoneNumberFormat().replace(/-/g, ''),
       name: faker.name.findName().slice(0, 19),
       password: password,
       info: {},
-      gender: {
-        enumId: Gender_Types_Enum.Unknown,
-      },
+      gender: Gender_Types_Enum.Unknown,
     };
   });
   // delete before delete
@@ -80,7 +74,6 @@ export const createUsers = async ({
   const userResults = users.map((user) => {
     return {
       id: user.id,
-      type: user.type,
       authorization: `Bearer ${authService.createToken(instanceToPlain(user))}`,
     };
   });

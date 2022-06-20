@@ -40,7 +40,7 @@ export default () => {
       },
       synchronize: false,
       logging: false,
-      migrationsRun: true,
+      migrationsRun: false,
       extra: {
         connectionLimit: process.env.POSTGRES_DB_POOL_SIZE || 20,
       },

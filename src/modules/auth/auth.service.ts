@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User_Status_Enum, User_Types_Enum } from '@/common/enums/common.enum';
-import { JwtUser, signInResInfo, SignupResInfo } from '@/modules/auth/auth.types';
+import { User_Status_Enum} from '@/common/enums/common.enum';
+import { JwtUser, signInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
 import { ResultData } from '@/common/utils/result';
 import { bcompare } from '@/common/utils';
 import { Logins } from '@/entities/Logins';
 import { Users } from '@/entities/Users';
 import { Connection, getConnection } from 'typeorm';
-import { GenCodeDto, ModifyPasswordDto, ResetPasswordDto, signInDto, SignupDto } from './auth.dto';
+import { GenCodeDto, ModifyPasswordDto, ResetPasswordDto, signInDto, signUpDto } from './auth.dto';
 import { ErrorCode } from '@/common/utils/errorCode';
 import { Codes } from '@/entities/Codes';
 import { constant } from '@/common/utils/constant';
@@ -38,11 +38,7 @@ export class AuthService {
       .addSelect('users.mobile', 'mobile')
       .addSelect('users.name', 'name')
       .addSelect('users.status', 'status')
-      .addSelect('users.type', 'type')
       .addSelect('logins.token', 'token')
-      .addSelect('userCourses.courseId', 'courseId')
-      .addSelect('userPaperTypes.paperType', 'paperType')
-      .addSelect('userExercises.id', 'exerciseId')
       .innerJoin(Logins, 'logins', 'users.mobile=logins.mobile')
       .where('logins.mobile2 = :mobile', { mobile })
       .andWhere('logins.provider = :provider', { provider: provider || 'local' })
@@ -67,7 +63,6 @@ export class AuthService {
       mobile: signInResInfo.mobile,
       name: signInResInfo.name,
       status: signInResInfo.status,
-      type: signInResInfo.type,
     };
     signInResInfo.token = this.createToken(payload);
     return ResultData.ok({ data: signInResInfo });
@@ -99,10 +94,10 @@ export class AuthService {
 
   /**
    * @description 注册, 返回用户和token信息
-   * @param {SignupDto} params 注册信息
+   * @param {signUpDto} params 注册信息
    * @returns {ResultData} 返回用户聚合信息
    */
-  async signup(params: SignupDto): Promise<ResultData> {
+  async signUp(params: signUpDto): Promise<ResultData> {
     const { mobile, password, code } = params;
     const codeRegex = /^([0-9]{6})$/;
     if (!codeRegex.test(code)) {
@@ -155,15 +150,11 @@ export class AuthService {
       .execute();
 
     // return result
-    const signupResInfo: SignupResInfo | undefined = {
+    const signUpResInfo: signUpResInfo | undefined = {
       id: affectRows.identifiers[0].id,
       mobile: mobile,
       name: null,
       status: User_Status_Enum.Enabled,
-      type: User_Types_Enum.User,
-      courseId: null,
-      paperType: null,
-      exerciseId: null,
       token: '',
     };
     // get token
@@ -172,13 +163,9 @@ export class AuthService {
       mobile: mobile,
       name: null,
       status: User_Status_Enum.Enabled,
-      type: User_Types_Enum.User,
-      userCourses: [],
-      userPaperTypes: [],
-      userExercises: [],
     };
-    signupResInfo.token = this.createToken(payload);
-    return ResultData.ok({ data: signupResInfo });
+    signUpResInfo.token = this.createToken(payload);
+    return ResultData.ok({ data: signUpResInfo });
   }
 
   /**
@@ -246,7 +233,7 @@ export class AuthService {
       .getOne();
     // if user login is not exist, then throw error
     if (!loginInfo) {
-      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_SIGNUP_ERROR });
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_signUp_ERROR });
     }
     // check code
     const codeInfo = await this.connection

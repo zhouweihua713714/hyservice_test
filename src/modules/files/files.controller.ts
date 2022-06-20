@@ -1,6 +1,5 @@
 import { AllowAnon } from '@/common/decorators/allowAnon.decorator';
 import { ApiResult } from '@/common/decorators/apiResult.decorator';
-import { Exercise_Types_Enum } from '@/common/enums/common.enum';
 import { ResultData } from '@/common/utils/result';
 import {
   Body,

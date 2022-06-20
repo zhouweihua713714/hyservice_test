@@ -29,7 +29,7 @@ export class OSSService {
    */
   async launch(params: LaunchDto, req: any): Promise<ResultData> {
     // 手动校验是否通过
-    let user: Pick<signInResInfo, 'id' | 'status' | 'type'> | null = null;
+    let user: Pick<signInResInfo, 'id' | 'status' > | null = null;
     const token: string = req.get('Authorization');
     if (token) {
       // 兼容老token
@@ -41,7 +41,6 @@ export class OSSService {
         user = {
           id: signInResInfo.id,
           status: signInResInfo.status,
-          type: signInResInfo.type,
         };
       }
     }
@@ -56,7 +55,6 @@ export class OSSService {
       user = {
         id: info.id,
         status: info.status,
-        type: info.type,
       };
     }
     if (!user) {

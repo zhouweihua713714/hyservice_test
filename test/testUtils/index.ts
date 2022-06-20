@@ -1,14 +1,5 @@
 export * from './genMobile';
 export * from './createUser';
-export * from './createNodes';
-export * from './createUserExercise';
-export * from './createUserPaperType';
-export * from './createUploadTokenOfCache';
-export * from './createUserExercisesDetails';
 export * from './createFiles';
-export * from './createQuestions';
-export * from './createSource';
-export * from './createTests';
-export * from './createUserCourse';
 export * from './createUsers';
-export * from './createUserWrongQuestions';
+

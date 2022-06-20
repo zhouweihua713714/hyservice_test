@@ -1,7 +1,4 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { GenderTypes } from './GenderTypes';
-import { UserStatus } from './UserStatus';
-import { UserTypes } from './UserTypes';
 import { Logins } from './Logins';
 
 @Index('users_id_key', ['id'], { unique: true })
@@ -12,45 +9,30 @@ export class Users {
   @Column('text', {
     primary: true,
     name: 'id',
-    // default: () => 'uuid',
+    default: () => 'uuid_generate_v4()',
+    comment:'主键id'
   })
   id: string;
 
-  @Column('character varying', { name: 'mobile', unique: true, length: 11 })
+  @Column('character varying', { name: 'mobile', unique: true, length: 11 , comment:'手机号码'})
   mobile: string;
 
-  @Column('character varying', { name: 'name', nullable: true, length: 20 })
+  @Column('character varying', { name: 'name', nullable: true, length: 20 ,comment:'姓名'})
   name: string | null;
 
-  @Column('json', { name: 'info', default: {} })
+  @Column('json', { name: 'info', default: {},comment:'用户拓展信息' })
   info: object;
 
-  @Column('date', { name: 'created_at', default: () => 'now()' })
+  @Column('date', { name: 'created_at', default: () => 'now()',comment:'创建时间' })
   createdAt: string;
 
+  @Column('character varying', { name: 'gender',default: () => "'unknown'", length: 10 ,comment:'性别:男:male,女:female,未知:unknown'})
+  gender: string ;
 
-  // @OneToMany(() => Logins, (logins) => logins.mobile2)
-  // logins: Logins[];
+  @Column('character varying', { name: 'status',default: () => "'enabled'", length: 10 ,comment:'是否有效:enabled,disabled 无效'})
+  status: string;
 
+  @OneToMany(() => Logins, (logins) => logins.mobile2)
+  logins: Logins[];
 
-  @ManyToOne(() => GenderTypes, (genderTypes) => genderTypes.users, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'gender', referencedColumnName: 'enumId' }])
-  gender: GenderTypes;
-
-  @ManyToOne(() => UserStatus, (userStatus) => userStatus.users, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'status', referencedColumnName: 'enumId' }])
-  status: UserStatus;
-
-  @ManyToOne(() => UserTypes, (userTypes) => userTypes.users, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn([{ name: 'type', referencedColumnName: 'enumId' }])
-  type: UserTypes;
 }

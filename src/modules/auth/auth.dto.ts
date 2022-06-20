@@ -1,4 +1,3 @@
-import { User_Types_Enum } from '@/common/enums/common.enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
@@ -29,7 +28,7 @@ export class signInDto {
   @IsOptional()
   provider: string;
 }
-export class SignupDto {
+export class signUpDto {
   @ApiProperty({ description: '用户手机号' })
   @IsString({ message: 'mobile 类型错误, 正确类型 string' })
   @IsNotEmpty({ message: '手机号不能为空' })
@@ -41,15 +40,6 @@ export class SignupDto {
   @IsNotEmpty({ message: '验证码不能为空' })
   @MaxLength(6)
   code: string;
-
-  @ApiPropertyOptional({
-    description: '用户类型',
-    enum: User_Types_Enum,
-  })
-  @IsOptional()
-  @IsString({ message: 'type 类型错误,正确类型 string' })
-  @IsEnum(User_Types_Enum)
-  type: string;
 
   @ApiProperty({ description: '密码, 8~20位大小写字母或者数字' })
   @IsString({ message: 'password 类型错误, 正确类型 string' })

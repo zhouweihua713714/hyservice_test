@@ -35,7 +35,7 @@ export class ContextTrace {
   ) {}
 }
 
-Log4js.addLayout('Its-Server', (logConfig: any) => {
+Log4js.addLayout('HY-Server', (logConfig: any) => {
   return (logEvent: Log4js.LoggingEvent): string => {
     let moduleName = '';
     let position = '';
@@ -100,7 +100,7 @@ Log4js.configure({
   appenders: {
     console: {
       type: 'console',
-      layout: { type: 'Its-Server' },
+      layout: { type: 'HY-Server' },
     },
     access: {
       type: 'dateFile',

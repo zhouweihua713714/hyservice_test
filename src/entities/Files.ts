@@ -3,7 +3,7 @@ import { Column, Entity, Index } from 'typeorm';
 @Index('files_pkey', ['id'], { unique: true })
 @Entity('files', { schema: 'public' })
 export class Files {
-  @Column('text', { primary: true, name: 'id' })
+  @Column('text', { primary: true, name: 'id', default: () => 'uuid_generate_v4()' })
   id: string;
 
   @Column('text', { name: 'filename' })
