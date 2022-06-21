@@ -24,7 +24,7 @@ import { FilesModule } from './modules/files/files.module';
       useFactory: (config: ConfigService) => {
         return {
           entities: [`${__dirname}/entities/*{.ts,.js}`],
-          migrations:['../migrations/*{.ts,.js}'],
+          migrations: [`${__dirname}/migrations/*{.ts,.js}`],
           keepConnectionAlive: true,
           ...config.get('db'),
         } as TypeOrmModuleOptions;

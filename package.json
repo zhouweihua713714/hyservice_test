@@ -27,8 +27,8 @@
     "test:cov": "jest --runInBand --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "typeorm": "ts-node node_modules/typeorm/cli.js  -f ormConfig",
-    "migration:generate": "yarn run typeorm migration:generate -d migrations -n",
-    "migration:create": "yarn run typeorm migration:create -d migrations -n",
+    "migration:generate": "yarn run typeorm migration:generate -d src/migrations -n",
+    "migration:create": "yarn run typeorm migration:create -d src/migrations -n",
     "migration:revert": "yarn run typeorm migration:revert"
   },
   "dependencies": {

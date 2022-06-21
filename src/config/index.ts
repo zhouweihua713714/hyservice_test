@@ -34,13 +34,13 @@ export default () => {
       username: process.env.POSTGRES_DB_USERNAME || 'postgres',
       password: process.env.POSTGRES_DB_PASSWORD || '1234abcdpostgres',
       database: process.env.POSTGRES_DB_DATABASE || 'postgres',
-      cli: {
-        'entitiesDir': '../entities',
-        'migrationsDir': '../migrations'
-      },
+      // cli: {
+      //   'entitiesDir': './entities',
+      //   'migrationsDir': '../migrations'
+      // },
       synchronize: false,
       logging: false,
-      migrationsRun: false,
+      migrationsRun:false,
       extra: {
         connectionLimit: process.env.POSTGRES_DB_POOL_SIZE || 20,
       },
