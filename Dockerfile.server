@@ -1,4 +1,4 @@
-FROM registry.cn-shanghai.aliyuncs.com/mathits/its:base-rest-image as build
+FROM registry.cn-shanghai.aliyuncs.com/mathits/hy:base-rest-image as build
 
 ENV TZ=Asia/Shanghai \
     DEBIAN_FRONTEND=noninteractive
@@ -10,8 +10,19 @@ RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
 
 COPY package.json /app/package.json
 COPY .npmrc /app/.npmrc
+COPY ormConfig.ts  /app/ormConfig.ts
 
 RUN yarn
+
+ARG POSTGRES_DB_TYPE
+ARG POSTGRES_DB_HOST
+ARG POSTGRES_DB_PORT
+ARG POSTGRES_DB_USERNAME
+ARG POSTGRES_DB_PASSWORD
+ARG POSTGRES_DB_DATABASE
+
+RUN yarn run typeorm migration:run
+
 COPY . /app/
 RUN yarn build
 
