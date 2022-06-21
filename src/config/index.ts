@@ -35,8 +35,8 @@ export default () => {
       password: process.env.POSTGRES_DB_PASSWORD || '1234abcdpostgres',
       database: process.env.POSTGRES_DB_DATABASE || 'postgres',
       cli: {
-        "entitiesDir": "../entities",
-        "migrationsDir": "../migrations"
+        'entitiesDir': '../entities',
+        'migrationsDir': '../migrations'
       },
       synchronize: false,
       logging: false,

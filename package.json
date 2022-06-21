@@ -5,7 +5,11 @@
   "author": "hana",
   "private": true,
   "license": "UNLICENSED",
-
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test  --passWithNoTests --forceExit"
+    }
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -23,8 +27,8 @@
     "test:cov": "jest --runInBand --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "typeorm": "ts-node node_modules/typeorm/cli.js  -f ormConfig",
-    "migration:generate": "yarn run typeorm migration:generate -d src/migrations -n",
-    "migration:create": "yarn run typeorm migration:create -d src/migrations -n",
+    "migration:generate": "yarn run typeorm migration:generate -d migrations -n",
+    "migration:create": "yarn run typeorm migration:create -d migrations -n",
     "migration:revert": "yarn run typeorm migration:revert"
   },
   "dependencies": {
@@ -53,6 +57,7 @@
     "dayjs": "^1.10.7",
     "dotenv": "^16.0.0",
     "dotenv-expand": "^8.0.1",
+    "eslint-plugin-import": "^2.22.1",
     "express": "^4.17.2",
     "express-rate-limit": "^5.5.1",
     "helmet": "^4.6.0",

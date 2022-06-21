@@ -1,10 +1,9 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class init1655693812503 implements MigrationInterface {
-    name = 'init1655693812503'
+export class init1655776948453 implements MigrationInterface {
+    name = 'init1655776948453'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
         await queryRunner.query(`CREATE TABLE "codes" ("mobile" text NOT NULL, "code" character varying(6) NOT NULL, "sent_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), CONSTRAINT "PK_55409b69c6fb865eb4fcd7f0fd5" PRIMARY KEY ("mobile"))`);
         await queryRunner.query(`CREATE UNIQUE INDEX "codes_pkey" ON "codes" ("mobile") `);
         await queryRunner.query(`CREATE UNIQUE INDEX "codes_id_key" ON "codes" ("mobile") `);
