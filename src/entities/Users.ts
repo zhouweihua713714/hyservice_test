@@ -26,10 +26,10 @@ export class Users {
   @Column('date', { name: 'created_at', default: () => 'now()',comment:'创建时间' })
   createdAt: string;
 
-  @Column('character varying', { name: 'gender',default: () => "'unknown'", length: 10 ,comment:'性别:男:male,女:female,未知:unknown'})
+  @Column('character varying', { name: 'gender',default: () => '\'unknown\'', length: 10 ,comment:'性别:男:male,女:female,未知:unknown'})
   gender: string ;
 
-  @Column('character varying', { name: 'status',default: () => "'enabled'", length: 10 ,comment:'是否有效:enabled,disabled 无效'})
+  @Column('character varying', { name: 'status',default: () => '\'enabled\'', length: 10 ,comment:'是否有效:enabled,disabled 无效'})
   status: string;
 
   @OneToMany(() => Logins, (logins) => logins.mobile2)

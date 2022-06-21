@@ -9,7 +9,6 @@ import { RedisUtilModule } from './common/libs/redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HomeModule } from './modules/home/home.module';
 import { FilesModule } from './modules/files/files.module';
-
 @Module({
   imports: [
     // 配置模块
@@ -25,7 +24,7 @@ import { FilesModule } from './modules/files/files.module';
       useFactory: (config: ConfigService) => {
         return {
           entities: [`${__dirname}/entities/*{.ts,.js}`],
-          migrations:[`${__dirname}/migrations/*{.ts,.js}`],
+          migrations:['../migrations/*{.ts,.js}'],
           keepConnectionAlive: true,
           ...config.get('db'),
         } as TypeOrmModuleOptions;
