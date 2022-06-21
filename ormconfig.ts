@@ -7,10 +7,10 @@ module.exports = {
     database: process.env.POSTGRES_DB_DATABASE || 'postgres',
     migrationsRun: true,
     entities: ['src/entities/*{.ts,.js}'],
-    migrations: ['src/migrations/*{.ts,.js}'],
+    migrations: ['migrations/*{.ts,.js}'],
     cli: {
       "entitiesDir": "src/entities",
-      "migrationsDir": "src/migrations"
+      "migrationsDir": "migrations"
     },
     synchronize: false,
     logging: false,
