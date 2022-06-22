@@ -1,3 +1,5 @@
+require('dotenv');
+
 import rateLimit from 'express-rate-limit';
 import 'tsconfig-paths/register';
 import helmet from 'helmet';

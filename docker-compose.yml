@@ -2,19 +2,21 @@ version: "3.6"
 services:
   postgres:
     ports:
-      - "5434:5432"
+      - "${POSTGRES_PORT}:5432"
     image: postgres:13
     restart: always
     environment:
-      POSTGRES_PASSWORD: 1234abcdpostgres 
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
       TZ: Asia/Shanghai
   redis:
     image: redis:6.2.4
     command: redis-server --requirepass a39ecd1899b1d6f3fe930302c78feb69
     ports:
-      - 7379:6379
+      - "${POSTGRES_PORT}REDIS_PORT:6379"
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: [ 'CMD', 'redis-cli', 'ping' ]
       interval: 10s
       timeout: 5s
       retries: 3

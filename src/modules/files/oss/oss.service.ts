@@ -9,7 +9,7 @@ import { signInResInfo } from '@/modules/auth/auth.types';
 import { AccessDto, LaunchDto } from './oss.dto';
 import { getCallback, getPolicy, getSignature } from '@/common/utils/ossUtils';
 import { FilesDao } from '../files.dao';
-import { Files } from '@/entities/Files';
+import { Files } from '@/entities/Files.entity';
 import { ErrorCode } from '@/common/utils/errorCode';
 import { AuthService } from '@/modules/auth/auth.service';
 import { decode } from '@/common/utils';

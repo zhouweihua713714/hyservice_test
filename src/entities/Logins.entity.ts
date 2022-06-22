@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import { Users } from './Users';
+import { Users } from './Users.entity';
 
 @Index('logins_pkey', ['mobile', 'provider'], { unique: true })
 @Entity('logins', { schema: 'public' })
@@ -17,6 +17,6 @@ export class Logins {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'mobile', referencedColumnName: 'mobile' }])
-  mobile2: Users;
+  @JoinColumn([{ name: 'id', referencedColumnName: 'id' }])
+  mobile_user: Users;
 }

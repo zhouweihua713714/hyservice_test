@@ -1,13 +1,12 @@
 import faker from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
 import { Repository } from 'typeorm';
-import { Files } from '@/entities/Files';
+import { Files } from '@/entities/Files.entity';
 import { TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 export type CreateFilesRetType = {
   files: Files[];
-  finalize: () => void;
 };
 type ParamsType = {
   payloads: {
@@ -33,9 +32,6 @@ export const createFiles = async ({
   // create files
   const files = await filesRepository.save(filesData);
   return {
-    files,
-    finalize: async () => {
-      await filesRepository.delete(filesData.map((file) => file.id));
-    },
+    files
   };
 };

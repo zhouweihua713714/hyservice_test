@@ -1,5 +1,5 @@
 import { AppModule } from '@/app.module';
-import { Codes } from '@/entities/Codes';
+import { Codes } from '@/entities/Codes.entity';
 import { AuthService } from '@/modules/auth/auth.service';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -7,7 +7,8 @@ import request from 'supertest';
 import { createUser, CreateUserRetType } from '../testUtils';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-describe('test/auth/resetPassword.e2e.spec.ts', () => {
+
+describe.skip('test/auth/resetPassword.e2e.spec.ts', () => {
   // 引入全局变量
   let app: INestApplication;
   let authService: AuthService;
@@ -100,8 +101,6 @@ describe('test/auth/resetPassword.e2e.spec.ts', () => {
   });
   afterEach(async () => {
     // delete user
-    await userRet.finalize();
-    //delete code
     await codesRepository.delete({ mobile });
     if (app) {
       await app.close();

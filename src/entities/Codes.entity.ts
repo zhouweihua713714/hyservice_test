@@ -1,10 +1,10 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, PrimaryColumn } from 'typeorm';
 
 @Index('codes_id_key', ['mobile'], { unique: true })
 @Index('codes_pkey', ['mobile'], { unique: true })
 @Entity('codes', { schema: 'public' })
 export class Codes {
-  @Column('text', { primary: true, name: 'mobile' })
+  @PrimaryColumn('text', { primary: true, name: 'mobile' })
   mobile: string;
 
   @Column('character varying', { name: 'code', length: 6 })

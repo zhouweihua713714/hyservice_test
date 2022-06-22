@@ -4,12 +4,12 @@ import { User_Status_Enum} from '@/common/enums/common.enum';
 import { JwtUser, signInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
 import { ResultData } from '@/common/utils/result';
 import { bcompare } from '@/common/utils';
-import { Logins } from '@/entities/Logins';
-import { Users } from '@/entities/Users';
+import { Logins } from '@/entities/Logins.entity';
+import { Users } from '@/entities/Users.entity';
 import { Connection, getConnection } from 'typeorm';
 import { GenCodeDto, ModifyPasswordDto, ResetPasswordDto, signInDto, signUpDto } from './auth.dto';
 import { ErrorCode } from '@/common/utils/errorCode';
-import { Codes } from '@/entities/Codes';
+import { Codes } from '@/entities/Codes.entity';
 import { constant } from '@/common/utils/constant';
 import bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
@@ -40,7 +40,7 @@ export class AuthService {
       .addSelect('users.status', 'status')
       .addSelect('logins.token', 'token')
       .innerJoin(Logins, 'logins', 'users.mobile=logins.mobile')
-      .where('logins.mobile2 = :mobile', { mobile })
+      .where('logins.mobile = :mobile', { mobile })
       .andWhere('logins.provider = :provider', { provider: provider || 'local' })
       .getRawOne();
 

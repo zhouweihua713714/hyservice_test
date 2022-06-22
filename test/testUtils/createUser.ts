@@ -1,7 +1,7 @@
 import { Gender_Types_Enum } from '@/common/enums/common.enum';
 import { bhash } from '@/common/utils';
-import { Logins } from '@/entities/Logins';
-import { Users } from '@/entities/Users';
+import { Logins } from '@/entities/Logins.entity';
+import { Users } from '@/entities/Users.entity';
 import { AuthService } from '@/modules/auth/auth.service';
 import faker from '@faker-js/faker';
 import { TestingModule } from '@nestjs/testing';
@@ -19,7 +19,6 @@ export type CreateUserRetType = {
   login: Logins;
   token: string;
   headers: { authorization: string; 'Content-Type': 'application/json' };
-  finalize: () => void;
 };
 
 export const createUser = async (
@@ -54,9 +53,5 @@ export const createUser = async (
     login,
     token,
     headers: { authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    finalize: async () => {
-      await usersRepository.delete({ mobile });
-      await loginsRepository.delete({ mobile });
-    },
   };
 };

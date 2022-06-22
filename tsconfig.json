@@ -28,7 +28,7 @@
     "src/**/*",
     "*.ts",
     "test/**/*.ts"
-  ],
+, "ormconfig.js"  ],
   "exclude": [
     "node_modules",
     "migrations"

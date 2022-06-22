@@ -1,12 +1,12 @@
 import { Gender_Types_Enum } from '@/common/enums/common.enum';
-import { Users } from '@/entities/Users';
+import { Users } from '@/entities/Users.entity';
 import { TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { faker } from '@faker-js/faker';
 import { bhash } from '@/common/utils';
 import _ from 'lodash';
-import { Logins } from '@/entities/Logins';
+import { Logins } from '@/entities/Logins.entity';
 import { AuthService } from '@/modules/auth/auth.service';
 import { instanceToPlain } from 'class-transformer';
 type ParamsType = {
@@ -20,7 +20,6 @@ export type CreateUsersRetType = {
     id: string;
     authorization: string;
   }[];
-  finalize: () => void;
 };
 
 export const createUsers = async ({
@@ -78,13 +77,6 @@ export const createUsers = async ({
     };
   });
   return {
-    users: userResults,
-    finalize: async () => {
-      await usersRepository.delete(
-        users.map((user) => {
-          return user.id;
-        })
-      );
-    },
+    users: userResults
   };
 };

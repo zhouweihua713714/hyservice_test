@@ -1,13 +1,15 @@
 import OSS from 'ali-oss';
 import crypto from 'crypto';
 import { Buffer } from 'buffer';
-import config from '@/config/index';
+import {getConfig} from '@/config';
+
+const config = getConfig();
 
 const client = new OSS({
-  region: config().oss?.ossRegion,
-  accessKeyId: config().oss?.ossKeyId,
-  accessKeySecret: config().oss?.ossKeySecret,
-  bucket: config().oss?.ossBucket,
+  region: config.oss.ossRegion,
+  accessKeyId: config.oss.ossKeyId,
+  accessKeySecret: config.oss.ossKeySecret,
+  bucket: config.oss.ossBucket,
 });
 
 export const getSignatureUrl = (id: string, timeoutSeconds: number): string => {
@@ -21,7 +23,7 @@ export const getSignatureUrl = (id: string, timeoutSeconds: number): string => {
 };
 
 const sha1Base64 = (str: string) =>
-  crypto.createHmac('sha1', config().oss?.ossKeySecret).update(str).digest().toString('base64');
+  crypto.createHmac('sha1', config.oss?.ossKeySecret).update(str).digest().toString('base64');
 
 const md5Base64 = (str: string) =>
   crypto.createHmac('md5', '').update(str).digest().toString('base64');
@@ -30,7 +32,7 @@ const base64 = (str: string) => Buffer.from(str).toString('base64');
 
 export const getCallback = (): GetCallbackReturnType => {
   const callbackObj = {
-    callbackUrl: config().oss?.ossCallbackUrl,
+    callbackUrl: config.oss?.ossCallbackUrl,
     callbackBody:
       '{"user_id":${x:user_id},"file_id":${object},"bucket":${bucket},"object":${object},"etag":${etag},"size":${size},"mimeType":${mimeType},"imageInfo":${imageInfo}}', // eslint-disable-line
     callbackBodyType: 'application/json',
@@ -52,9 +54,9 @@ export const getPolicy = (
   const policyObj = {
     expiration: new Date(now.getTime() + (expireInSeconds || 30 * 1000)).toISOString(),
     conditions: [
-      { bucket: config().oss?.ossBucket },
+      { bucket: config.oss?.ossBucket },
       { callback: callbackBase64 },
-      ['content-length-range', 0, config().oss?.imageMaxSize], // <5m
+      ['content-length-range', 0, config.oss?.imageMaxSize], // <5m
       ['eq', '$key', key],
     ],
   };
@@ -87,12 +89,12 @@ export const getSignature = (
   authString += '\n'; // add new line no matter if there is or no content
   const expires = new Date().getTime() + timeoutSeconds * 1000;
   authString += `${expires}\n`;
-  authString += `/${config().oss?.ossBucket}/${objectKey}`;
+  authString += `/${config.oss?.ossBucket}/${objectKey}`;
 
   const authSignature = sha1Base64(authString);
 
   return {
-    OSSAccessKeyId: config().oss.ossKeyId,
+    OSSAccessKeyId: config.oss.ossKeyId,
     Expires: expires,
     Signature: encodeURI(authSignature),
   };
