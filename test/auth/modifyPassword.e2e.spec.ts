@@ -46,8 +46,7 @@ describe('/auth/modify_password', () => {
 
     const loginResult = await request(tester.server)
       .post('/auth/sign_in')
-      .send({ mobile, password: newPassword, provider: '' });
-
+      .send({ mobile, password: newPassword, provider: 'local' });
     expect(loginResult.status).toBe(HttpStatus.OK);
     expect(loginResult.body.code).toBe(200);
     expect(loginResult.body.message).toBe('ok');

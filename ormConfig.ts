@@ -1,9 +1,8 @@
-import { ConnectionOptions } from "typeorm";
-import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
+import { ConnectionOptions } from 'typeorm';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
-
 let config: PostgresConnectionOptions = {
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
@@ -29,7 +28,7 @@ if (process.env.NODE_ENV === 'test') {
   config = {
     ...config,
     schema:'test_' + path.basename(expect.getState().testPath).split('.')[0]
-  }
+  };
 }
 
 module.exports = config;

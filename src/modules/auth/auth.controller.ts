@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signIn')
+  @Post('/sign_in')
   @HttpCode(200)
   @ApiOperation({ summary: '用户登录' })
   @ApiResult(signInResInfo)

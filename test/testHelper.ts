@@ -32,6 +32,7 @@ export class DBTester<T> {
     this.options = (await getConnectionOptions()) as PostgresConnectionOptions;
     this.connection = await createConnection(this.options);
     this.queryRunner = this.connection.createQueryRunner();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     await this.queryRunner.createSchema(this.options.schema!, true);
     await this.connection.synchronize();
   };
@@ -52,6 +53,8 @@ export class DBTester<T> {
       this.authService = this.module.get<AuthService>(AuthService);
       this.codesRepository = this.module.get<CodesRepo>(CodesRepo);
       this.usersRepository = this.module.get<UsersRepo>(UsersRepo);
+    ///
+    ///
     });
 
     afterAll(async () => {

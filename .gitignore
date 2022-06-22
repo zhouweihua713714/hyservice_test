@@ -30,6 +30,6 @@ lerna-debug.log*
 .vscode/*
 
 # environment
-.env
+ .env
 
 !yarn.lock

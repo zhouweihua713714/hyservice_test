@@ -3,7 +3,7 @@ import { createUser, CreateUserRetType } from '../testUtils';
 
 import {samples} from '../samples';
 
-const {mobile, newPassword: password} = samples;
+const {mobile, password} = samples;
 
 let user: CreateUserRetType;
 

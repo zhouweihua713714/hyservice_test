@@ -40,7 +40,7 @@ export class AuthService {
       .addSelect('users.status', 'status')
       .addSelect('logins.token', 'token')
       .innerJoin(Logins, 'logins', 'users.mobile=logins.mobile')
-      .where('logins.mobile2 = :mobile', { mobile })
+      .where('logins.mobile = :mobile', { mobile })
       .andWhere('logins.provider = :provider', { provider: provider || 'local' })
       .getRawOne();
 
