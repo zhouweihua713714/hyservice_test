@@ -1,5 +1,7 @@
 import { AppModule } from '@/app.module';
+import { UsersDao } from '@/dao/users.dao';
 import { CodesRepo } from '@/entities/Codes.repo';
+import { LoginsRepo } from '@/entities/Logins.repo';
 import { UsersRepo } from '@/entities/Users.repo';
 import { AuthService } from '@/modules/auth/auth.service';
 import { INestApplication } from '@nestjs/common';
@@ -20,6 +22,8 @@ export class DBTester<T> {
   authService: AuthService;
   codesRepository: CodesRepo;
   usersRepository: UsersRepo;
+  usersDao:UsersDao;
+  loginsRepository:LoginsRepo;
   server: any;
 
   data: T;
@@ -53,6 +57,8 @@ export class DBTester<T> {
       this.authService = this.module.get<AuthService>(AuthService);
       this.codesRepository = this.module.get<CodesRepo>(CodesRepo);
       this.usersRepository = this.module.get<UsersRepo>(UsersRepo);
+      this.usersDao = this.module.get<UsersDao>(UsersDao);
+      this.loginsRepository = this.module.get<LoginsRepo>(LoginsRepo);
     ///
     ///
     });

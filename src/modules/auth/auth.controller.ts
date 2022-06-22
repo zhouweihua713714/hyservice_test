@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/sign_in')
+  @Post('/signIn')
   @HttpCode(200)
   @ApiOperation({ summary: '用户登录' })
   @ApiResult(signInResInfo)
@@ -22,7 +22,7 @@ export class AuthController {
   async signIn(@Body() params: signInDto): Promise<ResultData> {
     return this.authService.signIn(params);
   }
-  @Post('/sign_up')
+  @Post('/signUp')
   @HttpCode(200)
   @ApiOperation({ summary: '用户注册' })
   @ApiResult(signUpResInfo)
@@ -30,7 +30,7 @@ export class AuthController {
   async signUp(@Body() params: signUpDto): Promise<ResultData> {
     return this.authService.signUp(params);
   }
-  @Post('/modify_password')
+  @Post('/modifyPassword')
   @HttpCode(200)
   @ApiOperation({ summary: '修改密码' })
   @ApiResult()
@@ -38,7 +38,7 @@ export class AuthController {
   modifyPassword(@Body() params: ModifyPasswordDto): Promise<ResultData> {
     return this.authService.modifyPassword(params);
   }
-  @Post('/reset_password')
+  @Post('/resetPassword')
   @HttpCode(200)
   @ApiOperation({ summary: '重置密码' })
   @ApiResult()
@@ -46,7 +46,7 @@ export class AuthController {
   resetPassword(@Body() params: ResetPasswordDto): Promise<ResultData> {
     return this.authService.resetPassword(params);
   }
-  @Post('/gen_code')
+  @Post('/genCode')
   @HttpCode(200)
   @ApiOperation({ summary: '发送验证码' })
   @ApiResult()

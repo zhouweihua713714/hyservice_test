@@ -13,7 +13,7 @@ import { CodesRepo } from './entities/Codes.repo';
 import { FilesRepo } from './entities/Files.repo';
 import { LoginsRepo } from './entities/Logins.repo';
 import { UsersRepo } from './entities/Users.repo';
-import path from 'path';
+import { DaoModule} from './dao/dao.module';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ormConfig = require('../ormconfig');
@@ -55,6 +55,7 @@ const ormConfig = require('../ormconfig');
     HomeModule,
     AuthModule,
     FilesModule,
+    DaoModule
   ],
   // 守卫
   providers: [

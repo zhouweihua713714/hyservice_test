@@ -233,7 +233,7 @@ export class AuthService {
       .getOne();
     // if user login is not exist, then throw error
     if (!loginInfo) {
-      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_signUp_ERROR });
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_SIGN_UP_ERROR });
     }
     // check code
     const codeInfo = await this.connection
