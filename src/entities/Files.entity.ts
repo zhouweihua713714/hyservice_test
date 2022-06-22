@@ -1,9 +1,9 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('files_pkey', ['id'], { unique: true })
 @Entity('files', { schema: 'public' })
 export class Files {
-  @Column('text', { primary: true, name: 'id', default: () => 'uuid_generate_v4()' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('text', { name: 'filename' })

@@ -4,9 +4,11 @@ import * as Util from 'util';
 import dayjs from 'dayjs'; // 处理时间的工具
 import * as StackTrace from 'stacktrace-js';
 import Chalk from 'chalk';
-import config from '../../../config/index';
+import {getConfig} from '@/config';
 
-const appLogDirConfig = config().app.logger.dir;
+const config = getConfig();
+
+const appLogDirConfig = config.app.logger.dir;
 
 const baseLogPath = Path.normalize(
   Path.isAbsolute(appLogDirConfig) ? appLogDirConfig : Path.join(process.cwd(), appLogDirConfig)

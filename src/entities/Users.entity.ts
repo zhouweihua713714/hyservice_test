@@ -1,17 +1,12 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { Logins } from './Logins';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Logins } from './Logins.entity';
 
 @Index('users_id_key', ['id'], { unique: true })
 @Index('users_pkey', ['id'], { unique: true })
 @Index('users_mobile_key', ['mobile'], { unique: true })
 @Entity('users', { schema: 'public' })
 export class Users {
-  @Column('text', {
-    primary: true,
-    name: 'id',
-    default: () => 'uuid_generate_v4()',
-    comment:'主键id'
-  })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('character varying', { name: 'mobile', unique: true, length: 11 , comment:'手机号码'})
@@ -32,7 +27,6 @@ export class Users {
   @Column('character varying', { name: 'status',default: () => '\'enabled\'', length: 10 ,comment:'是否有效:enabled,disabled 无效'})
   status: string;
 
-  @OneToMany(() => Logins, (logins) => logins.mobile2)
+  @OneToMany(() => Logins, (logins) => logins.mobile)
   logins: Logins[];
-
 }

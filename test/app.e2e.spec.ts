@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 
-describe('test/controller/app.e2e-spec.ts', () => {
+describe.skip('test/controller/app.e2e-spec.ts', () => {
   let app: INestApplication;
 
   beforeEach(async () => {

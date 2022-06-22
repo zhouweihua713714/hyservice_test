@@ -3,33 +3,41 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { RedisModuleOptions, RedisClientOptions } from '@liaoliaots/nestjs-redis';
 import { APP_GUARD } from '@nestjs/core';
-import configuration from './config/index';
+import { getConfig } from '@/config';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { RedisUtilModule } from './common/libs/redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HomeModule } from './modules/home/home.module';
 import { FilesModule } from './modules/files/files.module';
+import { CodesRepo } from './entities/Codes.repo';
+import { FilesRepo } from './entities/Files.repo';
+import { LoginsRepo } from './entities/Logins.repo';
+import { UsersRepo } from './entities/Users.repo';
+import path from 'path';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ormConfig = require('../ormconfig');
+
 @Module({
   imports: [
     // 配置模块
     ConfigModule.forRoot({
       cache: true,
-      load: [configuration],
+      load: [getConfig],
       isGlobal: true,
     }),
     // 数据库
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          entities: [`${__dirname}/entities/*{.ts,.js}`],
-          migrations: [`${__dirname}/migrations/*{.ts,.js}`],
+      useFactory: () => {
+        const config = {
           keepConnectionAlive: true,
-          ...config.get('db'),
+          ...ormConfig,
         } as TypeOrmModuleOptions;
+        return config;
       },
     }),
+
+    TypeOrmModule.forFeature([UsersRepo, FilesRepo, CodesRepo, LoginsRepo]),
     // redis
     RedisUtilModule.forRootAsync({
       imports: [ConfigModule],

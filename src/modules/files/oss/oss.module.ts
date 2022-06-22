@@ -1,4 +1,4 @@
-import { Files } from '@/entities/Files';
+import { Files } from '@/entities/Files.entity';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';

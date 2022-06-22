@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { createUser, CreateUserRetType, genMobile } from '../../testUtils';
 import { encode } from '@/common/utils';
-import { Files } from '@/entities/Files';
+import { Files } from '@/entities/Files.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 const body: LaunchDto = {
@@ -17,7 +17,7 @@ const body: LaunchDto = {
 // mock arguments
 const mobile = genMobile();
 const password = '12345678';
-describe('test/files/oss/launch.e2e.spec.ts', () => {
+describe.skip('test/files/oss/launch.e2e.spec.ts', () => {
   // 引入全局变量
   let app: INestApplication;
   let authService: AuthService;
@@ -86,7 +86,6 @@ describe('test/files/oss/launch.e2e.spec.ts', () => {
     // delete user
     await filesRepository.delete({ filename: body.filename });
     // 状态键
-    await userRet.finalize();
     if (app) {
       await app.close();
     }

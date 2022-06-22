@@ -11,7 +11,7 @@ const headers_key_url = 'https://xxxx.ngrok.io/v1/version';
 const base64 = (str: string) => Buffer.from(str).toString('base64');
 
 const authorization = 'authorization_test';
-describe('test/files/oss/callback.e2e.spec.ts', () => {
+describe.skip('test/files/oss/callback.e2e.spec.ts', () => {
   // 引入全局变量
   let app: INestApplication;
   let authService: AuthService;
@@ -86,7 +86,6 @@ describe('test/files/oss/callback.e2e.spec.ts', () => {
 
   afterEach(async () => {
     // 状态键
-    await filesRet.finalize();
     if (app) {
       await app.close();
     }

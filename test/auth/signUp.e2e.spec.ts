@@ -1,6 +1,6 @@
 import { AppModule } from '@/app.module';
-import { Codes } from '@/entities/Codes';
-import { Users } from '@/entities/Users';
+import { Codes } from '@/entities/Codes.entity';
+import { Users } from '@/entities/Users.entity';
 // import { AuthModule } from '@/modules/auth/auth.module';
 import { AuthService } from '@/modules/auth/auth.service';
 import { HttpStatus, INestApplication } from '@nestjs/common';
@@ -8,7 +8,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-describe('test/auth/signUp.e2e.spec.ts', () => {
+describe.skip('test/auth/signUp.e2e.spec.ts', () => {
   // 引入全局变量
   let app: INestApplication;
   let authService: AuthService;

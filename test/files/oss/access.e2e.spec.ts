@@ -19,7 +19,7 @@ const query: AccessDto = {
 // mock arguments
 const mobile = genMobile();
 const password = '12345678';
-describe('test/files/oss/access.e2e.spec.ts', () => {
+describe.skip('test/files/oss/access.e2e.spec.ts', () => {
   // 引入全局变量
   let app: INestApplication;
   let authService: AuthService;
@@ -66,8 +66,6 @@ describe('test/files/oss/access.e2e.spec.ts', () => {
 
   afterEach(async () => {
     // 状态键
-    await userRet.finalize();
-    await filesRet.finalize();
     if (app) {
       await app.close();
     }
