@@ -8,12 +8,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import fs from 'fs';
 import path from 'path';
-import {
-  Connection,
-  createConnection,
-  getConnectionOptions,
-  QueryRunner,
-} from 'typeorm';
+import { Connection, createConnection, getConnectionOptions, QueryRunner } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 export class DBTester<T> {
@@ -22,8 +17,8 @@ export class DBTester<T> {
   authService: AuthService;
   codesRepository: CodesRepo;
   usersRepository: UsersRepo;
-  usersDao:UsersDao;
-  loginsRepository:LoginsRepo;
+  usersDao: UsersDao;
+  loginsRepository: LoginsRepo;
   server: any;
 
   data: T;
@@ -59,12 +54,11 @@ export class DBTester<T> {
       this.usersRepository = this.module.get<UsersRepo>(UsersRepo);
       this.usersDao = this.module.get<UsersDao>(UsersDao);
       this.loginsRepository = this.module.get<LoginsRepo>(LoginsRepo);
-    ///
-    ///
     });
 
     afterAll(async () => {
       this.app && (await this.app.close());
+      await this.connection.close();
     });
 
     const dir = path.dirname(expect.getState().testPath);
