@@ -2,7 +2,7 @@ import { Column, Entity, Index, PrimaryColumn } from 'typeorm';
 
 @Index('codes_id_key', ['mobile'], { unique: true })
 @Index('codes_pkey', ['mobile'], { unique: true })
-@Entity('codes', { schema: 'public' })
+@Entity('codes')
 export class Codes {
   @PrimaryColumn('text', { primary: true, name: 'mobile' })
   mobile: string;

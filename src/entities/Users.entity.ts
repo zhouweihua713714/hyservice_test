@@ -4,7 +4,7 @@ import { Logins } from './Logins.entity';
 @Index('users_id_key', ['id'], { unique: true })
 @Index('users_pkey', ['id'], { unique: true })
 @Index('users_mobile_key', ['mobile'], { unique: true })
-@Entity('users', { schema: 'public' })
+@Entity('users')
 export class Users {
   @PrimaryGeneratedColumn('uuid')
   id: string;

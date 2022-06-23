@@ -12,19 +12,11 @@ export class signInResInfo {
   @ApiProperty({ description: '用户状态', enum: User_Status_Enum })
   status: User_Status_Enum;
 
-
   @ApiProperty({ description: 'token' })
   token: string;
 
   @ApiPropertyOptional({ description: '用户昵称' })
-  name?: string;
-
-  @ApiPropertyOptional({ description: '课程id' })
-  courseId?: string;
-
-
-  @ApiPropertyOptional({ description: '导练Id' })
-  exerciseId?: string;
+  name: string | null;
 }
 export class signUpResInfo {
   @ApiProperty({ description: '用户id' })
@@ -41,12 +33,6 @@ export class signUpResInfo {
 
   @ApiPropertyOptional({ description: '用户昵称' })
   name?: string | null;
-
-  @ApiPropertyOptional({ description: '课程id' })
-  courseId?: string | null;
-
-  @ApiPropertyOptional({ description: '导练Id' })
-  exerciseId?: string | null;
 }
 export class JwtUser {
   id: string;

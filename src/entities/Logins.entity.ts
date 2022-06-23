@@ -2,7 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { Users } from './Users.entity';
 
 @Index('logins_pkey', ['mobile', 'provider'], { unique: true })
-@Entity('logins', { schema: 'public' })
+@Entity('logins')
 export class Logins {
   @Column('character varying', { primary: true, name: 'mobile', length: 11,comment:'手机号码' })
   mobile: string;
