@@ -1,73 +1,23 @@
 import request from 'supertest';
-import { AppModule } from '@/app.module';
-import { AuthService } from '@/modules/auth/auth.service';
-import { AccessDto } from '@/modules/files/oss/oss.dto';
-import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Test, TestingModule } from '@nestjs/testing';
-import {
-  createFiles,
-  CreateFilesRetType,
-  createUser,
-  CreateUserRetType,
-  genMobile,
-} from '../../testUtils';
+import { DBTester } from '../../testHelper';
+import { DataType } from './access.seed';
+const tester = new DBTester<DataType>().setup();
 
-const query: AccessDto = {
-  file_id: '需要赋值',
-};
 // mock arguments
-const mobile = genMobile();
-const password = '12345678';
-describe.skip('test/files/oss/access.e2e.spec.ts', () => {
-  // 引入全局变量
-  let app: INestApplication;
-  let authService: AuthService;
-  let config: ConfigService;
-  let module: TestingModule;
-
-  // 构造变量
-  let userRet: CreateUserRetType;
-  let filesRet: CreateFilesRetType;
-
-  beforeEach(async () => {
-    // 初始化全局变量
-    module = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    authService = module.get<AuthService>(AuthService);
-    config = module.get<ConfigService>(ConfigService);
-    app = module.createNestApplication();
-    await app.init();
-    // 构造测试数据
-    // create user
-    userRet = await createUser({ mobile, password }, authService, module);
-    // create files
-    filesRet = await createFiles({
-      payloads: [{ status: 1 }],
-      module,
-    });
-    query.file_id = filesRet.files[0].id;
-  });
+describe('/files/oss/access', () => {
   test('should GET /file/access with field id', async () => {
     // 获取配置数据
-    const ossBucket = config.get<string>('oss.ossBucket');
-    const ossRegion = config.get<string>('oss.ossRegion');
+    const ossBucket = tester.config.get<string>('oss.ossBucket');
+    const ossRegion = tester.config.get<string>('oss.ossRegion');
     // make request
-    const result = await request(app.getHttpServer()).get('/file/access').query(query);
+    const result = await request(tester.server)
+      .get('/file/access')
+      .query({ file_id: tester.data.file.id });
     // use expect by jest
     expect(result.redirect).toBe(true);
     expect(result.statusCode).toBe(302);
     expect(
-      result.text.includes(`http://${ossBucket}.${ossRegion}.aliyuncs.com/${query.file_id}`)
+      result.text.includes(`http://${ossBucket}.${ossRegion}.aliyuncs.com/${tester.data.file.id}`)
     ).toBe(true);
-  });
-
-  afterEach(async () => {
-    // 状态键
-    if (app) {
-      await app.close();
-    }
   });
 });

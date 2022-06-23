@@ -1,27 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User_Status_Enum} from '@/common/enums/common.enum';
+import { User_Status_Enum } from '@/common/enums/common.enum';
 import { JwtUser, signInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
 import { ResultData } from '@/common/utils/result';
 import { bcompare } from '@/common/utils';
-import { Logins } from '@/entities/Logins.entity';
-import { Users } from '@/entities/Users.entity';
-import { Connection, getConnection } from 'typeorm';
 import { GenCodeDto, ModifyPasswordDto, ResetPasswordDto, signInDto, signUpDto } from './auth.dto';
 import { ErrorCode } from '@/common/utils/errorCode';
-import { Codes } from '@/entities/Codes.entity';
 import { constant } from '@/common/utils/constant';
 import bcrypt from 'bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { EnvModeType } from '@/common/enums/common.enum';
 import { sendSMS } from '@/common/utils/sendSms';
+import { UsersRepo } from '@/entities/Users.repo';
+import { LoginsRepo } from '@/entities/Logins.repo';
+import { CodesRepo } from '@/entities/Codes.repo';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
-    private readonly connection: Connection
+    private readonly usersRepo: UsersRepo,
+    private readonly loginsRepo: LoginsRepo,
+    private readonly codesRepo: CodesRepo
   ) {}
 
   /**
@@ -31,38 +32,37 @@ export class AuthService {
    */
   async signIn(params: signInDto): Promise<ResultData> {
     const { mobile, password, provider } = params;
-    // 聚合查询相关信息
-    const signInResInfo: signInResInfo | undefined = await this.connection
-      .createQueryBuilder(Users, 'users')
-      .select('users.id', 'id')
-      .addSelect('users.mobile', 'mobile')
-      .addSelect('users.name', 'name')
-      .addSelect('users.status', 'status')
-      .addSelect('logins.token', 'token')
-      .innerJoin(Logins, 'logins', 'users.mobile=logins.mobile')
-      .where('logins.mobile = :mobile', { mobile })
-      .andWhere('logins.provider = :provider', { provider: provider || 'local' })
-      .getRawOne();
-
+    const userInfo = await this.usersRepo.findOne({ mobile });
+    const loginInfo = await this.loginsRepo.findOne({
+      mobile: mobile,
+      provider: 'local',
+    });
     // 用户不存在
-    if (!signInResInfo) {
+    if (!loginInfo || !userInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_FOUND_ERROR });
     }
     // 用户未激活
-    if (signInResInfo.status === User_Status_Enum.Disabled) {
+    if (userInfo.status === User_Status_Enum.Disabled) {
       return ResultData.fail({ ...ErrorCode.AUTH.ACCOUNT_FORBIDDEN_ERROR });
     }
     // 密码错误
-    if (!bcompare(password, signInResInfo.token)) {
+    if (!bcompare(password, loginInfo.token)) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_FOUND_ERROR });
       // return ResultData.fail({ ...ErrorCode.AUTH.PASSWORD_ERROR });
     }
+    const signInResInfo: signInResInfo | undefined = {
+      id: userInfo.id,
+      name: userInfo.name,
+      mobile: userInfo.mobile,
+      status: User_Status_Enum.Enabled,
+      token: loginInfo.token,
+    };
     // 暂时还保留之前的token构造形式
     const payload: JwtUser = {
-      id: signInResInfo.id,
-      mobile: signInResInfo.mobile,
-      name: signInResInfo.name,
-      status: signInResInfo.status,
+      id: userInfo.id,
+      name: userInfo.name,
+      mobile: userInfo.mobile,
+      status: User_Status_Enum.Enabled,
     };
     signInResInfo.token = this.createToken(payload);
     return ResultData.ok({ data: signInResInfo });
@@ -104,10 +104,7 @@ export class AuthService {
       return ResultData.fail({ ...ErrorCode.AUTH.ILLEGAL_CODE });
     }
     // check code
-    const codeInfo = await this.connection
-      .createQueryBuilder(Codes, 'codes')
-      .where('codes.mobile =:mobile', { mobile })
-      .getOne();
+    const codeInfo = await this.codesRepo.findOne(mobile);
     if (!codeInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.CODE_NOT_FOUND });
     }
@@ -121,37 +118,17 @@ export class AuthService {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     // check user
-    const userInfo = await this.connection
-      .createQueryBuilder(Users, 'users')
-      .where('users.mobile =:mobile', { mobile })
-      .getOne();
+    const userInfo = await this.usersRepo.findOne({ mobile });
     // if user exist, then throw error
     if (userInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.MOBILE_ALREADY_REGISTERED });
     }
     // insert user
-    const affectRows = await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into(Users)
-      .values({
-        mobile: mobile,
-      })
-      .execute();
-    await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into(Logins)
-      .values({
-        mobile: mobile,
-        provider: 'local',
-        token: hashedPassword,
-      })
-      .execute();
-
+    const user = await this.usersRepo.save({ mobile });
+    await this.loginsRepo.save({ mobile: mobile, provider: 'local', token: hashedPassword });
     // return result
     const signUpResInfo: signUpResInfo | undefined = {
-      id: affectRows.identifiers[0].id,
+      id: user.id,
       mobile: mobile,
       name: null,
       status: User_Status_Enum.Enabled,
@@ -159,7 +136,7 @@ export class AuthService {
     };
     // get token
     const payload: JwtUser = {
-      id: affectRows.identifiers[0].id,
+      id: user.id,
       mobile: mobile,
       name: null,
       status: User_Status_Enum.Enabled,
@@ -178,13 +155,7 @@ export class AuthService {
     // hash newPassword
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     // check user login
-    const loginInfo = await this.connection
-      .createQueryBuilder(Logins, 'logins')
-      .where('logins.mobile = :mobile and logins.provider = :provider', {
-        mobile,
-        provider: 'local',
-      })
-      .getOne();
+    const loginInfo = await this.loginsRepo.findOne({ mobile, provider: 'local' });
     // if user login is not exist, then throw error
     if (!loginInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.UNAUTHENTICATED_ERROR });
@@ -198,15 +169,10 @@ export class AuthService {
       return ResultData.fail({ ...ErrorCode.AUTH.PASSWORD_ERROR });
     }
     // update logins
-    const affectRows = await getConnection()
-      .createQueryBuilder()
-      .update(Logins)
-      .set({
-        token: hashedPassword,
-      })
-      .where('mobile = :mobile and provider = :provider', { mobile, provider: 'local' })
-      .execute();
-
+    const affectRows = await this.loginsRepo.update(
+      { mobile, provider: 'local' },
+      { token: hashedPassword }
+    );
     if (!affectRows.affected) {
       return ResultData.fail({ ...ErrorCode.AUTH.MODIFY_PASSWORD_ERROR });
     }
@@ -224,22 +190,13 @@ export class AuthService {
     // hash newPassword
     const hashedPassword = await bcrypt.hash(password, 10);
     // check user login
-    const loginInfo = await this.connection
-      .createQueryBuilder(Logins, 'logins')
-      .where('logins.mobile = :mobile and logins.provider = :provider', {
-        mobile,
-        provider: 'local',
-      })
-      .getOne();
+    const loginInfo = await this.loginsRepo.findOne({ mobile, provider: 'local' });
     // if user login is not exist, then throw error
     if (!loginInfo) {
-      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_signUp_ERROR });
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_SIGN_UP_ERROR });
     }
     // check code
-    const codeInfo = await this.connection
-      .createQueryBuilder(Codes, 'codes')
-      .where('codes.mobile =:mobile', { mobile })
-      .getOne();
+    const codeInfo = await this.codesRepo.findOne(mobile);
     if (!codeInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.CODE_NOT_FOUND });
     }
@@ -252,15 +209,10 @@ export class AuthService {
       return ResultData.fail({ ...ErrorCode.AUTH.CODE_MISMATCH });
     }
     // update logins
-    const affectRows = await getConnection()
-      .createQueryBuilder()
-      .update(Logins)
-      .set({
-        token: hashedPassword,
-      })
-      .where('mobile = :mobile and provider = :provider', { mobile, provider: 'local' })
-      .execute();
-
+    const affectRows = await this.loginsRepo.update(
+      { mobile, provider: 'local' },
+      { token: hashedPassword }
+    );
     if (!affectRows.affected) {
       return ResultData.fail({ ...ErrorCode.AUTH.RESET_PASSWORD_ERROR });
     }
@@ -276,7 +228,6 @@ export class AuthService {
     const { mobile } = params;
     // gen code
     const code = genCodeOfLength(6);
-
     if (
       this.config.get<string>('app.envMode') === EnvModeType.PUBLICATION ||
       this.config.get<string>('app.envMode') === EnvModeType.STAGE
@@ -297,23 +248,13 @@ export class AuthService {
       }
     }
     // delete code
-    await getConnection()
-      .createQueryBuilder()
-      .delete()
-      .from(Codes)
-      .where('mobile = :mobile', { mobile: mobile })
-      .execute();
+    await this.codesRepo.delete(mobile);
     // insert code
-    const affectRows = await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into(Codes)
-      .values({
-        mobile: mobile,
-        code: code,
-        sentAt: new Date(),
-      })
-      .execute();
+    await this.codesRepo.save({
+      mobile: mobile,
+      code: code,
+      sentAt: new Date(),
+    });
     if (
       this.config.get<string>('app.envMode') === EnvModeType.PUBLICATION ||
       this.config.get<string>('app.envMode') === EnvModeType.STAGE

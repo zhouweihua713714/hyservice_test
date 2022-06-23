@@ -7,17 +7,17 @@ import { DataType } from './modifyPassword.seed';
 const tester = new DBTester<DataType>().setup();
 const { mobile, oldPassword, newPassword } = samples;
 
-describe('/auth/modify_password', () => {
+describe('/auth/modifyPassword', () => {
   test('should not POST before login', async () => {
     const result = await request(tester.server)
-      .post('/auth/modify_password')
+      .post('/auth/modifyPassword')
       .send({ mobile, oldPassword, newPassword });
 
     expect(result.status).toBe(HttpStatus.FORBIDDEN);
   });
   test('should not POST with incorrect oldPassword', async () => {
     const result = await request(tester.server)
-      .post('/auth/modify_password')
+      .post('/auth/modifyPassword')
       .set('Authorization', tester.data.user.headers.authorization)
       .send({ mobile, oldPassword: 'error password', newPassword });
 
@@ -26,7 +26,7 @@ describe('/auth/modify_password', () => {
   });
   test('should not POST /auth/modify_password with identical passwords', async () => {
     const result = await request(tester.server)
-      .post('/auth/modify_password')
+      .post('/auth/modifyPassword')
       .set('Authorization', tester.data.user.headers.authorization)
       .send({ mobile, oldPassword, newPassword: oldPassword });
 
@@ -36,7 +36,7 @@ describe('/auth/modify_password', () => {
 
   test('should POST and signIn with newPassword', async () => {
     const result = await request(tester.server)
-      .post('/auth/modify_password')
+      .post('/auth/modifyPassword')
       .set('Authorization', tester.data.user.headers.authorization)
       .send({ mobile, oldPassword, newPassword });
 
@@ -45,7 +45,7 @@ describe('/auth/modify_password', () => {
     expect(result.body.message).toBe('ok');
 
     const loginResult = await request(tester.server)
-      .post('/auth/sign_in')
+      .post('/auth/signIn')
       .send({ mobile, password: newPassword, provider: 'local' });
     expect(loginResult.status).toBe(HttpStatus.OK);
     expect(loginResult.body.code).toBe(200);

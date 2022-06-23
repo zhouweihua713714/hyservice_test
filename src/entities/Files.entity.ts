@@ -1,7 +1,7 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('files_pkey', ['id'], { unique: true })
-@Entity('files', { schema: 'public' })
+@Entity('files')
 export class Files {
   @PrimaryGeneratedColumn('uuid')
   id: string;
