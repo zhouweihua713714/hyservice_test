@@ -10,7 +10,6 @@ RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
 
 COPY package.json /app/package.json
 COPY .npmrc /app/.npmrc
-COPY ormConfig.ts  /app/ormConfig.ts
 
 RUN yarn
 

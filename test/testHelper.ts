@@ -1,43 +1,45 @@
 import { AppModule } from '@/app.module';
 import { UsersDao } from '@/dao/users.dao';
-import { CodesRepo } from '@/entities/Codes.repo';
-import { FilesRepo } from '@/entities/Files.repo';
-import { LoginsRepo } from '@/entities/Logins.repo';
-import { UsersRepo } from '@/entities/Users.repo';
 import { AuthService } from '@/modules/auth/auth.service';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import fs from 'fs';
 import path from 'path';
-import { Connection, createConnection, getConnectionOptions, QueryRunner } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import {
+  DataSource,
+  Repository,
+} from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { ConfigService } from '@nestjs/config';
-export class DBTester<T> {
+import { getConfig } from '@/config';
+import { Codes } from '@/entities/Codes.entity';
+import { Users } from '@/entities/Users.entity';
+import { Files } from '@/entities/Files.entity';
+import { Logins } from '@/entities/Logins.entity';
+export class DBTester<T=undefined> {
   app: INestApplication;
   module: TestingModule;
   authService: AuthService;
-  codesRepository: CodesRepo;
-  usersRepository: UsersRepo;
+  codesRepository: Repository<Codes>;
+  usersRepository: Repository<Users>;
   usersDao: UsersDao;
-  loginsRepository: LoginsRepo;
-  filesRepository:FilesRepo;
-  config:ConfigService;
+  loginsRepository: Repository<Logins>;
+  filesRepository: Repository<Files>;
+  config: ConfigService;
   server: any;
 
   data: T;
 
-  private queryRunner: QueryRunner;
-  private options: PostgresConnectionOptions;
-  private connection: Connection;
-
   createSchema = async () => {
-    this.options = (await getConnectionOptions()) as PostgresConnectionOptions;
-    this.connection = await createConnection(this.options);
-    this.queryRunner = this.connection.createQueryRunner();
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await this.queryRunner.createSchema(this.options.schema!, true);
-    await this.connection.synchronize();
+    const options = getConfig().postgres as PostgresConnectionOptions;
+    this.dataSource = new DataSource(options);
+
+    await this.dataSource.initialize();
+    await this.dataSource.createQueryRunner().createSchema(options.schema, true);
+    await this.dataSource.synchronize();
   };
+  dataSource: any;
 
   setup() {
     beforeAll(async () => {
@@ -53,17 +55,17 @@ export class DBTester<T> {
       this.server = this.app.getHttpServer();
 
       this.authService = this.module.get<AuthService>(AuthService);
-      this.codesRepository = this.module.get<CodesRepo>(CodesRepo);
-      this.usersRepository = this.module.get<UsersRepo>(UsersRepo);
+      this.codesRepository = this.module.get<Repository<Codes>>(getRepositoryToken(Codes));
+      this.usersRepository = this.module.get<Repository<Users>>(getRepositoryToken(Users));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
-      this.loginsRepository = this.module.get<LoginsRepo>(LoginsRepo);
-      this.filesRepository = this.module.get<FilesRepo>(FilesRepo);
-      this.config =this.module.get<ConfigService>(ConfigService);
+      this.loginsRepository = this.module.get<Repository<Logins>>(getRepositoryToken(Logins));
+      this.filesRepository = this.module.get<Repository<Files>>(getRepositoryToken(Files));
+      this.config = this.module.get<ConfigService>(ConfigService);
     });
 
     afterAll(async () => {
       this.app && (await this.app.close());
-      await this.connection.close();
+      this.dataSource && (await this.dataSource.destroy());
     });
 
     const dir = path.dirname(expect.getState().testPath);

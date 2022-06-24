@@ -12,17 +12,22 @@ import { ConfigService } from '@nestjs/config';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { EnvModeType } from '@/common/enums/common.enum';
 import { sendSMS } from '@/common/utils/sendSms';
-import { UsersRepo } from '@/entities/Users.repo';
-import { LoginsRepo } from '@/entities/Logins.repo';
-import { CodesRepo } from '@/entities/Codes.repo';
+import { Repository } from 'typeorm';
+import { Users } from '@/entities/Users.entity';
+import { Logins } from '@/entities/Logins.entity';
+import { Codes } from '@/entities/Codes.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
-    private readonly usersRepo: UsersRepo,
-    private readonly loginsRepo: LoginsRepo,
-    private readonly codesRepo: CodesRepo
+    @InjectRepository(Users)
+    private readonly usersRepo: Repository<Users>,
+    @InjectRepository(Logins)
+    private readonly loginsRepo: Repository<Logins>,
+    @InjectRepository(Codes)
+    private readonly codesRepo: Repository<Codes>
   ) {}
 
   /**
@@ -32,8 +37,8 @@ export class AuthService {
    */
   async signIn(params: signInDto): Promise<ResultData> {
     const { mobile, password, provider } = params;
-    const userInfo = await this.usersRepo.findOne({ mobile });
-    const loginInfo = await this.loginsRepo.findOne({
+    const userInfo = await this.usersRepo.findOneBy({ mobile });
+    const loginInfo = await this.loginsRepo.findOneBy({
       mobile: mobile,
       provider: 'local',
     });
@@ -104,7 +109,7 @@ export class AuthService {
       return ResultData.fail({ ...ErrorCode.AUTH.ILLEGAL_CODE });
     }
     // check code
-    const codeInfo = await this.codesRepo.findOne(mobile);
+    const codeInfo = await this.codesRepo.findOneBy({ mobile });
     if (!codeInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.CODE_NOT_FOUND });
     }
@@ -118,7 +123,7 @@ export class AuthService {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     // check user
-    const userInfo = await this.usersRepo.findOne({ mobile });
+    const userInfo = await this.usersRepo.findOneBy({ mobile });
     // if user exist, then throw error
     if (userInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.MOBILE_ALREADY_REGISTERED });
@@ -155,7 +160,7 @@ export class AuthService {
     // hash newPassword
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     // check user login
-    const loginInfo = await this.loginsRepo.findOne({ mobile, provider: 'local' });
+    const loginInfo = await this.loginsRepo.findOneBy({ mobile, provider: 'local' });
     // if user login is not exist, then throw error
     if (!loginInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.UNAUTHENTICATED_ERROR });
@@ -190,13 +195,13 @@ export class AuthService {
     // hash newPassword
     const hashedPassword = await bcrypt.hash(password, 10);
     // check user login
-    const loginInfo = await this.loginsRepo.findOne({ mobile, provider: 'local' });
+    const loginInfo = await this.loginsRepo.findOneBy({ mobile, provider: 'local' });
     // if user login is not exist, then throw error
     if (!loginInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_SIGN_UP_ERROR });
     }
     // check code
-    const codeInfo = await this.codesRepo.findOne(mobile);
+    const codeInfo = await this.codesRepo.findOneBy({ mobile });
     if (!codeInfo) {
       return ResultData.fail({ ...ErrorCode.AUTH.CODE_NOT_FOUND });
     }

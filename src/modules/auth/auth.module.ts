@@ -1,3 +1,7 @@
+import { Codes } from '@/entities/Codes.entity';
+import { Files } from '@/entities/Files.entity';
+import { Logins } from '@/entities/Logins.entity';
+import { Users } from '@/entities/Users.entity';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -6,16 +10,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthStrategy } from './auth.strategy';
-import { UsersRepo } from '@/entities/Users.repo';
-import { LoginsRepo } from '@/entities/Logins.repo';
-import { CodesRepo } from '@/entities/Codes.repo';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      UsersRepo,
-      LoginsRepo,
-      CodesRepo
+      Users,
+      Logins,
+      Codes,
+      Files,
     ]),
     // jwt
     JwtModule.registerAsync({

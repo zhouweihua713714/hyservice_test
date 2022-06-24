@@ -16,7 +16,7 @@ export class FilesDao {
   }
 
   // 根据id 查询文件
-  async findOne(id: string): Promise<Files | undefined> {
-    return this.filesRepository.findOne(id);
+  async findOne(id: string): Promise<Files | null> {
+    return this.filesRepository.findOneBy({ id });
   }
 }

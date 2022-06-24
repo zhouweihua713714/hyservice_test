@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import * as dotenvExpand from 'dotenv-expand';
+import path from 'path';
 export const getConfig = () => {
   // 加载环境变量
   const env = dotenv.config();
@@ -7,6 +8,12 @@ export const getConfig = () => {
   // 定义oss回调路径
   const ossCallbackPath = '/api/file/callback';
   // 构建环境变量
+
+  let schema = 'public';
+  if (process.env.NODE_ENV === 'test') {
+    schema = 'test_' + path.basename(expect.getState().testPath).split('.')[0];
+  }
+
   return {
     app: {
       prefix: process.env.APP_PREFIX || '/api',
@@ -51,5 +58,17 @@ export const getConfig = () => {
       ossCallbackPath,
       imageMaxSize: process.env.IMAGE_MAX_SIZE || 5 * 1024 * 1024, // 5M
     },
-  } as const;
+    postgres: {
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: '',
+      database: 'postgres',
+      entities: [__dirname + '/entities/*.entity.{ts,js}'],
+      migrations: [__dirname + '/migrations/*.{ts,js}'],
+      schema,
+      synchronize: process.env.NODE_ENV === 'development',
+    },
+  };
 };

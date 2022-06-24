@@ -9,14 +9,11 @@ import { RedisUtilModule } from './common/libs/redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { HomeModule } from './modules/home/home.module';
 import { FilesModule } from './modules/files/files.module';
-import { CodesRepo } from './entities/Codes.repo';
-import { FilesRepo } from './entities/Files.repo';
-import { LoginsRepo } from './entities/Logins.repo';
-import { UsersRepo } from './entities/Users.repo';
-import { DaoModule} from './dao/dao.module';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const ormConfig = require('../ormconfig');
+import { DaoModule } from './dao/dao.module';
+import { Codes } from './entities/Codes.entity';
+import { Logins } from './entities/Logins.entity';
+import { Users } from './entities/Users.entity';
+import { Files } from './entities/Files.entity';
 
 @Module({
   imports: [
@@ -28,16 +25,18 @@ const ormConfig = require('../ormconfig');
     }),
     // 数据库
     TypeOrmModule.forRootAsync({
-      useFactory: () => {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (cfg) => {
         const config = {
           keepConnectionAlive: true,
-          ...ormConfig,
+          autoLoadEntities: true,
+          ...cfg.get('postgres'),
+          entities: [Users, Codes, Logins, Files],
         } as TypeOrmModuleOptions;
         return config;
       },
     }),
-
-    TypeOrmModule.forFeature([UsersRepo, FilesRepo, CodesRepo, LoginsRepo]),
     // redis
     RedisUtilModule.forRootAsync({
       imports: [ConfigModule],
@@ -52,10 +51,11 @@ const ormConfig = require('../ormconfig');
       },
     }),
     // 业务模块
+    TypeOrmModule.forFeature([Users, Files, Codes, Logins]),
     HomeModule,
     AuthModule,
     FilesModule,
-    DaoModule
+    DaoModule,
   ],
   // 守卫
   providers: [
