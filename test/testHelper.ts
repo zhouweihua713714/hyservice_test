@@ -54,13 +54,13 @@ export class DBTester<T=undefined> {
 
       this.server = this.app.getHttpServer();
 
+      this.config = this.module.get<ConfigService>(ConfigService);
       this.authService = this.module.get<AuthService>(AuthService);
       this.codesRepository = this.module.get<Repository<Codes>>(getRepositoryToken(Codes));
       this.usersRepository = this.module.get<Repository<Users>>(getRepositoryToken(Users));
-      this.usersDao = this.module.get<UsersDao>(UsersDao);
       this.loginsRepository = this.module.get<Repository<Logins>>(getRepositoryToken(Logins));
       this.filesRepository = this.module.get<Repository<Files>>(getRepositoryToken(Files));
-      this.config = this.module.get<ConfigService>(ConfigService);
+      this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 
     afterAll(async () => {
@@ -76,11 +76,11 @@ export class DBTester<T=undefined> {
       const {
         seed: { up, down },
       } = require(path.join(dir, potentialSeedFile)); // eslint-disable-line @typescript-eslint/no-var-requires
-      beforeEach(async () => {
+      up && beforeEach(async () => {
         this.data = await up(this);
       });
 
-      afterEach(async () => {
+      down && afterEach(async () => {
         await down(this);
       });
     }
@@ -90,6 +90,6 @@ export class DBTester<T=undefined> {
 }
 
 export type TesterSeed<T = void> = {
-  up: (tester: DBTester<T>) => Promise<T>;
-  down: (tester: DBTester<T>) => Promise<void>;
+  up?: (tester: DBTester<T>) => Promise<T>;
+  down?: (tester: DBTester<T>) => Promise<void>;
 };

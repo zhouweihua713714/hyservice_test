@@ -1,9 +1,10 @@
+# docker compose is only used for local dev
 version: "3.6"
 services:
   postgres:
     ports:
       - "${POSTGRES_PORT}:5432"
-    image: postgres:13
+    image: postgres:14
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -14,16 +15,16 @@ services:
     image: redis:6.2.4
     command: redis-server --requirepass a39ecd1899b1d6f3fe930302c78feb69
     ports:
-      - "${POSTGRES_PORT}REDIS_PORT:6379"
+      - "${REDIS_PORT}:6379"
     healthcheck:
       test: [ 'CMD', 'redis-cli', 'ping' ]
       interval: 10s
       timeout: 5s
       retries: 3
     # volumes:
-    #   - ./.docker/redis/data/:/data
-  zookeeper:
-    image: wurstmeister/zookeeper
-    restart: always
-    ports:
-      - 3181:2181
+  #   #   - ./.docker/redis/data/:/data
+  # zookeeper: # seems we don't need zookeeper?
+  #   image: wurstmeister/zookeeper
+  #   restart: always
+  #   ports:
+  #     - 3181:2181

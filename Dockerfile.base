@@ -1,6 +1,0 @@
-FROM lvvapflt.mirror.aliyuncs.com/library/node:16
-WORKDIR /app
-COPY package.json .
-COPY .npmrc .
-
-RUN yarn

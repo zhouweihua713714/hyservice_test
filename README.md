@@ -4,27 +4,26 @@ huiyan backend
 
 ## 首次启动
 
-开启 docker 容器
+rename .env.shadow to .env and fill all envs
 
+```
 docker-compose up -d
+```
+## migration
 
-## migrations
+we develop and synchronize entities in `development` schema, and maintain master branch schema in `public` schema
+every time before we submit a pr, we should sync the master schema and generate diff migration
 
-attention:生成迁移的经验法则是，在对模型进行"每次"更改后生成它们
+```
+git checkout -b your.name/ticket-number
 
-### 自动生成 migration
+// update entities and complete the features
 
+git fetch origin master:master
+git rebase master
+git checkout -- master src/migrations
+git m:run
+git m:gen-diff
 
-yarn run typeorm migration:generate -d src/migrations -n filename
-
-### 手动生成 migration
-
-yarn run typeorm migration:create -d src/migrations -n filename
-
-### 运行迁移
-
-yarn run typeorm migration:run
-
-### 回退迁移
-
-yarn run typeorm migration:revert
+// manually move diff migration to src/migrations
+``

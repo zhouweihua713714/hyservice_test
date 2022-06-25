@@ -11,8 +11,8 @@ export const seed: TesterSeed<DataType> = {
     return { code };
   },
   down: async (tester) => {
-    await tester.codesRepository.delete({ mobile });
-    await tester.usersRepository.delete({ mobile });
-    await tester.loginsRepository.delete({ mobile });
+    await tester.codesRepository.delete({});
+    await tester.usersRepository.delete({});
+    await tester.loginsRepository.delete({});
   },
 };

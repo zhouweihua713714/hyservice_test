@@ -17,27 +17,22 @@ import { Files } from './entities/Files.entity';
 
 @Module({
   imports: [
-    // 配置模块
     ConfigModule.forRoot({
       cache: true,
       load: [getConfig],
       isGlobal: true,
     }),
-    // 数据库
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (cfg) => {
         const config = {
-          keepConnectionAlive: true,
-          autoLoadEntities: true,
           ...cfg.get('postgres'),
-          entities: [Users, Codes, Logins, Files],
-        } as TypeOrmModuleOptions;
+          autoLoadEntities: true,
+        };
         return config;
       },
     }),
-    // redis
     RedisUtilModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -50,7 +45,6 @@ import { Files } from './entities/Files.entity';
         };
       },
     }),
-    // 业务模块
     TypeOrmModule.forFeature([Users, Files, Codes, Logins]),
     HomeModule,
     AuthModule,

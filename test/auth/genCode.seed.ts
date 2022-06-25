@@ -5,15 +5,7 @@ import { samples } from '../samples';
 
 const { mobile, password } = samples;
 
-let user: CreateUserRetType;
-
-export type DataType = { user: CreateUserRetType };
-
-export const seed: TesterSeed<DataType> = {
-  up: async (tester) => {
-    user = await tester.usersDao.createUser({ mobile, password }, tester.authService);
-    return { user };
-  },
+export const seed: TesterSeed = {
   down: async (tester) => {
     await tester.codesRepository.delete({});
     await tester.usersRepository.delete({});

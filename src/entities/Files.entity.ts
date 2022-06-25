@@ -9,7 +9,7 @@ export class Files {
   @Column('text', { name: 'filename' })
   filename: string;
 
-  @Column('smallint', { name: 'status', default: () => '0' })
+  @Column('smallint', { name: 'status', default: 0 })
   status: number;
 
   @Column('jsonb', { name: 'oss_info', nullable: true })
