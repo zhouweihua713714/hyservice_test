@@ -21,9 +21,9 @@ git checkout -b your.name/ticket-number
 
 git fetch origin master:master
 git rebase master
-git checkout -- master src/migrations
-git m:run
-git m:gen-diff
+git checkout master -- src/migrations
+yarn m:run
+yarn m:gen diff
 
 // manually move diff migration to src/migrations
 ``

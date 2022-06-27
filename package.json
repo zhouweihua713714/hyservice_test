@@ -25,13 +25,13 @@
     "test:watch": "jest --watch --verbose",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest",
-    "tsorm": "yarn ts-node $(yarn bin typeorm)",
+    "tsorm": "yarn ts-node node_modules/typeorm/cli.js",
     "m:gen": "yarn tsorm migration:generate -d src/dataSource.migration.ts",
     "m:check": "yarn tsorm migration:generate -d src/dataSource.migration.ts new --ch",
-    "m:create": "yarn tsorm migration:create -d src/dataSource.migration.ts -n",
+    "m:create": "yarn tsorm migration:create",
     "m:revert": "yarn tsorm migration:revert -d src/dataSource.migration.ts",
     "m:run": "yarn tsorm migration:run -d src/dataSource.migration.ts",
-    "m:gen-diff": "yarn m:run | yarn m:gen diff"
+    "m:gen-diff": "yarn tsorm m:run | yarn tsorm m:gen diff"
   },
   "dependencies": {
     "@alicloud/sms-sdk": "^1.1.6",
