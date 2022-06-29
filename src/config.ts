@@ -16,8 +16,8 @@ export const getConfig = () => {
       },
       envMode: process.env.ENV_MODE || 'dev',
       aliyunSendSms: {
-        accessKeyId: process.env.ACCESS_KEY_ID,
-        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+        accessKeyId: process.env.SMS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.SMS_SECRET_ACCESS_KEY,
         templateCode: {
           verification: process.env.SMS_TEMPLATE_CODE_VERIFICATION,
           retrieval: process.env.SMS_TEMPLATE_CODE_RETRIEVAL,
