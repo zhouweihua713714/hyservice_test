@@ -12,5 +12,5 @@ cd "$root"
 echo "system password then namespace password"
 sudo docker login --username=ccnuyan@live.com registry.cn-shanghai.aliyuncs.com
 
-sudo docker build -f Dockerfile.base -t registry.cn-shanghai.aliyuncs.com/mathits/hy:base-rest-image .
-sudo docker push registry.cn-shanghai.aliyuncs.com/mathits/hy:base-rest-image
+sudo docker build -f Dockerfile.base -t registry.cn-shanghai.aliyuncs.com/mathits/hy:base-server-image .
+sudo docker push registry.cn-shanghai.aliyuncs.com/mathits/hy:base-server-image
