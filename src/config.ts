@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import dotenv from 'dotenv';
 import * as dotenvExpand from 'dotenv-expand';
 import { options } from './dataSource';
