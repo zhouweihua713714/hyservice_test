@@ -17,6 +17,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiQuery, ApiTags } from '
 import { FilesService } from './files.service';
 import { AccessDto, LaunchDto } from './oss/oss.dto';
 import { OSSService } from './oss/oss.service';
+import { XlsxService } from './xlsx/xlsx.service';
 import { LaunchResult } from './oss/oss.types';
 
 @ApiTags('文件上传')
@@ -26,7 +27,7 @@ import { LaunchResult } from './oss/oss.types';
 )
 @Controller('/file')
 export class FilesController {
-  constructor(private readonly filesService: FilesService, private readonly oss: OSSService) {}
+  constructor(private readonly filesService: FilesService, private readonly oss: OSSService,private readonly xlsx:XlsxService) {}
 
   // 一下三个为 oss 接口
   @Post('/launch')
@@ -53,5 +54,12 @@ export class FilesController {
   @AllowAnon()
   callback(@Body() params: any, @Req() req: any): Promise<Record<string, any>> {
     return this.oss.callback(params, req);
+  }
+
+  @Post('/parseXlsx')
+  @HttpCode(200)
+  @AllowAnon()
+  parseXlsx(@Body() params: any, @Req() req: any): Promise<Record<string, any>> {
+    return this.xlsx.parseXlsx(params, req);
   }
 }
