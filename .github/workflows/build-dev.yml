@@ -41,6 +41,7 @@ jobs:
           docker build -t hy-service:${{ github.sha }} -f Dockerfile.ci .
           docker rm -f hy-service-dev || true
           docker run -d --add-host=host.docker.internal:host-gateway -p 80:3000 --name hy-service-dev hy-service:${{ github.sha }}
+          docker image prune -a -f 
 
       - name: Slack Failure Notification
         uses: rtCamp/action-slack-notify@v2
