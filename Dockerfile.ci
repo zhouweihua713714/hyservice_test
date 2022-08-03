@@ -1,7 +1,8 @@
 FROM lvvapflt.mirror.aliyuncs.com/library/node:16
 
 ENV TZ=Asia/Shanghai \
-    DEBIAN_FRONTEND=noninteractive
+    DEBIAN_FRONTEND=noninteractive \
+    NODE_ENV=production
 
 RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
     && echo ${TZ} > /etc/timezone \
