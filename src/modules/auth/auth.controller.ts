@@ -4,12 +4,12 @@ import { ApiOperation, ApiTags, ApiExtraModels, ApiBearerAuth } from '@nestjs/sw
 import { ResultData } from '../../common/utils/result';
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { ApiResult } from '../../common/decorators/apiResult.decorator';
-import { signInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
+import { SignInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
 import { GenCodeDto, ModifyPasswordDto, ResetPasswordDto, signInDto, signUpDto } from './auth.dto';
 import { AuthService } from './auth.service';
 
 @ApiTags('登录注册')
-@ApiExtraModels(ResultData, signInResInfo, signUpResInfo)
+@ApiExtraModels(ResultData, SignInResInfo, signUpResInfo)
 @Controller('/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -17,7 +17,7 @@ export class AuthController {
   @Post('/signIn')
   @HttpCode(200)
   @ApiOperation({ summary: '用户登录' })
-  @ApiResult(signInResInfo)
+  @ApiResult(SignInResInfo)
   @AllowAnon()
   async signIn(@Body() params: signInDto): Promise<ResultData> {
     return this.authService.signIn(params);

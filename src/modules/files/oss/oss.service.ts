@@ -5,7 +5,7 @@ import fetch from 'cross-fetch';
 import { ResultData } from '@/common/utils/result';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { signInResInfo } from '@/modules/auth/auth.types';
+import { SignInResInfo } from '@/modules/auth/auth.types';
 import { AccessDto, LaunchDto } from './oss.dto';
 import { getCallback, getPolicy, getSignature } from '@/common/utils/ossUtils';
 import { FilesDao } from '../files.dao';
@@ -24,23 +24,23 @@ export class OSSService {
   /**
    * @description 预上传文件, 构造上传参数
    * @param {LaunchDto} params 文件名等信息
-   * @param {signInResInfo} user 用户信息
+   * @param {SignInResInfo} user 用户信息
    * @returns {ResultData} 返回ok
    */
   async launch(params: LaunchDto, req: any): Promise<ResultData> {
     // 手动校验是否通过
-    let user: Pick<signInResInfo, 'id' | 'status' > | null = null;
+    let user: Pick<SignInResInfo, 'id' | 'status' > | null = null;
     const token: string = req.get('Authorization');
     if (token) {
       // 兼容老token
       const verifyToken = token.startsWith('Bearer ')
         ? token.replace('Bearer ', '')
         : token.replace('bearer ', '');
-      const signInResInfo: signInResInfo | null = this.authService.verifyToken(verifyToken);
-      if (signInResInfo) {
+      const SignInResInfo: SignInResInfo | null = this.authService.verifyToken(verifyToken);
+      if (SignInResInfo) {
         user = {
-          id: signInResInfo.id,
-          status: signInResInfo.status,
+          id: SignInResInfo.id,
+          status: SignInResInfo.status,
         };
       }
     }

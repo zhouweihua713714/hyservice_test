@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User_Status_Enum } from '@/common/enums/common.enum';
-import { JwtUser, signInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
+import { JwtUser, SignInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
 import { ResultData } from '@/common/utils/result';
 import { bcompare } from '@/common/utils';
 import { GenCodeDto, ModifyPasswordDto, ResetPasswordDto, signInDto, signUpDto } from './auth.dto';
@@ -55,7 +55,7 @@ export class AuthService {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_FOUND_ERROR });
       // return ResultData.fail({ ...ErrorCode.AUTH.PASSWORD_ERROR });
     }
-    const signInResInfo: signInResInfo | undefined = {
+    const SignInResInfo: SignInResInfo | undefined = {
       id: userInfo.id,
       name: userInfo.name,
       mobile: userInfo.mobile,
@@ -69,8 +69,8 @@ export class AuthService {
       mobile: userInfo.mobile,
       status: User_Status_Enum.Enabled,
     };
-    signInResInfo.token = this.createToken(payload);
-    return ResultData.ok({ data: signInResInfo });
+    SignInResInfo.token = this.createToken(payload);
+    return ResultData.ok({ data: SignInResInfo });
   }
 
   /**
@@ -85,13 +85,13 @@ export class AuthService {
   /**
    * @description 校验token
    * @param {String} token
-   * @returns {signInResInfo | null} signInResInfo
+   * @returns {SignInResInfo | null} SignInResInfo
    */
-  verifyToken(token: string): signInResInfo | null {
+  verifyToken(token: string): SignInResInfo | null {
     try {
       if (!token) return null;
-      const signInResInfo = this.jwtService.verify(token);
-      return signInResInfo;
+      const SignInResInfo = this.jwtService.verify(token);
+      return SignInResInfo;
     } catch (error) {
       return null;
     }

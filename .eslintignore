@@ -1,2 +1,1 @@
-/src/migrations/
-# *.ts
+/src/migrations/*.ts
