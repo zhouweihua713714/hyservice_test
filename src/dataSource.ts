@@ -8,6 +8,9 @@ let schema = 'development';
 if (process.env.NODE_ENV === 'test') {
   schema = 'test_' + path.basename(expect.getState().testPath).split('.')[0];
 }
+if (process.env.NODE_ENV === 'production') {
+  schema = 'public';
+}
 
 export const options: PostgresConnectionOptions = {
   type: 'postgres',
