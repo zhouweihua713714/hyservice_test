@@ -1,38 +1,15 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import { User_Status_Enum } from '@/common/enums/common.enum';
+import { Users } from '@/entities/Users.entity';
 
 // signIn 返回的聚合数据
-export class signInResInfo {
-  @ApiProperty({ description: '用户id' })
-  id: string;
-
-  @ApiProperty({ description: '用户手机号' })
-  mobile: string;
-
-  @ApiProperty({ description: '用户状态', enum: User_Status_Enum })
-  status: User_Status_Enum;
-
+export class SignInResInfo extends PickType(Users, ['id', 'mobile', 'status', 'name'] as const) {
   @ApiProperty({ description: 'token' })
   token: string;
-
-  @ApiPropertyOptional({ description: '用户昵称' })
-  name: string | null;
 }
-export class signUpResInfo {
-  @ApiProperty({ description: '用户id' })
-  id: string;
-
-  @ApiProperty({ description: '用户手机号' })
-  mobile: string;
-
-  @ApiProperty({ description: '用户状态', enum: User_Status_Enum })
-  status: User_Status_Enum;
-
+export class signUpResInfo extends PickType(Users, ['id', 'mobile', 'status', 'name'] as const) {
   @ApiProperty({ description: 'token' })
   token: string;
-
-  @ApiPropertyOptional({ description: '用户昵称' })
-  name?: string | null;
 }
 export class JwtUser {
   id: string;

@@ -22,7 +22,7 @@ export const options: PostgresConnectionOptions = {
   schema,
   entities: [__dirname + '/entities/*.entity.{ts,js}'],
   migrations: [__dirname + '/migrations/*.{ts,js}'],
-  synchronize: process.env.NODE_ENV === 'development'
+  synchronize: process.env.NODE_ENV === 'development',
 };
 
 export default new DataSource(options);

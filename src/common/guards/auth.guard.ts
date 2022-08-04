@@ -8,7 +8,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ALLOW_ANON } from '../decorators/allowAnon.decorator';
-import { signInResInfo } from '@/modules/auth/auth.types';
+import { SignInResInfo } from '@/modules/auth/auth.types';
 import { AuthService } from '@/modules/auth/auth.service';
 
 @Injectable()
@@ -35,8 +35,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const verifyToken = token.startsWith('Bearer ')
       ? token.replace('Bearer ', '')
       : token.replace('bearer ', '');
-    const signInResInfo: signInResInfo | null = this.authService.verifyToken(verifyToken);
-    if (!signInResInfo) throw new UnauthorizedException('当前登录已过期, 请重新登录');
+    const SignInResInfo: SignInResInfo | null = this.authService.verifyToken(verifyToken);
+    if (!SignInResInfo) throw new UnauthorizedException('当前登录已过期, 请重新登录');
     return this.activate(ctx);
   }
 

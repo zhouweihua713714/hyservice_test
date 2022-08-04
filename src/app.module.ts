@@ -14,7 +14,6 @@ import { Codes } from './entities/Codes.entity';
 import { Logins } from './entities/Logins.entity';
 import { Users } from './entities/Users.entity';
 import { Files } from './entities/Files.entity';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -50,6 +49,7 @@ import { Files } from './entities/Files.entity';
     AuthModule,
     FilesModule,
     DaoModule,
+
   ],
   // 守卫
   providers: [
