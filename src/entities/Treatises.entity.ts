@@ -88,7 +88,7 @@ export class Treatises {
   @Column('character varying', {
     name: 'other_author',
     nullable: true,
-    length: 32,
+    length: 128,
     comment: '其他作者',
   })
   otherAuthor: string | null;

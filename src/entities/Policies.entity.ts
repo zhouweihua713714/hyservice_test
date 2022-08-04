@@ -46,23 +46,22 @@ export class Policies {
   })
   announceNo: string | null;
 
-  @ApiPropertyOptional({ description: '教育层次:基础教育,高等教育,职业教育' })
-  @Column('character varying', {
+  @ApiPropertyOptional({ description: '教育层次:基础教育basic,高等教育higher,职业教育vocation,格式:[basic,higher]' })
+  @Column('jsonb', {
     name: 'education_level',
-    length: 64,
     nullable: true,
     comment: '教育层次:基础教育,高等教育,职业教育',
   })
-  educationLevel: string | null;
+  educationLevel: object | null;
 
- @ApiPropertyOptional({ description: '关键字' })
- @Column('character varying', {
-   name: 'keyword',
-   length: 100,
-   nullable: true,
-   comment: '关键字',
- })
- keyword: string | null;
+  @ApiPropertyOptional({ description: '关键字' })
+  @Column('character varying', {
+    name: 'keyword',
+    length: 100,
+    nullable: true,
+    comment: '关键字',
+  })
+  keyword: string | null;
 
   @ApiPropertyOptional({ description: '政策发布时间(出台时间)' })
   @Column('timestamp with time zone', {

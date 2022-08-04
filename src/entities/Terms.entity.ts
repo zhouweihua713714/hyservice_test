@@ -47,9 +47,9 @@ export class Terms {
   @Column('character varying', { name: 'department', length: 64, nullable: true, comment: '学部' })
   department: string | null;
 
-  @ApiPropertyOptional({ description: '批准年份' })
-  @Column('integer', { name: 'year', nullable: true, comment: '批准年份' })
-  year: number | null;
+  @ApiPropertyOptional({ description: '批准时间(年份)' })
+  @Column('timestamp with time zone', { name: 'authorized_at', nullable: true, comment: '批准时间(年份)' })
+  authorizedAt: number | null;
 
   @ApiProperty({ description: '项目名称' })
   @Column('character varying', { name: 'name', length: 50, comment: '项目名称' })

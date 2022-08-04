@@ -57,18 +57,21 @@ export class Conferences {
   @Column('text', { name: 'introduction', nullable: true, comment: '会议简介/主题' })
   introduction: string | null;
 
-  @ApiPropertyOptional({ description: '主领域' })
-  @Column('character varying', { name: 'field', length: 64, nullable: true, comment: '主领域' })
-  field: string | null;
-
-  @ApiPropertyOptional({ description: '子领域' })
-  @Column('character varying', {
-    name: 'minor_field',
-    length: 64,
+  @ApiPropertyOptional({ description: '主领域,格式 [string,string]' })
+  @Column('jsonb', {
+    name: 'field',
     nullable: true,
-    comment: '子领域',
+    comment: '主领域,格式 [string,string]',
   })
-  minorField: string | null;
+  field: object | null;
+
+  @ApiPropertyOptional({ description: '子领域,格式 [string,string]' })
+  @Column('jsonb', {
+    name: 'minor_field',
+    nullable: true,
+    comment: '子领域,格式 [string,string]',
+  })
+  minorField: object | null;
 
   @ApiProperty({ description: '网站' })
   @Column('character varying', { name: 'website', nullable: true, length: 50, comment: '网站' })
