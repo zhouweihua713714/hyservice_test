@@ -68,9 +68,9 @@ export class Patents {
   })
   appliedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '专利类型' })
-  @Column('character varying', { name: 'type', length: 64, nullable: true, comment: '专利类型' })
-  type: string | null;
+  @ApiProperty({ description: '专利类型' })
+  @Column('character varying', { name: 'type', length: 64,  comment: '专利类型' })
+  type: string ;
 
   @ApiPropertyOptional({ description: '公开国别' })
   @Column('character varying', { name: 'country', length: 32, nullable: true, comment: '公开国别' })
@@ -114,7 +114,7 @@ export class Patents {
   })
   status: string;
 
-  @ApiProperty({ description: '录入人id' })
+  @ApiPropertyOptional({ description: '录入人id' })
   @Column('character varying', {
     name: 'owner_id',
     length: 20,

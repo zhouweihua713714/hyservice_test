@@ -40,8 +40,8 @@ export class Conferences {
   })
   endedAt: Date | null;
 
-  @ApiProperty({ description: '届' })
-  @Column('character varying', { name: 'period', length: 50, nullable: true, comment: '届' })
+  @ApiPropertyOptional({ description: '届' })
+  @Column('integer', { name: 'period', nullable: true, comment: '届' })
   period: number | null;
 
   @ApiPropertyOptional({ description: '地点' })
@@ -73,17 +73,17 @@ export class Conferences {
   })
   minorField: object | null;
 
-  @ApiProperty({ description: '网站' })
+  @ApiPropertyOptional({ description: '网站' })
   @Column('character varying', { name: 'website', nullable: true, length: 50, comment: '网站' })
-  website: string;
+  website: string | null;
 
-  @ApiProperty({ description: '联络人' })
+  @ApiPropertyOptional({ description: '联络人' })
   @Column('character varying', { name: 'contact', nullable: true, length: 50, comment: '联络人' })
-  contact: string;
+  contact: string | null;
 
-  @ApiProperty({ description: '联络人邮箱' })
+  @ApiPropertyOptional({ description: '联络人邮箱' })
   @Column('character varying', { name: 'email', nullable: true, length: 50, comment: '联络人邮箱' })
-  email: string;
+  email: string | null;
 
   @ApiPropertyOptional({ description: '举办单位' })
   @Column('character varying', {
@@ -94,7 +94,7 @@ export class Conferences {
   })
   organizer: string | null;
 
-  @ApiProperty({ description: '送稿截止时间' })
+  @ApiPropertyOptional({ description: '送稿截止时间' })
   @Column('timestamp with time zone', {
     name: 'delivery_ended_at',
     nullable: true,
@@ -103,7 +103,7 @@ export class Conferences {
   })
   deliveryEndedAt: Date | null;
 
-  @ApiProperty({ description: '提前注册截止时间' })
+  @ApiPropertyOptional({ description: '提前注册截止时间' })
   @Column('timestamp with time zone', {
     name: 'preregister_ended_at',
     nullable: true,
@@ -112,7 +112,7 @@ export class Conferences {
   })
   preregisterEndedAt: Date | null;
 
-  @ApiProperty({ description: '注册截止时间' })
+  @ApiPropertyOptional({ description: '注册截止时间' })
   @Column('timestamp with time zone', {
     name: 'register_ended_at',
     nullable: true,
@@ -130,7 +130,7 @@ export class Conferences {
   })
   status: string;
 
-  @ApiProperty({ description: '录入人id' })
+  @ApiPropertyOptional({ description: '录入人id' })
   @Column('character varying', {
     name: 'owner_id',
     length: 20,

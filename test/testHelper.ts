@@ -6,10 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import fs from 'fs';
 import path from 'path';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import {
-  DataSource,
-  Repository,
-} from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { ConfigService } from '@nestjs/config';
 import { getConfig } from '@/config';
@@ -17,7 +14,8 @@ import { Codes } from '@/entities/Codes.entity';
 import { Users } from '@/entities/Users.entity';
 import { Files } from '@/entities/Files.entity';
 import { Logins } from '@/entities/Logins.entity';
-export class DBTester<T=undefined> {
+import { Website } from '@/entities/Website.entity';
+export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
   authService: AuthService;
@@ -26,6 +24,7 @@ export class DBTester<T=undefined> {
   usersDao: UsersDao;
   loginsRepository: Repository<Logins>;
   filesRepository: Repository<Files>;
+  websiteRepository: Repository<Website>;
   config: ConfigService;
   server: any;
 
@@ -60,6 +59,7 @@ export class DBTester<T=undefined> {
       this.usersRepository = this.module.get<Repository<Users>>(getRepositoryToken(Users));
       this.loginsRepository = this.module.get<Repository<Logins>>(getRepositoryToken(Logins));
       this.filesRepository = this.module.get<Repository<Files>>(getRepositoryToken(Files));
+      this.websiteRepository = this.module.get<Repository<Website>>(getRepositoryToken(Website));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 
@@ -76,13 +76,15 @@ export class DBTester<T=undefined> {
       const {
         seed: { up, down },
       } = require(path.join(dir, potentialSeedFile)); // eslint-disable-line @typescript-eslint/no-var-requires
-      up && beforeEach(async () => {
-        this.data = await up(this);
-      });
+      up &&
+        beforeEach(async () => {
+          this.data = await up(this);
+        });
 
-      down && afterEach(async () => {
-        await down(this);
-      });
+      down &&
+        afterEach(async () => {
+          await down(this);
+        });
     }
 
     return this;

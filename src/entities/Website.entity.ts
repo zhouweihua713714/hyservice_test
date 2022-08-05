@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('website_pkey', ['id'], { unique: true })
@@ -16,11 +16,11 @@ export class Website {
   @Column('character varying', { name: 'ipc', length: 128, comment: '网站备案号' })
   IPC: string;
 
-  @ApiProperty({ description: 'CDN地址' })
+  @ApiPropertyOptional({ description: 'CDN地址' })
   @Column('character varying', { name: 'cdn', length: 128, nullable: true, comment: 'CND地址' })
   CDN: string | null;
 
-  @ApiProperty({ description: '版本号' })
+  @ApiPropertyOptional({ description: '版本号' })
   @Column('character varying', {
     name: 'version_no',
     length: 64,
@@ -29,7 +29,7 @@ export class Website {
   })
   versionNo: string | null;
 
-  @ApiProperty({ description: '黑名单:ip分号隔开' })
+  @ApiPropertyOptional({ description: '黑名单:ip分号隔开' })
   @Column('character varying', {
     name: 'blacklist',
     length: 100,
@@ -42,7 +42,7 @@ export class Website {
   @Column('character varying', { name: 'title', length: 20, comment: '标题' })
   title: string;
 
-  @ApiProperty({ description: '首页描述' })
+  @ApiPropertyOptional({ description: '首页描述' })
   @Column('character varying', {
     name: 'description',
     length: 20,
@@ -80,9 +80,9 @@ export class Website {
     length: 256,
     comment: 'logo',
   })
-  logo: string | null;
+  logo: string ;
 
-  @ApiProperty({ description: '手机端二维码' })
+  @ApiPropertyOptional({ description: '手机端二维码' })
   @Column('character varying', {
     name: 'qr_code',
     length: 256,

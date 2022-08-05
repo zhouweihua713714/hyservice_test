@@ -83,7 +83,7 @@ export class AmericaTerms {
   })
   status: string;
 
-  @ApiProperty({ description: '录入人id' })
+  @ApiPropertyOptional({ description: '录入人id' })
   @Column('character varying', {
     name: 'owner_id',
     length: 20,

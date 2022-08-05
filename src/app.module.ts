@@ -14,6 +14,8 @@ import { Codes } from './entities/Codes.entity';
 import { Logins } from './entities/Logins.entity';
 import { Users } from './entities/Users.entity';
 import { Files } from './entities/Files.entity';
+import { HomepageModule } from './modules/homepage/homepage.module';
+import { Website } from './entities/Website.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,12 +46,12 @@ import { Files } from './entities/Files.entity';
         };
       },
     }),
-    TypeOrmModule.forFeature([Users, Files, Codes, Logins]),
+    TypeOrmModule.forFeature([Users, Files, Codes, Logins,Website]),
     HomeModule,
     AuthModule,
     FilesModule,
     DaoModule,
-
+    HomepageModule
   ],
   // 守卫
   providers: [

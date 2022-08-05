@@ -5,11 +5,11 @@ export enum User_Status_Enum {
   Enabled = 'enabled',
 }
 
-export enum User_Type_Enum {
+export enum User_Types_Enum {
   /** 用户 */
   User = 'user',
   /** 管理员 */
-  Admin= 'admin',
+  Admin = 'admin',
   /** 超级管理员 */
   Administrator = 'administrator',
 }
