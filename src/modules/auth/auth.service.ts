@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User_Status_Enum } from '@/common/enums/common.enum';
+import { User_Status_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { JwtUser, SignInResInfo, signUpResInfo } from '@/modules/auth/auth.types';
 import { ResultData } from '@/common/utils/result';
 import { bcompare } from '@/common/utils';
@@ -60,6 +60,7 @@ export class AuthService {
       name: userInfo.name,
       mobile: userInfo.mobile,
       status: User_Status_Enum.Enabled,
+      type: userInfo.type,
       token: loginInfo.token,
     };
     // 暂时还保留之前的token构造形式
@@ -68,6 +69,7 @@ export class AuthService {
       name: userInfo.name,
       mobile: userInfo.mobile,
       status: User_Status_Enum.Enabled,
+      type: userInfo.type,
     };
     SignInResInfo.token = this.createToken(payload);
     return ResultData.ok({ data: SignInResInfo });
@@ -137,6 +139,7 @@ export class AuthService {
       mobile: mobile,
       name: null,
       status: User_Status_Enum.Enabled,
+      type: User_Types_Enum.User,
       token: '',
     };
     // get token
@@ -145,6 +148,7 @@ export class AuthService {
       mobile: mobile,
       name: null,
       status: User_Status_Enum.Enabled,
+      type: User_Types_Enum.User,
     };
     signUpResInfo.token = this.createToken(payload);
     return ResultData.ok({ data: signUpResInfo });

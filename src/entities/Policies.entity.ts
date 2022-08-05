@@ -20,20 +20,20 @@ export class Policies {
   @Column('character varying', { name: 'name', length: 50, comment: '政策名称' })
   name: string;
 
-  @ApiPropertyOptional({ description: '政策类型' })
-  @Column('character varying', { name: 'type', length: 64, nullable: true, comment: '政策类型' })
-  type: string | null;
+  @ApiProperty({ description: '政策类型' })
+  @Column('character varying', { name: 'type', length: 64, comment: '政策类型' })
+  type: string;
 
   @ApiPropertyOptional({ description: '政策层次' })
   @Column('character varying', { name: 'level', length: 64, nullable: true, comment: '政策层次' })
   level: string | null;
 
-  @ApiPropertyOptional({ description: '发布机构' })
+  @ApiPropertyOptional({ description: '发布机构/部门' })
   @Column('character varying', {
     name: 'institution',
     length: 50,
     nullable: true,
-    comment: '发布机构',
+    comment: '发布机构/部门',
   })
   institution: string | null;
 
@@ -97,7 +97,7 @@ export class Policies {
   })
   status: string;
 
-  @ApiProperty({ description: '录入人id' })
+  @ApiPropertyOptional({ description: '录入人id' })
   @Column('character varying', {
     name: 'owner_id',
     length: 20,

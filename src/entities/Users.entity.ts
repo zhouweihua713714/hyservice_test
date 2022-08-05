@@ -1,4 +1,4 @@
-import { User_Status_Enum, User_Type_Enum } from '../common/enums/common.enum';
+import { User_Status_Enum, User_Types_Enum } from '../common/enums/common.enum';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Logins } from './Logins.entity';
@@ -40,7 +40,7 @@ export class Users {
   @ApiProperty({ description: '用户状态 是否有效:enabled,disabled 无效', enum: User_Status_Enum })
   @Column('character varying', {
     name: 'status',
-    default:  'enabled',
+    default: 'enabled',
     length: 10,
     comment: '是否有效:enabled,disabled 无效',
   })
@@ -48,12 +48,12 @@ export class Users {
 
   @ApiProperty({
     description: '用户类型:普通用户user,管理员admin,超级管理员administrator',
-    enum: User_Type_Enum,
+    enum: User_Types_Enum,
   })
   @Column('character varying', {
     name: 'type',
     default: 'user',
-    length: 10,
+    length: 20,
     comment: '用户类型:普通用户user,管理员admin,超级管理员administrator',
   })
   type: string;
