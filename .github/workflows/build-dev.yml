@@ -20,25 +20,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Test
-        run: |
-          npm install -g yarn
-          yarn
-          cp ~/hy-service.env .env
-          yarn test
-
-      - name: Migration
-        run: |
-          yarn m:check || yarn m:run
-          yarn m:check
-
       - name: Build & Run
         env:
           CI: true
         run: |
           rm .env || true
           cp ~/hy-service.container.env .env
-          docker build -t hy-service:${{ github.sha }} -f Dockerfile.ci .
+          docker build -t hy-service:${{ github.sha }} -f Dockerfile.dev .
           docker rm -f hy-service-dev || true
           docker run -d --add-host=host.docker.internal:host-gateway -p 80:3000 --name hy-service-dev hy-service:${{ github.sha }}
           docker image prune -a -f 
@@ -48,7 +36,7 @@ jobs:
         if: ${{ failure() }}
         env:
           SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: 'HY dev 环境 CI/CD 运行失败'
+          SLACK_MESSAGE: 'HY dev service 环境更新 运行失败'
           SLACK_TITLE: HY 慧研
           SLACK_USERNAME: BOT
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -58,7 +46,7 @@ jobs:
         if: ${{ success() }}
         env:
           SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: 'HY dev 环境 CI/CD 运行成功, http://demobox-hy.xyfolder.com/api/docs'
+          SLACK_MESSAGE: 'HY dev service 环境更新 运行成功, http://demobox-hy.xyfolder.com/api/docs'
           SLACK_TITLE: HY 慧研
           SLACK_USERNAME: BOT
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
