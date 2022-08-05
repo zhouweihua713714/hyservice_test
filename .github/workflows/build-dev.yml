@@ -20,6 +20,18 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Test
+        run: |
+          npm install -g yarn
+          yarn
+          cp ~/hy-service.env .env
+          yarn test
+
+      - name: Migration
+        run: |
+          yarn m:check || yarn m:run
+          yarn m:check
+
       - name: Build & Run
         env:
           CI: true
