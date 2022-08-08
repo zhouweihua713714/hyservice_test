@@ -24,8 +24,8 @@ export class Policies {
   @Column('character varying', { name: 'type', length: 64, comment: '政策类型' })
   type: string;
 
-  @ApiPropertyOptional({ description: '政策层次' })
-  @Column('character varying', { name: 'level', length: 64, nullable: true, comment: '政策层次' })
+  @ApiPropertyOptional({ description: '政策层级:国家级policy_level_001' })
+  @Column('character varying', { name: 'level', length: 64, nullable: true, comment: '政策层级:国家级policy_level_001' })
   level: string | null;
 
   @ApiPropertyOptional({ description: '发布机构/部门' })

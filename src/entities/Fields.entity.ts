@@ -14,13 +14,13 @@ export class Fields {
 
   @ApiProperty({
     description:
-      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy',
+      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy,两者共用则用_连接:institution_conference',
   })
   @Column('character varying', {
     name: 'type',
     length: 32,
     comment:
-      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy',
+      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy,两者共用则用_连接:institution_conference',
   })
   type: string;
 

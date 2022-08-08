@@ -29,8 +29,8 @@ export class Treatises {
   })
   region: string | null;
 
-  @ApiPropertyOptional({ description: '发表途径' })
-  @Column('character varying', { name: 'channel', nullable: true, length: 32, comment: '发表途径' })
+  @ApiPropertyOptional({ description: '发表途径:期刊way_001,会议way_002,EDM会议way003,书way_004' })
+  @Column('character varying', { name: 'channel', nullable: true, length: 32, comment: '发表途径:期刊way_001,会议way_002,EDM会议way003' })
   channel: string | null;
 
   @ApiPropertyOptional({ description: '语种' })

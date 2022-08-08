@@ -16,6 +16,7 @@ import { Users } from './entities/Users.entity';
 import { Files } from './entities/Files.entity';
 import { HomepageModule } from './modules/homepage/homepage.module';
 import { Website } from './entities/Website.entity';
+import { ConfigsModule } from './modules/configs/configs.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -51,7 +52,8 @@ import { Website } from './entities/Website.entity';
     AuthModule,
     FilesModule,
     DaoModule,
-    HomepageModule
+    HomepageModule,
+    ConfigsModule
   ],
   // 守卫
   providers: [
