@@ -3,7 +3,7 @@ import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('policy_types_pkey', ['id'], { unique: true })
 @Entity('policy_types')
-export class policyTypes {
+export class PolicyTypes {
   @ApiProperty({ description: '主键id' })
   @Column('character varying', { name: 'id', primary: true, length: 32, comment: '主键id' })
   id: string;

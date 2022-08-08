@@ -1,0 +1,16 @@
+import { HttpStatus } from '@nestjs/common';
+import request from 'supertest';
+import { DBTester } from '../testHelper';
+
+const tester = new DBTester().setup();
+
+describe('/configs/getPatentTypes', () => {
+
+  test('should get /configs/getPatentTypes', async () => {
+    const result = await request(tester.server).get('/configs/getPatentTypes').query({});
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.message).toBe('ok');
+    expect(result.body.data.patentTypes).toBeTruthy();
+  });
+});

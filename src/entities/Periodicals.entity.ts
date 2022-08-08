@@ -136,11 +136,11 @@ export class Periodicals {
   @Column('character varying', { name: 'cn', length: 50, nullable: true, comment: '国内统一刊号' })
   CN: string | null;
 
-  @ApiPropertyOptional({ description: '中文核心期刊(北大),格式 [string,string]' })
+  @ApiPropertyOptional({ description: '中文核心期刊(北大) 类型:核心期刊journals_001,1级权威journals_002,2级权威journals_003 格式 [string,string]' })
   @Column('jsonb', {
     name: 'peking_unit',
     nullable: true,
-    comment: '中文核心期刊(北大),格式 [string,string]',
+    comment: '中文核心期刊(北大) 类型:核心期刊journals_001,1级权威journals_002,2级权威journals_003 格式 [string,string]',
   })
   pekingUnit: object | null;
 

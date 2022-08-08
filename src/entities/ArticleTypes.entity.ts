@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-@Index('languages_pkey', ['id'], { unique: true })
-@Entity('languages')
-export class Languages {
+@Index('article_types_pkey', ['id'], { unique: true })
+@Entity('article_types')
+export class ArticleTypes {
   @ApiProperty({ description: '主键id' })
   @Column('character varying', { name: 'id', primary: true, length: 32, comment: '主键id' })
   id: string;
