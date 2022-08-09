@@ -110,6 +110,25 @@ export const ErrorCode = {
       message: '当前用户无权限操作',
     },
   },
+  // 2xxxx
+  CONTENT_MANAGEMENT: {
+    COLUMN_NOT_FOUND_ERROR: {
+      code: 20001,
+      message: '当前栏目不存在或者已经被删除',
+    },
+    TERM_TYPE_NOT_FOUND_ERROR: {
+      code: 20002,
+      message: '当前项目类型不存在或者已经被删除',
+    },
+    SUBJECT_NOT_FOUND_ERROR: {
+      code: 20003,
+      message: '当前学科不存在或者已经被删除',
+    },
+    START_TIME_ERROR: {
+      code: 20004,
+      message: '开始时间不能大于结束时间',
+    },
+  },
   // 3xxxx
   FILES: {
     FILE_NOT_FOUND_ERROR: {

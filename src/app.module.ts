@@ -18,6 +18,10 @@ import { HomepageModule } from './modules/homepage/homepage.module';
 import { Website } from './entities/Website.entity';
 import { ConfigsModule } from './modules/configs/configs.module';
 import { TermsModule } from './modules/terms/terms.module';
+import { Columns } from './entities/Columns.entity';
+import { TermTypes } from './entities/TermTypes.entity';
+import { Subjects } from './entities/Subjects.entity';
+import { Terms } from './entities/Terms.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,14 +52,24 @@ import { TermsModule } from './modules/terms/terms.module';
         };
       },
     }),
-    TypeOrmModule.forFeature([Users, Files, Codes, Logins,Website]),
+    TypeOrmModule.forFeature([
+      Users,
+      Files,
+      Codes,
+      Logins,
+      Website,
+      Columns,
+      TermTypes,
+      Subjects,
+      Terms,
+    ]),
     HomeModule,
     AuthModule,
     FilesModule,
     DaoModule,
     HomepageModule,
     ConfigsModule,
-    TermsModule
+    TermsModule,
   ],
   // 守卫
   providers: [

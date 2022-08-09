@@ -1,18 +1,10 @@
-import _, { isArray, isNull } from 'lodash';
+import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-import { Injectable } from '@nestjs/common';
-
 import { SignInResInfo } from '../auth/auth.types';
-
-import { Repository, Like, In, IsNull, Not, getRepository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-
 import { ErrorCode } from '@/common/utils/errorCode';
 import { websiteRepository } from '../repository/repository';
 import { SetHomepageDto } from './homepage.dto';
 import { User_Types_Enum } from '@/common/enums/common.enum';
-
-@Injectable()
 export class HomepageService {
   /**
    * @description 获取首页配置

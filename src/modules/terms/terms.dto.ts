@@ -1,13 +1,5 @@
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsDateString,
-  IsInt,
-  IsOptional,
-  IsString,
-  Length,
-} from 'class-validator';
-
+import { IsArray, IsDateString, IsInt, IsOptional, IsString, Length } from 'class-validator';
 
 export class SaveTermDto {
   // @ApiPropertyOptional({ description: 'id,有则传过来无则不传' })
@@ -27,7 +19,7 @@ export class SaveTermDto {
   @ApiPropertyOptional({ description: '项目类型' })
   @IsString({ message: 'type 类型错误, 正确类型 string' })
   @IsOptional()
-  type: string ;
+  type: string;
 
   @ApiPropertyOptional({ description: '省份code' })
   @IsString({ message: 'string 类型错误, 正确类型 string' })
@@ -38,7 +30,7 @@ export class SaveTermDto {
   @IsString({ message: 'unit 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
   @IsOptional()
-  unit: string ;
+  unit: string;
 
   @ApiPropertyOptional({ description: '项目负责人' })
   @IsString({ message: 'principal 类型错误, 正确类型 string' })
@@ -48,7 +40,7 @@ export class SaveTermDto {
   @ApiPropertyOptional({ description: '项目编号' })
   @IsString({ message: 'termNumber 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
-  termNumber: string ;
+  termNumber: string;
 
   @ApiPropertyOptional({ description: '关键词' })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
@@ -75,12 +67,17 @@ export class SaveTermDto {
   @IsOptional()
   subjectNo: string;
 
+  @ApiPropertyOptional({ description: '批准年份' })
+  @IsDateString({ message: 'authorizedAt 类型错误, 正确类型 date' })
+  @IsOptional()
+  authorizedAt: Date;
+
   @ApiPropertyOptional({ description: '执行开始时间' })
   @IsDateString({ message: 'startedAt 类型错误, 正确类型 date' })
   @IsOptional()
   startedAt: Date;
 
-  @ApiPropertyOptional({ description: '执行开始时间' })
+  @ApiPropertyOptional({ description: '执行开始时间,前端需要判断结束时间>开始时间' })
   @IsDateString({ message: 'endedAt 类型错误, 正确类型 date' })
   @IsOptional()
   endedAt: Date;
