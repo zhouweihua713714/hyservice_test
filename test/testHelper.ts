@@ -15,6 +15,11 @@ import { Users } from '@/entities/Users.entity';
 import { Files } from '@/entities/Files.entity';
 import { Logins } from '@/entities/Logins.entity';
 import { Website } from '@/entities/Website.entity';
+import { Columns } from '@/entities/Columns.entity';
+import { TermTypes } from '@/entities/TermTypes.entity';
+import { ReplaySubject } from 'rxjs';
+import { Subjects } from '@/entities/Subjects.entity';
+import { Terms } from '@/entities/Terms.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -25,6 +30,10 @@ export class DBTester<T = undefined> {
   loginsRepository: Repository<Logins>;
   filesRepository: Repository<Files>;
   websiteRepository: Repository<Website>;
+  columnsRepository: Repository<Columns>;
+  termTypesRepository: Repository<TermTypes>;
+  subjectsRepository: Repository<Subjects>;
+  termsRepository: Repository<Terms>;
   config: ConfigService;
   server: any;
 
@@ -60,6 +69,12 @@ export class DBTester<T = undefined> {
       this.loginsRepository = this.module.get<Repository<Logins>>(getRepositoryToken(Logins));
       this.filesRepository = this.module.get<Repository<Files>>(getRepositoryToken(Files));
       this.websiteRepository = this.module.get<Repository<Website>>(getRepositoryToken(Website));
+      this.columnsRepository = this.module.get<Repository<Columns>>(getRepositoryToken(Columns));
+      this.termTypesRepository = this.module.get<Repository<TermTypes>>(
+        getRepositoryToken(TermTypes)
+      );
+      this.subjectsRepository = this.module.get<Repository<Subjects>>(getRepositoryToken(Subjects));
+      this.termsRepository = this.module.get<Repository<Terms>>(getRepositoryToken(Terms));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 

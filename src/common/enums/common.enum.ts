@@ -41,3 +41,20 @@ export enum Orders_Enum {
   /** 升序 */
   ASC = 'ASC',
 }
+
+export enum Content_Types_Enum {
+  /** 会议 */
+  CONFERENCE = 'conference',
+  /** 机构 */
+  INSTITUTION = 'institution',
+  /** 专利 */
+  PATENT = 'patent',
+  /** 政策 */
+  POLICY = 'policy',
+  /**项目 */
+  TERM = 'term',
+  /**项目 */
+  TREATISE = 'treatise',
+  /**期刊 */
+  PERIODICAL = 'periodical',
+}

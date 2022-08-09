@@ -117,7 +117,7 @@ export class Patents {
   @ApiPropertyOptional({ description: '录入人id' })
   @Column('character varying', {
     name: 'owner_id',
-    length: 20,
+    length:128,
     nullable: true,
     comment: '录入人id',
   })

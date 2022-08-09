@@ -51,7 +51,7 @@ export class Terms {
     nullable: true,
     comment: '批准时间(年份)',
   })
-  authorizedAt: number | null;
+  authorizedAt: Date | null;
 
   @ApiProperty({ description: '项目名称' })
   @Column('character varying', { name: 'name', length: 50, comment: '项目名称' })
@@ -119,7 +119,7 @@ export class Terms {
   @ApiPropertyOptional({ description: '录入人id' })
   @Column('character varying', {
     name: 'owner_id',
-    length: 20,
+    length: 128,
     nullable: true,
     comment: '录入人id',
   })
