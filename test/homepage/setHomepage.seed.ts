@@ -7,8 +7,9 @@ import { User_Types_Enum } from '@/common/enums/common.enum';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
+let normalUser: CreateUserRetType;
 
-export type DataType = { user: CreateUserRetType };
+export type DataType = { user: CreateUserRetType; normalUser: CreateUserRetType };
 
 export const seed: TesterSeed<DataType> = {
   up: async (tester) => {
@@ -16,7 +17,11 @@ export const seed: TesterSeed<DataType> = {
       { mobile, password, type: User_Types_Enum.Administrator },
       tester.authService
     );
-    return { user };
+    normalUser = await tester.usersDao.createUser(
+      { mobile, password, type: User_Types_Enum.User },
+      tester.authService
+    );
+    return { user, normalUser };
   },
   down: async (tester) => {
     await tester.usersRepository.delete({});
