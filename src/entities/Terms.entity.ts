@@ -30,10 +30,8 @@ export class Terms {
   province: string | null;
 
   @ApiPropertyOptional({ description: '金额(万元)' })
-  @Column('decimal', {
+  @Column('integer', {
     name: 'money',
-    precision: 10,
-    scale: 2,
     nullable: true,
     comment: '金额(万元)',
   })
@@ -78,7 +76,7 @@ export class Terms {
     nullable: true,
     comment: '执行时间,开始时间',
   })
-  startedAt: string | null;
+  startedAt: Date | null;
 
   @ApiProperty({ description: '执行时间,结束时间' })
   @Column('timestamp with time zone', {
@@ -86,7 +84,7 @@ export class Terms {
     nullable: true,
     comment: '执行时间,结束时间',
   })
-  endedAt: string | null;
+  endedAt: Date | null;
 
   @ApiPropertyOptional({ description: '关键字' })
   @Column('character varying', {

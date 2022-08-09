@@ -1,12 +1,14 @@
 import { User_Types_Enum } from '@/common/enums/common.enum';
 import { SetHomepageDto } from '@/modules/homepage/homepage.dto';
 import { HttpStatus } from '@nestjs/common';
+import { Console } from 'console';
 import request from 'supertest';
 import { DBTester } from '../testHelper';
 import { DataType } from './setHomepage.seed';
 
 const tester = new DBTester<DataType>().setup();
 const payload: SetHomepageDto = {
+  id: '需要赋值',
   name: '网站名称',
   IPC: '备案号',
   CDN: 'xxxx',
@@ -29,16 +31,12 @@ describe('/homepage/setHomepage', () => {
   });
 
   test('should not POST /homepage/setHomepage with user is not admin', async () => {
-    // update user
-    await tester.usersRepository.update(tester.data.user.user.id, {
-      type: User_Types_Enum.User,
-    });
     const result = await request(tester.server)
       .post('/homepage/setHomepage')
-      .set('Authorization', tester.data.user.headers.authorization)
+      .set('Authorization', tester.data.normalUser.headers.authorization)
       .send(payload);
     expect(result.status).toBe(HttpStatus.OK);
-    expect(result.body.code).toBe(200);
+    expect(result.body.code).toBe(10016);
   });
 
   test('should not POST /homepage/setHomepage', async () => {
@@ -46,15 +44,16 @@ describe('/homepage/setHomepage', () => {
     const result = await request(tester.server)
       .post('/homepage/setHomepage')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send(payload);
+      .send({});
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.id).toBeTruthy();
+    payload.id = result.body.data.id;
     // save with id
     const resultData = await request(tester.server)
       .post('/homepage/setHomepage')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ id: result.body.data.id, ...payload });
+      .send({ ...payload });
     expect(resultData.status).toBe(HttpStatus.OK);
     expect(resultData.body.code).toBe(200);
     expect(resultData.body.data.id).toBeTruthy();

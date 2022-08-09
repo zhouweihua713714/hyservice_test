@@ -8,13 +8,13 @@ export class Website {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: '站点名称' })
-  @Column('character varying', { name: 'name', length: 128, comment: '站点名称' })
-  name: string;
+  @ApiPropertyOptional({ description: '站点名称' })
+  @Column('character varying', { name: 'name', length: 128, nullable: true, comment: '站点名称' })
+  name: string | null;
 
-  @ApiProperty({ description: '网站备案号' })
-  @Column('character varying', { name: 'ipc', length: 128, comment: '网站备案号' })
-  IPC: string;
+  @ApiPropertyOptional({ description: '网站备案号' })
+  @Column('character varying', { name: 'ipc', length: 128, nullable: true, comment: '网站备案号' })
+  IPC: string | null;
 
   @ApiPropertyOptional({ description: 'CDN地址' })
   @Column('character varying', { name: 'cdn', length: 128, nullable: true, comment: 'CND地址' })
@@ -38,9 +38,9 @@ export class Website {
   })
   blacklist: string | null;
 
-  @ApiProperty({ description: '标题' })
-  @Column('character varying', { name: 'title', length: 20, comment: '标题' })
-  title: string;
+  @ApiPropertyOptional({ description: '标题' })
+  @Column('character varying', { name: 'title', length: 20, nullable: true, comment: '标题' })
+  title: string | null;
 
   @ApiPropertyOptional({ description: '首页描述' })
   @Column('character varying', {
@@ -51,36 +51,40 @@ export class Website {
   })
   description: string | null;
 
-  @ApiProperty({ description: '版权所有' })
+  @ApiPropertyOptional({ description: '版权所有' })
   @Column('character varying', {
     name: 'ownership',
     length: 50,
     comment: '版权所有',
+    nullable: true,
   })
-  ownership: string;
+  ownership: string | null;
 
-  @ApiProperty({ description: '底部描述' })
+  @ApiPropertyOptional({ description: '底部描述' })
   @Column('character varying', {
     name: 'bottom_description',
     length: 50,
     comment: '底部描述',
+    nullable: true,
   })
-  bottomDescription: string;
+  bottomDescription: string | null;
 
-  @ApiProperty({ description: '友情链接 数组[{url:,title:xxx }]' })
+  @ApiPropertyOptional({ description: '友情链接 数组[{url:,title:xxx }]' })
   @Column('jsonb', {
     name: 'links',
     comment: '友情链接 数组[{url:,title:xxx }]',
+    nullable: true,
   })
-  links: object;
+  links: object | null;
 
-  @ApiProperty({ description: 'logo' })
+  @ApiPropertyOptional({ description: 'logo' })
   @Column('character varying', {
     name: 'logo',
     length: 256,
     comment: 'logo',
+    nullable: true,
   })
-  logo: string ;
+  logo: string | null;
 
   @ApiPropertyOptional({ description: '手机端二维码' })
   @Column('character varying', {

@@ -17,6 +17,7 @@ import { Files } from './entities/Files.entity';
 import { HomepageModule } from './modules/homepage/homepage.module';
 import { Website } from './entities/Website.entity';
 import { ConfigsModule } from './modules/configs/configs.module';
+import { TermsModule } from './modules/terms/terms.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -53,7 +54,8 @@ import { ConfigsModule } from './modules/configs/configs.module';
     FilesModule,
     DaoModule,
     HomepageModule,
-    ConfigsModule
+    ConfigsModule,
+    TermsModule
   ],
   // 守卫
   providers: [
