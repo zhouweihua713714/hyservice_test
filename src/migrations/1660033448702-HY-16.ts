@@ -8,7 +8,7 @@ export class HY161660033448702 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "america_terms" ADD "owner_id" character varying(128)`);
     await queryRunner.query(`COMMENT ON COLUMN "america_terms"."owner_id" IS '录入人id'`);
     await queryRunner.query(`ALTER TABLE "columns" DROP COLUMN "sequence_number"`);
-    await queryRunner.query(`ALTER TABLE "columns" ADD "sequence_number" integer NOT NULL`);
+    await queryRunner.query(`ALTER TABLE "columns" ADD "sequence_number" integer`);
     await queryRunner.query(`COMMENT ON COLUMN "columns"."sequence_number" IS '排序'`);
     await queryRunner.query(`ALTER TABLE "conferences" DROP COLUMN "owner_id"`);
     await queryRunner.query(`ALTER TABLE "conferences" ADD "owner_id" character varying(128)`);
@@ -96,7 +96,7 @@ export class HY161660033448702 implements MigrationInterface {
     await queryRunner.query(`COMMENT ON COLUMN "columns"."sequence_number" IS '排序'`);
     await queryRunner.query(`ALTER TABLE "columns" DROP COLUMN "sequence_number"`);
     await queryRunner.query(
-      `ALTER TABLE "columns" ADD "sequence_number" character varying(64) NOT NULL`
+      `ALTER TABLE "columns" ADD "sequence_number" character varying(64)`
     );
     await queryRunner.query(`COMMENT ON COLUMN "america_terms"."owner_id" IS '录入人id'`);
     await queryRunner.query(`ALTER TABLE "america_terms" DROP COLUMN "owner_id"`);

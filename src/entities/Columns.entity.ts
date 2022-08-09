@@ -17,8 +17,8 @@ export class Columns {
   parentId: string;
 
   @ApiProperty({ description: '排序' })
-  @Column('integer', { name: 'sequence_number', comment: '排序' })
-  sequenceNumber: number;
+  @Column('integer', { name: 'sequence_number', comment: '排序', nullable: true })
+  sequenceNumber: number | null;
 
   @ApiProperty({ description: '是否隐藏:1是,0否' })
   @Column('smallint', { name: 'is_hide', default: '0', comment: '是否隐藏:1是,0否' })
