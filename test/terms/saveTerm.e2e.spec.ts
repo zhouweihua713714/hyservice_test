@@ -1,3 +1,4 @@
+import { Content_Status_Enum } from '@/common/enums/common.enum';
 import { SaveTermDto } from '@/modules/terms/terms.dto';
 import { HttpStatus } from '@nestjs/common';
 import request from 'supertest';
@@ -6,6 +7,8 @@ import { DataType } from './saveTerm.seed';
 
 const tester = new DBTester<DataType>().setup();
 const payload: SaveTermDto = {
+  id: '有传id则为编辑无则新增',
+  status: Content_Status_Enum.ACTIVE,
   name: '项目名称必填',
   columnId: 'tester.data.columns[1].id',
   type: 'tester.data.termType.id',
@@ -107,14 +110,28 @@ describe('/terms/saveTerms', () => {
     payload.columnId = tester.data.columns[1].id;
     payload.type = tester.data.termType.id;
     payload.subject = tester.data.subjects[0].id;
-    // save with id
+    // save with
     const result = await request(tester.server)
       .post('/terms/saveTerms')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ ...payload });
+      .send({
+        status: Content_Status_Enum.READY,
+        columnId: payload.columnId,
+        type: payload.type,
+        name: '这是新增',
+      });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.id).toBeTruthy();
+    //save with id
+    payload.id = result.body.data.id;
+    const resultData = await request(tester.server)
+      .post('/terms/saveTerms')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send(payload);
+    expect(resultData.status).toBe(HttpStatus.OK);
+    expect(resultData.body.code).toBe(200);
+    expect(resultData.body.data.id).toBeTruthy();
     await tester.termsRepository.delete(result.body.data.id);
   });
 });

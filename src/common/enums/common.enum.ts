@@ -58,3 +58,11 @@ export enum Content_Types_Enum {
   /**期刊 */
   PERIODICAL = 'periodical',
 }
+
+export enum Content_Status_Enum {
+  /** 待发布 */
+  READY = 'ready',
+  /** 已发布 */
+  ACTIVE = 'active',
+}
+
