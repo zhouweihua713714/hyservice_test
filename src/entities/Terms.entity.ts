@@ -57,11 +57,11 @@ export class Terms {
   @Column('character varying', { name: 'name', length: 50, comment: '项目名称' })
   name: string;
 
-  @ApiProperty({ description: '学科分类' })
+  @ApiPropertyOptional({ description: '学科分类' })
   @Column('character varying', { name: 'subject', nullable: true, length: 50, comment: '学科分类' })
   subject: string | null;
 
-  @ApiProperty({ description: '学科代码' })
+  @ApiPropertyOptional({ description: '学科代码' })
   @Column('character varying', {
     name: 'subject_no',
     nullable: true,
@@ -70,7 +70,7 @@ export class Terms {
   })
   subjectNo: string | null;
 
-  @ApiProperty({ description: '执行时间,开始时间' })
+  @ApiPropertyOptional({ description: '执行时间,开始时间' })
   @Column('timestamp with time zone', {
     name: 'started_at',
     nullable: true,
@@ -78,7 +78,7 @@ export class Terms {
   })
   startedAt: Date | null;
 
-  @ApiProperty({ description: '执行时间,结束时间' })
+  @ApiPropertyOptional({ description: '执行时间,结束时间' })
   @Column('timestamp with time zone', {
     name: 'ended_at',
     nullable: true,

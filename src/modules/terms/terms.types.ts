@@ -34,6 +34,6 @@ export class GetTermsDetailResult extends PickType(Terms, [
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 
-  @ApiProperty({ description: '责任人' })
+  @ApiPropertyOptional({ description: '责任人' })
   owner: string;
 }
