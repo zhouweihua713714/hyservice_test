@@ -1,6 +1,11 @@
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import { IsArray, IsDateString, IsInt, IsOptional, IsString, Length } from 'class-validator';
 
+export class GetTermDetailDto {
+  @ApiProperty({ description: 'id,' })
+  @IsString({ message: 'id 类型错误, 正确类型 string' })
+  id: string;
+}
 export class SaveTermDto {
   // @ApiPropertyOptional({ description: 'id,有则传过来无则不传' })
   // @IsString({ message: 'id 类型错误, 正确类型 string' })
