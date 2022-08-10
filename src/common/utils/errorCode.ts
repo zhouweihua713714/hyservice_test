@@ -128,6 +128,10 @@ export const ErrorCode = {
       code: 20004,
       message: '开始时间不能大于结束时间',
     },
+    RESOURCE_NOT_FOUND_ERROR: {
+      code: 20005,
+      message: '该数据不存在或已经被删除',
+    },
   },
   // 3xxxx
   FILES: {

@@ -9,28 +9,52 @@ import {
   subjectsRepository,
   termsRepository,
   termTypesRepository,
+  usersRepository,
   websiteRepository,
 } from '../repository/repository';
-import { SaveTermDto } from './terms.dto';
+import { GetTermDetailDto, SaveTermDto } from './terms.dto';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { IsNull } from 'typeorm';
 
 export class TermsService {
   /**
-   * @description 获取首页配置
-   * @param {} params
-   * @returns {ResultData} 返回getResourceSources信息
+   * @description 获取项目详情
+   * @param {GetTermDetailDto} params
+   * @returns {ResultData} 返回getTermDetail信息
    */
-  async getTermsConfig(): Promise<ResultData> {
-    const data = await websiteRepository.find({ take: 1 });
-    if (data.length > 0) {
-      return ResultData.ok({ data: { ...data[0] } });
-    } else {
-      return ResultData.ok({ data: {} });
+  async getTermDetail(params: GetTermDetailDto): Promise<ResultData> {
+    const termInfo = await termsRepository.findOneBy({
+      id: params.id,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    if (!termInfo) {
+      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
     }
+    const type = termInfo.type ? termInfo.type : '-1';
+    const subject = termInfo.subject ? termInfo.subject : '-1';
+
+    const [columnInfo, typeInfo, subjectInfo] = await Promise.all([
+      columnsRepository.findOneBy({ id: termInfo.columnId }),
+      termTypesRepository.findOneBy({ id: type }),
+      subjectsRepository.findOneBy({ id: subject }),
+    ]);
+    let userInfo;
+    if (termInfo.ownerId) {
+      userInfo = await usersRepository.findOneBy({ id: termInfo.ownerId });
+    }
+    const result = {
+      typeName: typeInfo ? typeInfo.name : null,
+      subjectName: subjectInfo ? subjectInfo.name : null,
+      columnName: columnInfo ? columnInfo.name : null,
+      owner: userInfo ? userInfo.mobile : null,
+      ...termInfo,
+    };
+    return ResultData.ok({ data: result });
   }
   /**
-   * @description 设置首页
-   * @param {SaveTermDto} params 创建资源的相关参数
+   * @description 保存项目
+   * @param {SaveTermDto} params 保存项目的相关参数
    * @returns {ResultData} 返回saveTerm信息
    */
   async saveTerm(params: SaveTermDto, user: SignInResInfo): Promise<ResultData> {
