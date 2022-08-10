@@ -158,6 +158,6 @@ export class Institutions {
     comment: '删除时间',
   })
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
-  @Column('boolean', { name: 'enabled', nullable: true, default: 'true' })
+  @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean ;
 }
