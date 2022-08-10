@@ -13,7 +13,11 @@ import {
   websiteRepository,
 } from '../repository/repository';
 import { GetTermDetailDto, SaveTermDto } from './terms.dto';
-import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import {
+  Content_Status_Enum,
+  Content_Types_Enum,
+  User_Types_Enum,
+} from '@/common/enums/common.enum';
 import { IsNull } from 'typeorm';
 
 export class TermsService {
@@ -58,7 +62,7 @@ export class TermsService {
    * @returns {ResultData} 返回saveTerm信息
    */
   async saveTerm(params: SaveTermDto, user: SignInResInfo): Promise<ResultData> {
-    const { termNumber, columnId, type, subject, startedAt, endedAt } = params;
+    const { id, status, termNumber, columnId, type, subject, startedAt, endedAt } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
@@ -83,9 +87,22 @@ export class TermsService {
     if (!subjectInfo || (subjectInfo && subjectInfo.type !== Content_Types_Enum.TERM)) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.SUBJECT_NOT_FOUND_ERROR });
     }
+    if (id) {
+      // if id exist get termInfo
+      const termInfo = await termsRepository.findOneBy({
+        id: params.id,
+        deletedAt: IsNull(),
+        enabled: true,
+      });
+      if (!termInfo) {
+        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
+      }
+    } else {
+      params.id = termNumber ? termNumber : new Date().getTime().toString();
+    }
     const result = await termsRepository.save({
-      id: termNumber ? termNumber : new Date().getTime().toString(),
       ownerId: user.id,
+      publishedAt: status && status === Content_Status_Enum.ACTIVE ? new Date() : null,
       ...params,
     });
     return ResultData.ok({ data: result });

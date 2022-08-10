@@ -1,5 +1,6 @@
+import { Content_Status_Enum } from '@/common/enums/common.enum';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
-import { IsArray, IsDateString, IsInt, IsOptional, IsString, Length } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, IsInt, IsOptional, IsString, Length } from 'class-validator';
 
 export class GetTermDetailDto {
   @ApiProperty({ description: 'id,' })
@@ -7,10 +8,16 @@ export class GetTermDetailDto {
   id: string;
 }
 export class SaveTermDto {
-  // @ApiPropertyOptional({ description: 'id,有则传过来无则不传' })
-  // @IsString({ message: 'id 类型错误, 正确类型 string' })
-  // @IsOptional()
-  // id: string | null;
+  @ApiPropertyOptional({ description: 'id,传表示编辑不传新增' })
+  @IsString({ message: 'id 类型错误, 正确类型 string' })
+  @IsOptional()
+  id: string;
+
+  @ApiPropertyOptional({ description: '状态,待发布,已发布' })
+  @IsString({ message: '项目名称name 类型错误, 正确类型 string' })
+  @IsEnum(Content_Status_Enum)
+  @IsOptional()
+  status: string;
 
   @ApiProperty({ description: '项目名称' })
   @IsString({ message: '项目名称name 类型错误, 正确类型 string' })

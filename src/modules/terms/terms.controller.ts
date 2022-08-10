@@ -26,7 +26,7 @@ export class TermsController {
 
   @Post('/saveTerms')
   @HttpCode(200)
-  @ApiOperation({ summary: '新增项目' })
+  @ApiOperation({ summary: '新增/编辑项目' })
   @ApiResult()
   @ApiBearerAuth()
   countResourceByStatus(@Body() params: SaveTermDto, @Req() req: any) {
