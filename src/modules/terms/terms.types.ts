@@ -37,3 +37,21 @@ export class GetTermsDetailResult extends PickType(Terms, [
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
 }
+export class ListTermInfo extends PickType(Terms, [
+  'id',
+  'name',
+  'columnId',
+  'status',
+  'updatedAt',
+] as const) {
+  @ApiProperty({ description: '栏目名称' })
+  columnName: string;
+}
+
+export class ListTermResult  {
+  @ApiProperty({ description: '项目数组', type: ListTermInfo, isArray: true })
+  terms: ListTermInfo[];
+
+  @ApiProperty({ description: '总数', })
+  count: number;
+}

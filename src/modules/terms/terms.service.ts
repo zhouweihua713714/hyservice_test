@@ -1,8 +1,7 @@
-import _, { isArray, isNull } from 'lodash';
+import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../auth/auth.types';
-
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
   columnsRepository,
@@ -10,15 +9,14 @@ import {
   termsRepository,
   termTypesRepository,
   usersRepository,
-  websiteRepository,
 } from '../repository/repository';
-import { GetTermDetailDto, SaveTermDto } from './terms.dto';
+import { GetTermDetailDto, ListTermDto, SaveTermDto } from './terms.dto';
 import {
   Content_Status_Enum,
   Content_Types_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { IsNull } from 'typeorm';
+import { In, IsNull, Like } from 'typeorm';
 
 export class TermsService {
   /**
@@ -102,9 +100,83 @@ export class TermsService {
     }
     const result = await termsRepository.save({
       ownerId: user.id,
+      updatedAt: id ? new Date() : undefined,
       publishedAt: status && status === Content_Status_Enum.ACTIVE ? new Date() : null,
       ...params,
     });
     return ResultData.ok({ data: result });
+  }
+  /**
+   * @description 项目列表
+   * @param {ListTermDto} params
+   * @returns {ResultData} 返回listTerm信息
+   */
+  async listTerm(params: ListTermDto, user: SignInResInfo): Promise<ResultData> {
+    const { columnId, name, status, page, size } = params;
+    // if user not permission, then throw error
+    if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
+    }
+    let statusCondition;
+    let columnCondition;
+    let nameCondition;
+    if (status) {
+      statusCondition = {
+        status: status,
+      };
+    }
+    if (columnId) {
+      columnCondition = {
+        columnId: columnId,
+      };
+    }
+    if (name) {
+      nameCondition = {
+        name: Like(`%${name}%`),
+      };
+    }
+    // get terms
+    const [terms, count] = await termsRepository.findAndCount({
+      where: {
+        ...statusCondition,
+        ...columnCondition,
+        ...nameCondition,
+        enabled: true,
+        deletedAt: IsNull(),
+      },
+      select: ['id', 'columnId', 'name', 'clicks', 'status', 'updatedAt'],
+      skip: (page - 1) * size,
+      take: size,
+      order: {
+        status: 'DESC',
+        updatedAt: 'DESC',
+      },
+    });
+    if (count === 0) {
+      return ResultData.ok({ data: { terms: [], count: count } });
+    }
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        id: In(
+          terms.map((term) => {
+            return term.columnId;
+          })
+        ),
+      },
+    });
+    const result = terms.map((term) => {
+      return {
+        id: term.id,
+        name: term.name,
+        clicks: term.clicks,
+        status: term.status,
+        updatedAt: term.updatedAt,
+        columnName: _.find(columns, function (o) {
+          return o.id === term.columnId;
+        })?.name,
+      };
+    });
+    return ResultData.ok({ data: { terms: result, count: count } });
   }
 }
