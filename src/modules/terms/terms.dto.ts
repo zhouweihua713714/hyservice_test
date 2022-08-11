@@ -1,6 +1,15 @@
 import { Content_Status_Enum } from '@/common/enums/common.enum';
+import { ReqListQuery } from '@/common/utils/reqListQuery';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
-import { IsArray, IsDateString, IsEnum, IsInt, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class GetTermDetailDto {
   @ApiProperty({ description: 'id,' })
@@ -93,4 +102,21 @@ export class SaveTermDto {
   @IsDateString({ message: 'endedAt 类型错误, 正确类型 date' })
   @IsOptional()
   endedAt: Date;
+}
+export class ListTermDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
+  @ApiPropertyOptional({ description: '项目名称,支持模糊搜索 如果为空则不传或者传null' })
+  @IsString({ message: 'name 类型错误,正确类型 string' })
+  @IsOptional()
+  name: string;
+
+  @ApiPropertyOptional({ description: '状态,待发布,已发布' })
+  @IsString({ message: '项目名称name 类型错误, 正确类型 string' })
+  @IsEnum(Content_Status_Enum)
+  @IsOptional()
+  status: string;
+
+  @ApiPropertyOptional({ description: '栏目id' })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  @IsOptional()
+  columnId: string;
 }

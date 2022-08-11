@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
-import { websiteRepository } from '@/modules/repository/repository';
 import { DBTester } from '../testHelper';
 import { DataType } from './getTermDetail.seed';
 
