@@ -28,15 +28,15 @@ export class Institutions {
   @Column('character varying', { name: 'address', length: 50, comment: '详细地址' })
   address: string;
 
-  @ApiPropertyOptional({ description: '简介' , nullable: true})
+  @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
   introduction: string | null;
 
-  @ApiProperty({ description: '网站' , nullable: true})
-  @Column('character varying', { name: 'website', length: 50, comment: '网站' })
+  @ApiProperty({ description: '网站', type: String, nullable: true })
+  @Column('character varying', { name: 'website', length: 50, nullable: true, comment: '网站' })
   website: string;
 
-  @ApiPropertyOptional({ description: '主办单位' , nullable: true})
+  @ApiPropertyOptional({ description: '主办单位', type: String, nullable: true })
   @Column('character varying', {
     name: 'unit',
     length: 50,
@@ -45,7 +45,12 @@ export class Institutions {
   })
   organizer: string | null;
 
-  @ApiPropertyOptional({ description: '主领域,格式 [string,string]', nullable: true })
+  @ApiPropertyOptional({
+    description: '主领域,格式 [string,string]',
+    type: String,
+    isArray: true,
+    nullable: true,
+  })
   @Column('jsonb', {
     name: 'field',
     nullable: true,
@@ -53,7 +58,12 @@ export class Institutions {
   })
   field: object | null;
 
-  @ApiPropertyOptional({ description: '子领域,格式 [string,string]', nullable: true })
+  @ApiPropertyOptional({
+    description: '子领域,格式 [string,string]',
+    type: String,
+    isArray: true,
+    nullable: true,
+  })
   @Column('jsonb', {
     name: 'minor_field',
     nullable: true,
@@ -61,27 +71,27 @@ export class Institutions {
   })
   minorField: object | null;
 
-  @ApiPropertyOptional({ description: '经度', nullable: true })
+  @ApiPropertyOptional({ description: '经度', type: Number, nullable: true })
   @Column('decimal', {
     name: 'longitude',
-    precision:10,
-    scale:6,
+    precision: 10,
+    scale: 6,
     nullable: true,
     comment: '子领域',
   })
   longitude: number | null;
 
-  @ApiPropertyOptional({ description: '纬度', nullable: true })
+  @ApiPropertyOptional({ description: '纬度', type: Number, nullable: true })
   @Column('decimal', {
     name: 'latitude',
-    precision:10,
-    scale:6,
+    precision: 10,
+    scale: 6,
     nullable: true,
     comment: '子领域',
   })
   latitude: number | null;
 
-  @ApiPropertyOptional({ description: '图片链接', nullable: true })
+  @ApiPropertyOptional({ description: '图片链接', type: String, nullable: true })
   @Column('character varying', {
     name: 'url',
     length: 64,
@@ -99,16 +109,16 @@ export class Institutions {
   })
   status: string;
 
-  @ApiPropertyOptional({ description: '录入人id', nullable: true })
+  @ApiPropertyOptional({ description: '录入人id', type: String, nullable: true })
   @Column('character varying', {
     name: 'owner_id',
-    length:128,
+    length: 128,
     nullable: true,
     comment: '录入人id',
   })
-    ownerId: string | null;
+  ownerId: string | null;
 
- @ApiPropertyOptional({ description: '关键字', nullable: true })
+  @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @Column('character varying', {
     name: 'keyword',
     length: 100,
@@ -128,11 +138,10 @@ export class Institutions {
   @ApiProperty({ description: '创建时间' })
   @Column('timestamp with time zone', {
     name: 'created_at',
-    nullable: true,
     default: () => 'CURRENT_TIMESTAMP',
     comment: '创建时间',
   })
-  createdAt: Date | null;
+  createdAt: Date;
 
   @ApiProperty({ description: '更新时间' })
   @Column('timestamp with time zone', {
@@ -141,9 +150,9 @@ export class Institutions {
     default: () => 'CURRENT_TIMESTAMP',
     comment: '更新时间',
   })
-  updatedAt: Date | null;
+  updatedAt: Date;
 
-  @ApiPropertyOptional({ description: '发布时间', nullable: true })
+  @ApiPropertyOptional({ description: '发布时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,
@@ -151,7 +160,7 @@ export class Institutions {
   })
   publishedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '删除时间' })
+  @ApiPropertyOptional({ description: '删除时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'deleted_at',
     nullable: true,
@@ -159,5 +168,5 @@ export class Institutions {
   })
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
-  enabled: boolean ;
+  enabled: boolean;
 }

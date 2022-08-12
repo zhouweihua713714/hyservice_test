@@ -8,7 +8,7 @@ export class Terms {
   @Column('character varying', { name: 'id', primary: true, length: 128, comment: '主键id' })
   id: string;
 
-  @ApiPropertyOptional({ description: '项目编号', nullable: true })
+  @ApiPropertyOptional({ description: '项目编号', type: String, nullable: true })
   @Column('character varying', {
     name: 'term_number',
     length: 50,
@@ -17,19 +17,19 @@ export class Terms {
   })
   termNumber: string | null;
 
-  @ApiPropertyOptional({ description: '项目负责人', nullable: true })
+  @ApiPropertyOptional({ description: '项目负责人', type: String, nullable: true })
   @Column('character varying', { name: 'principal', length: 50, nullable: true, comment: '负责人' })
   principal: string | null;
 
-  @ApiPropertyOptional({ description: '依托单位', nullable: true })
+  @ApiPropertyOptional({ description: '依托单位', type: String, nullable: true })
   @Column('character varying', { name: 'unit', length: 50, nullable: true, comment: '依托单位' })
   unit: string | null;
 
-  @ApiPropertyOptional({ description: '省份', nullable: true })
+  @ApiPropertyOptional({ description: '省份', type: String, nullable: true })
   @Column('character varying', { name: 'province', length: 50, nullable: true, comment: '省份' })
   province: string | null;
 
-  @ApiPropertyOptional({ description: '金额(万元)', nullable: true })
+  @ApiPropertyOptional({ description: '金额(万元)', type: String, nullable: true })
   @Column('integer', {
     name: 'money',
     nullable: true,
@@ -37,15 +37,15 @@ export class Terms {
   })
   money: number | null;
 
-  @ApiPropertyOptional({ description: '项目类型', nullable: true })
+  @ApiPropertyOptional({ description: '项目类型', type: String, nullable: true })
   @Column('character varying', { name: 'type', length: 64, nullable: true, comment: '项目类型' })
   type: string | null;
 
-  @ApiPropertyOptional({ description: '学部', nullable: true })
+  @ApiPropertyOptional({ description: '学部', type: String, nullable: true })
   @Column('character varying', { name: 'department', length: 64, nullable: true, comment: '学部' })
   department: string | null;
 
-  @ApiPropertyOptional({ description: '批准时间(年份)', nullable: true })
+  @ApiPropertyOptional({ description: '批准时间(年份)', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'authorized_at',
     nullable: true,
@@ -57,11 +57,11 @@ export class Terms {
   @Column('character varying', { name: 'name', length: 50, comment: '项目名称' })
   name: string;
 
-  @ApiPropertyOptional({ description: '学科分类', nullable: true })
+  @ApiPropertyOptional({ description: '学科分类', type: String, nullable: true })
   @Column('character varying', { name: 'subject', nullable: true, length: 50, comment: '学科分类' })
   subject: string | null;
 
-  @ApiPropertyOptional({ description: '学科代码', nullable: true })
+  @ApiPropertyOptional({ description: '学科代码', type: String, nullable: true })
   @Column('character varying', {
     name: 'subject_no',
     nullable: true,
@@ -70,7 +70,7 @@ export class Terms {
   })
   subjectNo: string | null;
 
-  @ApiPropertyOptional({ description: '执行时间,开始时间', nullable: true })
+  @ApiPropertyOptional({ description: '执行时间,开始时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'started_at',
     nullable: true,
@@ -78,7 +78,7 @@ export class Terms {
   })
   startedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '执行时间,结束时间', nullable: true })
+  @ApiPropertyOptional({ description: '执行时间,结束时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'ended_at',
     nullable: true,
@@ -86,7 +86,7 @@ export class Terms {
   })
   endedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '关键字', nullable: true })
+  @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @Column('character varying', {
     name: 'keyword',
     length: 100,
@@ -103,7 +103,7 @@ export class Terms {
   })
   columnId: string;
 
-  @ApiPropertyOptional({ description: '详情', nullable: true })
+  @ApiPropertyOptional({ description: '详情', type: Object, nullable: true })
   @Column('jsonb', { name: 'content', nullable: true, comment: '详情' })
   content: object | null;
 
@@ -116,7 +116,7 @@ export class Terms {
   })
   status: string;
 
-  @ApiPropertyOptional({ description: '录入人id' , nullable: true})
+  @ApiPropertyOptional({ description: '录入人id', type: String, nullable: true })
   @Column('character varying', {
     name: 'owner_id',
     length: 128,
@@ -136,11 +136,10 @@ export class Terms {
   @ApiProperty({ description: '创建时间' })
   @Column('timestamp with time zone', {
     name: 'created_at',
-    nullable: true,
     default: () => 'CURRENT_TIMESTAMP',
     comment: '创建时间',
   })
-  createdAt: Date | null;
+  createdAt: Date;
 
   @ApiProperty({ description: '更新时间' })
   @Column('timestamp with time zone', {
@@ -149,9 +148,9 @@ export class Terms {
     default: () => 'CURRENT_TIMESTAMP',
     comment: '更新时间',
   })
-  updatedAt: Date | null;
+  updatedAt: Date;
 
-  @ApiPropertyOptional({ description: '发布时间', nullable: true })
+  @ApiPropertyOptional({ description: '发布时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,
@@ -159,7 +158,7 @@ export class Terms {
   })
   publishedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '删除时间' })
+  @ApiPropertyOptional({ description: '删除时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'deleted_at',
     nullable: true,
@@ -167,13 +166,7 @@ export class Terms {
   })
   deletedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '删除时间' })
-  @Column('timestamp with time zone', {
-    name: 'deleted_at',
-    nullable: true,
-    comment: '删除时间',
-  })
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
-  enabled: boolean ;
+  enabled: boolean;
 }

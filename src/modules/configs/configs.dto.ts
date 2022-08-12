@@ -15,3 +15,8 @@ export class SetColumnsTypeDto {
   @IsInt({ message: 'isHide 类型错误, 正确类型 int' })
   isHide: number;
 }
+export class SetColumnsOrderDto {
+  @ApiProperty({ description: '栏目id数组', type: String, isArray: true })
+  @IsArray({ message: 'ids 类型错误, 正确类型 array' })
+  ids: string[];
+}

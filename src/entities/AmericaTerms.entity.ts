@@ -103,11 +103,10 @@ export class AmericaTerms {
   @ApiProperty({ description: '创建时间' })
   @Column('timestamp with time zone', {
     name: 'created_at',
-    nullable: true,
     default: () => 'CURRENT_TIMESTAMP',
     comment: '创建时间',
   })
-  createdAt: Date | null;
+  createdAt: Date;
 
   @ApiProperty({ description: '更新时间' })
   @Column('timestamp with time zone', {
@@ -116,9 +115,9 @@ export class AmericaTerms {
     default: () => 'CURRENT_TIMESTAMP',
     comment: '更新时间',
   })
-  updatedAt: Date | null;
+  updatedAt: Date;
 
-  @ApiPropertyOptional({ description: '发布时间' })
+  @ApiPropertyOptional({ description: '发布时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,
@@ -126,7 +125,7 @@ export class AmericaTerms {
   })
   publishedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '删除时间' })
+  @ApiPropertyOptional({ description: '删除时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'deleted_at',
     nullable: true,
