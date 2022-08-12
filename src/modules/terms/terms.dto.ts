@@ -37,71 +37,74 @@ export class SaveTermDto {
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   columnId: string;
 
-  @ApiPropertyOptional({ description: '项目类型' })
+  @ApiPropertyOptional({ description: '项目类型', nullable: true })
   @IsString({ message: 'type 类型错误, 正确类型 string' })
   @IsOptional()
-  type: string;
+  type: string | null;
 
-  @ApiPropertyOptional({ description: '省份code' })
+  @ApiPropertyOptional({ description: '省份code', nullable: true })
   @IsString({ message: 'string 类型错误, 正确类型 string' })
   @IsOptional()
-  province: string;
+  province: string | null;
 
-  @ApiPropertyOptional({ description: '依托单位' })
+  @ApiPropertyOptional({ description: '依托单位', nullable: true })
   @IsString({ message: 'unit 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
   @IsOptional()
-  unit: string;
+  unit: string | null;
 
-  @ApiPropertyOptional({ description: '项目负责人' })
+  @ApiPropertyOptional({ description: '项目负责人', nullable: true })
   @IsString({ message: 'principal 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
-  principal: string;
+  principal: string | null;
 
-  @ApiPropertyOptional({ description: '项目编号' })
+  @ApiPropertyOptional({ description: '项目编号', nullable: true })
   @IsString({ message: 'termNumber 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
-  termNumber: string;
+  termNumber: string | null;
 
-  @ApiPropertyOptional({ description: '关键词' })
+  @ApiPropertyOptional({ description: '关键词', nullable: true })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
-  keyword: string;
+  keyword: string | null;
 
-  @ApiPropertyOptional({ description: '金额(万元,保留到整数)' })
+  @ApiPropertyOptional({ description: '金额(万元,保留到整数)', nullable: true })
   @IsInt({ message: 'money 类型错误, 正确类型 number' })
-  money: number;
+  money: number | null;
 
-  @ApiPropertyOptional({ description: '学部' })
+  @ApiPropertyOptional({ description: '学部', nullable: true })
   @IsString({ message: 'department 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
-  department: string;
+  department: string | null;
 
-  @ApiPropertyOptional({ description: '学科分类id' })
+  @ApiPropertyOptional({ description: '学科分类id', nullable: true })
   @IsString({ message: 'subject 类型错误, 正确类型 string' })
   @IsOptional()
-  subject: string;
+  subject: string | null;
 
-  @ApiPropertyOptional({ description: '学科代码' })
+  @ApiPropertyOptional({ description: '学科代码', nullable: true })
   @IsString({ message: 'subjectNo 类型错误, 正确类型 string' })
   @Length(1, 50, { message: '最大允许值为50' })
   @IsOptional()
-  subjectNo: string;
+  subjectNo: string | null;
 
-  @ApiPropertyOptional({ description: '批准年份' })
+  @ApiPropertyOptional({ description: '批准年份', nullable: true })
   @IsDateString({ message: 'authorizedAt 类型错误, 正确类型 date' })
   @IsOptional()
-  authorizedAt: Date;
+  authorizedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '执行开始时间' })
+  @ApiPropertyOptional({ description: '执行开始时间', nullable: true })
   @IsDateString({ message: 'startedAt 类型错误, 正确类型 date' })
   @IsOptional()
-  startedAt: Date;
+  startedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '执行开始时间,前端需要判断结束时间>开始时间' })
+  @ApiPropertyOptional({
+    description: '执行开始时间,前端需要判断结束时间>开始时间',
+    nullable: true,
+  })
   @IsDateString({ message: 'endedAt 类型错误, 正确类型 date' })
   @IsOptional()
-  endedAt: Date;
+  endedAt: Date | null;
 }
 export class ListTermDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
   @ApiPropertyOptional({ description: '项目名称,支持模糊搜索 如果为空则不传或者传null' })

@@ -11,14 +11,10 @@ const { mobile, password } = samples;
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
-let subjects: Subjects[];
-let termType: TermTypes;
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
   columns: Columns[];
-  subjects: Subjects[];
-  termType: TermTypes;
 };
 
 export const seed: TesterSeed<DataType> = {
@@ -35,20 +31,12 @@ export const seed: TesterSeed<DataType> = {
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: '0', sequenceNumber: 1 },
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: '1', sequenceNumber: 1 },
     ]);
-    subjects = await tester.subjectsRepository.save([
-      { id: `S${genCodeOfLength(8)}`, name: '学科名称', type: Content_Types_Enum.TERM },
-      { id: `S${genCodeOfLength(8)}`, name: '学科名称1', type: Content_Types_Enum.PATENT },
-    ]);
-    termType = await tester.termTypesRepository.save({
-      id: `T${genCodeOfLength(8)}`,
-      name: '项目类型名称',
-    });
-    return { user, normalUser, columns, subjects, termType };
+   
+    return { user, normalUser, columns, };
   },
   down: async (tester) => {
     await tester.usersRepository.delete({});
     await tester.columnsRepository.delete({});
-    await tester.subjectsRepository.delete({});
     await tester.loginsRepository.delete({});
   },
 };

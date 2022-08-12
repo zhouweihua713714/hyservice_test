@@ -8,19 +8,19 @@ export class Website {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiPropertyOptional({ description: '站点名称' })
+  @ApiPropertyOptional({ description: '站点名称', nullable: true })
   @Column('character varying', { name: 'name', length: 128, nullable: true, comment: '站点名称' })
   name: string | null;
 
-  @ApiPropertyOptional({ description: '网站备案号' })
+  @ApiPropertyOptional({ description: '网站备案号', nullable: true })
   @Column('character varying', { name: 'ipc', length: 128, nullable: true, comment: '网站备案号' })
   IPC: string | null;
 
-  @ApiPropertyOptional({ description: 'CDN地址' })
+  @ApiPropertyOptional({ description: 'CDN地址', nullable: true })
   @Column('character varying', { name: 'cdn', length: 128, nullable: true, comment: 'CND地址' })
   CDN: string | null;
 
-  @ApiPropertyOptional({ description: '版本号' })
+  @ApiPropertyOptional({ description: '版本号', nullable: true })
   @Column('character varying', {
     name: 'version_no',
     length: 64,
@@ -29,7 +29,7 @@ export class Website {
   })
   versionNo: string | null;
 
-  @ApiPropertyOptional({ description: '黑名单:ip分号隔开' })
+  @ApiPropertyOptional({ description: '黑名单:ip分号隔开', nullable: true })
   @Column('character varying', {
     name: 'blacklist',
     length: 100,
@@ -38,11 +38,11 @@ export class Website {
   })
   blacklist: string | null;
 
-  @ApiPropertyOptional({ description: '标题' })
+  @ApiPropertyOptional({ description: '标题', nullable: true })
   @Column('character varying', { name: 'title', length: 20, nullable: true, comment: '标题' })
   title: string | null;
 
-  @ApiPropertyOptional({ description: '首页描述' })
+  @ApiPropertyOptional({ description: '首页描述', nullable: true })
   @Column('character varying', {
     name: 'description',
     length: 20,
@@ -51,7 +51,7 @@ export class Website {
   })
   description: string | null;
 
-  @ApiPropertyOptional({ description: '版权所有' })
+  @ApiPropertyOptional({ description: '版权所有', nullable: true })
   @Column('character varying', {
     name: 'ownership',
     length: 50,
@@ -60,7 +60,7 @@ export class Website {
   })
   ownership: string | null;
 
-  @ApiPropertyOptional({ description: '底部描述' })
+  @ApiPropertyOptional({ description: '底部描述', nullable: true })
   @Column('character varying', {
     name: 'bottom_description',
     length: 50,
@@ -69,7 +69,7 @@ export class Website {
   })
   bottomDescription: string | null;
 
-  @ApiPropertyOptional({ description: '友情链接 数组[{url:,title:xxx }]' })
+  @ApiPropertyOptional({ description: '友情链接 数组[{url:,title:xxx }]', nullable: true })
   @Column('jsonb', {
     name: 'links',
     comment: '友情链接 数组[{url:,title:xxx }]',
@@ -77,7 +77,7 @@ export class Website {
   })
   links: object | null;
 
-  @ApiPropertyOptional({ description: 'logo' })
+  @ApiPropertyOptional({ description: 'logo', nullable: true })
   @Column('character varying', {
     name: 'logo',
     length: 256,
@@ -86,7 +86,7 @@ export class Website {
   })
   logo: string | null;
 
-  @ApiPropertyOptional({ description: '手机端二维码' })
+  @ApiPropertyOptional({ description: '手机端二维码', nullable: true })
   @Column('character varying', {
     name: 'qr_code',
     length: 256,

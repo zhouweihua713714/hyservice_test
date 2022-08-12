@@ -24,11 +24,16 @@ export class Policies {
   @Column('character varying', { name: 'type', length: 64, comment: '政策类型' })
   type: string;
 
-  @ApiPropertyOptional({ description: '政策层级:国家级policy_level_001' })
-  @Column('character varying', { name: 'level', length: 64, nullable: true, comment: '政策层级:国家级policy_level_001' })
+  @ApiPropertyOptional({ description: '政策层级:国家级policy_level_001', nullable: true })
+  @Column('character varying', {
+    name: 'level',
+    length: 64,
+    nullable: true,
+    comment: '政策层级:国家级policy_level_001',
+  })
   level: string | null;
 
-  @ApiPropertyOptional({ description: '发布机构/部门' })
+  @ApiPropertyOptional({ description: '发布机构/部门', nullable: true })
   @Column('character varying', {
     name: 'institution',
     length: 50,
@@ -37,7 +42,7 @@ export class Policies {
   })
   institution: string | null;
 
-  @ApiPropertyOptional({ description: '发文号' })
+  @ApiPropertyOptional({ description: '发文号', nullable: true })
   @Column('character varying', {
     name: 'announce_no',
     length: 50,
@@ -46,7 +51,10 @@ export class Policies {
   })
   announceNo: string | null;
 
-  @ApiPropertyOptional({ description: '教育层次:基础教育basic,高等教育higher,职业教育vocation,格式:[basic,higher]' })
+  @ApiPropertyOptional({
+    description: '教育层次:基础教育basic,高等教育higher,职业教育vocation,格式:[basic,higher]',
+    nullable: true,
+  })
   @Column('jsonb', {
     name: 'education_level',
     nullable: true,
@@ -63,7 +71,7 @@ export class Policies {
   })
   keyword: string | null;
 
-  @ApiPropertyOptional({ description: '政策发布时间(出台时间)' })
+  @ApiPropertyOptional({ description: '政策发布时间(出台时间)', nullable: true })
   @Column('timestamp with time zone', {
     name: 'announced_at',
     nullable: true,
@@ -71,7 +79,7 @@ export class Policies {
   })
   announcedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '简介' })
+  @ApiPropertyOptional({ description: '简介', nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
   introduction: string | null;
 
@@ -79,7 +87,7 @@ export class Policies {
   // @Column('jsonb', { name: 'content', nullable: true, comment: '详情' })
   // content: object | null;
 
-  @ApiPropertyOptional({ description: '政策来源(网址)' })
+  @ApiPropertyOptional({ description: '政策来源(网址)', nullable: true })
   @Column('character varying', {
     name: 'url',
     length: 10,
@@ -97,10 +105,10 @@ export class Policies {
   })
   status: string;
 
-  @ApiPropertyOptional({ description: '录入人id' })
+  @ApiPropertyOptional({ description: '录入人id', nullable: true })
   @Column('character varying', {
     name: 'owner_id',
-    length:128,
+    length: 128,
     nullable: true,
     comment: '录入人id',
   })
@@ -132,7 +140,7 @@ export class Policies {
   })
   updatedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '发布时间' })
+  @ApiPropertyOptional({ description: '发布时间', nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,
@@ -148,5 +156,5 @@ export class Policies {
   })
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
-  enabled: boolean ;
+  enabled: boolean;
 }

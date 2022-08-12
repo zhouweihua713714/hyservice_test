@@ -33,4 +33,5 @@ export class HomepageController {
     const user = <SignInResInfo>req.user;
     return this.homepageService.setHomepage(params, user);
   }
+  
 }

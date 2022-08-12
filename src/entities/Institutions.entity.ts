@@ -28,15 +28,15 @@ export class Institutions {
   @Column('character varying', { name: 'address', length: 50, comment: '详细地址' })
   address: string;
 
-  @ApiPropertyOptional({ description: '简介' })
+  @ApiPropertyOptional({ description: '简介' , nullable: true})
   @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
   introduction: string | null;
 
-  @ApiProperty({ description: '网站' })
+  @ApiProperty({ description: '网站' , nullable: true})
   @Column('character varying', { name: 'website', length: 50, comment: '网站' })
   website: string;
 
-  @ApiPropertyOptional({ description: '主办单位' })
+  @ApiPropertyOptional({ description: '主办单位' , nullable: true})
   @Column('character varying', {
     name: 'unit',
     length: 50,
@@ -45,7 +45,7 @@ export class Institutions {
   })
   organizer: string | null;
 
-  @ApiPropertyOptional({ description: '主领域,格式 [string,string]' })
+  @ApiPropertyOptional({ description: '主领域,格式 [string,string]', nullable: true })
   @Column('jsonb', {
     name: 'field',
     nullable: true,
@@ -53,7 +53,7 @@ export class Institutions {
   })
   field: object | null;
 
-  @ApiPropertyOptional({ description: '子领域,格式 [string,string]' })
+  @ApiPropertyOptional({ description: '子领域,格式 [string,string]', nullable: true })
   @Column('jsonb', {
     name: 'minor_field',
     nullable: true,
@@ -61,7 +61,7 @@ export class Institutions {
   })
   minorField: object | null;
 
-  @ApiPropertyOptional({ description: '经度' })
+  @ApiPropertyOptional({ description: '经度', nullable: true })
   @Column('decimal', {
     name: 'longitude',
     precision:10,
@@ -71,7 +71,7 @@ export class Institutions {
   })
   longitude: number | null;
 
-  @ApiPropertyOptional({ description: '纬度' })
+  @ApiPropertyOptional({ description: '纬度', nullable: true })
   @Column('decimal', {
     name: 'latitude',
     precision:10,
@@ -81,7 +81,7 @@ export class Institutions {
   })
   latitude: number | null;
 
-  @ApiPropertyOptional({ description: '图片链接' })
+  @ApiPropertyOptional({ description: '图片链接', nullable: true })
   @Column('character varying', {
     name: 'url',
     length: 64,
@@ -99,7 +99,7 @@ export class Institutions {
   })
   status: string;
 
-  @ApiPropertyOptional({ description: '录入人id' })
+  @ApiPropertyOptional({ description: '录入人id', nullable: true })
   @Column('character varying', {
     name: 'owner_id',
     length:128,
@@ -108,7 +108,7 @@ export class Institutions {
   })
     ownerId: string | null;
 
- @ApiPropertyOptional({ description: '关键字' })
+ @ApiPropertyOptional({ description: '关键字', nullable: true })
   @Column('character varying', {
     name: 'keyword',
     length: 100,
@@ -143,7 +143,7 @@ export class Institutions {
   })
   updatedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '发布时间' })
+  @ApiPropertyOptional({ description: '发布时间', nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,

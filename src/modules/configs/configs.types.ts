@@ -71,6 +71,14 @@ export class GetSubjectsResult {
 }
 
 export class GetTermTypesResult {
-  @ApiProperty({ description: '项目类型数组', type:TermTypes, isArray: true })
+  @ApiProperty({ description: '项目类型数组', type: TermTypes, isArray: true })
   termTypes: TermTypes[];
+}
+
+export class SetColumnsTypeResult {
+  @ApiProperty({ description: '成功数量' })
+  success: number;
+
+  @ApiProperty({ description: '失败数量' })
+  failed: number;
 }

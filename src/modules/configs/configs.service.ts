@@ -21,7 +21,7 @@ import {
   termTypesRepository,
   websiteRepository,
 } from '../repository/repository';
-import { SetConfigsDto } from './configs.dto';
+import { SetColumnsTypeDto } from './configs.dto';
 import { User_Types_Enum } from '@/common/enums/common.enum';
 
 @Injectable()
@@ -38,6 +38,22 @@ export class ConfigsService {
       },
     });
     return ResultData.ok({ data: { articleTypes: data } });
+  }
+  /**
+   * @description 设置栏目状态
+   * @param {SetColumnsTypeDto} params
+   * @returns {ResultData} 返回setColumnsType信息
+   */
+  async setColumnsType(params: SetColumnsTypeDto, user: SignInResInfo): Promise<ResultData> {
+    const { ids, isHide } = params;
+    if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
+    }
+    const data = await columnsRepository.update(ids, {
+      isHide: isHide,
+    });
+    const success = data.affected ? data.affected : 0;
+    return ResultData.ok({ data: { succeed: success, failed: ids.length - success } });
   }
   /**
    * @description 获取栏目
@@ -143,17 +159,17 @@ export class ConfigsService {
     });
     return ResultData.ok({ data: { subjects: data } });
   }
-    /**
+  /**
    * @description 获取项目类型数据
    * @param {} params
    * @returns {ResultData} 返回getTermTypes信息
    */
-     async getTermTypes(): Promise<ResultData> {
-      const data = await termTypesRepository.find({
-        order: {
-          name: 'ASC',
-        },
-      });
-      return ResultData.ok({ data: { termTypes: data } });
-    }
+  async getTermTypes(): Promise<ResultData> {
+    const data = await termTypesRepository.find({
+      order: {
+        name: 'ASC',
+      },
+    });
+    return ResultData.ok({ data: { termTypes: data } });
+  }
 }
