@@ -5,7 +5,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { SetColumnsTypeDto} from './configs.dto';
+import { SetColumnsOrderDto, SetColumnsTypeDto} from './configs.dto';
 import { ConfigsService } from './configs.service';
 import {
   GetArticleTypesResult,
@@ -137,9 +137,19 @@ export class ConfigsController {
   @ApiOperation({ summary: '设置栏目状态' })
   @ApiResult(SetColumnsTypeResult)
   @ApiBearerAuth()
-  countResourceByStatus(@Body() params: SetColumnsTypeDto, @Req() req: any) {
+  setColumnsType(@Body() params: SetColumnsTypeDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.configService.setColumnsType(params, user);
+  }
+
+  @Post('/setColumnsOrder')
+  @HttpCode(200)
+  @ApiOperation({ summary: '设置栏目排序(同组)' })
+  @ApiResult()
+  @ApiBearerAuth()
+  setColumnsOrder(@Body() params: SetColumnsOrderDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.configService.setColumnsOrder(params, user);
   }
   
 }

@@ -21,7 +21,7 @@ import {
   termTypesRepository,
   websiteRepository,
 } from '../repository/repository';
-import { SetColumnsTypeDto } from './configs.dto';
+import { SetColumnsOrderDto, SetColumnsTypeDto } from './configs.dto';
 import { User_Types_Enum } from '@/common/enums/common.enum';
 
 @Injectable()
@@ -54,6 +54,23 @@ export class ConfigsService {
     });
     const success = data.affected ? data.affected : 0;
     return ResultData.ok({ data: { succeed: success, failed: ids.length - success } });
+  }
+  /**
+   * @description 设置栏目排序
+   * @param {SetColumnsOrderDto} params
+   * @returns {ResultData} 返回setColumnsOrder信息
+   */
+  async setColumnsOrder(params: SetColumnsOrderDto, user: SignInResInfo): Promise<ResultData> {
+    const { ids } = params;
+    if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
+    }
+    const columns: { id: string; sequenceNumber: number }[] = [];
+    for (let i = 0; i < ids.length; i++) {
+      columns.push({ id: ids[i], sequenceNumber: i + 1 });
+    }
+    const data = await columnsRepository.save(columns);
+    return ResultData.ok({ data: {} });
   }
   /**
    * @description 获取栏目

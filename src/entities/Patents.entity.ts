@@ -12,7 +12,7 @@ export class Patents {
   @Column('character varying', { name: 'title', length: 50, comment: '专利标题' })
   title: string;
 
-  @ApiPropertyOptional({ description: '关键字', nullable: true })
+  @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @Column('character varying', {
     name: 'keyword',
     length: 100,
@@ -21,11 +21,11 @@ export class Patents {
   })
   keyword: string | null;
 
-  @ApiPropertyOptional({ description: '摘要', nullable: true })
+  @ApiPropertyOptional({ description: '摘要', type: String, nullable: true })
   @Column('text', { name: 'abstract', nullable: true, comment: '摘要' })
   abstract: string | null;
 
-  @ApiPropertyOptional({ description: '申请人(单位)', nullable: true })
+  @ApiPropertyOptional({ description: '申请人(单位)', type: String, nullable: true })
   @Column('character varying', {
     name: 'institution',
     length: 50,
@@ -34,16 +34,16 @@ export class Patents {
   })
   applicant: string | null;
 
-  @ApiPropertyOptional({ description: '公开(公告)号', nullable: true })
+  @ApiPropertyOptional({ description: '公开(公告)号', type: String, nullable: true })
   @Column('character varying', {
     name: 'announced_no',
     nullable: true,
-    length:128,
+    length: 128,
     comment: '公开(公告)号',
   })
   announcedNo: Date | null;
 
-  @ApiPropertyOptional({ description: '公开(公告)日' , nullable: true})
+  @ApiPropertyOptional({ description: '公开(公告)日', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'announced_at',
     nullable: true,
@@ -51,16 +51,16 @@ export class Patents {
   })
   announcedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '申请号', nullable: true })
+  @ApiPropertyOptional({ description: '申请号', type: String, nullable: true })
   @Column('character varying', {
     name: 'applied_no',
     nullable: true,
-    length:128,
+    length: 128,
     comment: '申请号',
   })
   appliedNo: Date | null;
 
-  @ApiPropertyOptional({ description: '申请日', nullable: true })
+  @ApiPropertyOptional({ description: '申请日', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'applied_at',
     nullable: true,
@@ -69,22 +69,22 @@ export class Patents {
   appliedAt: Date | null;
 
   @ApiProperty({ description: '专利类型' })
-  @Column('character varying', { name: 'type', length: 64,  comment: '专利类型' })
-  type: string ;
+  @Column('character varying', { name: 'type', length: 64, comment: '专利类型' })
+  type: string;
 
-  @ApiPropertyOptional({ description: '公开国别', nullable: true })
+  @ApiPropertyOptional({ description: '公开国别', type: String, nullable: true })
   @Column('character varying', { name: 'country', length: 32, nullable: true, comment: '公开国别' })
   country: string | null;
 
-  @ApiPropertyOptional({ description: '代理机构', nullable: true })
+  @ApiPropertyOptional({ description: '代理机构', type: String, nullable: true })
   @Column('character varying', { name: 'agency', length: 128, nullable: true, comment: '代理机构' })
   agency: string | null;
 
-  @ApiPropertyOptional({ description: '代理人' , nullable: true})
+  @ApiPropertyOptional({ description: '代理人', type: String, nullable: true })
   @Column('character varying', { name: 'agent', length: 64, nullable: true, comment: '代理人' })
   agent: string | null;
 
-  @ApiPropertyOptional({ description: '专利有效性' , nullable: true})
+  @ApiPropertyOptional({ description: '专利有效性', type: String, nullable: true })
   @Column('character varying', {
     name: 'valid_status',
     length: 64,
@@ -114,14 +114,14 @@ export class Patents {
   })
   status: string;
 
-  @ApiPropertyOptional({ description: '录入人id', nullable: true })
+  @ApiPropertyOptional({ description: '录入人id', type: String, nullable: true })
   @Column('character varying', {
     name: 'owner_id',
-    length:128,
+    length: 128,
     nullable: true,
     comment: '录入人id',
   })
-    ownerId: string | null;
+  ownerId: string | null;
 
   @ApiPropertyOptional({ description: '点击量,暂时不做' })
   @Column('integer', {
@@ -134,11 +134,10 @@ export class Patents {
   @ApiProperty({ description: '创建时间' })
   @Column('timestamp with time zone', {
     name: 'created_at',
-    nullable: true,
     default: () => 'CURRENT_TIMESTAMP',
     comment: '创建时间',
   })
-  createdAt: Date | null;
+  createdAt: Date;
 
   @ApiProperty({ description: '更新时间' })
   @Column('timestamp with time zone', {
@@ -147,9 +146,9 @@ export class Patents {
     default: () => 'CURRENT_TIMESTAMP',
     comment: '更新时间',
   })
-  updatedAt: Date | null;
+  updatedAt: Date;
 
-  @ApiPropertyOptional({ description: '发布时间', nullable: true })
+  @ApiPropertyOptional({ description: '发布时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,
@@ -157,7 +156,7 @@ export class Patents {
   })
   publishedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '删除时间' })
+  @ApiPropertyOptional({ description: '删除时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'deleted_at',
     nullable: true,
@@ -165,5 +164,5 @@ export class Patents {
   })
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
-  enabled: boolean ;
+  enabled: boolean;
 }

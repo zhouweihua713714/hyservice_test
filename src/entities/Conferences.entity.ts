@@ -24,7 +24,7 @@ export class Conferences {
   @Column('character varying', { name: 'name', length: 50, comment: '会议名称' })
   name: string;
 
-  @ApiPropertyOptional({ description: '举办时间' , nullable: true})
+  @ApiPropertyOptional({ description: '举办时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'conducted_at',
     nullable: true,
@@ -32,7 +32,7 @@ export class Conferences {
   })
   conductedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '举办结束时间(个别数据有)', nullable: true })
+  @ApiPropertyOptional({ description: '举办结束时间(个别数据有)', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'ended_at',
     nullable: true,
@@ -40,11 +40,11 @@ export class Conferences {
   })
   endedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '届' , nullable: true})
+  @ApiPropertyOptional({ description: '届', type: String, nullable: true })
   @Column('integer', { name: 'period', nullable: true, comment: '届' })
   period: number | null;
 
-  @ApiPropertyOptional({ description: '地点', nullable: true })
+  @ApiPropertyOptional({ description: '地点', type: String, nullable: true })
   @Column('character varying', {
     name: 'location',
     length: 50,
@@ -53,11 +53,16 @@ export class Conferences {
   })
   location: string | null;
 
-  @ApiPropertyOptional({ description: '会议简介/主题' , nullable: true})
+  @ApiPropertyOptional({ description: '会议简介/主题', type: String, nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '会议简介/主题' })
   introduction: string | null;
 
-  @ApiPropertyOptional({ description: '主领域,格式 [string,string]' , nullable: true})
+  @ApiPropertyOptional({
+    description: '主领域,格式 [string,string]',
+    type: String,
+    isArray: true,
+    nullable: true,
+  })
   @Column('jsonb', {
     name: 'field',
     nullable: true,
@@ -65,7 +70,12 @@ export class Conferences {
   })
   field: object | null;
 
-  @ApiPropertyOptional({ description: '子领域,格式 [string,string]' , nullable: true})
+  @ApiPropertyOptional({
+    description: '子领域,格式 [string,string]',
+    type: String,
+    isArray: true,
+    nullable: true,
+  })
   @Column('jsonb', {
     name: 'minor_field',
     nullable: true,
@@ -73,19 +83,19 @@ export class Conferences {
   })
   minorField: object | null;
 
-  @ApiPropertyOptional({ description: '网站', nullable: true })
+  @ApiPropertyOptional({ description: '网站', type: String, nullable: true })
   @Column('character varying', { name: 'website', nullable: true, length: 50, comment: '网站' })
   website: string | null;
 
-  @ApiPropertyOptional({ description: '联络人', nullable: true })
+  @ApiPropertyOptional({ description: '联络人', type: String, nullable: true })
   @Column('character varying', { name: 'contact', nullable: true, length: 50, comment: '联络人' })
   contact: string | null;
 
-  @ApiPropertyOptional({ description: '联络人邮箱', nullable: true })
+  @ApiPropertyOptional({ description: '联络人邮箱', type: String, nullable: true })
   @Column('character varying', { name: 'email', nullable: true, length: 50, comment: '联络人邮箱' })
   email: string | null;
 
-  @ApiPropertyOptional({ description: '举办单位', nullable: true })
+  @ApiPropertyOptional({ description: '举办单位', type: String, nullable: true })
   @Column('character varying', {
     name: 'unit',
     length: 50,
@@ -94,7 +104,7 @@ export class Conferences {
   })
   organizer: string | null;
 
-  @ApiPropertyOptional({ description: '送稿截止时间', nullable: true })
+  @ApiPropertyOptional({ description: '送稿截止时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'delivery_ended_at',
     nullable: true,
@@ -103,7 +113,7 @@ export class Conferences {
   })
   deliveryEndedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '提前注册截止时间', nullable: true })
+  @ApiPropertyOptional({ description: '提前注册截止时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'preregister_ended_at',
     nullable: true,
@@ -112,7 +122,7 @@ export class Conferences {
   })
   preregisterEndedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '注册截止时间', nullable: true })
+  @ApiPropertyOptional({ description: '注册截止时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'register_ended_at',
     nullable: true,
@@ -130,10 +140,10 @@ export class Conferences {
   })
   status: string;
 
-  @ApiPropertyOptional({ description: '录入人id', nullable: true })
+  @ApiPropertyOptional({ description: '录入人id', type: String, nullable: true })
   @Column('character varying', {
     name: 'owner_id',
-    length:128,
+    length: 128,
     nullable: true,
     comment: '录入人id',
   })
@@ -150,11 +160,10 @@ export class Conferences {
   @ApiProperty({ description: '创建时间' })
   @Column('timestamp with time zone', {
     name: 'created_at',
-    nullable: true,
     default: () => 'CURRENT_TIMESTAMP',
     comment: '创建时间',
   })
-  createdAt: Date | null;
+  createdAt: Date;
 
   @ApiProperty({ description: '更新时间' })
   @Column('timestamp with time zone', {
@@ -163,9 +172,9 @@ export class Conferences {
     default: () => 'CURRENT_TIMESTAMP',
     comment: '更新时间',
   })
-  updatedAt: Date | null;
+  updatedAt: Date;
 
-  @ApiPropertyOptional({ description: '发布时间', nullable: true })
+  @ApiPropertyOptional({ description: '发布时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,
@@ -173,13 +182,13 @@ export class Conferences {
   })
   publishedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '删除时间' })
+  @ApiPropertyOptional({ description: '删除时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
     name: 'deleted_at',
     nullable: true,
     comment: '删除时间',
   })
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
-  @Column('boolean', { name: 'enabled', nullable: true, default: true  })
-  enabled: boolean ;
+  @Column('boolean', { name: 'enabled', nullable: true, default: true })
+  enabled: boolean;
 }
