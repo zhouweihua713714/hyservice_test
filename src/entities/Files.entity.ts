@@ -16,7 +16,7 @@ export class Files {
   @Column('smallint', { name: 'status', default: 0, comment: '文件状态默认0,1已上传' })
   status: number;
 
-  @ApiPropertyOptional({ description: 'oss 信息' })
+  @ApiPropertyOptional({ description: 'oss 信息', nullable: true })
   @Column('jsonb', { name: 'oss_info', nullable: true, comment: 'oss 信息' })
   ossInfo: object | null;
 

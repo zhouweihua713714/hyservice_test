@@ -5,7 +5,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { SetConfigsDto } from './configs.dto';
+import { SetColumnsTypeDto} from './configs.dto';
 import { ConfigsService } from './configs.service';
 import {
   GetArticleTypesResult,
@@ -19,6 +19,7 @@ import {
   GetPolicyTypesResult,
   GetSubjectsResult,
   GetTermTypesResult,
+  SetColumnsTypeResult,
 } from './configs.types';
 
 @ApiTags('配置数据')
@@ -34,11 +35,12 @@ import {
   GetPeriodicalPeriodsResult,
   GetPolicyTypesResult,
   GetSubjectsResult,
-  GetTermTypesResult
+  GetTermTypesResult,
+  SetColumnsTypeResult
 )
 @Controller('/configs')
 export class ConfigsController {
-  constructor(private readonly homepageService: ConfigsService) {}
+  constructor(private readonly configService: ConfigsService) {}
 
   @Get('/getArticleTypes')
   @HttpCode(200)
@@ -46,7 +48,7 @@ export class ConfigsController {
   @ApiResult(GetArticleTypesResult)
   @AllowAnon()
   getArticleTypes(@Query() params: any) {
-    return this.homepageService.getArticleTypes();
+    return this.configService.getArticleTypes();
   }
 
   @Get('/getColumns')
@@ -55,7 +57,7 @@ export class ConfigsController {
   @ApiResult(GetColumnsResult)
   @AllowAnon()
   getColumns(@Query() params: any) {
-    return this.homepageService.getColumns();
+    return this.configService.getColumns();
   }
 
   @Get('/getFields')
@@ -64,7 +66,7 @@ export class ConfigsController {
   @ApiResult(GetFieldsResult)
   @AllowAnon()
   getFields(@Query() params: any) {
-    return this.homepageService.getFields();
+    return this.configService.getFields();
   }
 
   @Get('/getLanguages')
@@ -73,7 +75,7 @@ export class ConfigsController {
   @ApiResult(GetLanguagesResult)
   @AllowAnon()
   getLanguages(@Query() params: any) {
-    return this.homepageService.getLanguages();
+    return this.configService.getLanguages();
   }
 
   @Get('/getPatentTypes')
@@ -82,7 +84,7 @@ export class ConfigsController {
   @ApiResult(GetPatentTypesResult)
   @AllowAnon()
   getPatentTypes(@Query() params: any) {
-    return this.homepageService.getPatentTypes();
+    return this.configService.getPatentTypes();
   }
 
   @Get('/getPatentValidTypes')
@@ -91,7 +93,7 @@ export class ConfigsController {
   @ApiResult(GetPatentValidTypesResult)
   @AllowAnon()
   getPatentValidTypes(@Query() params: any) {
-    return this.homepageService.getPatentValidTypes();
+    return this.configService.getPatentValidTypes();
   }
 
   @Get('/getPeriodicalPeriods')
@@ -100,7 +102,7 @@ export class ConfigsController {
   @ApiResult(GetPeriodicalPeriodsResult)
   @AllowAnon()
   getPeriodicalPeriods(@Query() params: any) {
-    return this.homepageService.getPeriodicalPeriods();
+    return this.configService.getPeriodicalPeriods();
   }
 
   @Get('/getPolicyTypes')
@@ -109,7 +111,7 @@ export class ConfigsController {
   @ApiResult(GetPolicyTypesResult)
   @AllowAnon()
   getPolicyTypes(@Query() params: any) {
-    return this.homepageService.getPolicyTypes();
+    return this.configService.getPolicyTypes();
   }
 
   @Get('/getSubjects')
@@ -118,7 +120,7 @@ export class ConfigsController {
   @ApiResult(GetSubjectsResult)
   @AllowAnon()
   getSubjects(@Query() params: any) {
-    return this.homepageService.getSubjects();
+    return this.configService.getSubjects();
   }
 
   @Get('/getTermTypes')
@@ -127,6 +129,17 @@ export class ConfigsController {
   @ApiResult(GetTermTypesResult)
   @AllowAnon()
   getTermTypes(@Query() params: any) {
-    return this.homepageService.getTermTypes();
+    return this.configService.getTermTypes();
   }
+
+  @Post('/setColumnsType')
+  @HttpCode(200)
+  @ApiOperation({ summary: '设置栏目状态' })
+  @ApiResult(SetColumnsTypeResult)
+  @ApiBearerAuth()
+  countResourceByStatus(@Body() params: SetColumnsTypeDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.configService.setColumnsType(params, user);
+  }
+  
 }

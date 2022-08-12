@@ -60,31 +60,35 @@ export class TermsService {
    * @returns {ResultData} 返回saveTerm信息
    */
   async saveTerm(params: SaveTermDto, user: SignInResInfo): Promise<ResultData> {
-    const { id, status, termNumber, columnId, type, subject, startedAt, endedAt } = params;
+    const { id, status, termNumber, type, subject, columnId, startedAt, endedAt } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
     }
-    const [columnInfo, typeInfo, subjectInfo] = await Promise.all([
-      columnsRepository.findOneBy({ id: columnId }),
-      termTypesRepository.findOneBy({ id: type }),
-      subjectsRepository.findOneBy({ id: subject }),
-    ]);
-    if (startedAt && endedAt && new Date(startedAt).getTime() >= new Date(endedAt).getTime()) {
-      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.START_TIME_ERROR });
+    // if type not found in database, then throw error
+    if (type) {
+      const typeInfo = await termTypesRepository.findOneBy({ id: type });
+      if (!typeInfo) {
+        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.TERM_TYPE_NOT_FOUND_ERROR });
+      }
+    }
+    // if subject not found in database, then throw error
+    if (subject) {
+      const subjectInfo = await subjectsRepository.findOneBy({ id: subject });
+      if (!subjectInfo || (subjectInfo && subjectInfo.type !== Content_Types_Enum.TERM)) {
+        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.SUBJECT_NOT_FOUND_ERROR });
+      }
     }
     // if columnId not found in database, then throw error
+    const columnInfo = await columnsRepository.findOneBy({ id: columnId });
     if (!columnInfo || (columnInfo && columnInfo.parentId === '0')) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.COLUMN_NOT_FOUND_ERROR });
     }
-    // if type not found in database, then throw error
-    if (!typeInfo) {
-      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.TERM_TYPE_NOT_FOUND_ERROR });
+    //  startedAt < endedAt
+    if (startedAt && endedAt && new Date(startedAt).getTime() >= new Date(endedAt).getTime()) {
+      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.START_TIME_ERROR });
     }
-    // if subject not found in database, then throw error
-    if (!subjectInfo || (subjectInfo && subjectInfo.type !== Content_Types_Enum.TERM)) {
-      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.SUBJECT_NOT_FOUND_ERROR });
-    }
+
     if (id) {
       // if id exist get termInfo
       const termInfo = await termsRepository.findOneBy({

@@ -12,7 +12,7 @@ export class Treatises {
   @Column('character varying', { name: 'title', length: 50, comment: '论文标题' })
   title: string;
 
-  @ApiPropertyOptional({ description: '发表时间,单位:年' })
+  @ApiPropertyOptional({ description: '发表时间,单位:年' , nullable: true})
   @Column('timestamp with time zone', {
     name: 'delivery_at',
     nullable: true,
@@ -20,7 +20,7 @@ export class Treatises {
   })
   deliveryAt: string | null;
 
-  @ApiPropertyOptional({ description: '科研人员所属国家或地区' })
+  @ApiPropertyOptional({ description: '科研人员所属国家或地区', nullable: true })
   @Column('character varying', {
     name: 'region',
     nullable: true,
@@ -29,11 +29,11 @@ export class Treatises {
   })
   region: string | null;
 
-  @ApiPropertyOptional({ description: '发表途径:期刊way_001,会议way_002,EDM会议way003,书way_004' })
+  @ApiPropertyOptional({ description: '发表途径:期刊way_001,会议way_002,EDM会议way003,书way_004', nullable: true })
   @Column('character varying', { name: 'channel', nullable: true, length: 32, comment: '发表途径:期刊way_001,会议way_002,EDM会议way003' })
   channel: string | null;
 
-  @ApiPropertyOptional({ description: '语种' })
+  @ApiPropertyOptional({ description: '语种', nullable: true })
   @Column('character varying', {
     name: 'language',
     length: 10,
@@ -43,11 +43,11 @@ export class Treatises {
   })
   language: string | null;
 
-  @ApiPropertyOptional({ description: '第一作者' })
+  @ApiPropertyOptional({ description: '第一作者', nullable: true })
   @Column('character varying', { name: 'author', nullable: true, length: 32, comment: '第一作者' })
   author: string | null;
 
-  @ApiPropertyOptional({ description: '第一作者单位' })
+  @ApiPropertyOptional({ description: '第一作者单位', nullable: true })
   @Column('character varying', {
     name: 'author_unit',
     nullable: true,
@@ -56,7 +56,7 @@ export class Treatises {
   })
   authorUnit: string | null;
 
-  @ApiPropertyOptional({ description: '通讯作者' })
+  @ApiPropertyOptional({ description: '通讯作者', nullable: true })
   @Column('character varying', {
     name: 'corresponding_author',
     nullable: true,
@@ -65,7 +65,7 @@ export class Treatises {
   })
   correspondingAuthor: string | null;
 
-  @ApiPropertyOptional({ description: '通讯作者单位' })
+  @ApiPropertyOptional({ description: '通讯作者单位', nullable: true })
   @Column('character varying', {
     name: 'corresponding_author_unit',
     nullable: true,
@@ -74,7 +74,7 @@ export class Treatises {
   })
   correspondingAuthorUnit: string | null;
 
-  @ApiPropertyOptional({ description: '通讯作者邮箱' })
+  @ApiPropertyOptional({ description: '通讯作者邮箱', nullable: true })
   @Column('character varying', {
     name: 'corresponding_author_email',
     nullable: true,
@@ -83,7 +83,7 @@ export class Treatises {
   })
   correspondingAuthorEmail: string | null;
 
-  @ApiPropertyOptional({ description: '其他作者' })
+  @ApiPropertyOptional({ description: '其他作者', nullable: true })
   @Column('character varying', {
     name: 'other_author',
     nullable: true,
@@ -92,7 +92,7 @@ export class Treatises {
   })
   otherAuthor: string | null;
 
-  @ApiPropertyOptional({ description: '其他作者单位' })
+  @ApiPropertyOptional({ description: '其他作者单位', nullable: true })
   @Column('character varying', {
     name: 'other_author_unit',
     nullable: true,
@@ -101,11 +101,11 @@ export class Treatises {
   })
   otherAuthorUnit: string | null;
 
-  @ApiPropertyOptional({ description: '文章主领域' })
+  @ApiPropertyOptional({ description: '文章主领域', nullable: true })
   @Column('character varying', { name: 'field', length: 50, nullable: true, comment: '文章主领域' })
   field: string | null;
 
-  @ApiPropertyOptional({ description: '文章子领域' })
+  @ApiPropertyOptional({ description: '文章子领域', nullable: true })
   @Column('character varying', {
     name: 'minor_field',
     length: 50,
@@ -114,7 +114,7 @@ export class Treatises {
   })
   minorField: string | null;
 
-  @ApiPropertyOptional({ description: '文章类型' })
+  @ApiPropertyOptional({ description: '文章类型', nullable: true })
   @Column('character varying', {
     name: 'sort',
     length: 32,
@@ -123,27 +123,27 @@ export class Treatises {
   })
   sort: string | null;
 
-  @ApiPropertyOptional({ description: '摘要' })
+  @ApiPropertyOptional({ description: '摘要' , nullable: true})
   @Column('text', { name: 'abstract', nullable: true, comment: '摘要' })
   abstract: string | null;
 
-  @ApiPropertyOptional({ description: '检索情况' })
+  @ApiPropertyOptional({ description: '检索情况', nullable: true })
   @Column('character varying', { name: 'search', nullable: true, length: 32, comment: '检索情况' })
   search: string | null;
 
-  @ApiPropertyOptional({ description: '参考文献' })
+  @ApiPropertyOptional({ description: '参考文献', nullable: true })
   @Column('text', { name: 'references', nullable: true, comment: '参考文献' })
   references: string | null;
 
-  @ApiPropertyOptional({ description: '引用情况(次数)' })
+  @ApiPropertyOptional({ description: '引用情况(次数)', nullable: true })
   @Column('integer', { name: 'quote', nullable: true, comment: '引用情况(次数)' })
   quote: number | null;
 
-  @ApiPropertyOptional({ description: '所获得资助项目' })
+  @ApiPropertyOptional({ description: '所获得资助项目' , nullable: true})
   @Column('integer', { name: 'funded_project', nullable: true, comment: '所获得资助项目' })
   fundedProject: number | null;
 
-  @ApiPropertyOptional({ description: '论文链接' })
+  @ApiPropertyOptional({ description: '论文链接', nullable: true })
   @Column('character varying', { name: 'url', nullable: true, length: 128, comment: '论文链接' })
   url: number | null;
 
@@ -183,7 +183,7 @@ export class Treatises {
   })
   type: string;
 
-  @ApiPropertyOptional({ description: '栏目id,期刊论文只能选择期刊相关的栏目且不为空' })
+  @ApiPropertyOptional({ description: '栏目id,期刊论文只能选择期刊相关的栏目且不为空', nullable: true })
   @Column('character varying', {
     name: 'column_id',
     length: 128,
@@ -211,7 +211,7 @@ export class Treatises {
   })
   status: string;
 
-  @ApiPropertyOptional({ description: '录入人id' })
+  @ApiPropertyOptional({ description: '录入人id' , nullable: true})
   @Column('character varying', {
     name: 'owner_id',
     length:128,
@@ -220,7 +220,7 @@ export class Treatises {
   })
   ownerId: string | null;
 
- @ApiPropertyOptional({ description: '关键字' })
+ @ApiPropertyOptional({ description: '关键字', nullable: true })
   @Column('character varying', {
     name: 'keyword',
     length: 100,
@@ -255,7 +255,7 @@ export class Treatises {
   })
   updatedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '发布时间' })
+  @ApiPropertyOptional({ description: '发布时间', nullable: true })
   @Column('timestamp with time zone', {
     name: 'published_at',
     nullable: true,

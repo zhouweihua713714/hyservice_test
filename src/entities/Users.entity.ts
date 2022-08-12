@@ -16,11 +16,11 @@ export class Users {
   @Column('character varying', { name: 'mobile', unique: true, length: 11, comment: '手机号码' })
   mobile: string;
 
-  @ApiPropertyOptional({ description: '用户昵称' })
+  @ApiPropertyOptional({ description: '用户昵称', nullable: true })
   @Column('character varying', { name: 'name', nullable: true, length: 20, comment: '姓名' })
   name: string | null;
 
-  @ApiPropertyOptional({ description: '用户拓展信息' })
+  @ApiPropertyOptional({ description: '用户拓展信息' , nullable: true})
   @Column('json', { name: 'info', default: {}, comment: '用户拓展信息' })
   info: object;
 
