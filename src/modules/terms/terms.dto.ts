@@ -124,3 +124,20 @@ export class ListTermDto extends PickType(ReqListQuery, ['page', 'size'] as cons
   @IsOptional()
   columnId: string;
 }
+export class OperateTermsDto {
+  @ApiProperty({ description: 'ids 数组' })
+  @IsArray({ message: 'ids 类型错误, 正确类型 array' })
+  ids: string[];
+
+  @ApiProperty({ description: '状态' })
+  @IsString({ message: 'status 类型错误, 正确类型 string' })
+  @IsEnum(Content_Status_Enum)
+  status: string;
+}
+
+export class RemoveTermsDto {
+  @ApiProperty({ description: 'ids 数组' })
+  @IsArray({ message: 'ids 类型错误, 正确类型 array' })
+  ids: string[];
+
+}

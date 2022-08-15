@@ -10,7 +10,13 @@ import {
   termTypesRepository,
   usersRepository,
 } from '../repository/repository';
-import { GetTermDetailDto, ListTermDto, SaveTermDto } from './terms.dto';
+import {
+  GetTermDetailDto,
+  ListTermDto,
+  OperateTermsDto,
+  RemoveTermsDto,
+  SaveTermDto,
+} from './terms.dto';
 import {
   Content_Status_Enum,
   Content_Types_Enum,
@@ -182,5 +188,88 @@ export class TermsService {
       };
     });
     return ResultData.ok({ data: { terms: result, count: count } });
+  }
+  /**
+   * @description 操作项目
+   * @param {OperateTermsDto} params 操作项目的相关参数
+   * @returns {ResultData} 返回operateTerms信息
+   */
+  async operateTerms(params: OperateTermsDto, user: SignInResInfo): Promise<ResultData> {
+    const { ids, status } = params;
+    // if user not permission, then throw error
+    if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
+    }
+    let statusCondition;
+    if (status === Content_Status_Enum.ACTIVE) {
+      statusCondition = {
+        status: Content_Status_Enum.READY,
+      };
+    }
+    if (status === Content_Status_Enum.READY) {
+      statusCondition = {
+        status: Content_Status_Enum.ACTIVE,
+      };
+    }
+    const success = await termsRepository.find({
+      where: { ...statusCondition, id: In(ids), enabled: true, deletedAt: IsNull() },
+      select: ['id'],
+    });
+
+    if (success.length === 0) {
+      return ResultData.ok({
+        data: { succeed: 0, failed: ids.length },
+      });
+    }
+    // update
+    const affected = await termsRepository.update(
+      success.map((data) => {
+        return data.id;
+      }),
+      {
+        status: status,
+        publishedAt: status === Content_Status_Enum.ACTIVE ? new Date() : undefined,
+      }
+    );
+    const succeed = affected.affected ? affected.affected : 0;
+    return ResultData.ok({
+      data: { succeed: succeed, failed: ids.length - succeed },
+    });
+  }
+  /**
+   * @description 删除项目
+   * @param {RemoveTermsDto} params 删除项目的相关参数
+   * @returns {ResultData} 返回removeTerms信息
+   */
+  async removeTerms(params: RemoveTermsDto, user: SignInResInfo): Promise<ResultData> {
+    const { ids } = params;
+    // if user not permission, then throw error
+    if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
+    }
+
+    const success = await termsRepository.find({
+      where: { id: In(ids), enabled: true, deletedAt: IsNull() },
+      select: ['id'],
+    });
+    if (success.length === 0) {
+      return ResultData.ok({
+        data: { succeed: 0, failed: ids.length },
+      });
+    }
+    // update
+    const affected = await termsRepository.update(
+      success.map((data) => {
+        return data.id;
+      }),
+      {
+        deletedAt: new Date(),
+        enabled: false,
+      }
+    );
+    const succeed = affected.affected ? affected.affected : 0;
+    return ResultData.ok({
+      data: { succeed: succeed, failed: ids.length - succeed },
+    });
   }
 }

@@ -5,12 +5,29 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { GetTermDetailDto, ListTermDto, SaveTermDto } from './terms.dto';
+import {
+  GetTermDetailDto,
+  ListTermDto,
+  OperateTermsDto,
+  RemoveTermsDto,
+  SaveTermDto,
+} from './terms.dto';
 import { TermsService } from './terms.service';
-import { GetTermsDetailResult, ListTermResult } from './terms.types';
+import {
+  GetTermsDetailResult,
+  ListTermResult,
+  OperateTermsResult,
+  RemoveTermsResult,
+} from './terms.types';
 
 @ApiTags('内容管理-项目')
-@ApiExtraModels(ResultData, GetTermsDetailResult, ListTermResult)
+@ApiExtraModels(
+  ResultData,
+  GetTermsDetailResult,
+  ListTermResult,
+  OperateTermsResult,
+  RemoveTermsResult
+)
 @Controller('/terms')
 export class TermsController {
   constructor(private readonly termsService: TermsService) {}
@@ -24,12 +41,12 @@ export class TermsController {
     return this.termsService.getTermDetail(params);
   }
 
-  @Post('/saveTerms')
+  @Post('/saveTerm')
   @HttpCode(200)
   @ApiOperation({ summary: '新增/编辑项目' })
   @ApiResult()
   @ApiBearerAuth()
-  countResourceByStatus(@Body() params: SaveTermDto, @Req() req: any) {
+  saveTerm(@Body() params: SaveTermDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.saveTerm(params, user);
   }
@@ -42,5 +59,25 @@ export class TermsController {
   listTerm(@Query() params: ListTermDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.listTerm(params, user);
+  }
+
+  @Post('/operateTerms')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作项目(发布、待发布)' })
+  @ApiResult(OperateTermsResult)
+  @ApiBearerAuth()
+  operateTerms(@Body() params: OperateTermsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.operateTerms(params, user);
+  }
+
+  @Post('/removeTerms')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除项目' })
+  @ApiResult(RemoveTermsResult)
+  @ApiBearerAuth()
+  removeTerms(@Body() params: RemoveTermsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.removeTerms(params, user);
   }
 }
