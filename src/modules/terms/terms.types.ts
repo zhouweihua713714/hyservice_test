@@ -48,10 +48,23 @@ export class ListTermInfo extends PickType(Terms, [
   columnName: string;
 }
 
-export class ListTermResult  {
+export class ListTermResult {
   @ApiProperty({ description: '项目数组', type: ListTermInfo, isArray: true })
   terms: ListTermInfo[];
 
-  @ApiProperty({ description: '总数', })
+  @ApiProperty({ description: '总数' })
   count: number;
 }
+
+export class OperateTermsResult {
+  @ApiProperty({ description: '成功数量' })
+  succeed: number;
+
+  @ApiProperty({ description: '失败数量' })
+  failed: number;
+}
+
+export class RemoveTermsResult extends PickType(OperateTermsResult, [
+  'succeed',
+  'failed',
+] as const) {}
