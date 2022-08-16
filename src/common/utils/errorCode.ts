@@ -116,9 +116,9 @@ export const ErrorCode = {
       code: 20001,
       message: '当前栏目不存在或者已经被删除',
     },
-    TERM_TYPE_NOT_FOUND_ERROR: {
+    TYPE_NOT_FOUND_ERROR: {
       code: 20002,
-      message: '当前项目类型不存在或者已经被删除',
+      message: '当前类型不存在或者已经被删除',
     },
     SUBJECT_NOT_FOUND_ERROR: {
       code: 20003,
@@ -131,6 +131,18 @@ export const ErrorCode = {
     RESOURCE_NOT_FOUND_ERROR: {
       code: 20005,
       message: '该数据不存在或已经被删除',
+    },
+    LANGUAGE_NOT_FOUND_ERROR: {
+      code: 20006,
+      message: '当前语言不存在或已经被删除',
+    },
+    PERIOD_NOT_FOUND_ERROR: {
+      code: 20007,
+      message: '当前发刊周期不存在或已经被删除',
+    },
+    PEKING_UNIT_NOT_FOUND_ERROR: {
+      code: 20008,
+      message: '当前期刊不存在或已经被删除',
     },
   },
   // 3xxxx

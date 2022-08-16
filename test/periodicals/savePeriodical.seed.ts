@@ -5,20 +5,23 @@ import { samples } from '../samples';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
-import { TermTypes } from '@/entities/TermTypes.entity';
+import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
+import { Languages } from '@/entities/Languages.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
 let subjects: Subjects[];
-let termType: TermTypes;
+let periodicalPeriod: PeriodicalPeriods;
+let language: Languages;
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
   columns: Columns[];
   subjects: Subjects[];
-  termType: TermTypes;
+  periodicalPeriod: PeriodicalPeriods;
+  language: Languages;
 };
 
 export const seed: TesterSeed<DataType> = {
@@ -36,20 +39,26 @@ export const seed: TesterSeed<DataType> = {
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: '1', sequenceNumber: 1 },
     ]);
     subjects = await tester.subjectsRepository.save([
-      { id: `S${genCodeOfLength(8)}`, name: '学科名称', type: Content_Types_Enum.TERM },
+      { id: `S${genCodeOfLength(8)}`, name: '学科名称', type: Content_Types_Enum.PERIODICAL },
       { id: `S${genCodeOfLength(8)}`, name: '学科名称1', type: Content_Types_Enum.PATENT },
     ]);
-    termType = await tester.termTypesRepository.save({
-      id: `T${genCodeOfLength(8)}`,
-      name: '项目类型名称',
+    language = await tester.languagesRepository.save({
+      id: `L${genCodeOfLength(8)}`,
+      name: '语种名称',
+      type: `${Content_Types_Enum.PERIODICAL}_${Content_Types_Enum.PATENT}`,
     });
-    return { user, normalUser, columns, subjects, termType };
+    periodicalPeriod = await tester.periodicalPeriodsRepository.save({
+      id: `P${genCodeOfLength(8)}`,
+      name: '发刊周期名称',
+    });
+    return { user, normalUser, columns, subjects, language, periodicalPeriod };
   },
   down: async (tester) => {
     await tester.usersRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.subjectsRepository.delete({});
-    await tester.termTypesRepository.delete({});
+    await tester.languagesRepository.delete({});
+    await tester.periodicalPeriodsRepository.delete({});
     await tester.loginsRepository.delete({});
   },
 };

@@ -18,6 +18,7 @@ import {
   ListTermResult,
   OperateTermsResult,
   RemoveTermsResult,
+  SaveTermResult,
 } from './terms.types';
 
 @ApiTags('内容管理-项目')
@@ -26,7 +27,8 @@ import {
   GetTermsDetailResult,
   ListTermResult,
   OperateTermsResult,
-  RemoveTermsResult
+  RemoveTermsResult,
+  SaveTermResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -44,7 +46,7 @@ export class TermsController {
   @Post('/saveTerm')
   @HttpCode(200)
   @ApiOperation({ summary: '新增/编辑项目' })
-  @ApiResult()
+  @ApiResult(SaveTermResult)
   @ApiBearerAuth()
   saveTerm(@Body() params: SaveTermDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;

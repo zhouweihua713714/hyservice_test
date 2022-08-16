@@ -1,29 +1,15 @@
-import { Terms } from '@/entities/Terms.entity';
+import { Periodicals } from '@/entities/Periodicals.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
-export class SaveTermResult {
+export class SavePeriodicalResult {
   @ApiProperty({ description: '主键id' })
   id: string;
 
 }
-export class GetTermsDetailResult extends PickType(Terms, [
+export class GetPeriodicalsDetailResult extends PickType(Periodicals, [
   'id',
   'name',
-  'termNumber',
-  'principal',
-  'unit',
-  'province',
-  'money',
-  'type',
-  'department',
-  'authorizedAt',
-  'subject',
-  'subjectNo',
-  'startedAt',
-  'endedAt',
-  'keyword',
-  'columnId',
   'status',
   'ownerId',
   'createdAt',
@@ -42,27 +28,26 @@ export class GetTermsDetailResult extends PickType(Terms, [
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
 }
-export class ListTermInfo extends PickType(Terms, [
+export class ListPeriodicalInfo extends PickType(Periodicals, [
   'id',
   'name',
   'columnId',
   'status',
   'updatedAt',
-  'clicks'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 }
 
-export class ListTermResult {
-  @ApiProperty({ description: '项目数组', type: ListTermInfo, isArray: true })
-  terms: ListTermInfo[];
+export class ListPeriodicalResult {
+  @ApiProperty({ description: '项目数组', type: ListPeriodicalInfo, isArray: true })
+  terms: ListPeriodicalInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
 }
 
-export class OperateTermsResult {
+export class OperatePeriodicalsResult {
   @ApiProperty({ description: '成功数量' })
   succeed: number;
 
@@ -70,7 +55,8 @@ export class OperateTermsResult {
   failed: number;
 }
 
-export class RemoveTermsResult extends PickType(OperateTermsResult, [
+
+export class RemovePeriodicalsResult extends PickType(OperatePeriodicalsResult, [
   'succeed',
   'failed',
 ] as const) {}

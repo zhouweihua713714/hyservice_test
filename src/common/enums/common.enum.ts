@@ -65,4 +65,11 @@ export enum Content_Status_Enum {
   /** 已发布 */
   ACTIVE = 'active',
 }
-
+export enum Peking_Unit_Enum {
+  /**  核心期刊 */
+  JOURNALS_001 = 'journals_001',
+  /** 1级权威 */
+  JOURNALS_002 = 'journals_002',
+  /** 2级权威 */
+  JOURNALS_003 = 'journals_003',
+}
