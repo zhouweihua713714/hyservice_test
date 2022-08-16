@@ -48,6 +48,7 @@ export class ListTermInfo extends PickType(Terms, [
   'columnId',
   'status',
   'updatedAt',
+  'clicks'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
