@@ -1,25 +1,16 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class HY301660619393841 implements MigrationInterface {
-    name = 'HY301660619393841'
+export class HY301660620772357 implements MigrationInterface {
+    name = 'HY301660620772357'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "classification"`);
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "content"`);
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "picture"`);
-        await queryRunner.query(`ALTER TABLE "treatises" DROP COLUMN "name"`);
-        await queryRunner.query(`ALTER TABLE "treatises" DROP COLUMN "conference_field"`);
-        await queryRunner.query(`ALTER TABLE "treatises" DROP COLUMN "conference_minor_field"`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "subject" jsonb`);
         await queryRunner.query(`COMMENT ON COLUMN "periodicals"."subject" IS '学科分类(CNKI中国知网),格式:[string,string]'`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "deleted_at" TIMESTAMP WITH TIME ZONE`);
         await queryRunner.query(`COMMENT ON COLUMN "periodicals"."deleted_at" IS '删除时间'`);
-        await queryRunner.query(`ALTER TABLE "america_terms" ALTER COLUMN "created_at" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "conferences" ALTER COLUMN "created_at" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "patents" ALTER COLUMN "created_at" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "institutions" ALTER COLUMN "website" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "institutions" ALTER COLUMN "created_at" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "policies" ALTER COLUMN "created_at" SET NOT NULL`);
         await queryRunner.query(`ALTER TABLE "periodicals" ALTER COLUMN "type" DROP NOT NULL`);
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "region"`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "region" character varying(50)`);
@@ -41,19 +32,11 @@ export class HY301660619393841 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "cover_url"`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "cover_url" character varying(128)`);
         await queryRunner.query(`COMMENT ON COLUMN "periodicals"."cover_url" IS '封面链接'`);
-        await queryRunner.query(`ALTER TABLE "periodicals" ALTER COLUMN "created_at" SET NOT NULL`);
         await queryRunner.query(`ALTER TABLE "periodicals" ALTER COLUMN "enabled" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "terms" ALTER COLUMN "created_at" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "created_at" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "updated_at" SET NOT NULL`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "updated_at" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "created_at" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "terms" ALTER COLUMN "created_at" DROP NOT NULL`);
         await queryRunner.query(`ALTER TABLE "periodicals" ALTER COLUMN "enabled" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "periodicals" ALTER COLUMN "created_at" DROP NOT NULL`);
         await queryRunner.query(`COMMENT ON COLUMN "periodicals"."cover_url" IS '封面链接'`);
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "cover_url"`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "cover_url" character varying(50)`);
@@ -75,19 +58,10 @@ export class HY301660619393841 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "region"`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "region" jsonb`);
         await queryRunner.query(`ALTER TABLE "periodicals" ALTER COLUMN "type" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "policies" ALTER COLUMN "created_at" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "institutions" ALTER COLUMN "created_at" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "institutions" ALTER COLUMN "website" SET NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "patents" ALTER COLUMN "created_at" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "conferences" ALTER COLUMN "created_at" DROP NOT NULL`);
-        await queryRunner.query(`ALTER TABLE "america_terms" ALTER COLUMN "created_at" DROP NOT NULL`);
         await queryRunner.query(`COMMENT ON COLUMN "periodicals"."deleted_at" IS '删除时间'`);
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "deleted_at"`);
         await queryRunner.query(`COMMENT ON COLUMN "periodicals"."subject" IS '学科分类(CNKI中国知网),格式:[string,string]'`);
         await queryRunner.query(`ALTER TABLE "periodicals" DROP COLUMN "subject"`);
-        await queryRunner.query(`ALTER TABLE "treatises" ADD "conference_minor_field" character varying(64)`);
-        await queryRunner.query(`ALTER TABLE "treatises" ADD "conference_field" character varying(64)`);
-        await queryRunner.query(`ALTER TABLE "treatises" ADD "name" character varying(128)`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "picture" character varying(128)`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "content" jsonb`);
         await queryRunner.query(`ALTER TABLE "periodicals" ADD "classification" jsonb`);
