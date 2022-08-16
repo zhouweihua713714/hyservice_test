@@ -56,25 +56,30 @@ export class SaveTermDto {
 
   @ApiPropertyOptional({ description: '项目负责人', type: String, nullable: true })
   @IsString({ message: 'principal 类型错误, 正确类型 string' })
+  @IsOptional()
   @MaxLength(50)
   principal: string | null;
 
   @ApiPropertyOptional({ description: '项目编号', type: String, nullable: true })
   @IsString({ message: 'termNumber 类型错误, 正确类型 string' })
+  @IsOptional()
   @MaxLength(50)
   termNumber: string | null;
 
   @ApiPropertyOptional({ description: '关键词', type: String, nullable: true })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
+  @IsOptional()
   @MaxLength(50)
   keyword: string | null;
 
   @ApiPropertyOptional({ description: '金额(万元,保留到整数)', type: Number, nullable: true })
   @IsInt({ message: 'money 类型错误, 正确类型 number' })
+  @IsOptional()
   money: number | null;
 
   @ApiPropertyOptional({ description: '学部', type: String, nullable: true })
   @IsString({ message: 'department 类型错误, 正确类型 string' })
+  @IsOptional()
   @MaxLength(50)
   department: string | null;
 

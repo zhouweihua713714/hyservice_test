@@ -76,6 +76,7 @@ export class SavePeriodicalDto {
   @ApiPropertyOptional({ description: '主领域(大领域之间用“;”隔开)', type: String, nullable: true })
   @IsString({ message: 'field 类型错误, 正确类型 string' })
   @MaxLength(50)
+  @IsOptional()
   field: string | null;
 
   @ApiPropertyOptional({ description: '子领域(大领域之间用“;”隔开)', type: String, nullable: true })
