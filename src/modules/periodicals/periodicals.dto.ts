@@ -12,6 +12,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  MaxLength,
 } from 'class-validator';
 import { words } from 'lodash';
 
@@ -34,7 +35,7 @@ export class SavePeriodicalDto {
 
   @ApiProperty({ description: '期刊名称' })
   @IsString({ message: '期刊名称name 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   name: string;
 
   @ApiProperty({ description: '栏目id' })
@@ -48,7 +49,7 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @IsString({ message: 'string 类型错误, 正确类型 string' })
-  @Length(1, 300, { message: '最大允许值为300' })
+  @MaxLength(300)
   @IsOptional()
   introduction: string | null;
 
@@ -68,36 +69,36 @@ export class SavePeriodicalDto {
     nullable: true,
   })
   @IsString({ message: 'region 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   region: string | null;
 
   @ApiPropertyOptional({ description: '主领域(大领域之间用“;”隔开)', type: String, nullable: true })
   @IsString({ message: 'field 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   field: string | null;
 
   @ApiPropertyOptional({ description: '子领域(大领域之间用“;”隔开)', type: String, nullable: true })
   @IsString({ message: 'minorField 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   minorField: string | null;
 
   @ApiPropertyOptional({ description: '网址', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 number' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   url: string | null;
 
   @ApiPropertyOptional({ description: '详细地址', type: String, nullable: true })
   @IsString({ message: 'address 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   address: string | null;
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
   @IsString({ message: 'search 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   search: string | null;
 
@@ -113,7 +114,7 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '出版商', type: String, nullable: true })
   @IsString({ message: 'publisher 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   publisher: string | null;
 
@@ -124,25 +125,25 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '主管单位', type: String, nullable: true })
   @IsString({ message: 'manager 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   manager: string | null;
 
   @ApiPropertyOptional({ description: '主办单位', type: String, nullable: true })
   @IsString({ message: 'organizer 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   organizer: string | null;
 
   @ApiPropertyOptional({ description: 'ISSN,国际标准期刊编号', type: String, nullable: true })
   @IsString({ message: 'ISSN 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   ISSN: string | null;
 
   @ApiPropertyOptional({ description: 'CN,国内统一刊号', type: String, nullable: true })
   @IsString({ message: 'CN 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   CN: string | null;
 
@@ -159,7 +160,7 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '期刊荣誉', type: String, nullable: true })
   @IsString({ message: 'honor 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   honor: string | null;
 
@@ -195,13 +196,13 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '审稿周期', type: String, nullable: true })
   @IsString({ message: 'checkPeriod 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   checkPeriod: string | null;
 
   @ApiPropertyOptional({ description: '发稿周期', type: String, nullable: true })
   @IsString({ message: 'releasePeriod 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   releasePeriod: string | null;
 

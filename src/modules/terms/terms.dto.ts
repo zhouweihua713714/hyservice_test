@@ -9,6 +9,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  MaxLength,
 } from 'class-validator';
 
 export class GetTermDetailDto {
@@ -30,7 +31,7 @@ export class SaveTermDto {
 
   @ApiProperty({ description: '项目名称' })
   @IsString({ message: '项目名称name 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   name: string;
 
   @ApiProperty({ description: '栏目id' })
@@ -49,32 +50,32 @@ export class SaveTermDto {
 
   @ApiPropertyOptional({ description: '依托单位', type: String, nullable: true })
   @IsString({ message: 'unit 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   unit: string | null;
 
   @ApiPropertyOptional({ description: '项目负责人', type: String, nullable: true })
   @IsString({ message: 'principal 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   principal: string | null;
 
   @ApiPropertyOptional({ description: '项目编号', type: String, nullable: true })
   @IsString({ message: 'termNumber 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   termNumber: string | null;
 
   @ApiPropertyOptional({ description: '关键词', type: String, nullable: true })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   keyword: string | null;
 
-  @ApiPropertyOptional({ description: '金额(万元,保留到整数)', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '金额(万元,保留到整数)', type: Number, nullable: true })
   @IsInt({ message: 'money 类型错误, 正确类型 number' })
   money: number | null;
 
   @ApiPropertyOptional({ description: '学部', type: String, nullable: true })
   @IsString({ message: 'department 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   department: string | null;
 
   @ApiPropertyOptional({ description: '学科分类id', type: String, nullable: true })
@@ -84,11 +85,11 @@ export class SaveTermDto {
 
   @ApiPropertyOptional({ description: '学科代码', type: String, nullable: true })
   @IsString({ message: 'subjectNo 类型错误, 正确类型 string' })
-  @Length(1, 50, { message: '最大允许值为50' })
+  @MaxLength(50)
   @IsOptional()
   subjectNo: string | null;
 
-  @ApiPropertyOptional({ description: '批准年份', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '批准年份', type: Date, nullable: true })
   @IsDateString({ message: 'authorizedAt 类型错误, 正确类型 date' })
   @IsOptional()
   authorizedAt: Date | null;

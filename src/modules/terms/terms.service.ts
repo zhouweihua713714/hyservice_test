@@ -106,7 +106,7 @@ export class TermsService {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
       }
     } else {
-      params.id = termNumber ? termNumber : new Date().getTime().toString();
+      params.id = new Date().getTime().toString();
     }
     const result = await termsRepository.save({
       ownerId: user.id,

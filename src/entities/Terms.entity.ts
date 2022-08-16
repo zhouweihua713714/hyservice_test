@@ -29,7 +29,7 @@ export class Terms {
   @Column('character varying', { name: 'province', length: 50, nullable: true, comment: '省份' })
   province: string | null;
 
-  @ApiPropertyOptional({ description: '金额(万元)', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '金额(万元)', type: Number, nullable: true })
   @Column('integer', {
     name: 'money',
     nullable: true,

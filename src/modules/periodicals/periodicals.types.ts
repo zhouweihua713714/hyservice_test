@@ -5,7 +5,6 @@ import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 export class SavePeriodicalResult {
   @ApiProperty({ description: '主键id' })
   id: string;
-
 }
 export class GetPeriodicalsDetailResult extends PickType(Periodicals, [
   'id',
@@ -15,10 +14,41 @@ export class GetPeriodicalsDetailResult extends PickType(Periodicals, [
   'createdAt',
   'updatedAt',
   'publishedAt',
+  'columnId',
+  'type',
+  'introduction',
+  'language',
+  'region',
+  'field',
+  'minorField',
+  'url',
+  'address',
+  'search',
+  'impactFactor',
+  'establishedAt',
+  'publisher',
+  'period',
+  'manager',
+  'organizer',
+  'ISSN',
+  'CN',
+  'pekingUnit',
+  'honor',
+  'articleNumber',
+  'quote',
+  'downloads',
+  'subject',
+  'compositeImpactFactor',
+  'checkPeriod',
+  'releasePeriod',
+  'recordRate',
+  'checkFee',
+  'pageFee',
+  'reward',
+  'coverUrl',
+  'citeScore',
+  'citeRate',
 ] as const) {
-  @ApiPropertyOptional({ description: '项目类型名称' })
-  typeName: string;
-
   @ApiPropertyOptional({ description: '学科分类名称' })
   subjectName: string;
 
@@ -54,7 +84,6 @@ export class OperatePeriodicalsResult {
   @ApiProperty({ description: '失败数量' })
   failed: number;
 }
-
 
 export class RemovePeriodicalsResult extends PickType(OperatePeriodicalsResult, [
   'succeed',
