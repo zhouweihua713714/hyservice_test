@@ -20,6 +20,9 @@ import { TermTypes } from '@/entities/TermTypes.entity';
 import { ReplaySubject } from 'rxjs';
 import { Subjects } from '@/entities/Subjects.entity';
 import { Terms } from '@/entities/Terms.entity';
+import { Languages } from '@/entities/Languages.entity';
+import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
+import { Periodicals } from '@/entities/Periodicals.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -34,6 +37,9 @@ export class DBTester<T = undefined> {
   termTypesRepository: Repository<TermTypes>;
   subjectsRepository: Repository<Subjects>;
   termsRepository: Repository<Terms>;
+  languagesRepository: Repository<Languages>;
+  periodicalPeriodsRepository: Repository<PeriodicalPeriods>;
+  periodicalsRepository: Repository<Periodicals>;
   config: ConfigService;
   server: any;
 
@@ -75,6 +81,9 @@ export class DBTester<T = undefined> {
       );
       this.subjectsRepository = this.module.get<Repository<Subjects>>(getRepositoryToken(Subjects));
       this.termsRepository = this.module.get<Repository<Terms>>(getRepositoryToken(Terms));
+      this.languagesRepository = this.module.get<Repository<Languages>>(getRepositoryToken(Languages));
+      this.periodicalPeriodsRepository = this.module.get<Repository<PeriodicalPeriods>>(getRepositoryToken(PeriodicalPeriods));
+      this.periodicalsRepository = this.module.get<Repository<Periodicals>>(getRepositoryToken(Periodicals));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 

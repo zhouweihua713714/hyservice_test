@@ -22,6 +22,10 @@ import { Columns } from './entities/Columns.entity';
 import { TermTypes } from './entities/TermTypes.entity';
 import { Subjects } from './entities/Subjects.entity';
 import { Terms } from './entities/Terms.entity';
+import { PeriodicalsModule } from './modules/periodicals/periodicals.module';
+import { Languages } from './entities/Languages.entity';
+import { PeriodicalPeriods } from './entities/PeriodicalPeriods.entity';
+import { Periodicals } from './entities/Periodicals.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -62,6 +66,9 @@ import { Terms } from './entities/Terms.entity';
       TermTypes,
       Subjects,
       Terms,
+      Languages,
+      PeriodicalPeriods,
+      Periodicals,
     ]),
     HomeModule,
     AuthModule,
@@ -70,6 +77,7 @@ import { Terms } from './entities/Terms.entity';
     HomepageModule,
     ConfigsModule,
     TermsModule,
+    PeriodicalsModule,
   ],
   // 守卫
   providers: [

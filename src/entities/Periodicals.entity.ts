@@ -20,9 +20,9 @@ export class Periodicals {
   @Column('character varying', { name: 'name', length: 50, comment: '期刊名称' })
   name: string;
 
-  @ApiPropertyOptional({ description: '期刊类型', type: String, nullable: true })
-  @Column('character varying', { name: 'type', length: 64, comment: '期刊类型' })
-  type: string;
+  @ApiPropertyOptional({ description: '期刊类型:期刊 periodical', type: String, nullable: true })
+  @Column('character varying', { name: 'type', length: 64, comment: '期刊类型', nullable: true })
+  type: string | null;
 
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
@@ -42,38 +42,38 @@ export class Periodicals {
   language: object | null;
 
   @ApiPropertyOptional({
-    description: '地区(刊物国别),格式 [string,string]',
+    description: '地区(刊物国别),国别之间用;隔开',
     type: String,
-    isArray: true,
     nullable: true,
   })
-  @Column('jsonb', {
+  @Column('character varying', {
     name: 'region',
+    length: 50,
     nullable: true,
-    comment: '地区(刊物国别)格式 [string,string]',
+    comment: '地区(刊物国别),国别之间用;隔开',
   })
-  region: object | null;
+  region: string | null;
 
-  @ApiPropertyOptional({ description: '主领域', nullable: true })
+  @ApiPropertyOptional({ description: '主领域(大领域之间用“;”隔开)', nullable: true })
   @Column('character varying', {
     name: 'field',
     length: 128,
     nullable: true,
-    comment: '主领域',
+    comment: '主领域(大领域之间用“;”隔开)',
   })
   field: string | null;
 
-  @ApiPropertyOptional({ description: '子领域', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '子领域(大领域之间用“;”隔开)', type: String, nullable: true })
   @Column('character varying', {
     name: 'minor_field',
     length: 128,
     nullable: true,
-    comment: '子领域,格式 [string,string]',
+    comment: '子领域,(子领域之间用“;”隔开)',
   })
   minorField: string | null;
 
   @ApiPropertyOptional({ description: '网址', type: String, nullable: true })
-  @Column('character varying', { name: 'url', length: 50, nullable: true, comment: '网址' })
+  @Column('character varying', { name: 'url', length: 128, nullable: true, comment: '网址' })
   url: string | null;
 
   @ApiPropertyOptional({ description: '详细地址', type: String, nullable: true })
@@ -81,7 +81,7 @@ export class Periodicals {
   address: string | null;
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
-  @Column('character varying', { name: 'search', nullable: true, length: 32, comment: '检索情况' })
+  @Column('character varying', { name: 'search', nullable: true, length: 50, comment: '检索情况' })
   search: string | null;
 
   @ApiPropertyOptional({ description: '影响因子', type: Number, nullable: true })
@@ -112,7 +112,7 @@ export class Periodicals {
   publisher: string | null;
 
   @ApiPropertyOptional({ description: '刊发周期', type: String, nullable: true })
-  @Column('character varying', { name: 'period', length: 10, nullable: true, comment: '刊发周期' })
+  @Column('character varying', { name: 'period', length: 30, nullable: true, comment: '刊发周期' })
   period: string | null;
 
   @ApiPropertyOptional({ description: '主管单位', type: String, nullable: true })
@@ -173,7 +173,7 @@ export class Periodicals {
   @Column('integer', { name: 'quote', nullable: true, comment: '引用量' })
   quote: number | null;
 
-  @ApiPropertyOptional({ description: '下载次数(统计CNKI中国知网)', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '下载次数(统计CNKI中国知网)', type: Number, nullable: true })
   @Column('integer', { name: 'downloads', nullable: true, comment: '下载次数(统计CNKI中国知网)' })
   downloads: number | null;
 
@@ -184,11 +184,11 @@ export class Periodicals {
     nullable: true,
   })
   @Column('jsonb', {
-    name: 'classification',
+    name: 'subject',
     nullable: true,
     comment: '学科分类(CNKI中国知网),格式:[string,string]',
   })
-  classification: object | null;
+  subject: object | null;
 
   @ApiPropertyOptional({ description: '综合影响因子', type: Number, nullable: true })
   @Column('decimal', {
@@ -238,40 +238,40 @@ export class Periodicals {
   })
   recordRate: number | null;
 
-  @ApiPropertyOptional({ description: '审稿费', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '审稿费,单位:元', type: Number, nullable: true })
   @Column('decimal', {
     name: 'check_fee',
     precision: 10,
     scale: 2,
     nullable: true,
-    comment: '审稿费',
+    comment: '审稿费,单位:元',
   })
-  checkFee: string | null;
+  checkFee: number | null;
 
-  @ApiPropertyOptional({ description: '版面费', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '版面费,单位:元', type: Number, nullable: true })
   @Column('decimal', {
     name: 'page_fee',
     precision: 10,
     scale: 2,
     nullable: true,
-    comment: '版面费',
+    comment: '版面费,单位:元',
   })
-  pageFee: string | null;
+  pageFee: number | null;
 
-  @ApiPropertyOptional({ description: '稿酬', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '稿酬,单位:元', type: Number, nullable: true })
   @Column('decimal', {
     name: 'reward',
     precision: 10,
     scale: 2,
     nullable: true,
-    comment: '稿酬',
+    comment: '稿酬,单位:元',
   })
-  reward: string | null;
+  reward: number | null;
 
   @ApiPropertyOptional({ description: '封面链接', type: String, nullable: true })
   @Column('character varying', {
     name: 'cover_url',
-    length: 50,
+    length: 128,
     nullable: true,
     comment: '封面链接',
   })
@@ -295,10 +295,6 @@ export class Periodicals {
   })
   citeRate: number | null;
 
-  @ApiPropertyOptional({ description: '详情', type: Object, nullable: true })
-  @Column('jsonb', { name: 'content', nullable: true, comment: '详情' })
-  content: object | null;
-
   @ApiProperty({ description: '状态:待发布ready,已发布active,已下架inactive' })
   @Column('character varying', {
     name: 'status',
@@ -317,14 +313,14 @@ export class Periodicals {
   })
   ownerId: string | null;
 
-  @ApiPropertyOptional({ description: '栏目图片', type: String, nullable: true })
-  @Column('character varying', {
-    name: 'picture',
-    length: 128,
-    nullable: true,
-    comment: '栏目图片',
-  })
-  picture: string | null;
+  // @ApiPropertyOptional({ description: '栏目图片', type: String, nullable: true })
+  // @Column('character varying', {
+  //   name: 'picture',
+  //   length: 128,
+  //   nullable: true,
+  //   comment: '栏目图片',
+  // })
+  // picture: string | null;
 
   @ApiPropertyOptional({ description: '点击量,暂时不做' })
   @Column('integer', {
@@ -365,7 +361,9 @@ export class Periodicals {
     nullable: true,
     comment: '删除时间',
   })
+  deletedAt: Date | null;
+
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
-  @Column('boolean', { name: 'enabled', nullable: true, default: true })
+  @Column('boolean', { name: 'enabled', default: true })
   enabled: boolean;
 }

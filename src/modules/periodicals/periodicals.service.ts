@@ -5,83 +5,80 @@ import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
   columnsRepository,
+  languagesRepository,
+  periodicalPeriodsRepository,
+  periodicalsRepository,
   subjectsRepository,
-  termsRepository,
-  termTypesRepository,
   usersRepository,
 } from '../repository/repository';
 import {
-  GetTermDetailDto,
-  ListTermDto,
-  OperateTermsDto,
-  RemoveTermsDto,
-  SaveTermDto,
-} from './terms.dto';
+  GetPeriodicalDetailDto,
+  ListPeriodicalDto,
+  OperatePeriodicalsDto,
+  RemovePeriodicalsDto,
+  SavePeriodicalDto,
+} from './periodicals.dto';
 import {
   Content_Status_Enum,
   Content_Types_Enum,
+  Peking_Unit_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
 
-export class TermsService {
+export class PeriodicalsService {
   /**
-   * @description 获取项目详情
-   * @param {GetTermDetailDto} params
-   * @returns {ResultData} 返回getTermDetail信息
+   * @description 获取期刊详情
+   * @param {GetPeriodicalDetailDto} params
+   * @returns {ResultData} 返回getPeriodicalDetail信息
    */
-  async getTermDetail(params: GetTermDetailDto): Promise<ResultData> {
-    const termInfo = await termsRepository.findOneBy({
+  async getPeriodicalDetail(params: GetPeriodicalDetailDto): Promise<ResultData> {
+    const periodicalInfo = await periodicalsRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
       enabled: true,
     });
-    if (!termInfo) {
+    if (!periodicalInfo) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
     }
-    const type = termInfo.type ? termInfo.type : '-1';
-    const subject = termInfo.subject ? termInfo.subject : '-1';
 
-    const [columnInfo, typeInfo, subjectInfo] = await Promise.all([
-      columnsRepository.findOneBy({ id: termInfo.columnId }),
-      termTypesRepository.findOneBy({ id: type }),
-      subjectsRepository.findOneBy({ id: subject }),
-    ]);
-    let userInfo;
-    if (termInfo.ownerId) {
-      userInfo = await usersRepository.findOneBy({ id: termInfo.ownerId });
-    }
-    const result = {
-      typeName: typeInfo ? typeInfo.name : null,
-      subjectName: subjectInfo ? subjectInfo.name : null,
-      columnName: columnInfo ? columnInfo.name : null,
-      owner: userInfo ? userInfo.mobile : null,
-      ...termInfo,
-    };
-    return ResultData.ok({ data: result });
+    return ResultData.ok({ data: periodicalInfo });
   }
   /**
-   * @description 保存项目
-   * @param {SaveTermDto} params 保存项目的相关参数
-   * @returns {ResultData} 返回saveTerm信息
+   * @description 保存期刊
+   * @param {SavePeriodicalDto} params 保存期刊的相关参数
+   * @returns {ResultData} 返回savePeriodical信息
    */
-  async saveTerm(params: SaveTermDto, user: SignInResInfo): Promise<ResultData> {
-    const { id, status, termNumber, type, subject, columnId, startedAt, endedAt } = params;
+  async savePeriodical(params: SavePeriodicalDto, user: SignInResInfo): Promise<ResultData> {
+    const { id, status, type, columnId, language, subject, pekingUnit, period } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
     }
-    // if type not found in database, then throw error
-    if (type) {
-      const typeInfo = await termTypesRepository.findOneBy({ id: type });
-      if (!typeInfo) {
-        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.TYPE_NOT_FOUND_ERROR });
-      }
+    // if peking unit not permitted, then throw error
+    if (
+      pekingUnit &&
+      _.find(pekingUnit, function (o) {
+        return (
+          o !== Peking_Unit_Enum.JOURNALS_001 &&
+          o !== Peking_Unit_Enum.JOURNALS_002 &&
+          o !== Peking_Unit_Enum.JOURNALS_003
+        );
+      })
+    ) {
+      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.PEKING_UNIT_NOT_FOUND_ERROR });
+    }
+    // if type not found, then throw error
+    if (type && type !== Content_Types_Enum.PERIODICAL) {
+      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.TYPE_NOT_FOUND_ERROR });
     }
     // if subject not found in database, then throw error
     if (subject) {
-      const subjectInfo = await subjectsRepository.findOneBy({ id: subject });
-      if (!subjectInfo || (subjectInfo && subjectInfo.type !== Content_Types_Enum.TERM)) {
+      const subjectInfo = await subjectsRepository.findBy({
+        id: In(subject),
+        type: Content_Types_Enum.PERIODICAL,
+      });
+      if (!subjectInfo || (subjectInfo && subjectInfo.length !== subject.length)) {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.SUBJECT_NOT_FOUND_ERROR });
       }
     }
@@ -90,38 +87,54 @@ export class TermsService {
     if (!columnInfo || (columnInfo && columnInfo.parentId === '0')) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.COLUMN_NOT_FOUND_ERROR });
     }
-    //  startedAt < endedAt
-    if (startedAt && endedAt && new Date(startedAt).getTime() >= new Date(endedAt).getTime()) {
-      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.START_TIME_ERROR });
+    // if language not found in database, then throw error
+    if (language) {
+      const languages = await languagesRepository.findBy({
+        id: In(language),
+        type: Like(`%${Content_Types_Enum.PERIODICAL}%`),
+      });
+      if (!languages || (languages && languages.length !== language.length)) {
+        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.LANGUAGE_NOT_FOUND_ERROR });
+      }
+    }
+    // if period not found in database, then throw error
+    if (period) {
+      const periodInfo = await periodicalPeriodsRepository.findOneBy({
+        id: period,
+      });
+      if (!periodInfo) {
+        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.PERIOD_NOT_FOUND_ERROR });
+      }
     }
 
     if (id) {
-      // if id exist get termInfo
-      const termInfo = await termsRepository.findOneBy({
+      // if id exist get periodicalInfo
+      const periodicalInfo = await periodicalsRepository.findOneBy({
         id: params.id,
         deletedAt: IsNull(),
         enabled: true,
       });
-      if (!termInfo) {
+      if (!periodicalInfo) {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
       }
     } else {
-      params.id = termNumber ? termNumber : new Date().getTime().toString();
+      params.id = new Date().getTime().toString();
     }
-    const result = await termsRepository.save({
+    const result = await periodicalsRepository.save({
       ownerId: user.id,
       updatedAt: id ? new Date() : undefined,
       publishedAt: status && status === Content_Status_Enum.ACTIVE ? new Date() : null,
       ...params,
     });
+    console.log(result);
     return ResultData.ok({ data: result });
   }
   /**
-   * @description 项目列表
-   * @param {ListTermDto} params
-   * @returns {ResultData} 返回listTerm信息
+   * @description 期刊列表
+   * @param {ListPeriodicalDto} params
+   * @returns {ResultData} 返回listPeriodical信息
    */
-  async listTerm(params: ListTermDto, user: SignInResInfo): Promise<ResultData> {
+  async listPeriodical(params: ListPeriodicalDto, user: SignInResInfo): Promise<ResultData> {
     const { columnId, name, status, page, size } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
@@ -145,8 +158,8 @@ export class TermsService {
         name: Like(`%${name}%`),
       };
     }
-    // get terms
-    const [terms, count] = await termsRepository.findAndCount({
+    // get periodicals
+    const [periodicals, count] = await periodicalsRepository.findAndCount({
       where: {
         ...statusCondition,
         ...columnCondition,
@@ -163,38 +176,41 @@ export class TermsService {
       },
     });
     if (count === 0) {
-      return ResultData.ok({ data: { terms: [], count: count } });
+      return ResultData.ok({ data: { periodicals: [], count: count } });
     }
     // get columns
     const columns = await columnsRepository.find({
       where: {
         id: In(
-          terms.map((term) => {
-            return term.columnId;
+          periodicals.map((periodical) => {
+            return periodical.columnId;
           })
         ),
       },
     });
-    const result = terms.map((term) => {
+    const result = periodicals.map((periodical) => {
       return {
-        id: term.id,
-        name: term.name,
-        clicks: term.clicks,
-        status: term.status,
-        updatedAt: term.updatedAt,
+        id: periodical.id,
+        name: periodical.name,
+        clicks: periodical.clicks,
+        status: periodical.status,
+        updatedAt: periodical.updatedAt,
         columnName: _.find(columns, function (o) {
-          return o.id === term.columnId;
+          return o.id === periodical.columnId;
         })?.name,
       };
     });
-    return ResultData.ok({ data: { terms: result, count: count } });
+    return ResultData.ok({ data: { periodicals: result, count: count } });
   }
   /**
-   * @description 操作项目
-   * @param {OperateTermsDto} params 操作项目的相关参数
-   * @returns {ResultData} 返回operateTerms信息
+   * @description 操作期刊
+   * @param {OperatePeriodicalsDto} params 操作期刊的相关参数
+   * @returns {ResultData} 返回operatePeriodicals信息
    */
-  async operateTerms(params: OperateTermsDto, user: SignInResInfo): Promise<ResultData> {
+  async operatePeriodicals(
+    params: OperatePeriodicalsDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const { ids, status } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
@@ -211,7 +227,7 @@ export class TermsService {
         status: Content_Status_Enum.ACTIVE,
       };
     }
-    const success = await termsRepository.find({
+    const success = await periodicalsRepository.find({
       where: { ...statusCondition, id: In(ids), enabled: true, deletedAt: IsNull() },
       select: ['id'],
     });
@@ -222,7 +238,7 @@ export class TermsService {
       });
     }
     // update
-    const affected = await termsRepository.update(
+    const affected = await periodicalsRepository.update(
       success.map((data) => {
         return data.id;
       }),
@@ -237,18 +253,18 @@ export class TermsService {
     });
   }
   /**
-   * @description 删除项目
-   * @param {RemoveTermsDto} params 删除项目的相关参数
-   * @returns {ResultData} 返回removeTerms信息
+   * @description 删除期刊
+   * @param {RemovePeriodicalsDto} params 删除期刊的相关参数
+   * @returns {ResultData} 返回removePeriodicals信息
    */
-  async removeTerms(params: RemoveTermsDto, user: SignInResInfo): Promise<ResultData> {
+  async removePeriodicals(params: RemovePeriodicalsDto, user: SignInResInfo): Promise<ResultData> {
     const { ids } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
     }
 
-    const success = await termsRepository.find({
+    const success = await periodicalsRepository.find({
       where: { id: In(ids), enabled: true, deletedAt: IsNull() },
       select: ['id'],
     });
@@ -258,7 +274,7 @@ export class TermsService {
       });
     }
     // update
-    const affected = await termsRepository.update(
+    const affected = await periodicalsRepository.update(
       success.map((data) => {
         return data.id;
       }),
