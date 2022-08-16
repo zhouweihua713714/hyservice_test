@@ -126,7 +126,6 @@ export class PeriodicalsService {
       publishedAt: status && status === Content_Status_Enum.ACTIVE ? new Date() : null,
       ...params,
     });
-    console.log(result);
     return ResultData.ok({ data: result });
   }
   /**
