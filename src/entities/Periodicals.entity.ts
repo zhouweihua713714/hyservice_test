@@ -54,7 +54,7 @@ export class Periodicals {
   })
   region: string | null;
 
-  @ApiPropertyOptional({ description: '主领域(大领域之间用“;”隔开)', nullable: true })
+  @ApiPropertyOptional({ description: '主领域(大领域之间用“;”隔开)',type:String, nullable: true })
   @Column('character varying', {
     name: 'field',
     length: 128,

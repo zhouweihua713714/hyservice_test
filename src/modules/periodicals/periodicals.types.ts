@@ -55,6 +55,12 @@ export class GetPeriodicalsDetailResult extends PickType(Periodicals, [
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 
+  @ApiPropertyOptional({ description: '发刊周期名称' })
+  periodName: string;
+
+  @ApiPropertyOptional({ description: '语种名称' })
+  languageName: string;
+
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
 }

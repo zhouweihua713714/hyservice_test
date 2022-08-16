@@ -41,8 +41,55 @@ export class PeriodicalsService {
     if (!periodicalInfo) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
     }
-
-    return ResultData.ok({ data: periodicalInfo });
+    const columnInfo = await columnsRepository.findOneBy({ id: periodicalInfo.columnId });
+    // get necessary data
+    let userInfo;
+    let subjectInfo;
+    let languageInfo;
+    let periodInfo;
+    if (periodicalInfo.ownerId) {
+      userInfo = await usersRepository.findOneBy({ id: periodicalInfo.ownerId });
+    }
+    if (periodicalInfo.subject) {
+      subjectInfo = await subjectsRepository.findBy({
+        id: In(periodicalInfo.subject as string[]),
+        type: Content_Types_Enum.PERIODICAL,
+      });
+    }
+    if (periodicalInfo.language) {
+      languageInfo = await languagesRepository.findBy({
+        id: In(periodicalInfo.language as string[]),
+        type: Like(`%${Content_Types_Enum.PERIODICAL}%`),
+      });
+    }
+    if (periodicalInfo.period) {
+      periodInfo = await periodicalPeriodsRepository.findOneBy({
+        id: periodicalInfo.period,
+      });
+    }
+    const result = {
+      subjectName: subjectInfo
+        ? _.join(
+            subjectInfo.map((subject) => {
+              return subject.name;
+            }),
+            ';'
+          )
+        : null,
+      languageName: languageInfo
+        ? _.join(
+            languageInfo.map((language) => {
+              return language.name;
+            }),
+            ';'
+          )
+        : null,
+      periodName: periodInfo ? periodInfo.name : null,
+      columnName: columnInfo ? columnInfo.name : null,
+      owner: userInfo ? userInfo.mobile : null,
+      ...periodicalInfo,
+    };
+    return ResultData.ok({ data: result });
   }
   /**
    * @description 保存期刊
