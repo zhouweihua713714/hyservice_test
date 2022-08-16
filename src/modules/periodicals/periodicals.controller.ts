@@ -34,14 +34,14 @@ import {
 export class PeriodicalsController {
   constructor(private readonly termsService: PeriodicalsService) {}
 
-  // @Get('/getPeriodicalDetail')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '获取期刊详情' })
-  // @ApiResult(GetPeriodicalsDetailResult)
-  // @AllowAnon()
-  // getPeriodicalsDetail(@Query() params: GetPeriodicalDetailDto) {
-  //   return this.termsService.getPeriodicalDetail(params);
-  // }
+  @Get('/getPeriodicalDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取期刊详情' })
+  @ApiResult(GetPeriodicalsDetailResult)
+  @AllowAnon()
+  getPeriodicalsDetail(@Query() params: GetPeriodicalDetailDto) {
+    return this.termsService.getPeriodicalDetail(params);
+  }
 
   @Post('/savePeriodical')
   @HttpCode(200)
