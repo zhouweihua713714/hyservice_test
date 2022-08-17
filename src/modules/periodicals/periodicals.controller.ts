@@ -63,23 +63,23 @@ export class PeriodicalsController {
     return this.termsService.listPeriodical(params, user);
   }
 
-  // @Post('/operatePeriodicals')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '操作期刊(发布、待发布)' })
-  // @ApiResult(OperatePeriodicalsResult)
-  // @ApiBearerAuth()
-  // operatePeriodicals(@Body() params: OperatePeriodicalsDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.operatePeriodicals(params, user);
-  // }
+  @Post('/operatePeriodicals')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作期刊(发布、待发布)' })
+  @ApiResult(OperatePeriodicalsResult)
+  @ApiBearerAuth()
+  operatePeriodicals(@Body() params: OperatePeriodicalsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.operatePeriodicals(params, user);
+  }
 
-  // @Post('/removePeriodicals')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '删除期刊' })
-  // @ApiResult(RemovePeriodicalsResult)
-  // @ApiBearerAuth()
-  // removePeriodicals(@Body() params: RemovePeriodicalsDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.removePeriodicals(params, user);
-  // }
+  @Post('/removePeriodicals')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除期刊' })
+  @ApiResult(RemovePeriodicalsResult)
+  @ApiBearerAuth()
+  removePeriodicals(@Body() params: RemovePeriodicalsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.removePeriodicals(params, user);
+  }
 }
