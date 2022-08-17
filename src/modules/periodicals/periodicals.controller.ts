@@ -53,15 +53,15 @@ export class PeriodicalsController {
     return this.termsService.savePeriodical(params, user);
   }
 
-  // @Get('/listPeriodical')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '期刊列表' })
-  // @ApiResult(ListPeriodicalResult)
-  // @ApiBearerAuth()
-  // listPeriodicals(@Query() params: ListPeriodicalDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.listPeriodical(params, user);
-  // }
+  @Get('/listPeriodical')
+  @HttpCode(200)
+  @ApiOperation({ summary: '期刊列表' })
+  @ApiResult(ListPeriodicalResult)
+  @ApiBearerAuth()
+  listPeriodicals(@Query() params: ListPeriodicalDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.listPeriodical(params, user);
+  }
 
   // @Post('/operatePeriodicals')
   // @HttpCode(200)

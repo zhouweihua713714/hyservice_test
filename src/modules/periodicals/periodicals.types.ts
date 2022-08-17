@@ -77,7 +77,7 @@ export class ListPeriodicalInfo extends PickType(Periodicals, [
 
 export class ListPeriodicalResult {
   @ApiProperty({ description: '项目数组', type: ListPeriodicalInfo, isArray: true })
-  terms: ListPeriodicalInfo[];
+  periodicals: ListPeriodicalInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
