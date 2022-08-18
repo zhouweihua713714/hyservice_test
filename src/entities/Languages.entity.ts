@@ -12,6 +12,7 @@ export class Languages {
   @Column('character varying', { name: 'name', length: 128, comment: '名称' })
   name: string;
 
+  @ApiProperty({ description: '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy,论文下的ssci专用treatise_ssci' })
   @Column('character varying', {
     name: 'type',
     length: 32,
