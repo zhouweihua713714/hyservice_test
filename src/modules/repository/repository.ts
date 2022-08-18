@@ -13,6 +13,7 @@ import { TermTypes } from '@/entities/TermTypes.entity';
 import { Terms } from '@/entities/Terms.entity';
 import { Users } from '@/entities/Users.entity';
 import { Periodicals } from '@/entities/Periodicals.entity';
+import { Policies } from '@/entities/Policies.entity';
 DataSource.initialize()
   .then(() => {
     console.log('Data Source has been initialized!');
@@ -34,3 +35,5 @@ export const termTypesRepository = DataSource.getRepository(TermTypes);
 export const termsRepository = DataSource.getRepository(Terms);
 export const usersRepository = DataSource.getRepository(Users);
 export const periodicalsRepository = DataSource.getRepository(Periodicals);
+export const policiesRepository = DataSource.getRepository(Policies);
+

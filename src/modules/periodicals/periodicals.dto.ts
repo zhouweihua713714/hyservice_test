@@ -9,13 +9,12 @@ import {
   IsIn,
   isInt,
   IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
   MaxLength,
 } from 'class-validator';
-import { words } from 'lodash';
-
 export class GetPeriodicalDetailDto {
   @ApiProperty({ description: 'id,' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })
@@ -28,13 +27,13 @@ export class SavePeriodicalDto {
   id: string;
 
   @ApiPropertyOptional({ description: '状态,待发布,已发布' })
-  @IsString({ message: '期刊名称name 类型错误, 正确类型 string' })
+  @IsString({ message: 'status 类型错误, 正确类型 string' })
   @IsEnum(Content_Status_Enum)
   @IsOptional()
   status: string;
 
   @ApiProperty({ description: '期刊名称' })
-  @IsString({ message: '期刊名称name 类型错误, 正确类型 string' })
+  @IsString({ message: 'name 类型错误, 正确类型 string' })
   @MaxLength(50)
   name: string;
 
@@ -104,7 +103,7 @@ export class SavePeriodicalDto {
   search: string | null;
 
   @ApiPropertyOptional({ description: '影响因子', type: Number, nullable: true })
-  @IsDecimal({ message: 'impactFactor 类型错误, 正确类型 decimal' })
+  @IsNumber({ maxDecimalPlaces: 3 }, { message: 'impactFactor 类型错误, 正确类型 decimal' })
   @IsOptional()
   impactFactor: number | null;
 
@@ -191,7 +190,10 @@ export class SavePeriodicalDto {
   subject: string[] | null;
 
   @ApiPropertyOptional({ description: '综合影响因子', type: Number, nullable: true })
-  @IsDecimal({ message: 'compositeImpactFactor 类型错误, 正确类型 decimal' })
+  @IsNumber(
+    { maxDecimalPlaces: 3 },
+    { message: 'compositeImpactFactor 类型错误, 正确类型 decimal' }
+  )
   @IsOptional()
   compositeImpactFactor: number | null;
 
@@ -208,22 +210,22 @@ export class SavePeriodicalDto {
   releasePeriod: string | null;
 
   @ApiPropertyOptional({ description: '录用率', type: Number, nullable: true })
-  @IsDecimal({ message: 'recordRate 类型错误, 正确类型 decimal' })
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'recordRate 类型错误, 正确类型 decimal' })
   @IsOptional()
   recordRate: number | null;
 
   @ApiPropertyOptional({ description: '审稿费,单位:元', type: Number, nullable: true })
-  @IsDecimal({ message: 'checkFee 类型错误, 正确类型 decimal' })
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'checkFee 类型错误, 正确类型 decimal' })
   @IsOptional()
   checkFee: number | null;
 
   @ApiPropertyOptional({ description: '版面费,单位:元', type: Number, nullable: true })
-  @IsDecimal({ message: 'pageFee 类型错误, 正确类型 decimal' })
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'pageFee 类型错误, 正确类型 decimal' })
   @IsOptional()
   pageFee: number | null;
 
   @ApiPropertyOptional({ description: '稿酬,单位:元', type: Number, nullable: true })
-  @IsDecimal({ message: 'reward 类型错误, 正确类型 decimal' })
+  @IsNumber({ maxDecimalPlaces: 2 }, { message: 'reward 类型错误, 正确类型 decimal' })
   @IsOptional()
   reward: number | null;
 
@@ -233,7 +235,7 @@ export class SavePeriodicalDto {
   coverUrl: string | null;
 
   @ApiPropertyOptional({ description: '引用分', type: Number, nullable: true })
-  @IsDecimal({ message: 'citeScore 类型错误, 正确类型 decimal' })
+  @IsNumber({ maxDecimalPlaces: 1 }, { message: 'citeScore 类型错误, 正确类型 decimal' })
   @IsOptional()
   citeScore: number | null;
 
@@ -275,4 +277,3 @@ export class RemovePeriodicalsDto {
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];
 }
-

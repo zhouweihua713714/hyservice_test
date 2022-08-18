@@ -24,13 +24,13 @@ export class SaveTermDto {
   id: string;
 
   @ApiPropertyOptional({ description: '状态,待发布,已发布' })
-  @IsString({ message: '项目名称name 类型错误, 正确类型 string' })
+  @IsString({ message: 'status类型错误, 正确类型 string' })
   @IsEnum(Content_Status_Enum)
   @IsOptional()
   status: string;
 
   @ApiProperty({ description: '项目名称' })
-  @IsString({ message: '项目名称name 类型错误, 正确类型 string' })
+  @IsString({ message: 'name 类型错误, 正确类型 string' })
   @MaxLength(50)
   name: string;
 
