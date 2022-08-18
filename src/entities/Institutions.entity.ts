@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { ColumnNumericTransformer } from './Periodicals.entity';
 
 @Index('institutions_pkey', ['id'], { unique: true })
 @Entity('institutions')
@@ -78,6 +79,7 @@ export class Institutions {
     scale: 6,
     nullable: true,
     comment: '子领域',
+    transformer: new ColumnNumericTransformer()
   })
   longitude: number | null;
 
@@ -88,6 +90,7 @@ export class Institutions {
     scale: 6,
     nullable: true,
     comment: '子领域',
+    transformer: new ColumnNumericTransformer()
   })
   latitude: number | null;
 

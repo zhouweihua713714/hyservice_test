@@ -1,6 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
-
+export class ColumnNumericTransformer {
+  to(data: number): number {
+    return data;
+  }
+  from(data: string): number {
+    return parseFloat(data);
+  }
+}
 @Index('periodicals_pkey', ['id'], { unique: true })
 @Entity('periodicals')
 export class Periodicals {
@@ -91,6 +98,7 @@ export class Periodicals {
     scale: 3,
     nullable: true,
     comment: '影响因子',
+    transformer: new ColumnNumericTransformer()
   })
   impactFactor: number | null;
 
@@ -197,6 +205,7 @@ export class Periodicals {
     scale: 3,
     nullable: true,
     comment: '综合影响因子',
+    transformer: new ColumnNumericTransformer()
   })
   compositeImpactFactor: number | null;
 
@@ -235,6 +244,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '录用率',
+    transformer: new ColumnNumericTransformer()
   })
   recordRate: number | null;
 
@@ -245,6 +255,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '审稿费,单位:元',
+    transformer: new ColumnNumericTransformer()
   })
   checkFee: number | null;
 
@@ -255,6 +266,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '版面费,单位:元',
+    transformer: new ColumnNumericTransformer()
   })
   pageFee: number | null;
 
@@ -265,6 +277,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '稿酬,单位:元',
+    transformer: new ColumnNumericTransformer()
   })
   reward: number | null;
 
@@ -284,6 +297,7 @@ export class Periodicals {
     scale: 1,
     nullable: true,
     comment: '引用分',
+    transformer: new ColumnNumericTransformer()
   })
   citeScore: number | null;
 
