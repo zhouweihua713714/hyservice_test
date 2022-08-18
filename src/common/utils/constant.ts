@@ -12,4 +12,5 @@ export const constant = {
   TOPIC: {
     HELLO: 'hello.topic',
   },
+  POLICY_LEVEL:'policy_level_001'
 };

@@ -26,6 +26,9 @@ import { PeriodicalsModule } from './modules/periodicals/periodicals.module';
 import { Languages } from './entities/Languages.entity';
 import { PeriodicalPeriods } from './entities/PeriodicalPeriods.entity';
 import { Periodicals } from './entities/Periodicals.entity';
+import { PoliciesModule } from './modules/policies/policies.module';
+import { Policies } from './entities/Policies.entity';
+import { PolicyTypes } from './entities/PolicyTypes.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -69,6 +72,8 @@ import { Periodicals } from './entities/Periodicals.entity';
       Languages,
       PeriodicalPeriods,
       Periodicals,
+      Policies,
+      PolicyTypes
     ]),
     HomeModule,
     AuthModule,
@@ -78,6 +83,7 @@ import { Periodicals } from './entities/Periodicals.entity';
     ConfigsModule,
     TermsModule,
     PeriodicalsModule,
+    PoliciesModule
   ],
   // 守卫
   providers: [

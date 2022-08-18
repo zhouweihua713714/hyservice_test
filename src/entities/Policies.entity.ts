@@ -20,9 +20,9 @@ export class Policies {
   @Column('character varying', { name: 'name', length: 50, comment: '政策名称' })
   name: string;
 
-  @ApiProperty({ description: '政策类型' })
-  @Column('character varying', { name: 'type', length: 64, comment: '政策类型' })
-  type: string;
+  @ApiPropertyOptional({ description: '政策类型', type: String, nullable: true })
+  @Column('character varying', { name: 'type', length: 64, comment: '政策类型', nullable: true })
+  type: string | null;
 
   @ApiPropertyOptional({
     description: '政策层级:国家级policy_level_001',
@@ -68,7 +68,7 @@ export class Policies {
   })
   educationLevel: object | null;
 
-  @ApiPropertyOptional({ description: '关键字', type: String })
+  @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @Column('character varying', {
     name: 'keyword',
     length: 100,
@@ -96,11 +96,24 @@ export class Policies {
   @ApiPropertyOptional({ description: '政策来源(网址)', type: String, nullable: true })
   @Column('character varying', {
     name: 'url',
-    length: 10,
+    length: 50,
     nullable: true,
     comment: '政策来源(网址)',
   })
   url: string | null;
+
+  @ApiPropertyOptional({
+    description: '国家',
+    type: String,
+    nullable: true,
+  })
+  @Column('character varying', {
+    name: 'region',
+    length: 50,
+    nullable: true,
+    comment: '国家',
+  })
+  region: string | null;
 
   @ApiProperty({ description: '状态:待发布ready,已发布active,已下架inactive' })
   @Column('character varying', {
@@ -159,6 +172,8 @@ export class Policies {
     nullable: true,
     comment: '删除时间',
   })
+  deletedAt: Date | null;
+
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean;

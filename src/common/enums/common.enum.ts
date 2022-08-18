@@ -73,3 +73,12 @@ export enum Peking_Unit_Enum {
   /** 2级权威 */
   JOURNALS_003 = 'journals_003',
 }
+
+export enum Education_Level_Enum {
+  /**  基础教育 */
+  BASIC = 'basic',
+  /** 高等教育 */
+  HIGHER = 'higher',
+  /** 职业教育*/
+  VOCATION = 'vocation',
+}

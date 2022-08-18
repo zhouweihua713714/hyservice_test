@@ -23,6 +23,8 @@ import { Terms } from '@/entities/Terms.entity';
 import { Languages } from '@/entities/Languages.entity';
 import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
 import { Periodicals } from '@/entities/Periodicals.entity';
+import { PolicyTypes } from '@/entities/PolicyTypes.entity';
+import { Policies } from '@/entities/Policies.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -40,6 +42,8 @@ export class DBTester<T = undefined> {
   languagesRepository: Repository<Languages>;
   periodicalPeriodsRepository: Repository<PeriodicalPeriods>;
   periodicalsRepository: Repository<Periodicals>;
+  policyTypesRepository: Repository<PolicyTypes>;
+  policiesRepository: Repository<Policies>;
   config: ConfigService;
   server: any;
 
@@ -84,6 +88,8 @@ export class DBTester<T = undefined> {
       this.languagesRepository = this.module.get<Repository<Languages>>(getRepositoryToken(Languages));
       this.periodicalPeriodsRepository = this.module.get<Repository<PeriodicalPeriods>>(getRepositoryToken(PeriodicalPeriods));
       this.periodicalsRepository = this.module.get<Repository<Periodicals>>(getRepositoryToken(Periodicals));
+      this.policyTypesRepository = this.module.get<Repository<PolicyTypes>>(getRepositoryToken(PolicyTypes));
+      this.policiesRepository = this.module.get<Repository<Policies>>(getRepositoryToken(Policies));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 

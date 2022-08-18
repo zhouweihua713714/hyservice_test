@@ -144,6 +144,14 @@ export const ErrorCode = {
       code: 20008,
       message: '当前期刊不存在或已经被删除',
     },
+    EDUCATION_LEVEL_NOT_FOUND_ERROR: {
+      code: 20009,
+      message: '当前教育层次不存在或已经被删除',
+    },
+    POLICY_LEVEL_NOT_FOUND_ERROR: {
+      code: 20010,
+      message: '当前政策层次不存在或已经被删除',
+    },
   },
   // 3xxxx
   FILES: {
