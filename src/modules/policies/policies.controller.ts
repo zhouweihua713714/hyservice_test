@@ -63,23 +63,23 @@ export class PoliciesController {
     return this.policiesService.listPolicy(params, user);
   }
 
-  // @Post('/operatePolicies')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '操作政策(发布、待发布)' })
-  // @ApiResult(OperatePoliciesResult)
-  // @ApiBearerAuth()
-  // operatePolicies(@Body() params: OperatePoliciesDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.policiesService.operatePolicies(params, user);
-  // }
+  @Post('/operatePolicies')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作政策(发布、待发布)' })
+  @ApiResult(OperatePoliciesResult)
+  @ApiBearerAuth()
+  operatePolicies(@Body() params: OperatePoliciesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.policiesService.operatePolicies(params, user);
+  }
 
-  // @Post('/removePolicies')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '删除政策' })
-  // @ApiResult(RemovePoliciesResult)
-  // @ApiBearerAuth()
-  // removePolicies(@Body() params: RemovePoliciesDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.policiesService.removePolicies(params, user);
-  // }
+  @Post('/removePolicies')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除政策' })
+  @ApiResult(RemovePoliciesResult)
+  @ApiBearerAuth()
+  removePolicies(@Body() params: RemovePoliciesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.policiesService.removePolicies(params, user);
+  }
 }
