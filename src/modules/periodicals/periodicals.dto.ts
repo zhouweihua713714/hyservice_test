@@ -34,7 +34,7 @@ export class SavePeriodicalDto {
 
   @ApiProperty({ description: '期刊名称' })
   @IsString({ message: 'name 类型错误, 正确类型 string' })
-  @MaxLength(50)
+  @MaxLength(200)
   name: string;
 
   @ApiProperty({ description: '栏目id' })
@@ -48,7 +48,6 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @IsString({ message: 'string 类型错误, 正确类型 string' })
-  @MaxLength(300)
   @IsOptional()
   introduction: string | null;
 
@@ -114,7 +113,7 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '出版商', type: String, nullable: true })
   @IsString({ message: 'publisher 类型错误, 正确类型 string' })
-  @MaxLength(50)
+  @MaxLength(200)
   @IsOptional()
   publisher: string | null;
 

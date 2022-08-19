@@ -96,7 +96,7 @@ export class Policies {
   @ApiPropertyOptional({ description: '政策来源(网址)', type: String, nullable: true })
   @Column('character varying', {
     name: 'url',
-    length: 50,
+    length: 200,
     nullable: true,
     comment: '政策来源(网址)',
   })

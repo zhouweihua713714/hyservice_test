@@ -24,7 +24,7 @@ export class Periodicals {
   columnId: string;
 
   @ApiProperty({ description: '期刊名称' })
-  @Column('character varying', { name: 'name', length: 50, comment: '期刊名称' })
+  @Column('character varying', { name: 'name', length: 200, comment: '期刊名称' })
   name: string;
 
   @ApiPropertyOptional({ description: '期刊类型:期刊 periodical', type: String, nullable: true })
@@ -80,7 +80,7 @@ export class Periodicals {
   minorField: string | null;
 
   @ApiPropertyOptional({ description: '网址', type: String, nullable: true })
-  @Column('character varying', { name: 'url', length: 128, nullable: true, comment: '网址' })
+  @Column('character varying', { name: 'url', length: 200, nullable: true, comment: '网址' })
   url: string | null;
 
   @ApiPropertyOptional({ description: '详细地址', type: String, nullable: true })
@@ -113,7 +113,7 @@ export class Periodicals {
   @ApiPropertyOptional({ description: '出版商', type: String, nullable: true })
   @Column('character varying', {
     name: 'publisher',
-    length: 50,
+    length: 200,
     nullable: true,
     comment: '出版商',
   })
@@ -284,7 +284,7 @@ export class Periodicals {
   @ApiPropertyOptional({ description: '封面链接', type: String, nullable: true })
   @Column('character varying', {
     name: 'cover_url',
-    length: 128,
+    length: 200,
     nullable: true,
     comment: '封面链接',
   })

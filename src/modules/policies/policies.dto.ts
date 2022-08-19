@@ -88,13 +88,12 @@ export class SavePolicyDto {
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @IsString({ message: 'introduction 类型错误, 正确类型 string' })
   @IsOptional()
-  @MaxLength(300)
   introduction: string | null;
 
   @ApiPropertyOptional({ description: '政策来源(网址)', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 string' })
   @IsOptional()
-  @MaxLength(50)
+  @MaxLength(200)
   url: string | null;
 
   @ApiPropertyOptional({
