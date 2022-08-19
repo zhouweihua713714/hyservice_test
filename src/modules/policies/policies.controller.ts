@@ -34,14 +34,14 @@ import {
 export class PoliciesController {
   constructor(private readonly policiesService: PoliciesService) {}
 
-  // @Get('/getPolicyDetail')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '获取政策详情' })
-  // @ApiResult(GetPolicyDetailResult)
-  // @AllowAnon()
-  // getPolicyDetail(@Query() params: GetPolicyDetailDto) {
-  //   return this.policiesService.getPolicyDetail(params);
-  // }
+  @Get('/getPolicyDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取政策详情' })
+  @ApiResult(GetPolicyDetailResult)
+  @AllowAnon()
+  getPolicyDetail(@Query() params: GetPolicyDetailDto) {
+    return this.policiesService.getPolicyDetail(params);
+  }
 
   @Post('/savePolicy')
   @HttpCode(200)
