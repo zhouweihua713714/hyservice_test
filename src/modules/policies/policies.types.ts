@@ -50,7 +50,7 @@ export class ListPolicyInfo extends PickType(Policies, [
 
 export class ListPolicyResult {
   @ApiProperty({ description: '政策数组', type: ListPolicyInfo, isArray: true })
-  terms: ListPolicyInfo[];
+  policies: ListPolicyInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;

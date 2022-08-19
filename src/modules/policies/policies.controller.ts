@@ -53,15 +53,15 @@ export class PoliciesController {
     return this.policiesService.savePolicy(params, user);
   }
 
-  // @Get('/listPolicy')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '政策列表' })
-  // @ApiResult(ListPolicyResult)
-  // @ApiBearerAuth()
-  // listPolicy(@Query() params: ListPolicyDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.policiesService.listPolicy(params, user);
-  // }
+  @Get('/listPolicy')
+  @HttpCode(200)
+  @ApiOperation({ summary: '政策列表' })
+  @ApiResult(ListPolicyResult)
+  @ApiBearerAuth()
+  listPolicy(@Query() params: ListPolicyDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.policiesService.listPolicy(params, user);
+  }
 
   // @Post('/operatePolicies')
   // @HttpCode(200)
