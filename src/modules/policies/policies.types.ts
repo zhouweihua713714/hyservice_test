@@ -12,6 +12,16 @@ export class GetPolicyDetailResult extends PickType(Policies, [
   'name',
   'columnId',
   'status',
+  'type',
+  'level',
+  'institution',
+  'announceNo',
+  'educationLevel',
+  'keyword',
+  'url',
+  'announcedAt',
+  'introduction',
+  'region',
   'ownerId',
   'createdAt',
   'updatedAt',
@@ -19,9 +29,6 @@ export class GetPolicyDetailResult extends PickType(Policies, [
 ] as const) {
   @ApiPropertyOptional({ description: '政策类型名称' })
   typeName: string;
-
-  @ApiPropertyOptional({ description: '学科分类名称' })
-  subjectName: string;
 
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
