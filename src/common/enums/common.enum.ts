@@ -82,3 +82,14 @@ export enum Education_Level_Enum {
   /** 职业教育*/
   VOCATION = 'vocation',
 }
+
+export enum Channels_Enum {
+  /**  期刊 */
+  WAY_001 = 'way_001',
+  /** 会议 */
+  WAY_002 = 'way_002',
+  /** EDM会议*/
+  WAY_003 = 'way_003',
+  /** 书*/
+  WAY_004 = 'way_004',
+}

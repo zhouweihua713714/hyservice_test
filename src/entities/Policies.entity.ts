@@ -17,7 +17,7 @@ export class Policies {
   columnId: string;
 
   @ApiProperty({ description: '政策名称' })
-  @Column('character varying', { name: 'name', length: 50, comment: '政策名称' })
+  @Column('character varying', { name: 'name', length: 200, comment: '政策名称' })
   name: string;
 
   @ApiPropertyOptional({ description: '政策类型', type: String, nullable: true })

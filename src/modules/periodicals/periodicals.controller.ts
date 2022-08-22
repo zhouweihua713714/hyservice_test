@@ -14,7 +14,7 @@ import {
 } from './periodicals.dto';
 import { PeriodicalsService } from './periodicals.service';
 import {
-  GetPeriodicalsDetailResult,
+  GetPeriodicalDetailResult,
   ListPeriodicalResult,
   OperatePeriodicalsResult,
   RemovePeriodicalsResult,
@@ -24,7 +24,7 @@ import {
 @ApiTags('内容管理-期刊')
 @ApiExtraModels(
   ResultData,
-  GetPeriodicalsDetailResult,
+  GetPeriodicalDetailResult,
   ListPeriodicalResult,
   OperatePeriodicalsResult,
   RemovePeriodicalsResult,
@@ -37,7 +37,7 @@ export class PeriodicalsController {
   @Get('/getPeriodicalDetail')
   @HttpCode(200)
   @ApiOperation({ summary: '获取期刊详情' })
-  @ApiResult(GetPeriodicalsDetailResult)
+  @ApiResult(GetPeriodicalDetailResult)
   @AllowAnon()
   getPeriodicalsDetail(@Query() params: GetPeriodicalDetailDto) {
     return this.termsService.getPeriodicalDetail(params);

@@ -1,53 +1,18 @@
-import { Periodicals } from '@/entities/Periodicals.entity';
+import { Treatises } from '@/entities/Treatises.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
-export class SavePeriodicalResult {
+export class SaveTreatiseResult {
   @ApiProperty({ description: '主键id' })
   id: string;
 }
-export class GetPeriodicalDetailResult extends PickType(Periodicals, [
+export class GetTreatisesDetailResult extends PickType(Treatises, [
   'id',
-  'name',
   'status',
   'ownerId',
   'createdAt',
   'updatedAt',
-  'publishedAt',
   'columnId',
-  'type',
-  'introduction',
-  'language',
-  'region',
-  'field',
-  'minorField',
-  'url',
-  'address',
-  'search',
-  'impactFactor',
-  'establishedAt',
-  'publisher',
-  'period',
-  'manager',
-  'organizer',
-  'ISSN',
-  'CN',
-  'pekingUnit',
-  'honor',
-  'articleNumber',
-  'quote',
-  'downloads',
-  'subject',
-  'compositeImpactFactor',
-  'checkPeriod',
-  'releasePeriod',
-  'recordRate',
-  'checkFee',
-  'pageFee',
-  'reward',
-  'coverUrl',
-  'citeScore',
-  'citeRate',
 ] as const) {
   @ApiPropertyOptional({ description: '学科分类名称' })
   subjectName: string;
@@ -64,9 +29,8 @@ export class GetPeriodicalDetailResult extends PickType(Periodicals, [
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
 }
-export class ListPeriodicalInfo extends PickType(Periodicals, [
+export class ListTreatiseInfo extends PickType(Treatises, [
   'id',
-  'name',
   'columnId',
   'status',
   'updatedAt',
@@ -75,15 +39,15 @@ export class ListPeriodicalInfo extends PickType(Periodicals, [
   columnName: string;
 }
 
-export class ListPeriodicalResult {
-  @ApiProperty({ description: '项目数组', type: ListPeriodicalInfo, isArray: true })
-  periodicals: ListPeriodicalInfo[];
+export class ListTreatiseResult {
+  @ApiProperty({ description: '项目数组', type: ListTreatiseInfo, isArray: true })
+  periodicals: ListTreatiseInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
 }
 
-export class OperatePeriodicalsResult {
+export class OperateTreatisesResult {
   @ApiProperty({ description: '成功数量' })
   succeed: number;
 
@@ -91,7 +55,7 @@ export class OperatePeriodicalsResult {
   failed: number;
 }
 
-export class RemovePeriodicalsResult extends PickType(OperatePeriodicalsResult, [
+export class RemoveTreatisesResult extends PickType(OperateTreatisesResult, [
   'succeed',
   'failed',
 ] as const) {}
