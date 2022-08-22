@@ -29,6 +29,9 @@ import { Periodicals } from './entities/Periodicals.entity';
 import { PoliciesModule } from './modules/policies/policies.module';
 import { Policies } from './entities/Policies.entity';
 import { PolicyTypes } from './entities/PolicyTypes.entity';
+import { TreatisesModule } from './modules/treatises/treatises.module';
+import { ArticleTypes } from './entities/ArticleTypes.entity';
+import { Treatises } from './entities/Treatises.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -73,7 +76,9 @@ import { PolicyTypes } from './entities/PolicyTypes.entity';
       PeriodicalPeriods,
       Periodicals,
       Policies,
-      PolicyTypes
+      PolicyTypes,
+      ArticleTypes,
+      Treatises
     ]),
     HomeModule,
     AuthModule,
@@ -83,7 +88,8 @@ import { PolicyTypes } from './entities/PolicyTypes.entity';
     ConfigsModule,
     TermsModule,
     PeriodicalsModule,
-    PoliciesModule
+    PoliciesModule,
+    TreatisesModule
   ],
   // 守卫
   providers: [

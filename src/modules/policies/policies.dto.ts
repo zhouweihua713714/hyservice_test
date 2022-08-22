@@ -31,7 +31,7 @@ export class SavePolicyDto {
 
   @ApiProperty({ description: '政策名称' })
   @IsString({ message: 'name 类型错误, 正确类型 string' })
-  @MaxLength(50)
+  @MaxLength(200)
   name: string;
 
   @ApiProperty({ description: '栏目id' })
@@ -77,7 +77,7 @@ export class SavePolicyDto {
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
   @IsOptional()
-  @MaxLength(50)
+  @MaxLength(100)
   keyword: string | null;
 
   @ApiPropertyOptional({ description: '政策发布时间(出台时间)', type: Date, nullable: true })
