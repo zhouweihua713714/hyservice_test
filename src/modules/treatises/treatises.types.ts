@@ -13,15 +13,34 @@ export class GetTreatisesDetailResult extends PickType(Treatises, [
   'createdAt',
   'updatedAt',
   'columnId',
+  'title',
+  'deliveryAt',
+  'region',
+  'channel',
+  'language',
+  'author',
+  'authorUnit',
+  'correspondingAuthor',
+  'correspondingAuthorUnit',
+  'correspondingAuthorEmail',
+  'otherAuthor',
+  'otherAuthorUnit',
+  'field',
+  'minorField',
+  'sort',
+  'abstract',
+  'search',
+  'references',
+  'quote',
+  'fundedProject',
+  'url',
+  'keyword',
 ] as const) {
-  @ApiPropertyOptional({ description: '学科分类名称' })
-  subjectName: string;
-
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 
-  @ApiPropertyOptional({ description: '发刊周期名称' })
-  periodName: string;
+  @ApiPropertyOptional({ description: '文章类型名称' })
+  sortName: string;
 
   @ApiPropertyOptional({ description: '语种名称' })
   languageName: string;

@@ -44,13 +44,20 @@ export class TreatisesService {
     // get necessary data
     let userInfo;
     let languageInfo;
+    let articleTypeInfo;
     if (treatiseInfo.ownerId) {
       userInfo = await usersRepository.findOneBy({ id: treatiseInfo.ownerId });
     }
     if (treatiseInfo.language) {
       languageInfo = await languagesRepository.findBy({
         id: treatiseInfo.language as string,
-        type: Like(`%${Content_Types_Enum.PERIODICAL}%`),
+        type: Like(`%${Content_Types_Enum.TREATISE}%`),
+      });
+    }
+    if (treatiseInfo.sort) {
+      articleTypeInfo = await articleTypesRepository.findOneBy({
+        id: treatiseInfo.sort,
+        type: Like(`%${Content_Types_Enum.TREATISE}%`),
       });
     }
     const result = {
@@ -63,6 +70,7 @@ export class TreatisesService {
           )
         : null,
       columnName: columnInfo ? columnInfo.name : null,
+      sortName: articleTypeInfo ? articleTypeInfo.name : null,
       owner: userInfo ? userInfo.mobile : null,
       ...treatiseInfo,
     };
