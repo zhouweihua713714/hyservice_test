@@ -152,14 +152,18 @@ export const ErrorCode = {
       code: 20010,
       message: '当前政策层次不存在或已经被删除',
     },
-    CHANNEL_NOT_FOUND_ERROR:{
+    CHANNEL_NOT_FOUND_ERROR: {
       code: 20011,
       message: '当前发表路径不存在或已经被删除',
     },
-    SORT_NOT_FOUND_ERROR:{
+    SORT_NOT_FOUND_ERROR: {
       code: 20012,
       message: '当前文章类型不存在或已经被删除',
-    }
+    },
+    PICKER_NECESSARY_ERROR: {
+      code: 20013,
+      message: '当前出台时间不为空,picker必填',
+    },
   },
   // 3xxxx
   FILES: {

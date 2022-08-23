@@ -64,10 +64,14 @@ export class PoliciesService {
    * @returns {ResultData} 返回savePolicy信息
    */
   async savePolicy(params: SavePolicyDto, user: SignInResInfo): Promise<ResultData> {
-    const { id, status, type, columnId, educationLevel, level } = params;
+    const { id, status, type, columnId, educationLevel, level, announcedAt, picker } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
+    }
+    // if announcedAt is true picker must be true
+    if (announcedAt && !picker) {
+      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.PICKER_NECESSARY_ERROR });
     }
     // if type not found in database, then throw error
     if (type) {
