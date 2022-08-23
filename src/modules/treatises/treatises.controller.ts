@@ -53,15 +53,15 @@ export class TreatisesController {
     return this.termsService.saveTreatise(params, user);
   }
 
-  // @Get('/listTreatise')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '论文列表' })
-  // @ApiResult(ListTreatiseResult)
-  // @ApiBearerAuth()
-  // listTreatises(@Query() params: ListTreatiseDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.listTreatise(params, user);
-  // }
+  @Get('/listTreatise')
+  @HttpCode(200)
+  @ApiOperation({ summary: '论文列表' })
+  @ApiResult(ListTreatiseResult)
+  @ApiBearerAuth()
+  listTreatises(@Query() params: ListTreatiseDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.listTreatise(params, user);
+  }
 
   // @Post('/operateTreatises')
   // @HttpCode(200)

@@ -179,12 +179,12 @@ export class SaveTreatiseDto {
 }
 export class ListTreatiseDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
   @ApiPropertyOptional({ description: '论文名称,支持模糊搜索 如果为空则不传或者传null' })
-  @IsString({ message: 'name 类型错误,正确类型 string' })
+  @IsString({ message: 'title 类型错误,正确类型 string' })
   @IsOptional()
-  name: string;
+  title: string;
 
   @ApiPropertyOptional({ description: '状态,待发布,已发布' })
-  @IsString({ message: '论文名称name 类型错误, 正确类型 string' })
+  @IsString({ message: 'status 类型错误, 正确类型 string' })
   @IsEnum(Content_Status_Enum)
   @IsOptional()
   status: string;

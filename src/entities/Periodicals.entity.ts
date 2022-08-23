@@ -84,7 +84,7 @@ export class Periodicals {
   url: string | null;
 
   @ApiPropertyOptional({ description: '详细地址', type: String, nullable: true })
-  @Column('character varying', { name: 'address', length: 50, nullable: true, comment: '详细地址' })
+  @Column('character varying', { name: 'address', length: 100, nullable: true, comment: '详细地址' })
   address: string | null;
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
