@@ -150,14 +150,14 @@ export class TreatisesService {
    * @returns {ResultData} 返回listTreatise信息
    */
   async listTreatise(params: ListTreatiseDto, user: SignInResInfo): Promise<ResultData> {
-    const { columnId, name, status, page, size } = params;
+    const { columnId, title, status, page, size } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
     }
     let statusCondition;
     let columnCondition;
-    let nameCondition;
+    let titleCondition;
     if (status) {
       statusCondition = {
         status: status,
@@ -168,9 +168,9 @@ export class TreatisesService {
         columnId: columnId,
       };
     }
-    if (name) {
-      nameCondition = {
-        name: Like(`%${name}%`),
+    if (title) {
+      titleCondition = {
+        title: Like(`%${title}%`),
       };
     }
     // get treatises
@@ -178,7 +178,7 @@ export class TreatisesService {
       where: {
         ...statusCondition,
         ...columnCondition,
-        ...nameCondition,
+        ...titleCondition,
         enabled: true,
         deletedAt: IsNull(),
       },

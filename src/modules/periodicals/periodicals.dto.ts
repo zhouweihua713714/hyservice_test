@@ -85,13 +85,13 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '网址', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 number' })
-  @MaxLength(50)
+  @MaxLength(200)
   @IsOptional()
   url: string | null;
 
   @ApiPropertyOptional({ description: '详细地址', type: String, nullable: true })
   @IsString({ message: 'address 类型错误, 正确类型 string' })
-  @MaxLength(50)
+  @MaxLength(100)
   @IsOptional()
   address: string | null;
 

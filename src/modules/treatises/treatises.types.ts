@@ -53,6 +53,8 @@ export class ListTreatiseInfo extends PickType(Treatises, [
   'columnId',
   'status',
   'updatedAt',
+  'title',
+  'clicks'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
