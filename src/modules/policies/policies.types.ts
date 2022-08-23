@@ -5,7 +5,6 @@ import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 export class SavePolicyResult {
   @ApiProperty({ description: '主键id' })
   id: string;
-
 }
 export class GetPolicyDetailResult extends PickType(Policies, [
   'id',
@@ -26,6 +25,7 @@ export class GetPolicyDetailResult extends PickType(Policies, [
   'createdAt',
   'updatedAt',
   'publishedAt',
+  'picker',
 ] as const) {
   @ApiPropertyOptional({ description: '政策类型名称' })
   typeName: string;
@@ -42,7 +42,7 @@ export class ListPolicyInfo extends PickType(Policies, [
   'columnId',
   'status',
   'updatedAt',
-  'clicks'
+  'clicks',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
