@@ -34,14 +34,14 @@ import {
 export class TreatisesController {
   constructor(private readonly termsService: TreatisesService) {}
 
-  // @Get('/getTreatiseDetail')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '获取论文详情' })
-  // @ApiResult(GetTreatisesDetailResult)
-  // @AllowAnon()
-  // getTreatisesDetail(@Query() params: GetTreatiseDetailDto) {
-  //   return this.termsService.getTreatiseDetail(params);
-  // }
+  @Get('/getTreatiseDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取论文详情' })
+  @ApiResult(GetTreatisesDetailResult)
+  @AllowAnon()
+  getTreatisesDetail(@Query() params: GetTreatiseDetailDto) {
+    return this.termsService.getTreatiseDetail(params);
+  }
 
   @Post('/saveTreatise')
   @HttpCode(200)
