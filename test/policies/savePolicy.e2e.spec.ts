@@ -20,6 +20,7 @@ const payload: SavePolicyDto = {
   educationLevel: [Education_Level_Enum.BASIC, Education_Level_Enum.HIGHER],
   keyword: '关键字;政策',
   announcedAt: new Date(),
+  picker: 'date',
   introduction: '简介最多300',
   region: '中国',
   url: 'http://baidu.com',
@@ -70,7 +71,7 @@ describe('/policies/savePolicy', () => {
     const result = await request(tester.server)
       .post('/policies/savePolicy')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ columnId: tester.data.columns[1].id, educationLevel:['invalid'], name: '政策名称' });
+      .send({ columnId: tester.data.columns[1].id, educationLevel: ['invalid'], name: '政策名称' });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(20009);
   });
@@ -78,9 +79,22 @@ describe('/policies/savePolicy', () => {
     const result = await request(tester.server)
       .post('/policies/savePolicy')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ columnId: tester.data.columns[1].id, level:'invalid id', name: '政策名称' });
+      .send({ columnId: tester.data.columns[1].id, level: 'invalid id', name: '政策名称' });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(20010);
+  });
+  test('should not POST /policies/savePolicy with announceAt and invalid picker', async () => {
+    const result = await request(tester.server)
+      .post('/policies/savePolicy')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({
+        columnId: tester.data.columns[1].id,
+        announcedAt: new Date(),
+        picker: null,
+        name: '政策名称',
+      });
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(20013);
   });
   test('should POST /policies/savePolicy', async () => {
     payload.columnId = tester.data.columns[1].id;

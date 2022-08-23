@@ -85,6 +85,10 @@ export class Policies {
   })
   announcedAt: Date | null;
 
+  @ApiPropertyOptional({ description: '日期格式:year、month、date', type: String, nullable: true })
+  @Column('character varying', { name: 'picker', nullable: true, comment: '日期格式:year、month、date' })
+  picker: string | null;
+
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
   introduction: string | null;

@@ -85,6 +85,11 @@ export class SavePolicyDto {
   @IsOptional()
   announcedAt: Date | null;
 
+  @ApiPropertyOptional({ description: '政策发布时间不为空，该字段不能为空,日期格式:year、month、date', type: String, nullable: true })
+  @IsString({ message: 'picker 类型错误, 正确类型 string' })
+  @IsOptional()
+  picker: string | null;
+
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @IsString({ message: 'introduction 类型错误, 正确类型 string' })
   @IsOptional()
