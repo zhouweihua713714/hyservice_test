@@ -63,23 +63,23 @@ export class TreatisesController {
     return this.termsService.listTreatise(params, user);
   }
 
-  // @Post('/operateTreatises')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '操作论文(发布、待发布)' })
-  // @ApiResult(OperateTreatisesResult)
-  // @ApiBearerAuth()
-  // operateTreatises(@Body() params: OperateTreatisesDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.operateTreatises(params, user);
-  // }
+  @Post('/operateTreatises')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作论文(发布、待发布)' })
+  @ApiResult(OperateTreatisesResult)
+  @ApiBearerAuth()
+  operateTreatises(@Body() params: OperateTreatisesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.operateTreatises(params, user);
+  }
 
-  // @Post('/removeTreatises')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '删除论文' })
-  // @ApiResult(RemoveTreatisesResult)
-  // @ApiBearerAuth()
-  // removeTreatises(@Body() params: RemoveTreatisesDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.removeTreatises(params, user);
-  // }
+  @Post('/removeTreatises')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除论文' })
+  @ApiResult(RemoveTreatisesResult)
+  @ApiBearerAuth()
+  removeTreatises(@Body() params: RemoveTreatisesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.removeTreatises(params, user);
+  }
 }
