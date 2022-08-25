@@ -13,17 +13,28 @@ export class GetPatentDetailResult extends PickType(Patents, [
   'createdAt',
   'updatedAt',
   'columnId',
- 
+  'title',
+  'abstract',
+  'applicant',
+  'announcedNo',
+  'announcedAt',
+  'appliedNo',
+  'appliedAt',
+  'type',
+  'country',
+  'agency',
+  'agent',
+  'validStatus',
   'keyword',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 
-  @ApiPropertyOptional({ description: '文章类型名称' })
-  sortName: string;
+  @ApiPropertyOptional({ description: '专利类型名称' })
+  typeName: string;
 
-  @ApiPropertyOptional({ description: '语种名称' })
-  languageName: string;
+  @ApiPropertyOptional({ description: '专利有效性名称' })
+  validStatusName: string;
 
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
@@ -41,8 +52,8 @@ export class ListPatentInfo extends PickType(Patents, [
 }
 
 export class ListPatentResult {
-  @ApiProperty({ description: '项目数组', type: ListPatentInfo, isArray: true })
-  periodicals: ListPatentInfo[];
+  @ApiProperty({ description: '专利数组', type: ListPatentInfo, isArray: true })
+  patents: ListPatentInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;

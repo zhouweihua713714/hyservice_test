@@ -34,14 +34,14 @@ import {
 export class PatentsController {
   constructor(private readonly termsService: PatentsService) {}
 
-  // @Get('/getPatentDetail')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '获取专利详情' })
-  // @ApiResult(GetPatentDetailResult)
-  // @AllowAnon()
-  // getPatentDetail(@Query() params: GetPatentDetailDto) {
-  //   return this.termsService.getPatentDetail(params);
-  // }
+  @Get('/getPatentDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取专利详情' })
+  @ApiResult(GetPatentDetailResult)
+  @AllowAnon()
+  getPatentDetail(@Query() params: GetPatentDetailDto) {
+    return this.termsService.getPatentDetail(params);
+  }
 
   @Post('/savePatent')
   @HttpCode(200)

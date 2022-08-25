@@ -45,34 +45,27 @@ export class PatentsService {
     const columnInfo = await columnsRepository.findOneBy({ id: patentInfo.columnId });
     // get necessary data
     let userInfo;
-    let languageInfo;
-    let articleTypeInfo;
+    let typeInfo;
+    let validTypeInfo;
+    // if type not found in database, then throw error
+    if (patentInfo.type) {
+      typeInfo = await patentTypesRepository.findOneBy({
+        id: patentInfo.type,
+      });
+    }
+    // if validStatus not found in database, then throw error
+    if (patentInfo.validStatus) {
+      validTypeInfo = await patentValidTypesRepository.findOneBy({
+        id: patentInfo.validStatus,
+      });
+    }
     if (patentInfo.ownerId) {
       userInfo = await usersRepository.findOneBy({ id: patentInfo.ownerId });
     }
-    if (patentInfo.type) {
-      languageInfo = await languagesRepository.findBy({
-        id: patentInfo.type,
-        type: Like(`%${Content_Types_Enum.TREATISE}%`),
-      });
-    }
-    if (patentInfo.validStatus) {
-      articleTypeInfo = await articleTypesRepository.findOneBy({
-        id: patentInfo.validStatus,
-        type: Like(`%${Content_Types_Enum.TREATISE}%`),
-      });
-    }
     const result = {
-      languageName: languageInfo
-        ? _.join(
-            languageInfo.map((language) => {
-              return language.name;
-            }),
-            ';'
-          )
-        : null,
+      typeName: typeInfo ? typeInfo.name : null,
       columnName: columnInfo ? columnInfo.name : null,
-      sortName: articleTypeInfo ? articleTypeInfo.name : null,
+      validStatusName: validTypeInfo ? validTypeInfo.name : null,
       owner: userInfo ? userInfo.mobile : null,
       ...patentInfo,
     };
