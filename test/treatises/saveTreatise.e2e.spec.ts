@@ -32,6 +32,7 @@ const payload: SaveTreatiseDto = {
   quote: 0,
   fundedProject: '所获资助项目限制500',
   keyword: '关键词',
+  name:'期刊/会议名'
 };
 
 describe('/treatises/saveTreatise', () => {
