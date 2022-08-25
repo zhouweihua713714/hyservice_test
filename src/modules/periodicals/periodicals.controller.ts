@@ -39,7 +39,7 @@ export class PeriodicalsController {
   @ApiOperation({ summary: '获取期刊详情' })
   @ApiResult(GetPeriodicalDetailResult)
   @AllowAnon()
-  getPeriodicalsDetail(@Query() params: GetPeriodicalDetailDto) {
+  getPeriodicalDetail(@Query() params: GetPeriodicalDetailDto) {
     return this.termsService.getPeriodicalDetail(params);
   }
 
@@ -48,7 +48,7 @@ export class PeriodicalsController {
   @ApiOperation({ summary: '新增/编辑期刊' })
   @ApiResult(SavePeriodicalResult)
   @ApiBearerAuth()
-  savePeriodicals(@Body() params: SavePeriodicalDto, @Req() req: any) {
+  savePeriodical(@Body() params: SavePeriodicalDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.savePeriodical(params, user);
   }
@@ -58,7 +58,7 @@ export class PeriodicalsController {
   @ApiOperation({ summary: '期刊列表' })
   @ApiResult(ListPeriodicalResult)
   @ApiBearerAuth()
-  listPeriodicals(@Query() params: ListPeriodicalDto, @Req() req: any) {
+  listPeriodical(@Query() params: ListPeriodicalDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.listPeriodical(params, user);
   }

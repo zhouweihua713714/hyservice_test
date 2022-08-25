@@ -29,9 +29,13 @@ import { Periodicals } from './entities/Periodicals.entity';
 import { PoliciesModule } from './modules/policies/policies.module';
 import { Policies } from './entities/Policies.entity';
 import { PolicyTypes } from './entities/PolicyTypes.entity';
-import { TreatisesModule } from './modules/treatises/treatises.module';
 import { ArticleTypes } from './entities/ArticleTypes.entity';
 import { Treatises } from './entities/Treatises.entity';
+import { TreatisesModule } from './modules/treatises/treatises.module';
+import { PatentsModule } from './modules/patents/patents.module';
+import { Patents } from './entities/Patents.entity';
+import { PatentTypes } from './entities/PatentTypes.entity';
+import { PatentValidTypes } from './entities/PatentValidTypes.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -78,7 +82,10 @@ import { Treatises } from './entities/Treatises.entity';
       Policies,
       PolicyTypes,
       ArticleTypes,
-      Treatises
+      Treatises,
+      Patents,
+      PatentTypes,
+      PatentValidTypes
     ]),
     HomeModule,
     AuthModule,
@@ -89,7 +96,8 @@ import { Treatises } from './entities/Treatises.entity';
     TermsModule,
     PeriodicalsModule,
     PoliciesModule,
-    TreatisesModule
+    TreatisesModule,
+    PatentsModule
   ],
   // 守卫
   providers: [
