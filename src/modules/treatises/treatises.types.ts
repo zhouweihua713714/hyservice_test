@@ -61,8 +61,8 @@ export class ListTreatiseInfo extends PickType(Treatises, [
 }
 
 export class ListTreatiseResult {
-  @ApiProperty({ description: '项目数组', type: ListTreatiseInfo, isArray: true })
-  periodicals: ListTreatiseInfo[];
+  @ApiProperty({ description: '论文数组', type: ListTreatiseInfo, isArray: true })
+  treatises: ListTreatiseInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
