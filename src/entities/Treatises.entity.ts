@@ -155,14 +155,14 @@ export class Treatises {
   @Column('character varying', { name: 'url', nullable: true, length: 200, comment: '论文链接' })
   url: string | null;
 
-  // @ApiProperty({ description: '论文类型:会议论文conference、期刊论文treatise' })
-  // @Column('character varying', {
-  //   name: 'type',
-  //   length: 64,
-  //   default: 'treatise',
-  //   comment: '论文类型:会议论文conference、期刊论文treatise',
-  // })
-  // type: string;
+  @ApiPropertyOptional({ description: '期刊/会议名' })
+  @Column('character varying', {
+    name: 'name',
+    length: 200,
+    comment: '期刊/会议名',
+    nullable:true
+  })
+  name: string | null;
 
   @ApiPropertyOptional({
     description: '栏目id,期刊论文只能选择期刊相关的栏目且不为空',

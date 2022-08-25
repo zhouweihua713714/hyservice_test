@@ -170,6 +170,12 @@ export class SaveTreatiseDto {
   @IsOptional()
   url: string | null;
 
+  @ApiPropertyOptional({ description: '期刊/会议名', type: String, nullable: true })
+  @IsString({ message: 'url 类型错误, 正确类型 string' })
+  @MaxLength(200)
+  @IsOptional()
+  name: string | null;
+
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
   @MaxLength(300)
