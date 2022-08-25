@@ -14,7 +14,7 @@ import {
 } from './treatises.dto';
 import { TreatisesService } from './treatises.service';
 import {
-  GetTreatisesDetailResult,
+  GetTreatiseDetailResult,
   ListTreatiseResult,
   OperateTreatisesResult,
   RemoveTreatisesResult,
@@ -24,7 +24,7 @@ import {
 @ApiTags('内容管理-论文')
 @ApiExtraModels(
   ResultData,
-  GetTreatisesDetailResult,
+  GetTreatiseDetailResult,
   ListTreatiseResult,
   OperateTreatisesResult,
   RemoveTreatisesResult,
@@ -37,9 +37,9 @@ export class TreatisesController {
   @Get('/getTreatiseDetail')
   @HttpCode(200)
   @ApiOperation({ summary: '获取论文详情' })
-  @ApiResult(GetTreatisesDetailResult)
+  @ApiResult(GetTreatiseDetailResult)
   @AllowAnon()
-  getTreatisesDetail(@Query() params: GetTreatiseDetailDto) {
+  getTreatiseDetail(@Query() params: GetTreatiseDetailDto) {
     return this.termsService.getTreatiseDetail(params);
   }
 
@@ -48,7 +48,7 @@ export class TreatisesController {
   @ApiOperation({ summary: '新增/编辑论文' })
   @ApiResult(SaveTreatiseResult)
   @ApiBearerAuth()
-  saveTreatises(@Body() params: SaveTreatiseDto, @Req() req: any) {
+  saveTreatise(@Body() params: SaveTreatiseDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.saveTreatise(params, user);
   }

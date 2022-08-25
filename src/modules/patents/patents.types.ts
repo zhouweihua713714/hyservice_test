@@ -1,39 +1,19 @@
-import { Treatises } from '@/entities/Treatises.entity';
+import { Patents } from '@/entities/Patents.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
-export class SaveTreatiseResult {
+export class SavePatentResult {
   @ApiProperty({ description: '主键id' })
   id: string;
 }
-export class GetTreatiseDetailResult extends PickType(Treatises, [
+export class GetPatentDetailResult extends PickType(Patents, [
   'id',
   'status',
   'ownerId',
   'createdAt',
   'updatedAt',
   'columnId',
-  'title',
-  'deliveryAt',
-  'region',
-  'channel',
-  'language',
-  'author',
-  'authorUnit',
-  'correspondingAuthor',
-  'correspondingAuthorUnit',
-  'correspondingAuthorEmail',
-  'otherAuthor',
-  'otherAuthorUnit',
-  'field',
-  'minorField',
-  'sort',
-  'abstract',
-  'search',
-  'references',
-  'quote',
-  'fundedProject',
-  'url',
+ 
   'keyword',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
@@ -48,7 +28,7 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
 }
-export class ListTreatiseInfo extends PickType(Treatises, [
+export class ListPatentInfo extends PickType(Patents, [
   'id',
   'columnId',
   'status',
@@ -60,15 +40,15 @@ export class ListTreatiseInfo extends PickType(Treatises, [
   columnName: string;
 }
 
-export class ListTreatiseResult {
-  @ApiProperty({ description: '项目数组', type: ListTreatiseInfo, isArray: true })
-  periodicals: ListTreatiseInfo[];
+export class ListPatentResult {
+  @ApiProperty({ description: '项目数组', type: ListPatentInfo, isArray: true })
+  periodicals: ListPatentInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
 }
 
-export class OperateTreatisesResult {
+export class OperatePatentsResult {
   @ApiProperty({ description: '成功数量' })
   succeed: number;
 
@@ -76,7 +56,7 @@ export class OperateTreatisesResult {
   failed: number;
 }
 
-export class RemoveTreatisesResult extends PickType(OperateTreatisesResult, [
+export class RemovePatentsResult extends PickType(OperatePatentsResult, [
   'succeed',
   'failed',
 ] as const) {}

@@ -27,6 +27,9 @@ import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 import { Policies } from '@/entities/Policies.entity';
 import { ArticleTypes } from '@/entities/ArticleTypes.entity';
 import { Treatises } from '@/entities/Treatises.entity';
+import { Patents } from '@/entities/Patents.entity';
+import { PatentTypes } from '@/entities/PatentTypes.entity';
+import { PatentValidTypes } from '@/entities/PatentValidTypes.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -48,6 +51,9 @@ export class DBTester<T = undefined> {
   policiesRepository: Repository<Policies>;
   articleTypesRepository: Repository<ArticleTypes>;
   treatisesRepository: Repository<Treatises>;
+  patentsRepository: Repository<Patents>;
+  patentTypesRepository: Repository<PatentTypes>;
+  patentValidTypesRepository: Repository<PatentValidTypes>;
   config: ConfigService;
   server: any;
 
@@ -96,6 +102,9 @@ export class DBTester<T = undefined> {
       this.policiesRepository = this.module.get<Repository<Policies>>(getRepositoryToken(Policies));
       this.articleTypesRepository =this.module.get<Repository<ArticleTypes>>(getRepositoryToken(ArticleTypes));
       this.treatisesRepository =this.module.get<Repository<Treatises>>(getRepositoryToken(Treatises));
+      this.patentsRepository =this.module.get<Repository<Patents>>(getRepositoryToken(Patents));
+      this.patentTypesRepository =this.module.get<Repository<PatentTypes>>(getRepositoryToken(PatentTypes));
+      this.patentValidTypesRepository =this.module.get<Repository<PatentValidTypes>>(getRepositoryToken(PatentValidTypes));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 

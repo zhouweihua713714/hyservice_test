@@ -9,7 +9,7 @@ export class Patents {
   id: string;
 
   @ApiProperty({ description: '专利标题' })
-  @Column('character varying', { name: 'title', length: 50, comment: '专利标题' })
+  @Column('character varying', { name: 'title', length: 100, comment: '专利标题' })
   title: string;
 
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
@@ -28,7 +28,7 @@ export class Patents {
   @ApiPropertyOptional({ description: '申请人(单位)', type: String, nullable: true })
   @Column('character varying', {
     name: 'institution',
-    length: 50,
+    length: 100,
     nullable: true,
     comment: '申请人(单位)',
   })
@@ -58,7 +58,7 @@ export class Patents {
     length: 128,
     comment: '申请号',
   })
-  appliedNo: Date | null;
+  appliedNo: string | null;
 
   @ApiPropertyOptional({ description: '申请日', type: Date, nullable: true })
   @Column('timestamp with time zone', {
@@ -68,12 +68,12 @@ export class Patents {
   })
   appliedAt: Date | null;
 
-  @ApiProperty({ description: '专利类型' })
-  @Column('character varying', { name: 'type', length: 64, comment: '专利类型' })
-  type: string;
+  @ApiPropertyOptional({ description: '专利类型' })
+  @Column('character varying', { name: 'type', length: 64, nullable: true, comment: '专利类型' })
+  type: string | null;
 
   @ApiPropertyOptional({ description: '公开国别', type: String, nullable: true })
-  @Column('character varying', { name: 'country', length: 32, nullable: true, comment: '公开国别' })
+  @Column('character varying', { name: 'country', length: 50, nullable: true, comment: '公开国别' })
   country: string | null;
 
   @ApiPropertyOptional({ description: '代理机构', type: String, nullable: true })
@@ -162,6 +162,8 @@ export class Patents {
     nullable: true,
     comment: '删除时间',
   })
+  deletedAt: Date | null;
+
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean;

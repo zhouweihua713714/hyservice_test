@@ -164,6 +164,10 @@ export const ErrorCode = {
       code: 20013,
       message: '当前出台时间不为空,picker必填',
     },
+    VALID_TYPE_NOT_FOUND_ERROR:{
+      code: 20014,
+      message: '当前专利有效性类型不存在或已经被删除',
+    }
   },
   // 3xxxx
   FILES: {
