@@ -63,23 +63,23 @@ export class PatentsController {
     return this.termsService.listPatent(params, user);
   }
 
-  // @Post('/operatePatents')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '操作专利(发布、待发布)' })
-  // @ApiResult(OperatePatentsResult)
-  // @ApiBearerAuth()
-  // operatePatents(@Body() params: OperatePatentsDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.operatePatents(params, user);
-  // }
+  @Post('/operatePatents')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作专利(发布、待发布)' })
+  @ApiResult(OperatePatentsResult)
+  @ApiBearerAuth()
+  operatePatents(@Body() params: OperatePatentsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.operatePatents(params, user);
+  }
 
-  // @Post('/removePatents')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '删除专利' })
-  // @ApiResult(RemovePatentsResult)
-  // @ApiBearerAuth()
-  // removePatents(@Body() params: RemovePatentsDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.removePatents(params, user);
-  // }
+  @Post('/removePatents')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除专利' })
+  @ApiResult(RemovePatentsResult)
+  @ApiBearerAuth()
+  removePatents(@Body() params: RemovePatentsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.removePatents(params, user);
+  }
 }
