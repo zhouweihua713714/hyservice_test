@@ -35,6 +35,17 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
   'fundedProject',
   'url',
   'keyword',
+  'authorAbbreviation',
+  'authorAddress',
+  'correspondingAuthorAddress',
+  'referencesNumber',
+  'publisher',
+  'publisherAddress',
+  'periodical',
+  'periodicalAbbreviation',
+  'releasedAt',
+  'doi',
+  'studyField'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
