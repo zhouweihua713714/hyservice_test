@@ -53,15 +53,15 @@ export class PatentsController {
     return this.termsService.savePatent(params, user);
   }
 
-  // @Get('/listPatent')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '专利列表' })
-  // @ApiResult(ListPatentResult)
-  // @ApiBearerAuth()
-  // listPatent(@Query() params: ListPatentDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.listPatent(params, user);
-  // }
+  @Get('/listPatent')
+  @HttpCode(200)
+  @ApiOperation({ summary: '专利列表' })
+  @ApiResult(ListPatentResult)
+  @ApiBearerAuth()
+  listPatent(@Query() params: ListPatentDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.listPatent(params, user);
+  }
 
   // @Post('/operatePatents')
   // @HttpCode(200)
