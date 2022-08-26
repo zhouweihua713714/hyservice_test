@@ -72,6 +72,18 @@ export const seed: TesterSeed<DataType> = {
       quote: 0,
       fundedProject: '所获资助项目限制500',
       keyword: '关键词',
+      name:'期刊/会议名',
+      authorAbbreviation:'作者简称',
+      authorAddress:'作者地址',
+      correspondingAuthorAddress:'通讯作者地址',
+      referencesNumber:1,
+      publisher:'出版商',
+      publisherAddress:'出版商地址',
+      periodical:'期刊名字',
+      periodicalAbbreviation:'期刊简称',
+      releasedAt:new Date(),
+      doi:'论文doi',
+      studyField:'研究方向',
       ownerId: user.user.id,
     });
     return { user, treatiseInfo };

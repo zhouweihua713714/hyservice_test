@@ -29,7 +29,7 @@ export class SaveTreatiseDto {
 
   @ApiProperty({ description: '论文标题' })
   @IsString({ message: 'title 类型错误, 正确类型 string' })
-  @MaxLength(200)
+  @MaxLength(300)
   title: string;
 
   @ApiProperty({ description: '栏目id' })
@@ -70,14 +70,18 @@ export class SaveTreatiseDto {
   language: string | null;
 
   @ApiPropertyOptional({
-    description: '第一作者',
+    description: '第一作者/作者全称',
     type: String,
     nullable: true,
   })
   @IsString({ message: 'author 类型错误, 正确类型 string' })
-  @MaxLength(50)
   @IsOptional()
   author: string | null;
+
+  @ApiPropertyOptional({ description: '作者缩写', type: String, nullable: true })
+  @IsString({ message: 'authorAbbreviation 类型错误, 正确类型 string' })
+  @IsOptional()
+  authorAbbreviation: string | null;
 
   @ApiPropertyOptional({
     description: '第一作者单位',
@@ -85,37 +89,41 @@ export class SaveTreatiseDto {
     nullable: true,
   })
   @IsString({ message: 'authorUnit 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   authorUnit: string | null;
 
+  @ApiPropertyOptional({ description: '作者地址', type: String, nullable: true })
+  @IsString({ message: 'authorAddress 类型错误, 正确类型 string' })
+  @IsOptional()
+  authorAddress: string | null;
+
   @ApiPropertyOptional({ description: '通讯作者', type: String, nullable: true })
   @IsString({ message: 'correspondingAuthor 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   correspondingAuthor: string | null;
 
   @ApiPropertyOptional({ description: '通讯作者单位', type: String, nullable: true })
   @IsString({ message: 'correspondingAuthorUnit 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   correspondingAuthorUnit: string | null;
 
+  @ApiPropertyOptional({ description: '通讯作者地址', type: String, nullable: true })
+  @IsString({ message: 'correspondingAuthorAddress 类型错误, 正确类型 string' })
+  @IsOptional()
+  correspondingAuthorAddress: string | null;
+
   @ApiPropertyOptional({ description: '通讯作者邮箱', type: String, nullable: true })
   @IsString({ message: 'correspondingAuthorEmail 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   correspondingAuthorEmail: string | null;
 
   @ApiPropertyOptional({ description: '其他作者', type: String, nullable: true })
   @IsString({ message: 'otherAuthor 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   otherAuthor: string | null;
 
   @ApiPropertyOptional({ description: '其他作者单位', type: String, nullable: true })
   @IsString({ message: 'otherAuthorUnit 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   otherAuthorUnit: string | null;
 
@@ -153,7 +161,12 @@ export class SaveTreatiseDto {
   @IsOptional()
   references: string | null;
 
-  @ApiPropertyOptional({ description: '引用情况(次数)', type: Number, nullable: true })
+  @ApiPropertyOptional({ description: '参考文献量', type: Number, nullable: true })
+  @IsInt({ message: 'referencesNumber 类型错误, 正确类型 string' })
+  @IsOptional()
+  referencesNumber: number | null;
+
+  @ApiPropertyOptional({ description: '引用情况(次数)/被引频合计', type: Number, nullable: true })
   @IsInt({ message: 'quote 类型错误, 正确类型 int' })
   @IsOptional()
   quote: number | null;
@@ -181,6 +194,47 @@ export class SaveTreatiseDto {
   @MaxLength(300)
   @IsOptional()
   keyword: string | null;
+
+  @ApiPropertyOptional({ description: '出版商', type: String, nullable: true })
+  @IsString({ message: 'publisher 类型错误, 正确类型 string' })
+  @MaxLength(200)
+  @IsOptional()
+  publisher: string | null;
+
+  @ApiPropertyOptional({ description: '出版商地址', type: String, nullable: true })
+  @IsString({ message: 'publisherAddress 类型错误, 正确类型 string' })
+  @MaxLength(200)
+  @IsOptional()
+  publisherAddress: string | null;
+
+  @ApiPropertyOptional({ description: '期刊名称', type: String, nullable: true })
+  @IsString({ message: 'periodical 类型错误, 正确类型 string' })
+  @MaxLength(100)
+  @IsOptional()
+  periodical: string | null;
+
+  @ApiPropertyOptional({ description: '期刊简称', type: String, nullable: true })
+  @IsString({ message: 'periodicalAbbreviation 类型错误, 正确类型 string' })
+  @MaxLength(50)
+  @IsOptional()
+  periodicalAbbreviation: string | null;
+
+  @ApiPropertyOptional({ description: '出版年', type: Date, nullable: true })
+  @IsDateString({ message: 'releasedAt 类型错误, 正确类型 string' })
+  @IsOptional()
+  releasedAt: Date | null;
+
+  @ApiPropertyOptional({ description: 'doi 论文唯一id', type: String, nullable: true })
+  @IsString({ message: 'doi 类型错误, 正确类型 string' })
+  @MaxLength(100)
+  @IsOptional()
+  doi: string | null;
+
+  @ApiPropertyOptional({ description: '研究方向', type: String, nullable: true })
+  @IsString({ message: 'studyField 类型错误, 正确类型 string' })
+  @MaxLength(100)
+  @IsOptional()
+  studyField: string | null;
   
 }
 export class ListTreatiseDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
