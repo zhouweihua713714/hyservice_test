@@ -167,6 +167,14 @@ export const ErrorCode = {
     VALID_TYPE_NOT_FOUND_ERROR:{
       code: 20014,
       message: '当前专利有效性类型不存在或已经被删除',
+    },
+    FILED_NOT_FOUND_ERROR:{
+      code: 20015,
+      message: '当前主领域不存在或已经被删除',
+    },
+    MINOR_FILED_NOT_FOUND_ERROR:{
+      code: 20016,
+      message: '当前子领域不存在或已经被删除',
     }
   },
   // 3xxxx

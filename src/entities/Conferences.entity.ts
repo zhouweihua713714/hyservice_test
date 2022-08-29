@@ -16,12 +16,17 @@ export class Conferences {
   })
   columnId: string;
 
-  @ApiProperty({ description: '会议缩写' })
-  @Column('character varying', { name: 'abbreviation', length: 50, comment: '会议缩写' })
-  abbreviation: string;
+  @ApiProperty({ description: '会议缩写', type: String, nullable: true })
+  @Column('character varying', {
+    name: 'abbreviation',
+    length: 50,
+    nullable: true,
+    comment: '会议缩写',
+  })
+  abbreviation: string | null;
 
   @ApiProperty({ description: '会议名称' })
-  @Column('character varying', { name: 'name', length: 50, comment: '会议名称' })
+  @Column('character varying', { name: 'name', length: 100, comment: '会议名称' })
   name: string;
 
   @ApiPropertyOptional({ description: '举办时间', type: Date, nullable: true })
@@ -40,7 +45,7 @@ export class Conferences {
   })
   endedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '届', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '届', type: Number, nullable: true })
   @Column('integer', { name: 'period', nullable: true, comment: '届' })
   period: number | null;
 
@@ -56,6 +61,15 @@ export class Conferences {
   @ApiPropertyOptional({ description: '会议简介/主题', type: String, nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '会议简介/主题' })
   introduction: string | null;
+
+  @ApiPropertyOptional({ description: '封面链接', type: String, nullable: true })
+  @Column('character varying', {
+    name: 'cover_url',
+    length: 200,
+    nullable: true,
+    comment: '封面链接',
+  })
+  coverUrl: string | null;
 
   @ApiPropertyOptional({
     description: '主领域,格式 [string,string]',
@@ -84,7 +98,7 @@ export class Conferences {
   minorField: object | null;
 
   @ApiPropertyOptional({ description: '网站', type: String, nullable: true })
-  @Column('character varying', { name: 'website', nullable: true, length: 50, comment: '网站' })
+  @Column('character varying', { name: 'website', nullable: true, length: 200, comment: '网站' })
   website: string | null;
 
   @ApiPropertyOptional({ description: '联络人', type: String, nullable: true })
@@ -92,7 +106,7 @@ export class Conferences {
   contact: string | null;
 
   @ApiPropertyOptional({ description: '联络人邮箱', type: String, nullable: true })
-  @Column('character varying', { name: 'email', nullable: true, length: 50, comment: '联络人邮箱' })
+  @Column('character varying', { name: 'email', nullable: true, length: 100, comment: '联络人邮箱' })
   email: string | null;
 
   @ApiPropertyOptional({ description: '举办单位', type: String, nullable: true })
@@ -102,7 +116,7 @@ export class Conferences {
     nullable: true,
     comment: '举办单位',
   })
-  organizer: string | null;
+  unit: string | null;
 
   @ApiPropertyOptional({ description: '送稿截止时间', type: Date, nullable: true })
   @Column('timestamp with time zone', {
@@ -188,6 +202,8 @@ export class Conferences {
     nullable: true,
     comment: '删除时间',
   })
+  deletedAt: Date | null;
+  
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean;

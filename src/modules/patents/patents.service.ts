@@ -4,9 +4,7 @@ import { ResultData } from '@/common/utils/result';
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
-  articleTypesRepository,
   columnsRepository,
-  languagesRepository,
   patentsRepository,
   patentTypesRepository,
   patentValidTypesRepository,
@@ -20,9 +18,7 @@ import {
   SavePatentDto,
 } from './patents.dto';
 import {
-  Channels_Enum,
   Content_Status_Enum,
-  Content_Types_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
