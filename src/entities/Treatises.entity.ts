@@ -285,9 +285,8 @@ export class Treatises {
   ownerId: string | null;
 
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
-  @Column('character varying', {
+  @Column('text', {
     name: 'keyword',
-    length: 100,
     nullable: true,
     comment: '关键字',
   })
