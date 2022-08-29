@@ -191,7 +191,6 @@ export class SaveTreatiseDto {
 
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
-  @MaxLength(300)
   @IsOptional()
   keyword: string | null;
 
