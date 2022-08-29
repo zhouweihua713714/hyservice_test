@@ -30,6 +30,8 @@ import { Treatises } from '@/entities/Treatises.entity';
 import { Patents } from '@/entities/Patents.entity';
 import { PatentTypes } from '@/entities/PatentTypes.entity';
 import { PatentValidTypes } from '@/entities/PatentValidTypes.entity';
+import { Conferences } from '@/entities/Conferences.entity';
+import { Fields } from '@/entities/Fields.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -54,6 +56,8 @@ export class DBTester<T = undefined> {
   patentsRepository: Repository<Patents>;
   patentTypesRepository: Repository<PatentTypes>;
   patentValidTypesRepository: Repository<PatentValidTypes>;
+  conferencesRepository: Repository<Conferences>;
+  fieldsRepository: Repository<Fields>;
   config: ConfigService;
   server: any;
 
@@ -105,6 +109,8 @@ export class DBTester<T = undefined> {
       this.patentsRepository =this.module.get<Repository<Patents>>(getRepositoryToken(Patents));
       this.patentTypesRepository =this.module.get<Repository<PatentTypes>>(getRepositoryToken(PatentTypes));
       this.patentValidTypesRepository =this.module.get<Repository<PatentValidTypes>>(getRepositoryToken(PatentValidTypes));
+      this.conferencesRepository =this.module.get<Repository<Conferences>>(getRepositoryToken(Conferences));
+      this.fieldsRepository =this.module.get<Repository<Fields>>(getRepositoryToken(Fields));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 
