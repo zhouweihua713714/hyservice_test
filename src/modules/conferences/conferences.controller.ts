@@ -53,15 +53,15 @@ export class ConferencesController {
     return this.termsService.saveConference(params, user);
   }
 
-  // @Get('/listConference')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '会议列表' })
-  // @ApiResult(ListConferenceResult)
-  // @ApiBearerAuth()
-  // listConference(@Query() params: ListConferenceDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.listConference(params, user);
-  // }
+  @Get('/listConference')
+  @HttpCode(200)
+  @ApiOperation({ summary: '会议列表' })
+  @ApiResult(ListConferenceResult)
+  @ApiBearerAuth()
+  listConference(@Query() params: ListConferenceDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.listConference(params, user);
+  }
 
   // @Post('/operateConferences')
   // @HttpCode(200)
