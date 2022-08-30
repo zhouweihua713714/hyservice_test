@@ -29,7 +29,6 @@ export class SaveTreatiseDto {
 
   @ApiProperty({ description: '论文标题' })
   @IsString({ message: 'title 类型错误, 正确类型 string' })
-  @MaxLength(300)
   title: string;
 
   @ApiProperty({ description: '栏目id' })
@@ -47,12 +46,11 @@ export class SaveTreatiseDto {
     nullable: true,
   })
   @IsString({ message: 'region 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   region: string | null;
 
   @ApiPropertyOptional({
-    description: '发表途径:论文way_001,会议way_002,EDM会议way003,书way_004',
+    description: '发表途径:期刊way_001,会议way_002,EDM会议way003,书way_004',
     type: String,
     nullable: true,
   })
@@ -130,13 +128,11 @@ export class SaveTreatiseDto {
   
   @ApiPropertyOptional({ description: '文章主领域(大领域之间用“;”隔开)', type: String, nullable: true })
   @IsString({ message: 'field 类型错误, 正确类型 string' })
-  @MaxLength(50)
   @IsOptional()
   field: string | null;
 
   @ApiPropertyOptional({ description: '文章子领域(大领域之间用“;”隔开)', type: String, nullable: true })
   @IsString({ message: 'minorField 类型错误, 正确类型 string' })
-  @MaxLength(50)
   @IsOptional()
   minorField: string | null;
 
@@ -152,7 +148,6 @@ export class SaveTreatiseDto {
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
   @IsString({ message: 'search 类型错误, 正确类型 string' })
-  @MaxLength(100)
   @IsOptional()
   search: string | null;
 
@@ -173,19 +168,16 @@ export class SaveTreatiseDto {
 
   @ApiPropertyOptional({ description: '所获得资助项目', type: String, nullable: true })
   @IsString({ message: 'fundedProject 类型错误, 正确类型 string' })
-  @MaxLength(500)
   @IsOptional()
   fundedProject:string | null;
 
   @ApiPropertyOptional({ description: '论文链接', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   url: string | null;
 
   @ApiPropertyOptional({ description: '期刊/会议名', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   name: string | null;
 
@@ -196,25 +188,21 @@ export class SaveTreatiseDto {
 
   @ApiPropertyOptional({ description: '出版商', type: String, nullable: true })
   @IsString({ message: 'publisher 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   publisher: string | null;
 
   @ApiPropertyOptional({ description: '出版商地址', type: String, nullable: true })
   @IsString({ message: 'publisherAddress 类型错误, 正确类型 string' })
-  @MaxLength(200)
   @IsOptional()
   publisherAddress: string | null;
 
   @ApiPropertyOptional({ description: '期刊名称', type: String, nullable: true })
   @IsString({ message: 'periodical 类型错误, 正确类型 string' })
-  @MaxLength(100)
   @IsOptional()
   periodical: string | null;
 
   @ApiPropertyOptional({ description: '期刊简称', type: String, nullable: true })
   @IsString({ message: 'periodicalAbbreviation 类型错误, 正确类型 string' })
-  @MaxLength(50)
   @IsOptional()
   periodicalAbbreviation: string | null;
 
@@ -225,13 +213,11 @@ export class SaveTreatiseDto {
 
   @ApiPropertyOptional({ description: 'doi 论文唯一id', type: String, nullable: true })
   @IsString({ message: 'doi 类型错误, 正确类型 string' })
-  @MaxLength(100)
   @IsOptional()
   doi: string | null;
 
   @ApiPropertyOptional({ description: '研究方向', type: String, nullable: true })
   @IsString({ message: 'studyField 类型错误, 正确类型 string' })
-  @MaxLength(100)
   @IsOptional()
   studyField: string | null;
   
