@@ -2,7 +2,12 @@ import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
-import { Channels_Enum, Content_Status_Enum, Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import {
+  Channels_Enum,
+  Content_Status_Enum,
+  Content_Types_Enum,
+  User_Types_Enum,
+} from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { Languages } from '@/entities/Languages.entity';
@@ -73,7 +78,7 @@ export const seed: TesterSeed<DataType> = {
         correspondingAuthorEmail: '通讯作者邮箱',
         otherAuthor: '其他作者',
         otherAuthorUnit: '其他作者',
-        sort: articleType.id,
+        sort: [articleType.id],
         abstract: '摘要不限制字数',
         references: '参考文献不限字数',
         quote: 0,
@@ -82,7 +87,7 @@ export const seed: TesterSeed<DataType> = {
         ownerId: user.user.id,
       },
       {
-        id:  (new Date().getTime() - 40000).toString(),
+        id: (new Date().getTime() - 40000).toString(),
         columnId: columns[1].id,
         subject: [subjects[0].id],
         title: '论文名称必填',
@@ -101,7 +106,7 @@ export const seed: TesterSeed<DataType> = {
         correspondingAuthorEmail: '通讯作者邮箱',
         otherAuthor: '其他作者',
         otherAuthorUnit: '其他作者',
-        sort: articleType.id,
+        sort: [articleType.id],
         abstract: '摘要不限制字数',
         references: '参考文献不限字数',
         quote: 0,
@@ -130,7 +135,7 @@ export const seed: TesterSeed<DataType> = {
         correspondingAuthorEmail: '通讯作者邮箱',
         otherAuthor: '其他作者',
         otherAuthorUnit: '其他作者',
-        sort: articleType.id,
+        sort: [articleType.id],
         abstract: '摘要不限制字数',
         references: '参考文献不限字数',
         quote: 0,

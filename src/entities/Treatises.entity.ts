@@ -51,12 +51,11 @@ export class Treatises {
   language: string | null;
 
   @ApiPropertyOptional({ description: '第一作者/作者全称', type: String, nullable: true })
-  @Column('text', { name: 'author', nullable: true,comment: '第一作者/作者全称' })
+  @Column('text', { name: 'author', nullable: true, comment: '第一作者/作者全称' })
   author: string | null;
 
-  
   @ApiPropertyOptional({ description: '作者缩写', type: String, nullable: true })
-  @Column('text', { name: 'author_abbreviation', nullable: true,comment: '第一作者' })
+  @Column('text', { name: 'author_abbreviation', nullable: true, comment: '第一作者' })
   authorAbbreviation: string | null;
 
   @ApiPropertyOptional({ description: '第一作者单位', type: String, nullable: true })
@@ -135,21 +134,20 @@ export class Treatises {
   })
   minorField: string | null;
 
-  @ApiPropertyOptional({ description: '文章类型', type: String, nullable: true })
-  @Column('character varying', {
+  @ApiPropertyOptional({ description: '文章类型', type: String, isArray: true, nullable: true })
+  @Column('jsonb', {
     name: 'sort',
-    length: 50,
     nullable: true,
     comment: '文章类型',
   })
-  sort: string | null;
+  sort: string[] | null;
 
   @ApiPropertyOptional({ description: '摘要', type: String, nullable: true })
   @Column('text', { name: 'abstract', nullable: true, comment: '摘要' })
   abstract: string | null;
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
-  @Column('text', { name: 'search', nullable: true,  comment: '检索情况' })
+  @Column('text', { name: 'search', nullable: true, comment: '检索情况' })
   search: string | null;
 
   @ApiPropertyOptional({ description: '参考文献', type: String, nullable: true })
@@ -176,7 +174,7 @@ export class Treatises {
   @Column('text', {
     name: 'name',
     comment: '期刊/会议名',
-    nullable:true
+    nullable: true,
   })
   name: string | null;
 

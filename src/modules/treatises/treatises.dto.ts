@@ -125,21 +125,28 @@ export class SaveTreatiseDto {
   @IsOptional()
   otherAuthorUnit: string | null;
 
-  
-  @ApiPropertyOptional({ description: '文章主领域(大领域之间用“;”隔开)', type: String, nullable: true })
+  @ApiPropertyOptional({
+    description: '文章主领域(大领域之间用“;”隔开)',
+    type: String,
+    nullable: true,
+  })
   @IsString({ message: 'field 类型错误, 正确类型 string' })
   @IsOptional()
   field: string | null;
 
-  @ApiPropertyOptional({ description: '文章子领域(大领域之间用“;”隔开)', type: String, nullable: true })
+  @ApiPropertyOptional({
+    description: '文章子领域(大领域之间用“;”隔开)',
+    type: String,
+    nullable: true,
+  })
   @IsString({ message: 'minorField 类型错误, 正确类型 string' })
   @IsOptional()
   minorField: string | null;
 
-  @ApiPropertyOptional({ description: '文章类型', type: String, nullable: true })
-  @IsString({ message: 'sort 类型错误, 正确类型 string' })
+  @ApiPropertyOptional({ description: '文章类型', type: String, isArray: true, nullable: true })
+  @IsArray({ message: 'sort 类型错误, 正确类型 string' })
   @IsOptional()
-  sort: string | null;
+  sort: string[] | null;
 
   @ApiPropertyOptional({ description: '摘要', type: String, nullable: true })
   @IsString({ message: 'abstract 类型错误, 正确类型 string' })
@@ -169,7 +176,7 @@ export class SaveTreatiseDto {
   @ApiPropertyOptional({ description: '所获得资助项目', type: String, nullable: true })
   @IsString({ message: 'fundedProject 类型错误, 正确类型 string' })
   @IsOptional()
-  fundedProject:string | null;
+  fundedProject: string | null;
 
   @ApiPropertyOptional({ description: '论文链接', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 string' })
@@ -220,7 +227,6 @@ export class SaveTreatiseDto {
   @IsString({ message: 'studyField 类型错误, 正确类型 string' })
   @IsOptional()
   studyField: string | null;
-  
 }
 export class ListTreatiseDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
   @ApiPropertyOptional({ description: '论文名称,支持模糊搜索 如果为空则不传或者传null' })
