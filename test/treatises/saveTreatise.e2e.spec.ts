@@ -26,24 +26,24 @@ const payload: SaveTreatiseDto = {
   correspondingAuthorEmail: '通讯作者邮箱',
   otherAuthor: '其他作者',
   otherAuthorUnit: '其他作者',
-  sort: '文章类型需要赋值',
+  sort: ['文章类型需要赋值'],
   abstract: '摘要不限制字数',
   references: '参考文献不限字数',
   quote: 0,
   fundedProject: '所获资助项目限制500',
   keyword: '关键词',
-  name:'期刊/会议名',
-  authorAbbreviation:'作者简称',
-  authorAddress:'作者地址',
-  correspondingAuthorAddress:'通讯作者地址',
-  referencesNumber:1,
-  publisher:'出版商',
-  publisherAddress:'出版商地址',
-  periodical:'期刊名字',
-  periodicalAbbreviation:'期刊简称',
-  releasedAt:new Date(),
-  doi:'论文doi',
-  studyField:'研究方向'
+  name: '期刊/会议名',
+  authorAbbreviation: '作者简称',
+  authorAddress: '作者地址',
+  correspondingAuthorAddress: '通讯作者地址',
+  referencesNumber: 1,
+  publisher: '出版商',
+  publisherAddress: '出版商地址',
+  periodical: '期刊名字',
+  periodicalAbbreviation: '期刊简称',
+  releasedAt: new Date(),
+  doi: '论文doi',
+  studyField: '研究方向',
 };
 
 describe('/treatises/saveTreatise', () => {
@@ -117,7 +117,7 @@ describe('/treatises/saveTreatise', () => {
   test('should POST /treatises/saveTreatise', async () => {
     payload.columnId = tester.data.columns[1].id;
     payload.language = tester.data.language.id;
-    payload.sort = tester.data.articleType.id;
+    payload.sort = [tester.data.articleType.id];
 
     // save with
     const result = await request(tester.server)
@@ -140,6 +140,6 @@ describe('/treatises/saveTreatise', () => {
     expect(resultData.status).toBe(HttpStatus.OK);
     expect(resultData.body.code).toBe(200);
     expect(resultData.body.data.id).toBeTruthy();
-    await tester.termsRepository.delete(result.body.data.id);
+    await tester.treatisesRepository.delete(result.body.data.id);
   });
 });

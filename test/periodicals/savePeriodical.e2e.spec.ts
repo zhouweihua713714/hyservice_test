@@ -174,6 +174,6 @@ describe('/periodicals/savePeriodical', () => {
     expect(resultData.status).toBe(HttpStatus.OK);
     expect(resultData.body.code).toBe(200);
     expect(resultData.body.data.id).toBeTruthy();
-    await tester.termsRepository.delete(result.body.data.id);
+    await tester.periodicalsRepository.delete(result.body.data.id);
   });
 });

@@ -66,7 +66,7 @@ export const seed: TesterSeed<DataType> = {
       correspondingAuthorEmail: '通讯作者邮箱',
       otherAuthor: '其他作者',
       otherAuthorUnit: '其他作者',
-      sort: articleType.id,
+      sort: [articleType.id],
       abstract: '摘要不限制字数',
       references: '参考文献不限字数',
       quote: 0,

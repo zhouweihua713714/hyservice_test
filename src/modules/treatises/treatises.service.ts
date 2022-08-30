@@ -55,8 +55,8 @@ export class TreatisesService {
       });
     }
     if (treatiseInfo.sort) {
-      articleTypeInfo = await articleTypesRepository.findOneBy({
-        id: treatiseInfo.sort,
+      articleTypeInfo = await articleTypesRepository.findBy({
+        id: In(treatiseInfo.sort),
         type: Like(`%${Content_Types_Enum.TREATISE}%`),
       });
     }
@@ -70,7 +70,14 @@ export class TreatisesService {
           )
         : null,
       columnName: columnInfo ? columnInfo.name : null,
-      sortName: articleTypeInfo ? articleTypeInfo.name : null,
+      sortName: articleTypeInfo
+        ? _.join(
+            articleTypeInfo.map((articleType) => {
+              return articleType.name;
+            }),
+            ';'
+          )
+        : null,
       owner: userInfo ? userInfo.mobile : null,
       ...treatiseInfo,
     };
@@ -99,11 +106,11 @@ export class TreatisesService {
     }
     // if sort not found in database, then throw error
     if (sort) {
-      const articleTypeInfo = await articleTypesRepository.findOneBy({
-        id: sort,
+      const articleTypeInfo = await articleTypesRepository.findBy({
+        id: In(sort),
         type: Like(`%${Content_Types_Enum.TREATISE}%`),
       });
-      if (!articleTypeInfo) {
+      if (!articleTypeInfo || (articleTypeInfo && articleTypeInfo.length !== sort.length)) {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.SORT_NOT_FOUND_ERROR });
       }
     }
