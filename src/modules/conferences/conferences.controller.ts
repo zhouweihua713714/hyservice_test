@@ -34,14 +34,14 @@ import {
 export class ConferencesController {
   constructor(private readonly termsService: ConferencesService) {}
 
-  // @Get('/getConferenceDetail')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '获取会议详情' })
-  // @ApiResult(GetConferenceDetailResult)
-  // @AllowAnon()
-  // getConferenceDetail(@Query() params: GetConferenceDetailDto) {
-  //   return this.termsService.getConferenceDetail(params);
-  // }
+  @Get('/getConferenceDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取会议详情' })
+  @ApiResult(GetConferenceDetailResult)
+  @AllowAnon()
+  getConferenceDetail(@Query() params: GetConferenceDetailDto) {
+    return this.termsService.getConferenceDetail(params);
+  }
 
   @Post('/saveConference')
   @HttpCode(200)
