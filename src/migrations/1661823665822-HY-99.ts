@@ -26,6 +26,10 @@ export class HY991661823665822 implements MigrationInterface {
         await queryRunner.query(`COMMENT ON COLUMN "treatises"."doi" IS 'doi 论文唯一id'`);
         await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN " study_field" TYPE text`);
         await queryRunner.query(`COMMENT ON COLUMN "treatises"." study_field" IS '研究方向'`);
+        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "title" TYPE text`);
+        await queryRunner.query(`COMMENT ON COLUMN "treatises"."title" IS '论文标题'`);
+        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "url" TYPE text`);
+        await queryRunner.query(`COMMENT ON COLUMN "treatises"."url" IS '论文链接'`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
@@ -51,6 +55,10 @@ export class HY991661823665822 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "field" TYPE character varying(50)`);
         await queryRunner.query(`COMMENT ON COLUMN "treatises"."region" IS '科研人员所属国家或地区'`);
         await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "region" TYPE character varying(200)`);
+        await queryRunner.query(`COMMENT ON COLUMN "treatises"."url" IS '论文链接'`);
+        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "url" TYPE character varying(200)`);
+        await queryRunner.query(`COMMENT ON COLUMN "treatises"."title" IS '论文标题'`);
+        await queryRunner.query(`ALTER TABLE "treatises" ALTER COLUMN "title" TYPE character varying(300)`);
     }
 
 }
