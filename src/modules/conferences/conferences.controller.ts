@@ -63,23 +63,23 @@ export class ConferencesController {
     return this.termsService.listConference(params, user);
   }
 
-  // @Post('/operateConferences')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '操作会议(发布、待发布)' })
-  // @ApiResult(OperateConferencesResult)
-  // @ApiBearerAuth()
-  // operateConferences(@Body() params: OperateConferencesDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.operateConferences(params, user);
-  // }
+  @Post('/operateConferences')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作会议(发布、待发布)' })
+  @ApiResult(OperateConferencesResult)
+  @ApiBearerAuth()
+  operateConferences(@Body() params: OperateConferencesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.operateConferences(params, user);
+  }
 
-  // @Post('/removeConferences')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '删除会议' })
-  // @ApiResult(RemoveConferencesResult)
-  // @ApiBearerAuth()
-  // removeConferences(@Body() params: RemoveConferencesDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.removeConferences(params, user);
-  // }
+  @Post('/removeConferences')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除会议' })
+  @ApiResult(RemoveConferencesResult)
+  @ApiBearerAuth()
+  removeConferences(@Body() params: RemoveConferencesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.removeConferences(params, user);
+  }
 }

@@ -241,17 +241,16 @@ export class seeds1659928224903 implements MigrationInterface {
                                         ( 'article_type_00049', 'Published: 26 July 2020', 'treatise_ssci' ),
                                         ( 'article_type_00050', 'Published: 26 March 2020', 'treatise_ssci' ),
                                         ( 'article_type_00051', 'Published: 27 July 2020', 'treatise_ssci' ),
-                                        ( 'article_type_00052', 'Published: 27 July 2020', 'treatise_ssci' ),
-                                        ( 'article_type_00053', 'Reflection', 'treatise_ssci' ),
-                                        ( 'article_type_00054', 'Reports and Reviews', 'treatise_ssci' ),
-                                        ( 'article_type_00055', 'Reprint', 'treatise_ssci' ),
-                                        ( 'article_type_00056', 'Research', 'treatise_ssci' ),
-                                        ( 'article_type_00057', 'Research Article', 'treatise_ssci' ),
-                                        ( 'article_type_00058', 'Research Section', 'treatise_ssci' ),
-                                        ( 'article_type_00059', 'Retractions', 'treatise_ssci' ),
-                                        ( 'article_type_00060', 'Review', 'treatise_ssci' ),
-                                        ( 'article_type_00061', 'Software Review', 'treatise_ssci' ),
-                                        ( 'article_type_00062', 'Special Interests', 'treatise_ssci' ) ON CONFLICT ( "id" ) DO
+                                        ( 'article_type_00052', 'Reflection', 'treatise_ssci' ),
+                                        ( 'article_type_00053', 'Reports and Reviews', 'treatise_ssci' ),
+                                        ( 'article_type_00054', 'Reprint', 'treatise_ssci' ),
+                                        ( 'article_type_00055', 'Research', 'treatise_ssci' ),
+                                        ( 'article_type_00056', 'Research Article', 'treatise_ssci' ),
+                                        ( 'article_type_00057', 'Research Section', 'treatise_ssci' ),
+                                        ( 'article_type_00058', 'Retractions', 'treatise_ssci' ),
+                                        ( 'article_type_00059', 'Review', 'treatise_ssci' ),
+                                        ( 'article_type_00060', 'Software Review', 'treatise_ssci' ),
+                                        ( 'article_type_00061', 'Special Interests', 'treatise_ssci' ) ON CONFLICT ( "id" ) DO
                                     UPDATE 
                                         SET "name" = EXCLUDED."name",
                                         "type" = EXCLUDED."type";`);
