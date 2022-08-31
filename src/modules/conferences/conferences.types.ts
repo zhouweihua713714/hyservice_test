@@ -13,15 +13,32 @@ export class GetConferenceDetailResult extends PickType(Conferences, [
   'createdAt',
   'updatedAt',
   'columnId',
+  'abbreviation',
+  'name',
+  'conductedAt',
+  'endedAt',
+  'period',
+  'location',
+  'introduction',
+  'coverUrl',
+  'field',
+  'minorField',
+  'website',
+  'contact',
+  'email',
+  'unit',
+  'deliveryEndedAt',
+  'preregisterEndedAt',
+  'registerEndedAt'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 
-  @ApiPropertyOptional({ description: '会议类型名称' })
-  typeName: string;
+  @ApiPropertyOptional({ description: '子领域名称' })
+  minorFieldName: string;
 
-  @ApiPropertyOptional({ description: '会议有效性名称' })
-  validStatusName: string;
+  @ApiPropertyOptional({ description: '主领域名称' })
+  fieldName: string;
 
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
