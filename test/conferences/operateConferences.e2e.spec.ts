@@ -22,7 +22,6 @@ describe('/conferences/operateConferences', () => {
     expect(result.body.code).toBe(10016);
   });
   test('should POST /conferences/operateConferences with status is active', async () => {
-    // save with
     const result = await request(tester.server)
       .post('/conferences/operateConferences')
       .set('Authorization', tester.data.user.headers.authorization)
