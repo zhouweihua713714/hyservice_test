@@ -39,6 +39,8 @@ import { PatentValidTypes } from './entities/PatentValidTypes.entity';
 import { Conferences } from './entities/Conferences.entity';
 import { ConferencesModule } from './modules/conferences/conferences.module';
 import { Fields } from './entities/Fields.entity';
+import { Institutions } from './entities/Institutions.entity';
+import { InstitutionsModule } from './modules/institutions/institutions.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -90,7 +92,8 @@ import { Fields } from './entities/Fields.entity';
       PatentTypes,
       PatentValidTypes,
       Conferences,
-      Fields
+      Fields,
+      Institutions,
     ]),
     HomeModule,
     AuthModule,
@@ -104,6 +107,7 @@ import { Fields } from './entities/Fields.entity';
     TreatisesModule,
     PatentsModule,
     ConferencesModule,
+    InstitutionsModule,
   ],
   // 守卫
   providers: [

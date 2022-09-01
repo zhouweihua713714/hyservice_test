@@ -28,7 +28,7 @@ export class SaveConferenceDto {
   status: string;
 
   @ApiProperty({ description: '会议名称' })
-  @IsString({ message: 'title 类型错误, 正确类型 string' })
+  @IsString({ message: 'name 类型错误, 正确类型 string' })
   @MaxLength(100)
   name: string;
 
