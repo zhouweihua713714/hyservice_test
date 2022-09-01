@@ -45,6 +45,10 @@ export class Conferences {
   })
   endedAt: Date | null;
 
+  @ApiPropertyOptional({ description: '日期格式:year、month、date', type: String, nullable: true })
+  @Column('character varying', { name: 'picker', nullable: true, comment: '日期格式:year、month、date' })
+  picker: string | null;
+
   @ApiPropertyOptional({ description: '届', type: Number, nullable: true })
   @Column('integer', { name: 'period', nullable: true, comment: '届' })
   period: number | null;

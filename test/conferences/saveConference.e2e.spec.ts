@@ -27,6 +27,7 @@ const payload: SaveConferenceDto = {
   deliveryEndedAt: new Date(),
   preregisterEndedAt: new Date(),
   registerEndedAt: new Date(),
+  picker:'date'
 };
 
 describe('/conferences/saveConference', () => {
