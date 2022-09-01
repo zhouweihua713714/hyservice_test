@@ -29,7 +29,8 @@ export class GetConferenceDetailResult extends PickType(Conferences, [
   'unit',
   'deliveryEndedAt',
   'preregisterEndedAt',
-  'registerEndedAt'
+  'registerEndedAt',
+  'picker'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;

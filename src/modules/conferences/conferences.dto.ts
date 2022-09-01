@@ -47,6 +47,11 @@ export class SaveConferenceDto {
   @IsOptional()
   conductedAt: Date | null;
 
+  @ApiPropertyOptional({ description: '政策发布时间不为空，该字段不能为空,日期格式:year、month、date', type: String, nullable: true })
+  @IsString({ message: 'picker 类型错误, 正确类型 string' })
+  @IsOptional()
+  picker: string | null;
+
   @ApiPropertyOptional({ description: '举办结束时间(个别数据有)', type: Date, nullable: true })
   @IsDateString({ message: 'endedAt 类型错误, 正确类型 date' })
   @IsOptional()
