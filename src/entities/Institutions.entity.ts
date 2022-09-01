@@ -21,30 +21,35 @@ export class Institutions {
   @Column('character varying', { name: 'name', length: 50, comment: '中文机构名称' })
   name: string;
 
-  @ApiProperty({ description: '外文机构名称' })
-  @Column('character varying', { name: 'foreign_name', length: 50, comment: '外文机构名称' })
-  foreignName: string;
+  @ApiPropertyOptional({ description: '外文机构名称', nullable: true, type: String })
+  @Column('character varying', {
+    name: 'foreign_name',
+    nullable: true,
+    length: 200,
+    comment: '外文机构名称',
+  })
+  foreignName: string | null;
 
-  @ApiProperty({ description: '详细地址' })
-  @Column('character varying', { name: 'address', length: 50, comment: '详细地址' })
-  address: string;
+  @ApiPropertyOptional({ description: '详细地址', nullable: true, type: String })
+  @Column('character varying', { name: 'address',nullable: true, length: 200, comment: '详细地址' })
+  address: string | null;
 
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
   introduction: string | null;
 
-  @ApiProperty({ description: '网站', type: String, nullable: true })
-  @Column('character varying', { name: 'website', length: 50, nullable: true, comment: '网站' })
-  website: string;
+  @ApiPropertyOptional({ description: '网站', type: String, nullable: true })
+  @Column('character varying', { name: 'website', length: 200, nullable: true, comment: '网站' })
+  website: string | null;
 
   @ApiPropertyOptional({ description: '主办单位', type: String, nullable: true })
   @Column('character varying', {
     name: 'unit',
-    length: 50,
+    length: 100,
     nullable: true,
     comment: '主办单位',
   })
-  organizer: string | null;
+  unit: string | null;
 
   @ApiPropertyOptional({
     description: '主领域,格式 [string,string]',
@@ -75,29 +80,29 @@ export class Institutions {
   @ApiPropertyOptional({ description: '经度', type: Number, nullable: true })
   @Column('decimal', {
     name: 'longitude',
-    precision: 10,
+    precision: 9,
     scale: 6,
     nullable: true,
-    comment: '子领域',
-    transformer: new ColumnNumericTransformer()
+    comment: '经度',
+    transformer: new ColumnNumericTransformer(),
   })
   longitude: number | null;
 
   @ApiPropertyOptional({ description: '纬度', type: Number, nullable: true })
   @Column('decimal', {
     name: 'latitude',
-    precision: 10,
+    precision: 9,
     scale: 6,
     nullable: true,
-    comment: '子领域',
-    transformer: new ColumnNumericTransformer()
+    comment: '纬度',
+    transformer: new ColumnNumericTransformer(),
   })
   latitude: number | null;
 
   @ApiPropertyOptional({ description: '图片链接', type: String, nullable: true })
   @Column('character varying', {
     name: 'url',
-    length: 64,
+    length: 128,
     nullable: true,
     comment: '图片链接',
   })
@@ -120,15 +125,6 @@ export class Institutions {
     comment: '录入人id',
   })
   ownerId: string | null;
-
-  @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
-  @Column('character varying', {
-    name: 'keyword',
-    length: 100,
-    nullable: true,
-    comment: '关键字',
-  })
-  keyword: string | null;
 
   @ApiPropertyOptional({ description: '点击量,暂时不做' })
   @Column('integer', {
@@ -169,6 +165,8 @@ export class Institutions {
     nullable: true,
     comment: '删除时间',
   })
+  deletedAt: Date | null;
+
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean;
