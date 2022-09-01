@@ -57,7 +57,7 @@ export class ListConferenceInfo extends PickType(Conferences, [
 
 export class ListConferenceResult {
   @ApiProperty({ description: '会议数组', type: ListConferenceInfo, isArray: true })
-  patents: ListConferenceInfo[];
+  conferences: ListConferenceInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;

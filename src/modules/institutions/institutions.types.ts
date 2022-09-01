@@ -13,15 +13,25 @@ export class GetInstitutionDetailResult extends PickType(Institutions, [
   'createdAt',
   'updatedAt',
   'columnId',
+  'foreignName',
+  'address',
+  'introduction',
+  'website',
+  'unit',
+  'field',
+  'minorField',
+  'longitude',
+  'latitude',
+  'url'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 
-  @ApiPropertyOptional({ description: '机构类型名称' })
-  typeName: string;
+  @ApiPropertyOptional({ description: '子领域名称' })
+  minorFieldName: string;
 
-  @ApiPropertyOptional({ description: '机构有效性名称' })
-  validStatusName: string;
+  @ApiPropertyOptional({ description: '主领域名称' })
+  fieldName: string;
 
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
@@ -40,7 +50,7 @@ export class ListInstitutionInfo extends PickType(Institutions, [
 
 export class ListInstitutionResult {
   @ApiProperty({ description: '机构数组', type: ListInstitutionInfo, isArray: true })
-  patents: ListInstitutionInfo[];
+  institutions: ListInstitutionInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;

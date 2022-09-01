@@ -34,14 +34,14 @@ import {
 export class InstitutionsController {
   constructor(private readonly termsService: InstitutionsService) {}
 
-  // @Get('/getInstitutionDetail')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '获取机构详情' })
-  // @ApiResult(GetInstitutionDetailResult)
-  // @AllowAnon()
-  // getInstitutionDetail(@Query() params: GetInstitutionDetailDto) {
-  //   return this.termsService.getInstitutionDetail(params);
-  // }
+  @Get('/getInstitutionDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取机构详情' })
+  @ApiResult(GetInstitutionDetailResult)
+  @AllowAnon()
+  getInstitutionDetail(@Query() params: GetInstitutionDetailDto) {
+    return this.termsService.getInstitutionDetail(params);
+  }
 
   @Post('/saveInstitution')
   @HttpCode(200)
