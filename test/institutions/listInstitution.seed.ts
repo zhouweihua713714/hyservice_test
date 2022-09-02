@@ -9,19 +9,20 @@ import {
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Fields } from '@/entities/Fields.entity';
-import { Conferences } from '@/entities/Conferences.entity';
+import { Institutions } from '@/entities/Institutions.entity';
+
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
 let fields: Fields[];
-let conferences: Conferences[];
+let institutions: Institutions[];
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
   columns: Columns[];
-  conferences: Conferences[];
+  institutions: Institutions[];
 };
 
 export const seed: TesterSeed<DataType> = {
@@ -42,89 +43,71 @@ export const seed: TesterSeed<DataType> = {
       {
         id: `f${genCodeOfLength(8)}`,
         name: '主领域',
-        type: Content_Types_Enum.CONFERENCE,
+        type: Content_Types_Enum.INSTITUTION,
         isMain: 1,
       },
       {
         id: `fn${genCodeOfLength(8)}`,
         name: '子领域',
-        type: Content_Types_Enum.CONFERENCE,
+        type: Content_Types_Enum.INSTITUTION,
         isMain: 0,
       },
     ]);
-    conferences = await tester.conferencesRepository.save([
+    institutions = await tester.institutionsRepository.save([
       {
         id: (new Date().getTime() - 50000).toString(),
         name: '会议名称必填',
         columnId: columns[1].id,
-        abbreviation: '会议缩写',
-        conductedAt: new Date(),
-        endedAt: new Date(),
-        period: 1,
-        location: '中国',
+        foreignName: 'China',
+        address: '详细地址',
         introduction: '简介',
-        coverUrl: '封面链接',
+        unit: '主办单位',
         field: [fields[0].id],
         minorField: [fields[1].id],
+        longitude: 114.35683,
+        latitude: 30.506257,
+        url: '图片链接',
         website: 'http://baidu.com',
-        contact: '联络人',
-        email: '邮箱',
-        unit: '举办单位',
-        deliveryEndedAt: new Date(),
-        preregisterEndedAt: new Date(),
-        registerEndedAt: new Date(),
         ownerId: user.user.id,
       },
       {
         id: (new Date().getTime() - 30000).toString(),
-        name: '会议名称必填',
+        name: '机构名称必填',
         columnId: columns[1].id,
-        abbreviation: '会议缩写',
-        conductedAt: new Date(),
-        endedAt: new Date(),
-        period: 1,
-        location: '中国',
+        foreignName: 'China',
+        address: '详细地址',
         introduction: '简介',
-        coverUrl: '封面链接',
+        unit: '主办单位',
         field: [fields[0].id],
         minorField: [fields[1].id],
+        longitude: 114.35683,
+        latitude: 30.506257,
+        url: '图片链接',
         website: 'http://baidu.com',
-        contact: '联络人',
-        email: '邮箱',
-        unit: '举办单位',
-        deliveryEndedAt: new Date(),
-        preregisterEndedAt: new Date(),
-        registerEndedAt: new Date(),
         ownerId: user.user.id,
       },
       {
         id: new Date().getTime().toString(),
         status: Content_Status_Enum.ACTIVE,
-        name: '会议名称必填',
+        name: '机构名称必填',
         columnId: columns[1].id,
-        abbreviation: '会议缩写',
-        conductedAt: new Date(),
-        endedAt: new Date(),
-        period: 1,
-        location: '中国',
+        foreignName: 'China',
+        address: '详细地址',
         introduction: '简介',
-        coverUrl: '封面链接',
+        unit: '主办单位',
         field: [fields[0].id],
         minorField: [fields[1].id],
+        longitude: 114.35683,
+        latitude: 30.506257,
+        url: '图片链接',
         website: 'http://baidu.com',
-        contact: '联络人',
-        email: '邮箱',
-        unit: '举办单位',
-        deliveryEndedAt: new Date(),
-        preregisterEndedAt: new Date(),
-        registerEndedAt: new Date(),
         ownerId: user.user.id,
       },
     ]);
-    return { user, normalUser, columns, conferences };
+    return { user, normalUser, columns, institutions };
   },
   down: async (tester) => {
-    await tester.conferencesRepository.delete({});
+    await tester.institutionsRepository.delete({});
     await tester.fieldsRepository.delete({});
     await tester.usersRepository.delete({});
     await tester.columnsRepository.delete({});
