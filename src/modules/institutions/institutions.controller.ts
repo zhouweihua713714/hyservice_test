@@ -63,23 +63,23 @@ export class InstitutionsController {
     return this.termsService.listInstitution(params, user);
   }
 
-  // @Post('/operateInstitutions')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '操作机构(发布、待发布)' })
-  // @ApiResult(OperateInstitutionsResult)
-  // @ApiBearerAuth()
-  // operateInstitutions(@Body() params: OperateInstitutionsDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.operateInstitutions(params, user);
-  // }
+  @Post('/operateInstitutions')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作机构(发布、待发布)' })
+  @ApiResult(OperateInstitutionsResult)
+  @ApiBearerAuth()
+  operateInstitutions(@Body() params: OperateInstitutionsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.operateInstitutions(params, user);
+  }
 
-  // @Post('/removeInstitutions')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '删除机构' })
-  // @ApiResult(RemoveInstitutionsResult)
-  // @ApiBearerAuth()
-  // removeInstitutions(@Body() params: RemoveInstitutionsDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.removeInstitutions(params, user);
-  // }
+  @Post('/removeInstitutions')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除机构' })
+  @ApiResult(RemoveInstitutionsResult)
+  @ApiBearerAuth()
+  removeInstitutions(@Body() params: RemoveInstitutionsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.removeInstitutions(params, user);
+  }
 }
