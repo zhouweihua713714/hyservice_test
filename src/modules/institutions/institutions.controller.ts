@@ -53,15 +53,15 @@ export class InstitutionsController {
     return this.termsService.saveInstitution(params, user);
   }
 
-  // @Get('/listInstitution')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '机构列表' })
-  // @ApiResult(ListInstitutionResult)
-  // @ApiBearerAuth()
-  // listInstitution(@Query() params: ListInstitutionDto, @Req() req: any) {
-  //   const user = <SignInResInfo>req.user;
-  //   return this.termsService.listInstitution(params, user);
-  // }
+  @Get('/listInstitution')
+  @HttpCode(200)
+  @ApiOperation({ summary: '机构列表' })
+  @ApiResult(ListInstitutionResult)
+  @ApiBearerAuth()
+  listInstitution(@Query() params: ListInstitutionDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.listInstitution(params, user);
+  }
 
   // @Post('/operateInstitutions')
   // @HttpCode(200)

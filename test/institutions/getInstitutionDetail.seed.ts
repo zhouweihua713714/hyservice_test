@@ -48,7 +48,7 @@ export const seed: TesterSeed<DataType> = {
     institutionInfo = await tester.institutionsRepository.save({
       id: new Date().getTime().toString(),
       status: Content_Status_Enum.ACTIVE,
-      name: '会议名称必填',
+      name: '机构名称必填',
       columnId: columns[1].id,
       foreignName: 'China',
       address: '详细地址',
@@ -66,6 +66,7 @@ export const seed: TesterSeed<DataType> = {
   },
   down: async (tester) => {
     await tester.institutionsRepository.delete({});
+    await tester.fieldsRepository.delete({});
     await tester.usersRepository.delete({});
     await tester.loginsRepository.delete({});
   },
