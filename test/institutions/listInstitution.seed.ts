@@ -56,7 +56,7 @@ export const seed: TesterSeed<DataType> = {
     institutions = await tester.institutionsRepository.save([
       {
         id: (new Date().getTime() - 50000).toString(),
-        name: '会议名称必填',
+        name: '机构名称必填',
         columnId: columns[1].id,
         foreignName: 'China',
         address: '详细地址',

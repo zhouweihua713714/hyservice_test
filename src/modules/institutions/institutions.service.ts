@@ -142,14 +142,14 @@ export class InstitutionsService {
    * @returns {ResultData} 返回listInstitution信息
    */
   async listInstitution(params: ListInstitutionDto, user: SignInResInfo): Promise<ResultData> {
-    const { columnId, title, status, page, size } = params;
+    const { columnId, name, status, page, size } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
     }
     let statusCondition;
     let columnCondition;
-    let titleCondition;
+    let nameCondition;
     if (status) {
       statusCondition = {
         status: status,
@@ -160,9 +160,9 @@ export class InstitutionsService {
         columnId: columnId,
       };
     }
-    if (title) {
-      titleCondition = {
-        title: Like(`%${title}%`),
+    if (name) {
+      nameCondition = {
+        name: Like(`%${name}%`),
       };
     }
     // get institutions
@@ -170,7 +170,7 @@ export class InstitutionsService {
       where: {
         ...statusCondition,
         ...columnCondition,
-        ...titleCondition,
+        ...nameCondition,
         enabled: true,
         deletedAt: IsNull(),
       },
