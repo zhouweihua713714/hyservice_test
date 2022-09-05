@@ -133,9 +133,9 @@ export class SaveConferenceDto {
 }
 export class ListConferenceDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
   @ApiPropertyOptional({ description: '会议名称,支持模糊搜索 如果为空则不传或者传null' })
-  @IsString({ message: 'title 类型错误,正确类型 string' })
+  @IsString({ message: 'name 类型错误,正确类型 string' })
   @IsOptional()
-  title: string;
+  name: string;
 
   @ApiPropertyOptional({ description: '状态,待发布,已发布' })
   @IsString({ message: 'status 类型错误, 正确类型 string' })
