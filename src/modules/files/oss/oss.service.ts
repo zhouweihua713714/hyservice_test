@@ -29,7 +29,7 @@ export class OSSService {
    */
   async launch(params: LaunchDto, req: any): Promise<ResultData> {
     // 手动校验是否通过
-    let user: Pick<SignInResInfo, 'id' | 'status' > | null = null;
+    let user: Pick<SignInResInfo, 'id' | 'status'> | null = null;
     const token: string = req.get('Authorization');
     if (token) {
       // 兼容老token
@@ -99,9 +99,11 @@ export class OSSService {
   async access(params: AccessDto): Promise<{ url: string; statusCode: number }> {
     const { file_id: id } = params; // 下划线是兼容之前的链接
     // 查询文件信息
-    const file = await this.filesDao.findOne(id);
-    if (_.isEmpty(file) || file?.status === 0) {
-      throw new NotFoundException(ErrorCode.FILES.FILE_NOT_FOUND_ERROR);
+    if (id.indexOf('column') === -1) {
+      const file = await this.filesDao.findOne(id);
+      if (_.isEmpty(file) || file?.status === 0) {
+        throw new NotFoundException(ErrorCode.FILES.FILE_NOT_FOUND_ERROR);
+      }
     }
     // 获取配置数据
     const ossBucket = this.config.get<string>('oss.ossBucket');
