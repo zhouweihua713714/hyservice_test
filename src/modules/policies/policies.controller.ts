@@ -39,8 +39,9 @@ export class PoliciesController {
   @ApiOperation({ summary: '获取政策详情' })
   @ApiResult(GetPolicyDetailResult)
   @AllowAnon()
-  getPolicyDetail(@Query() params: GetPolicyDetailDto) {
-    return this.policiesService.getPolicyDetail(params);
+  getPolicyDetail(@Query() params: GetPolicyDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.policiesService.getPolicyDetail(params, user);
   }
 
   @Post('/savePolicy')

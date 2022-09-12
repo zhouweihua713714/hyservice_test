@@ -31,7 +31,7 @@ export class TreatisesService {
    * @param {GetTreatiseDetailDto} params
    * @returns {ResultData} 返回getTreatiseDetail信息
    */
-  async getTreatiseDetail(params: GetTreatiseDetailDto): Promise<ResultData> {
+  async getTreatiseDetail(params: GetTreatiseDetailDto, user: SignInResInfo): Promise<ResultData> {
     const treatiseInfo = await treatisesRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -81,6 +81,10 @@ export class TreatisesService {
       owner: userInfo ? userInfo.mobile : null,
       ...treatiseInfo,
     };
+    // update clicks
+    if (params.flag) {
+      await treatisesRepository.update(params.id, { clicks: treatiseInfo.clicks + 1 });
+    }
     return ResultData.ok({ data: result });
   }
   /**

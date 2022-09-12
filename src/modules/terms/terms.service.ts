@@ -30,7 +30,7 @@ export class TermsService {
    * @param {GetTermDetailDto} params
    * @returns {ResultData} 返回getTermDetail信息
    */
-  async getTermDetail(params: GetTermDetailDto): Promise<ResultData> {
+  async getTermDetail(params: GetTermDetailDto, user: SignInResInfo): Promise<ResultData> {
     const termInfo = await termsRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -58,6 +58,14 @@ export class TermsService {
       owner: userInfo ? userInfo.mobile : null,
       ...termInfo,
     };
+    // update clicks
+    if (params.flag) {
+      await termsRepository.update(params.id, { clicks: termInfo.clicks + 1 });
+    }
+    // // if user login then record history
+    // if (user) {
+    //   console.log('用户浏览历史');
+    // }
     return ResultData.ok({ data: result });
   }
   /**

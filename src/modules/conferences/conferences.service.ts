@@ -29,7 +29,10 @@ export class ConferencesService {
    * @param {GetConferenceDetailDto} params
    * @returns {ResultData} 返回getConferenceDetail信息
    */
-  async getConferenceDetail(params: GetConferenceDetailDto): Promise<ResultData> {
+  async getConferenceDetail(
+    params: GetConferenceDetailDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const conferenceInfo = await conferencesRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -75,6 +78,10 @@ export class ConferencesService {
       owner: userInfo ? userInfo.mobile : null,
       ...conferenceInfo,
     };
+    // update clicks
+    if (params.flag) {
+      await conferencesRepository.update(params.id, { clicks: conferenceInfo.clicks + 1 });
+    }
     return ResultData.ok({ data: result });
   }
   /**

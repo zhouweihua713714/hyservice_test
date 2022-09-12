@@ -3,6 +3,7 @@ import { ReqListQuery } from '@/common/utils/reqListQuery';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import {
   IsArray,
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsInt,
@@ -14,6 +15,11 @@ export class GetTreatiseDetailDto {
   @ApiProperty({ description: 'id,' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })
   id: string;
+
+  @ApiPropertyOptional({ description: '是否C端请求:是 true' })
+  @IsBoolean({ message: 'flag 类型错误, 正确类型 boolean' })
+  @IsOptional()
+  flag: boolean;
 }
 export class SaveTreatiseDto {
   @ApiPropertyOptional({ description: 'id,传表示编辑不传新增' })

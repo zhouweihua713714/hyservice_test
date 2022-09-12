@@ -20,6 +20,7 @@ describe('/terms/getTermDetail', () => {
     // make request
     const result = await request(tester.server)
       .get('/terms/getTermDetail')
+      .set('Authorization', tester.data.user.headers.authorization)
       .query({ id: tester.data.termInfo.id });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);

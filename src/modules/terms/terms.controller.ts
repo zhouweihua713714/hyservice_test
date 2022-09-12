@@ -39,8 +39,9 @@ export class TermsController {
   @ApiOperation({ summary: '获取项目详情' })
   @ApiResult(GetTermDetailResult)
   @AllowAnon()
-  getTermDetail(@Query() params: GetTermDetailDto) {
-    return this.termsService.getTermDetail(params);
+  getTermDetail(@Query() params: GetTermDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTermDetail(params,user);
   }
 
   @Post('/saveTerm')

@@ -30,7 +30,7 @@ export class PoliciesService {
    * @param {GetPolicyDetailDto} params
    * @returns {ResultData} 返回getPolicyDetail信息
    */
-  async getPolicyDetail(params: GetPolicyDetailDto): Promise<ResultData> {
+  async getPolicyDetail(params: GetPolicyDetailDto, user: SignInResInfo): Promise<ResultData> {
     const policyInfo = await policiesRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -55,6 +55,10 @@ export class PoliciesService {
       owner: userInfo ? userInfo.mobile : null,
       ...policyInfo,
     };
+    // update clicks
+    if (params.flag) {
+      await policiesRepository.update(params.id, { clicks: policyInfo.clicks + 1 });
+    }
     return ResultData.ok({ data: result });
   }
   /**
