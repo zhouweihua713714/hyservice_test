@@ -175,7 +175,11 @@ export const ErrorCode = {
     MINOR_FILED_NOT_FOUND_ERROR:{
       code: 20016,
       message: '当前子领域不存在或已经被删除',
-    }
+    },
+    UNIVERSITY_NOT_FOUND_ERROR: {
+      code: 20017,
+      message: '当前学校不存在或者已经被删除',
+    },
   },
   // 3xxxx
   FILES: {
@@ -188,4 +192,11 @@ export const ErrorCode = {
       message: '文件状态更新失败',
     },
   },
+  // 4xxxx
+  USERS:{
+    USER_NOT_PERMITTED_ERROR:{
+      code: 40001,
+      message: '当前用户无权限操作',
+    }
+  }
 };

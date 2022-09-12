@@ -14,7 +14,7 @@ import {
 } from './terms.dto';
 import { TermsService } from './terms.service';
 import {
-  GetTermsDetailResult,
+  GetTermDetailResult,
   ListTermResult,
   OperateTermsResult,
   RemoveTermsResult,
@@ -24,7 +24,7 @@ import {
 @ApiTags('内容管理-项目')
 @ApiExtraModels(
   ResultData,
-  GetTermsDetailResult,
+  GetTermDetailResult,
   ListTermResult,
   OperateTermsResult,
   RemoveTermsResult,
@@ -37,7 +37,7 @@ export class TermsController {
   @Get('/getTermDetail')
   @HttpCode(200)
   @ApiOperation({ summary: '获取项目详情' })
-  @ApiResult(GetTermsDetailResult)
+  @ApiResult(GetTermDetailResult)
   @AllowAnon()
   getTermDetail(@Query() params: GetTermDetailDto) {
     return this.termsService.getTermDetail(params);
