@@ -18,6 +18,7 @@ import { Treatises } from '@/entities/Treatises.entity';
 import { Patents } from '@/entities/Patents.entity';
 import { Conferences } from '@/entities/Conferences.entity';
 import { Institutions } from '@/entities/Institutions.entity';
+import { Universities } from '@/entities/Universities.entity';
 DataSource.initialize()
   .then(() => {
     console.log('Data Source has been initialized!');
@@ -44,4 +45,5 @@ export const treatisesRepository = DataSource.getRepository(Treatises);
 export const patentsRepository = DataSource.getRepository(Patents);
 export const conferencesRepository = DataSource.getRepository(Conferences);
 export const institutionsRepository = DataSource.getRepository(Institutions);
+export const universitiesRepository = DataSource.getRepository(Universities);
 

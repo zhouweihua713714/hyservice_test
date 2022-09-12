@@ -19,6 +19,7 @@ import {
   policyTypesRepository,
   subjectsRepository,
   termTypesRepository,
+  universitiesRepository,
   websiteRepository,
 } from '../repository/repository';
 import { SetColumnsOrderDto, SetColumnsTypeDto } from './configs.dto';
@@ -188,5 +189,19 @@ export class ConfigsService {
       },
     });
     return ResultData.ok({ data: { termTypes: data } });
+  }
+
+  /**
+   * @description 获取学校数据
+   * @param {} params
+   * @returns {ResultData} 返回getUniversities信息
+   */
+  async getUniversities(): Promise<ResultData> {
+    const data = await universitiesRepository.find({
+      order: {
+        name: 'ASC',
+      },
+    });
+    return ResultData.ok({ data: { universities: data } });
   }
 }

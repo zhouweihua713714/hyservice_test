@@ -19,6 +19,7 @@ import {
   GetPolicyTypesResult,
   GetSubjectsResult,
   GetTermTypesResult,
+  GetUniversitiesResult,
   SetColumnsTypeResult,
 } from './configs.types';
 
@@ -150,6 +151,15 @@ export class ConfigsController {
   setColumnsOrder(@Body() params: SetColumnsOrderDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.configService.setColumnsOrder(params, user);
+  }
+
+  @Get('/getUniversities')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取学校数据' })
+  @ApiResult(GetUniversitiesResult)
+  @AllowAnon()
+  getUniversities(@Query() params: any) {
+    return this.configService.getUniversities();
   }
   
 }

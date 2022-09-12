@@ -8,6 +8,7 @@ import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
 import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
+import { Universities } from '@/entities/Universities.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
@@ -74,6 +75,12 @@ export class GetTermTypesResult {
   @ApiProperty({ description: '项目类型数组', type: TermTypes, isArray: true })
   termTypes: TermTypes[];
 }
+
+export class GetUniversitiesResult {
+  @ApiProperty({ description: '学校数组', type: Universities, isArray: true })
+  termTypes: Universities[];
+}
+
 
 export class SetColumnsTypeResult {
   @ApiProperty({ description: '成功数量' })

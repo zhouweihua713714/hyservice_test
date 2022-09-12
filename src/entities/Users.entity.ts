@@ -20,7 +20,7 @@ export class Users {
   @Column('character varying', { name: 'name', nullable: true, length: 20, comment: '姓名' })
   name: string | null;
 
-  @ApiPropertyOptional({ description: '用户拓展信息' , nullable: true})
+  @ApiPropertyOptional({ description: '用户拓展信息', nullable: true })
   @Column('json', { name: 'info', default: {}, comment: '用户拓展信息' })
   info: object;
 
@@ -58,6 +58,32 @@ export class Users {
   })
   type: string;
 
+  @ApiPropertyOptional({
+    description: '用户头像',
+    type: String,
+    nullable: true,
+  })
+  @Column('character varying', {
+    name: 'avatar',
+    length: 64,
+    nullable: true,
+    comment: '用户头像',
+  })
+  avatar: string | null;
+
+  @ApiPropertyOptional({
+    description: '用户学校',
+    type: String,
+    nullable: true,
+  })
+  @Column('character varying', {
+    name: 'university',
+    length: 128,
+    nullable: true,
+    comment: '用户学校',
+  })
+  university: string | null;
+  
   @ApiProperty({ description: 'logins 信息' })
   @OneToMany(() => Logins, (logins) => logins.mobile)
   logins: Logins[];

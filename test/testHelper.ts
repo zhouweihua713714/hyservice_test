@@ -33,6 +33,7 @@ import { PatentValidTypes } from '@/entities/PatentValidTypes.entity';
 import { Conferences } from '@/entities/Conferences.entity';
 import { Fields } from '@/entities/Fields.entity';
 import { Institutions } from '@/entities/Institutions.entity';
+import { Universities } from '@/entities/Universities.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -60,6 +61,7 @@ export class DBTester<T = undefined> {
   conferencesRepository: Repository<Conferences>;
   institutionsRepository: Repository<Institutions>;
   fieldsRepository: Repository<Fields>;
+  universitiesRepository: Repository<Universities>;
   config: ConfigService;
   server: any;
 
@@ -114,6 +116,7 @@ export class DBTester<T = undefined> {
       this.conferencesRepository =this.module.get<Repository<Conferences>>(getRepositoryToken(Conferences));
       this.fieldsRepository =this.module.get<Repository<Fields>>(getRepositoryToken(Fields));
       this.institutionsRepository =this.module.get<Repository<Institutions>>(getRepositoryToken(Institutions));
+      this.universitiesRepository =this.module.get<Repository<Universities>>(getRepositoryToken(Universities));
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 

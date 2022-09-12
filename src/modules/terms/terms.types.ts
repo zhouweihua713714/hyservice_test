@@ -1,5 +1,4 @@
 import { Terms } from '@/entities/Terms.entity';
-import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class SaveTermResult {
@@ -7,7 +6,7 @@ export class SaveTermResult {
   id: string;
 
 }
-export class GetTermsDetailResult extends PickType(Terms, [
+export class GetTermDetailResult extends PickType(Terms, [
   'id',
   'name',
   'termNumber',

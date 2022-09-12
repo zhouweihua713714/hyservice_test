@@ -41,6 +41,8 @@ import { ConferencesModule } from './modules/conferences/conferences.module';
 import { Fields } from './entities/Fields.entity';
 import { Institutions } from './entities/Institutions.entity';
 import { InstitutionsModule } from './modules/institutions/institutions.module';
+import { Universities } from './entities/Universities.entity';
+import { UsersModule } from './modules/users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -94,6 +96,7 @@ import { InstitutionsModule } from './modules/institutions/institutions.module';
       Conferences,
       Fields,
       Institutions,
+      Universities
     ]),
     HomeModule,
     AuthModule,
@@ -108,6 +111,7 @@ import { InstitutionsModule } from './modules/institutions/institutions.module';
     PatentsModule,
     ConferencesModule,
     InstitutionsModule,
+    UsersModule
   ],
   // 守卫
   providers: [
