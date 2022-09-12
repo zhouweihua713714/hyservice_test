@@ -39,8 +39,9 @@ export class PeriodicalsController {
   @ApiOperation({ summary: '获取期刊详情' })
   @ApiResult(GetPeriodicalDetailResult)
   @AllowAnon()
-  getPeriodicalDetail(@Query() params: GetPeriodicalDetailDto) {
-    return this.termsService.getPeriodicalDetail(params);
+  getPeriodicalDetail(@Query() params: GetPeriodicalDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getPeriodicalDetail(params, user);
   }
 
   @Post('/savePeriodical')

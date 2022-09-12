@@ -32,7 +32,10 @@ export class PeriodicalsService {
    * @param {GetPeriodicalDetailDto} params
    * @returns {ResultData} 返回getPeriodicalDetail信息
    */
-  async getPeriodicalDetail(params: GetPeriodicalDetailDto): Promise<ResultData> {
+  async getPeriodicalDetail(
+    params: GetPeriodicalDetailDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const periodicalInfo = await periodicalsRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -89,6 +92,10 @@ export class PeriodicalsService {
       owner: userInfo ? userInfo.mobile : null,
       ...periodicalInfo,
     };
+    // update clicks
+    if (params.flag) {
+      await periodicalsRepository.update(params.id, { clicks: periodicalInfo.clicks + 1 });
+    }
     return ResultData.ok({ data: result });
   }
   /**

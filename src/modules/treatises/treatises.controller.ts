@@ -39,8 +39,9 @@ export class TreatisesController {
   @ApiOperation({ summary: '获取论文详情' })
   @ApiResult(GetTreatiseDetailResult)
   @AllowAnon()
-  getTreatiseDetail(@Query() params: GetTreatiseDetailDto) {
-    return this.termsService.getTreatiseDetail(params);
+  getTreatiseDetail(@Query() params: GetTreatiseDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTreatiseDetail(params,user);
   }
 
   @Post('/saveTreatise')

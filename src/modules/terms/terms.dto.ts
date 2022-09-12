@@ -3,6 +3,7 @@ import { ReqListQuery } from '@/common/utils/reqListQuery';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import {
   IsArray,
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsInt,
@@ -13,9 +14,14 @@ import {
 } from 'class-validator';
 
 export class GetTermDetailDto {
-  @ApiProperty({ description: 'id,' })
+  @ApiProperty({ description: 'id' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })
   id: string;
+
+  @ApiPropertyOptional({ description: '是否C端请求:是 true' })
+  @IsBoolean({ message: 'flag 类型错误, 正确类型 boolean' })
+  @IsOptional()
+  flag: boolean;
 }
 export class SaveTermDto {
   @ApiPropertyOptional({ description: 'id,传表示编辑不传新增' })
@@ -145,5 +151,4 @@ export class RemoveTermsDto {
   @ApiProperty({ description: 'ids 数组' })
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];
-
 }

@@ -39,8 +39,9 @@ export class PatentsController {
   @ApiOperation({ summary: '获取专利详情' })
   @ApiResult(GetPatentDetailResult)
   @AllowAnon()
-  getPatentDetail(@Query() params: GetPatentDetailDto) {
-    return this.termsService.getPatentDetail(params);
+  getPatentDetail(@Query() params: GetPatentDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getPatentDetail(params, user);
   }
 
   @Post('/savePatent')

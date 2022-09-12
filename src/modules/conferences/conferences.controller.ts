@@ -39,8 +39,9 @@ export class ConferencesController {
   @ApiOperation({ summary: '获取会议详情' })
   @ApiResult(GetConferenceDetailResult)
   @AllowAnon()
-  getConferenceDetail(@Query() params: GetConferenceDetailDto) {
-    return this.termsService.getConferenceDetail(params);
+  getConferenceDetail(@Query() params: GetConferenceDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getConferenceDetail(params, user);
   }
 
   @Post('/saveConference')

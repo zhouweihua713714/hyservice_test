@@ -39,8 +39,9 @@ export class InstitutionsController {
   @ApiOperation({ summary: '获取机构详情' })
   @ApiResult(GetInstitutionDetailResult)
   @AllowAnon()
-  getInstitutionDetail(@Query() params: GetInstitutionDetailDto) {
-    return this.termsService.getInstitutionDetail(params);
+  getInstitutionDetail(@Query() params: GetInstitutionDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getInstitutionDetail(params, user);
   }
 
   @Post('/saveInstitution')

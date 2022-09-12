@@ -17,10 +17,7 @@ import {
   RemovePatentsDto,
   SavePatentDto,
 } from './patents.dto';
-import {
-  Content_Status_Enum,
-  User_Types_Enum,
-} from '@/common/enums/common.enum';
+import { Content_Status_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
 
 export class PatentsService {
@@ -29,7 +26,7 @@ export class PatentsService {
    * @param {GetPatentDetailDto} params
    * @returns {ResultData} 返回getPatentDetail信息
    */
-  async getPatentDetail(params: GetPatentDetailDto): Promise<ResultData> {
+  async getPatentDetail(params: GetPatentDetailDto, user: SignInResInfo): Promise<ResultData> {
     const patentInfo = await patentsRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -65,6 +62,10 @@ export class PatentsService {
       owner: userInfo ? userInfo.mobile : null,
       ...patentInfo,
     };
+    // update clicks
+    if (params.flag) {
+      await patentsRepository.update(params.id, { clicks: patentInfo.clicks + 1 });
+    }
     return ResultData.ok({ data: result });
   }
   /**

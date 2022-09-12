@@ -27,9 +27,19 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       ctx.getHandler(),
       ctx.getClass(),
     ]);
-    if (allowAnon) return true;
     const req = ctx.switchToHttp().getRequest();
     const token: string = req.get('Authorization');
+    // 允许接口不校验但是有带头部仍然进行解析用户数据
+    if (token && req.url !== '/file/callback') {
+      const verifyToken = token.startsWith('Bearer ')
+        ? token.replace('Bearer ', '')
+        : token.replace('bearer ', '');
+      const SignInResInfo: SignInResInfo | null = this.authService.verifyToken(verifyToken);
+      return this.activate(ctx);
+    }
+    if (allowAnon) return true;
+    // const req = ctx.switchToHttp().getRequest();
+    // const token: string = req.get('Authorization');
     if (!token) throw new ForbiddenException('请先登录');
     // 兼容老token
     const verifyToken = token.startsWith('Bearer ')

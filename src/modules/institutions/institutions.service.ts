@@ -29,7 +29,7 @@ export class InstitutionsService {
    * @param {GetInstitutionDetailDto} params
    * @returns {ResultData} 返回getInstitutionDetail信息
    */
-  async getInstitutionDetail(params: GetInstitutionDetailDto): Promise<ResultData> {
+  async getInstitutionDetail(params: GetInstitutionDetailDto, user: SignInResInfo): Promise<ResultData> {
     const institutionInfo = await institutionsRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -75,6 +75,10 @@ export class InstitutionsService {
       owner: userInfo ? userInfo.mobile : null,
       ...institutionInfo,
     };
+    // update clicks
+    if (params.flag) {
+      await institutionsRepository.update(params.id, { clicks: institutionInfo.clicks + 1 });
+    }
     return ResultData.ok({ data: result });
   }
   /**
