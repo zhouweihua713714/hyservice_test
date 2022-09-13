@@ -8,6 +8,7 @@ import {
   columnsRepository,
   languagesRepository,
   treatisesRepository,
+  userHistoryRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -84,6 +85,14 @@ export class TreatisesService {
     // update clicks
     if (params.flag) {
       await treatisesRepository.update(params.id, { clicks: treatiseInfo.clicks + 1 });
+    }
+    // if user login then record history
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.TREATISE,
+      });
     }
     return ResultData.ok({ data: result });
   }

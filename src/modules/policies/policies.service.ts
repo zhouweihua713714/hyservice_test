@@ -7,6 +7,7 @@ import {
   columnsRepository,
   policiesRepository,
   policyTypesRepository,
+  userHistoryRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -18,6 +19,7 @@ import {
 } from './policies.dto';
 import {
   Content_Status_Enum,
+  Content_Types_Enum,
   Education_Level_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
@@ -58,6 +60,14 @@ export class PoliciesService {
     // update clicks
     if (params.flag) {
       await policiesRepository.update(params.id, { clicks: policyInfo.clicks + 1 });
+    }
+    // if user login then record history
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.POLICY,
+      });
     }
     return ResultData.ok({ data: result });
   }
