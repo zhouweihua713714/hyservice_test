@@ -30,7 +30,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const req = ctx.switchToHttp().getRequest();
     const token: string = req.get('Authorization');
     // 允许接口不校验但是有带头部仍然进行解析用户数据
-    if (token && req.url !== '/file/callback') {
+    if (token && req.url.indexOf('/file/callback') === -1) {
       const verifyToken = token.startsWith('Bearer ')
         ? token.replace('Bearer ', '')
         : token.replace('bearer ', '');
