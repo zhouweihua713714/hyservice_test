@@ -7,6 +7,7 @@ import {
   columnsRepository,
   conferencesRepository,
   fieldsRepository,
+  userHistoryRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -81,6 +82,14 @@ export class ConferencesService {
     // update clicks
     if (params.flag) {
       await conferencesRepository.update(params.id, { clicks: conferenceInfo.clicks + 1 });
+    }
+    // if user login then record history
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.CONFERENCE,
+      });
     }
     return ResultData.ok({ data: result });
   }

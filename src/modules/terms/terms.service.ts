@@ -8,6 +8,7 @@ import {
   subjectsRepository,
   termsRepository,
   termTypesRepository,
+  userHistoryRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -62,10 +63,14 @@ export class TermsService {
     if (params.flag) {
       await termsRepository.update(params.id, { clicks: termInfo.clicks + 1 });
     }
-    // // if user login then record history
-    // if (user) {
-    //   console.log('用户浏览历史');
-    // }
+    // if user login then record history
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.TERM,
+      });
+    }
     return ResultData.ok({ data: result });
   }
   /**

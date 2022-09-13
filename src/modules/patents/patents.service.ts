@@ -8,6 +8,7 @@ import {
   patentsRepository,
   patentTypesRepository,
   patentValidTypesRepository,
+  userHistoryRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -17,7 +18,11 @@ import {
   RemovePatentsDto,
   SavePatentDto,
 } from './patents.dto';
-import { Content_Status_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import {
+  Content_Status_Enum,
+  Content_Types_Enum,
+  User_Types_Enum,
+} from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
 
 export class PatentsService {
@@ -65,6 +70,14 @@ export class PatentsService {
     // update clicks
     if (params.flag) {
       await patentsRepository.update(params.id, { clicks: patentInfo.clicks + 1 });
+    }
+    // if user login then record history
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.PATENT,
+      });
     }
     return ResultData.ok({ data: result });
   }

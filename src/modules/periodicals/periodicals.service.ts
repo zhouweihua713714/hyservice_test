@@ -9,6 +9,7 @@ import {
   periodicalPeriodsRepository,
   periodicalsRepository,
   subjectsRepository,
+  userHistoryRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -95,6 +96,14 @@ export class PeriodicalsService {
     // update clicks
     if (params.flag) {
       await periodicalsRepository.update(params.id, { clicks: periodicalInfo.clicks + 1 });
+    }
+    // if user login then record history
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.PERIODICAL,
+      });
     }
     return ResultData.ok({ data: result });
   }

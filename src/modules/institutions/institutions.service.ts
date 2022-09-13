@@ -8,6 +8,7 @@ import {
   institutionsRepository,
   fieldsRepository,
   usersRepository,
+  userHistoryRepository,
 } from '../repository/repository';
 import {
   GetInstitutionDetailDto,
@@ -29,7 +30,10 @@ export class InstitutionsService {
    * @param {GetInstitutionDetailDto} params
    * @returns {ResultData} 返回getInstitutionDetail信息
    */
-  async getInstitutionDetail(params: GetInstitutionDetailDto, user: SignInResInfo): Promise<ResultData> {
+  async getInstitutionDetail(
+    params: GetInstitutionDetailDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const institutionInfo = await institutionsRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
@@ -78,6 +82,14 @@ export class InstitutionsService {
     // update clicks
     if (params.flag) {
       await institutionsRepository.update(params.id, { clicks: institutionInfo.clicks + 1 });
+    }
+    // if user login then record history
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.INSTITUTION,
+      });
     }
     return ResultData.ok({ data: result });
   }
