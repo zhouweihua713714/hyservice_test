@@ -2,6 +2,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('terms_pkey', ['id'], { unique: true })
+@Index('index_gin_name', { synchronize: false })
+@Index('index_gin_keyword', { synchronize: false })
 @Entity('terms')
 export class Terms {
   @ApiProperty({ description: 'id' })

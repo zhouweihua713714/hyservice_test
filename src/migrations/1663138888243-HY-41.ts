@@ -8,8 +8,8 @@ export class HY411663138888243 implements MigrationInterface {
     await queryRunner.query(
       `COMMENT ON COLUMN "terms"."year" IS '批准时间(年份),冗余字段便于查询'`
     );
-    await queryRunner.query(`CREATE EXTENSION pg_trgm`);
-    await queryRunner.query(`CREATE EXTENSION btree_gin`);
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS pg_trgm`);
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS btree_gin`);
     await queryRunner.query(`CREATE INDEX "index_gin_name" ON "terms" USING gin (name)`);
     await queryRunner.query(`CREATE INDEX "index_gin_keyword" ON "terms" USING gin (keyword)`);
   }
