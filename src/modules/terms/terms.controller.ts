@@ -7,6 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
   GetTermDetailDto,
+  ListComplexTermDto,
   ListTermDto,
   OperateTermsDto,
   RemoveTermsDto,
@@ -15,6 +16,7 @@ import {
 import { TermsService } from './terms.service';
 import {
   GetTermDetailResult,
+  ListComplexTermResult,
   ListTermResult,
   OperateTermsResult,
   RemoveTermsResult,
@@ -28,7 +30,8 @@ import {
   ListTermResult,
   OperateTermsResult,
   RemoveTermsResult,
-  SaveTermResult
+  SaveTermResult,
+  ListComplexTermResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -82,5 +85,15 @@ export class TermsController {
   removeTerms(@Body() params: RemoveTermsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.removeTerms(params, user);
+  }
+
+  @Post('/listComplexTerm')
+  @HttpCode(200)
+  @ApiOperation({ summary: '项目列表(c端)' })
+  @ApiResult(ListComplexTermResult )
+  @AllowAnon()
+  listComplexTerm(@Body() params: ListComplexTermDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.listComplexTerm(params, user);
   }
 }

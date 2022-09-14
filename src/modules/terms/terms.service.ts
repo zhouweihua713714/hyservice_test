@@ -13,6 +13,7 @@ import {
 } from '../repository/repository';
 import {
   GetTermDetailDto,
+  ListComplexTermDto,
   ListTermDto,
   OperateTermsDto,
   RemoveTermsDto,
@@ -23,7 +24,7 @@ import {
   Content_Types_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { In, IsNull, Like } from 'typeorm';
+import { Brackets, In, IsNull, Like } from 'typeorm';
 
 export class TermsService {
   /**
@@ -79,7 +80,8 @@ export class TermsService {
    * @returns {ResultData} 返回saveTerm信息
    */
   async saveTerm(params: SaveTermDto, user: SignInResInfo): Promise<ResultData> {
-    const { id, status, termNumber, type, subject, columnId, startedAt, endedAt } = params;
+    const { id, status, termNumber, type, subject, columnId, startedAt, endedAt, authorizedAt } =
+      params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
@@ -124,6 +126,7 @@ export class TermsService {
     const result = await termsRepository.save({
       ownerId: user.id,
       updatedAt: id ? new Date() : undefined,
+      year: authorizedAt ? new Date(authorizedAt).getFullYear() : null,
       publishedAt: status && status === Content_Status_Enum.ACTIVE ? new Date() : null,
       ...params,
     });
@@ -284,5 +287,111 @@ export class TermsService {
     return ResultData.ok({
       data: { succeed: succeed, failed: ids.length - succeed },
     });
+  }
+  /**
+   * @description 项目列表(c端)
+   * @param {ListComplexTermDto} params
+   * @returns {ResultData} 返回listComplexTerm信息
+   */
+  async listComplexTerm(params: ListComplexTermDto, user: SignInResInfo): Promise<ResultData> {
+    const { keyword, unit, type, principal, authorizedAt, page, size } = params;
+    // get basic condition
+    let basicCondition =
+      'terms.enabled = true and terms.deletedAt is null and terms.status =:status';
+    if (unit) {
+      basicCondition += ' and terms.unit like :unit';
+    }
+    if (type) {
+      basicCondition += ' and terms.type = :type';
+    }
+    if (authorizedAt) {
+      basicCondition += ' and terms.year = :year';
+    }
+    if (principal) {
+      basicCondition += ' and terms.principal like :principal';
+    }
+    // get terms and count
+    let terms;
+    let count;
+    if (keyword) {
+      // get keywords
+      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      [terms, count] = await termsRepository
+        .createQueryBuilder('terms')
+        .select([
+          'terms.id',
+          'terms.name',
+          'terms.termNumber',
+          'terms.unit',
+          'terms.type',
+          'terms.authorizedAt',
+          'terms.unit',
+          'terms.principal',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          unit: `%${unit}%`,
+          type: type,
+          principal: `%${principal}%`,
+          year: new Date(authorizedAt).getFullYear(),
+        })
+        .andWhere(
+          new Brackets((qb) => {
+            qb.where('terms.name like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
+              'terms.keyword like any (ARRAY[:...keyword])',
+              { keyword: keywords }
+            );
+          })
+        )
+        .orderBy('terms.publishedAt', 'DESC')
+        .orderBy('terms.id', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    } else {
+      [terms, count] = await termsRepository
+        .createQueryBuilder('terms')
+        .select([
+          'terms.id',
+          'terms.name',
+          'terms.termNumber',
+          'terms.unit',
+          'terms.type',
+          'terms.authorizedAt',
+          'terms.unit',
+          'terms.principal',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          unit: `%${unit}%`,
+          type: type,
+          principal: `%${principal}%`,
+          year: new Date(authorizedAt).getFullYear(),
+        })
+        .orderBy('terms.publishedAt', 'DESC')
+        .orderBy('terms.id', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    }
+    // get termTypes
+    const termTypes = await termTypesRepository.find({
+      where: {
+        id: In(
+          terms.map((term) => {
+            return term.type;
+          })
+        ),
+      },
+    });
+    const result = terms.map((term) => {
+      return {
+        ...term,
+        typeName: _.find(termTypes, function (o) {
+          return o.id === term.type;
+        })?.name,
+      };
+    });
+    return ResultData.ok({ data: { terms: result, count: count } });
   }
 }

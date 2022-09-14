@@ -37,7 +37,8 @@ import {
   GetPolicyTypesResult,
   GetSubjectsResult,
   GetTermTypesResult,
-  SetColumnsTypeResult
+  SetColumnsTypeResult,
+  GetUniversitiesResult
 )
 @Controller('/configs')
 export class ConfigsController {

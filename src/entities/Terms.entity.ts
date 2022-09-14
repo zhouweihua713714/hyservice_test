@@ -2,6 +2,8 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('terms_pkey', ['id'], { unique: true })
+@Index('index_gin_name', { synchronize: false })
+@Index('index_gin_keyword', { synchronize: false })
 @Entity('terms')
 export class Terms {
   @ApiProperty({ description: 'id' })
@@ -52,6 +54,18 @@ export class Terms {
     comment: '批准时间(年份)',
   })
   authorizedAt: Date | null;
+
+  @ApiPropertyOptional({
+    description: '批准时间(年份),冗余字段便于查询',
+    type: Number,
+    nullable: true,
+  })
+  @Column('integer', {
+    name: 'year',
+    nullable: true,
+    comment: '批准时间(年份),冗余字段便于查询',
+  })
+  year: number | null;
 
   @ApiProperty({ description: '项目名称' })
   @Column('character varying', { name: 'name', length: 50, comment: '项目名称' })

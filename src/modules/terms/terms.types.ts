@@ -4,7 +4,6 @@ import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 export class SaveTermResult {
   @ApiProperty({ description: '主键id' })
   id: string;
-
 }
 export class GetTermDetailResult extends PickType(Terms, [
   'id',
@@ -47,7 +46,7 @@ export class ListTermInfo extends PickType(Terms, [
   'columnId',
   'status',
   'updatedAt',
-  'clicks'
+  'clicks',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -73,3 +72,24 @@ export class RemoveTermsResult extends PickType(OperateTermsResult, [
   'succeed',
   'failed',
 ] as const) {}
+
+export class ListComplexTermInfo extends PickType(Terms, [
+  'id',
+  'name',
+  'type',
+  'principal',
+  'unit',
+  'authorizedAt',
+  'termNumber',
+] as const) {
+  @ApiProperty({ description: '类型名称' })
+  typeName: string;
+}
+
+export class ListComplexTermResult {
+  @ApiProperty({ description: '项目数组', type: ListComplexTermInfo, isArray: true })
+  terms: ListComplexTermInfo[];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
+}

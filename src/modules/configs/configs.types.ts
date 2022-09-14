@@ -78,7 +78,7 @@ export class GetTermTypesResult {
 
 export class GetUniversitiesResult {
   @ApiProperty({ description: '学校数组', type: Universities, isArray: true })
-  termTypes: Universities[];
+  universities: Universities[];
 }
 
 
