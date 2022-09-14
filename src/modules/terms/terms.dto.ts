@@ -7,6 +7,7 @@ import {
   IsDateString,
   IsEnum,
   IsInt,
+  IsNumber,
   IsOptional,
   IsString,
   Length,
@@ -151,4 +152,33 @@ export class RemoveTermsDto {
   @ApiProperty({ description: 'ids 数组' })
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];
+}
+
+export class ListComplexTermDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
+  @ApiPropertyOptional({
+    description: '关键词,多标签需要分号隔开才能进行分词在进行模糊搜索 如果为空则不传或者传null',
+  })
+  @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  @IsOptional()
+  keyword: string;
+
+  @ApiPropertyOptional({ description: '项目类型' })
+  @IsString({ message: '项目类型type 类型错误, 正确类型 string' })
+  @IsOptional()
+  type: string;
+
+  @ApiPropertyOptional({ description: '批准年份' })
+  @IsDateString({ message: 'year 类型错误, 正确类型 number' })
+  @IsOptional()
+  authorizedAt: Date;
+
+  @ApiPropertyOptional({ description: '依托单位,模糊搜索' })
+  @IsString({ message: 'unit类型错误, 正确类型 string' })
+  @IsOptional()
+  unit: string;
+
+  @ApiPropertyOptional({ description: '项目负责人,模糊搜索' })
+  @IsString({ message: 'principal类型错误, 正确类型 string' })
+  @IsOptional()
+  principal: string;
 }

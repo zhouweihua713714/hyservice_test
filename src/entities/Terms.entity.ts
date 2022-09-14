@@ -53,6 +53,18 @@ export class Terms {
   })
   authorizedAt: Date | null;
 
+  @ApiPropertyOptional({
+    description: '批准时间(年份),冗余字段便于查询',
+    type: Number,
+    nullable: true,
+  })
+  @Column('integer', {
+    name: 'year',
+    nullable: true,
+    comment: '批准时间(年份),冗余字段便于查询',
+  })
+  year: number | null;
+
   @ApiProperty({ description: '项目名称' })
   @Column('character varying', { name: 'name', length: 50, comment: '项目名称' })
   name: string;
