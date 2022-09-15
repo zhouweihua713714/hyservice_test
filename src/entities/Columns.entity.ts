@@ -16,7 +16,7 @@ export class Columns {
   @Column('character varying', { name: 'parent_id', length: 128, comment: '父级id' })
   parentId: string;
 
-  @ApiProperty({ description: '排序', nullable: true })
+  @ApiProperty({ description: '排序', nullable: true,type:Number })
   @Column('integer', { name: 'sequence_number', comment: '排序', nullable: true })
   sequenceNumber: number | null;
 

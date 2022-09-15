@@ -14,6 +14,7 @@ import {
 } from './treatises.dto';
 import { TreatisesService } from './treatises.service';
 import {
+  GetArticleCountResult,
   GetTreatiseDetailResult,
   ListTreatiseResult,
   OperateTreatisesResult,
@@ -28,11 +29,12 @@ import {
   ListTreatiseResult,
   OperateTreatisesResult,
   RemoveTreatisesResult,
-  SaveTreatiseResult
+  SaveTreatiseResult,
+  GetArticleCountResult
 )
 @Controller('/treatises')
 export class TreatisesController {
-  constructor(private readonly termsService: TreatisesService) {}
+  constructor(private readonly treatisesService: TreatisesService) {}
 
   @Get('/getTreatiseDetail')
   @HttpCode(200)
@@ -41,7 +43,7 @@ export class TreatisesController {
   @AllowAnon()
   getTreatiseDetail(@Query() params: GetTreatiseDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.getTreatiseDetail(params,user);
+    return this.treatisesService.getTreatiseDetail(params,user);
   }
 
   @Post('/saveTreatise')
@@ -51,7 +53,7 @@ export class TreatisesController {
   @ApiBearerAuth()
   saveTreatise(@Body() params: SaveTreatiseDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.saveTreatise(params, user);
+    return this.treatisesService.saveTreatise(params, user);
   }
 
   @Get('/listTreatise')
@@ -61,7 +63,7 @@ export class TreatisesController {
   @ApiBearerAuth()
   listTreatises(@Query() params: ListTreatiseDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.listTreatise(params, user);
+    return this.treatisesService.listTreatise(params, user);
   }
 
   @Post('/operateTreatises')
@@ -71,7 +73,7 @@ export class TreatisesController {
   @ApiBearerAuth()
   operateTreatises(@Body() params: OperateTreatisesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.operateTreatises(params, user);
+    return this.treatisesService.operateTreatises(params, user);
   }
 
   @Post('/removeTreatises')
@@ -81,6 +83,16 @@ export class TreatisesController {
   @ApiBearerAuth()
   removeTreatises(@Body() params: RemoveTreatisesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.removeTreatises(params, user);
+    return this.treatisesService.removeTreatises(params, user);
+  }
+
+  @Get('/getArticleCount')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取论文分类下的文章数量' })
+  @ApiResult(GetArticleCountResult)
+  @AllowAnon()
+  getArticleCount(@Query() params: any, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatisesService.getArticleCount(params, user);
   }
 }
