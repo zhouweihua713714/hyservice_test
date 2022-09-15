@@ -1,3 +1,4 @@
+import { Columns } from '@/entities/Columns.entity';
 import { Treatises } from '@/entities/Treatises.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
@@ -45,7 +46,7 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
   'periodicalAbbreviation',
   'releasedAt',
   'doi',
-  'studyField'
+  'studyField',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -65,7 +66,7 @@ export class ListTreatiseInfo extends PickType(Treatises, [
   'status',
   'updatedAt',
   'title',
-  'clicks'
+  'clicks',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -91,3 +92,20 @@ export class RemoveTreatisesResult extends PickType(OperateTreatisesResult, [
   'succeed',
   'failed',
 ] as const) {}
+export class ArticleCountInfo extends PickType(Columns, [
+  'id',
+  'name',
+  'sequenceNumber',
+  'parentId',
+] as const) {
+  @ApiProperty({ description: '文章数量' })
+  number: number;
+
+  @ApiProperty({ description: '最新更新时间' })
+  updatedAt: Date;
+}
+
+export class GetArticleCountResult {
+  @ApiProperty({ description: '论文下栏目的文章数量数组', type: ArticleCountInfo, isArray: true })
+  columns: ArticleCountInfo[];
+}

@@ -320,4 +320,51 @@ export class TreatisesService {
       data: { succeed: succeed, failed: ids.length - succeed },
     });
   }
+
+  /**
+   * @description 获取论文分类下的文章数量
+   * @param {} params 获取论文分类下的文章数量的相关参数
+   * @returns {ResultData} 返回getArticleCount信息
+   */
+  async getArticleCount(params: any, user: SignInResInfo): Promise<ResultData> {
+    //get columns
+    const columns = await columnsRepository.find({
+      where: { parentId: 'column_02', isHide: 0 },
+      select: ['id', 'name', 'sequenceNumber','parentId'],
+    });
+    // get article count and latest date
+    const treatises = await treatisesRepository
+      .createQueryBuilder('treatises')
+      .select('COUNT(treatises.id)', 'count')
+      .addSelect('treatises.columnId', 'columnId')
+      .addSelect(
+        'MAX(floor(EXTRACT(epoch FROM CAST(treatises.updatedAt AS TIMESTAMP WITH TIME ZONE))*1000))',
+        'updatedAt'
+      )
+      .where(
+        'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status',
+        {
+          status: Content_Status_Enum.ACTIVE,
+        }
+      )
+      .groupBy('treatises.columnId')
+      .getRawMany();
+    //get return data
+    const result = columns.map((column) => {
+      const count = _.find(treatises, function (o) {
+        return o.columnId === column.id;
+      })?.count;
+      const updatedAt = _.find(treatises, function (o) {
+        return o.columnId === column.id;
+      })?.updatedAt;
+      return {
+        ...column,
+        count: count ? Number(count) : 0,
+        updatedAt: updatedAt ? new Date(Number(updatedAt)) : null,
+      };
+    });
+    return ResultData.ok({
+      data: { columns: result },
+    });
+  }
 }
