@@ -5,7 +5,7 @@ import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import { universitiesRepository, usersRepository } from '../repository/repository';
 import { ModifyUserInfoDto } from './users.dto';
-import { User_Status_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { User_Status_Enum } from '@/common/enums/common.enum';
 
 export class UsersService {
   /**

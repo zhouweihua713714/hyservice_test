@@ -34,6 +34,7 @@ import { Conferences } from '@/entities/Conferences.entity';
 import { Fields } from '@/entities/Fields.entity';
 import { Institutions } from '@/entities/Institutions.entity';
 import { Universities } from '@/entities/Universities.entity';
+import { UserHistory } from '@/entities/UserHistory.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -62,6 +63,7 @@ export class DBTester<T = undefined> {
   institutionsRepository: Repository<Institutions>;
   fieldsRepository: Repository<Fields>;
   universitiesRepository: Repository<Universities>;
+  userHistoryRepository: Repository<UserHistory>;
   config: ConfigService;
   server: any;
 
@@ -103,20 +105,45 @@ export class DBTester<T = undefined> {
       );
       this.subjectsRepository = this.module.get<Repository<Subjects>>(getRepositoryToken(Subjects));
       this.termsRepository = this.module.get<Repository<Terms>>(getRepositoryToken(Terms));
-      this.languagesRepository = this.module.get<Repository<Languages>>(getRepositoryToken(Languages));
-      this.periodicalPeriodsRepository = this.module.get<Repository<PeriodicalPeriods>>(getRepositoryToken(PeriodicalPeriods));
-      this.periodicalsRepository = this.module.get<Repository<Periodicals>>(getRepositoryToken(Periodicals));
-      this.policyTypesRepository = this.module.get<Repository<PolicyTypes>>(getRepositoryToken(PolicyTypes));
+      this.languagesRepository = this.module.get<Repository<Languages>>(
+        getRepositoryToken(Languages)
+      );
+      this.periodicalPeriodsRepository = this.module.get<Repository<PeriodicalPeriods>>(
+        getRepositoryToken(PeriodicalPeriods)
+      );
+      this.periodicalsRepository = this.module.get<Repository<Periodicals>>(
+        getRepositoryToken(Periodicals)
+      );
+      this.policyTypesRepository = this.module.get<Repository<PolicyTypes>>(
+        getRepositoryToken(PolicyTypes)
+      );
       this.policiesRepository = this.module.get<Repository<Policies>>(getRepositoryToken(Policies));
-      this.articleTypesRepository =this.module.get<Repository<ArticleTypes>>(getRepositoryToken(ArticleTypes));
-      this.treatisesRepository =this.module.get<Repository<Treatises>>(getRepositoryToken(Treatises));
-      this.patentsRepository =this.module.get<Repository<Patents>>(getRepositoryToken(Patents));
-      this.patentTypesRepository =this.module.get<Repository<PatentTypes>>(getRepositoryToken(PatentTypes));
-      this.patentValidTypesRepository =this.module.get<Repository<PatentValidTypes>>(getRepositoryToken(PatentValidTypes));
-      this.conferencesRepository =this.module.get<Repository<Conferences>>(getRepositoryToken(Conferences));
-      this.fieldsRepository =this.module.get<Repository<Fields>>(getRepositoryToken(Fields));
-      this.institutionsRepository =this.module.get<Repository<Institutions>>(getRepositoryToken(Institutions));
-      this.universitiesRepository =this.module.get<Repository<Universities>>(getRepositoryToken(Universities));
+      this.articleTypesRepository = this.module.get<Repository<ArticleTypes>>(
+        getRepositoryToken(ArticleTypes)
+      );
+      this.treatisesRepository = this.module.get<Repository<Treatises>>(
+        getRepositoryToken(Treatises)
+      );
+      this.patentsRepository = this.module.get<Repository<Patents>>(getRepositoryToken(Patents));
+      this.patentTypesRepository = this.module.get<Repository<PatentTypes>>(
+        getRepositoryToken(PatentTypes)
+      );
+      this.patentValidTypesRepository = this.module.get<Repository<PatentValidTypes>>(
+        getRepositoryToken(PatentValidTypes)
+      );
+      this.conferencesRepository = this.module.get<Repository<Conferences>>(
+        getRepositoryToken(Conferences)
+      );
+      this.fieldsRepository = this.module.get<Repository<Fields>>(getRepositoryToken(Fields));
+      this.institutionsRepository = this.module.get<Repository<Institutions>>(
+        getRepositoryToken(Institutions)
+      );
+      this.universitiesRepository = this.module.get<Repository<Universities>>(
+        getRepositoryToken(Universities)
+      );
+      this.userHistoryRepository = this.module.get<Repository<UserHistory>>(
+        getRepositoryToken(UserHistory)
+      );
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
 
