@@ -5,15 +5,21 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
+import { ListHistoryDto } from './userHistory/userHistory.dto';
+import { UserHistoryService } from './userHistory/userHistory.service';
+import { ListHistoryResult } from './userHistory/userHistory.types';
 import { ModifyUserInfoDto } from './users.dto';
 import { UsersService } from './users.service';
 import { GetUsersDetailResult } from './users.types';
 
 @ApiTags('我的空间-用户')
-@ApiExtraModels(ResultData, GetUsersDetailResult)
+@ApiExtraModels(ResultData, GetUsersDetailResult, ListHistoryResult)
 @Controller('/users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly userHistoryService: UserHistoryService
+  ) {}
 
   @Get('/getUserDetail')
   @HttpCode(200)
@@ -33,5 +39,15 @@ export class UsersController {
   modifyUserInfo(@Body() params: ModifyUserInfoDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.usersService.modifyUserInfo(params, user);
+  }
+
+  @Get('/listHistory')
+  @HttpCode(200)
+  @ApiOperation({ summary: '用户浏览历史' })
+  @ApiResult(ListHistoryResult)
+  @ApiBearerAuth()
+  listHistory(@Query() params: ListHistoryDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.userHistoryService.listHistory(params, user);
   }
 }

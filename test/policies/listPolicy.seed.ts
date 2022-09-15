@@ -10,21 +10,21 @@ import {
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
-import { TermTypes } from '@/entities/TermTypes.entity';
-import { Terms } from '@/entities/Terms.entity';
 import { constant } from '@/common/utils/constant';
+import { Policies } from '@/entities/Policies.entity';
+import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
 let subjects: Subjects[];
-let policyType: TermTypes;
-let policies: Terms[];
+let policyType: PolicyTypes;
+let policies: Policies[];
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
-  policies: Terms[];
+  policies: Policies[];
   columns: Columns[];
 };
 
