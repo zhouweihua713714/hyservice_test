@@ -44,7 +44,7 @@ export class AuthService {
     });
     // 用户不存在
     if (!loginInfo || !userInfo) {
-      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_FOUND_ERROR });
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_REGISTER_ERROR });
     }
     // 用户未激活
     if (userInfo.status === User_Status_Enum.Disabled) {
@@ -52,7 +52,7 @@ export class AuthService {
     }
     // 密码错误
     if (!bcompare(password, loginInfo.token)) {
-      return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_FOUND_ERROR });
+      return ResultData.fail({ ...ErrorCode.AUTH.USER_PASSWORD_ERROR });
       // return ResultData.fail({ ...ErrorCode.AUTH.PASSWORD_ERROR });
     }
     const SignInResInfo: SignInResInfo | undefined = {

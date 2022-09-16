@@ -109,6 +109,14 @@ export const ErrorCode = {
       code: 10016,
       message: '当前用户无权限操作',
     },
+    USER_NOT_REGISTER_ERROR: {
+      code: 10017,
+      message: '手机号未注册,请注册后再登录',
+    },
+    USER_PASSWORD_ERROR: {
+      code: 10018,
+      message: '密码错误',
+    },
   },
   // 2xxxx
   CONTENT_MANAGEMENT: {
@@ -164,15 +172,15 @@ export const ErrorCode = {
       code: 20013,
       message: '当前出台时间不为空,picker必填',
     },
-    VALID_TYPE_NOT_FOUND_ERROR:{
+    VALID_TYPE_NOT_FOUND_ERROR: {
       code: 20014,
       message: '当前专利有效性类型不存在或已经被删除',
     },
-    FILED_NOT_FOUND_ERROR:{
+    FILED_NOT_FOUND_ERROR: {
       code: 20015,
       message: '当前主领域不存在或已经被删除',
     },
-    MINOR_FILED_NOT_FOUND_ERROR:{
+    MINOR_FILED_NOT_FOUND_ERROR: {
       code: 20016,
       message: '当前子领域不存在或已经被删除',
     },
@@ -193,10 +201,10 @@ export const ErrorCode = {
     },
   },
   // 4xxxx
-  USERS:{
-    USER_NOT_PERMITTED_ERROR:{
+  USERS: {
+    USER_NOT_PERMITTED_ERROR: {
       code: 40001,
       message: '当前用户无权限操作',
-    }
-  }
+    },
+  },
 };

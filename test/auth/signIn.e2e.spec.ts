@@ -14,7 +14,7 @@ describe('test/auth/signIn.e2e.spec.ts', () => {
       .send({ mobile: '13900000001', password: 'error password' });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
-    expect(result.body.code).toBe(10014);
+    expect(result.body.code).toBe(10017);
   });
   test('should not POST /auth/signIn with incorrect password', async () => {
     // make request
@@ -23,7 +23,7 @@ describe('test/auth/signIn.e2e.spec.ts', () => {
       .send({ mobile, password: 'error password' });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
-    expect(result.body.code).toBe(10014);
+    expect(result.body.code).toBe(10018);
   });
   test('should POST /auth/signIn by correct mobile and password', async () => {
     // make request
