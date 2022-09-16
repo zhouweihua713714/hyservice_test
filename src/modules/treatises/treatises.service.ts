@@ -13,6 +13,7 @@ import {
 } from '../repository/repository';
 import {
   GetTreatiseDetailDto,
+  ListComplexTreatiseDto,
   ListTreatiseDto,
   OperateTreatisesDto,
   RemoveTreatisesDto,
@@ -24,7 +25,7 @@ import {
   Content_Types_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { In, IsNull, Like } from 'typeorm';
+import { Brackets, In, IsNull, Like } from 'typeorm';
 
 export class TreatisesService {
   /**
@@ -330,7 +331,7 @@ export class TreatisesService {
     //get columns
     const columns = await columnsRepository.find({
       where: { parentId: 'column_02', isHide: 0 },
-      select: ['id', 'name', 'sequenceNumber','parentId'],
+      select: ['id', 'name', 'sequenceNumber', 'parentId'],
     });
     // get article count and latest date
     const treatises = await treatisesRepository
@@ -365,6 +366,103 @@ export class TreatisesService {
     });
     return ResultData.ok({
       data: { columns: result },
+    });
+  }
+  /**
+   * @description 论文列表(c端)
+   * @param {} params 论文列表(c端)的相关参数
+   * @returns {ResultData} 返回listComplexTreatise信息
+   */
+  async listComplexTreatise(
+    params: ListComplexTreatiseDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { keyword, columnId, deliveryAt, page, size } = params;
+    // get basic condition
+    let basicCondition =
+      'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status';
+    if (deliveryAt) {
+      basicCondition += ' and treatises.year = :year';
+    }
+    if (columnId) {
+      basicCondition += ' and treatises.columnId = :columnId';
+    }
+    // get treatises and count
+    let treatises;
+    let count;
+    if (keyword) {
+      // get keywords
+      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      console.log(keywords);
+      [treatises, count] = await treatisesRepository
+        .createQueryBuilder('treatises')
+        .select([
+          'treatises.id',
+          'treatises.title',
+          'treatises.deliveryAt',
+          'treatises.author',
+          'treatises.name',
+          'treatises.abstract',
+          'treatises.keyword',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId,
+          year: new Date(deliveryAt).getFullYear(),
+        })
+        .andWhere(
+          new Brackets((qb) => {
+            qb.where('treatises.title like any (ARRAY[:...keyword])', { keyword: keywords })
+              .orWhere('treatises.keyword like any (ARRAY[:...keyword])', { keyword: keywords })
+              .orWhere('treatises.abstract like any (ARRAY[:...keyword])', { keyword: keywords });
+          })
+        )
+        .orderBy('treatises.deliveryAt', 'DESC')
+        .orderBy('treatises.publishedAt', 'DESC')
+        .orderBy('treatises.id', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    } else {
+      [treatises, count] = await treatisesRepository
+        .createQueryBuilder('treatises')
+        .select([
+          'treatises.id',
+          'treatises.title',
+          'treatises.deliveryAt',
+          'treatises.author',
+          'treatises.name',
+          'treatises.abstract',
+          'treatises.keyword',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId,
+          year: new Date(deliveryAt).getFullYear(),
+        })
+        .orderBy('treatises.deliveryAt', 'DESC')
+        .orderBy('treatises.publishedAt', 'DESC')
+        .orderBy('treatises.id', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    }
+
+    // 用户收藏,标签置空
+    if (count === 0) {
+      return ResultData.ok({
+        data: { treatises: [], count: 0 },
+      });
+    }
+    const result = treatises.map((treatise) => {
+      return {
+        ...treatise,
+        label: '标签预置',
+        isFavorite: 0,
+      };
+    });
+    return ResultData.ok({
+      data: { treatises: result, count: count },
     });
   }
 }

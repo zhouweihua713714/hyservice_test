@@ -109,3 +109,26 @@ export class GetArticleCountResult {
   @ApiProperty({ description: '论文下栏目的文章数量数组', type: ArticleCountInfo, isArray: true })
   columns: ArticleCountInfo[];
 }
+
+export class ListComplexTreatiseInfo extends PickType(Treatises, [
+  'id',
+  'title',
+  'deliveryAt',
+  'name',
+  'abstract',
+  'keyword',
+] as const) {
+  @ApiProperty({ description: '标签,字段先留着还没做' })
+  label: string;
+
+  @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0) 字段先留着还没做' })
+  isFavorite: number;
+}
+
+export class ListComplexTreatiseResult {
+  @ApiProperty({ description: '论文数组', type: ListComplexTreatiseInfo , isArray: true })
+  treatises: ListComplexTreatiseInfo [];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
+}
