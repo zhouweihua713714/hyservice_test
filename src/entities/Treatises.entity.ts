@@ -2,6 +2,9 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Index('treatises_pkey', ['id'], { unique: true })
+@Index('index_gin_treatise_title', { synchronize: false })
+@Index('index_gin_treatise_keyword', { synchronize: false })
+@Index('index_gin_treatise_abstract', { synchronize: false })
 @Entity('treatises')
 export class Treatises {
   @ApiProperty({ description: 'id' })
@@ -19,6 +22,18 @@ export class Treatises {
     comment: '发表时间,单位:年',
   })
   deliveryAt: Date | null;
+
+  @ApiPropertyOptional({
+    description: '发表时间,冗余字段便于查询',
+    type: Number,
+    nullable: true,
+  })
+  @Column('integer', {
+    name: 'year',
+    nullable: true,
+    comment: '发表时间,冗余字段便于查询',
+  })
+  year: number | null;
 
   @ApiPropertyOptional({ description: '科研人员所属国家或地区', type: String, nullable: true })
   @Column('text', {
@@ -170,7 +185,7 @@ export class Treatises {
   @Column('text', { name: 'url', nullable: true, comment: '论文链接' })
   url: string | null;
 
-  @ApiPropertyOptional({ description: '期刊/会议名' })
+  @ApiPropertyOptional({ description: '期刊/会议名',type: String, nullable: true })
   @Column('text', {
     name: 'name',
     comment: '期刊/会议名',
@@ -244,6 +259,7 @@ export class Treatises {
     nullable: true,
     comment: '栏目id,期刊论文只能选择期刊相关的栏目且不为空',
   })
+  @Index()
   columnId: string;
 
   // @ApiPropertyOptional({ description: '会议id,会议论文不为空' })

@@ -7,6 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
   GetTreatiseDetailDto,
+  ListComplexTreatiseDto,
   ListTreatiseDto,
   OperateTreatisesDto,
   RemoveTreatisesDto,
@@ -16,6 +17,7 @@ import { TreatisesService } from './treatises.service';
 import {
   GetArticleCountResult,
   GetTreatiseDetailResult,
+  ListComplexTreatiseResult,
   ListTreatiseResult,
   OperateTreatisesResult,
   RemoveTreatisesResult,
@@ -30,7 +32,8 @@ import {
   OperateTreatisesResult,
   RemoveTreatisesResult,
   SaveTreatiseResult,
-  GetArticleCountResult
+  GetArticleCountResult,
+  ListComplexTreatiseResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -94,5 +97,15 @@ export class TreatisesController {
   getArticleCount(@Query() params: any, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatisesService.getArticleCount(params, user);
+  }
+
+  @Post('/listComplexTreatise')
+  @HttpCode(200)
+  @ApiOperation({ summary: '论文列表(c端)' })
+  @ApiResult(ListComplexTreatiseResult)
+  @ApiBearerAuth()
+  listComplexTreatise(@Body() params: ListComplexTreatiseDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatisesService.listComplexTreatise(params, user);
   }
 }
