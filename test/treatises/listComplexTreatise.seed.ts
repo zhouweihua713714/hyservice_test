@@ -2,26 +2,15 @@ import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
-import {
-  Channels_Enum,
-  Content_Status_Enum,
-  Content_Types_Enum,
-  User_Types_Enum,
-} from '@/common/enums/common.enum';
+import { Content_Status_Enum, Labels_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { Subjects } from '@/entities/Subjects.entity';
-import { Languages } from '@/entities/Languages.entity';
-import { ArticleTypes } from '@/entities/ArticleTypes.entity';
 import { Treatises } from '@/entities/Treatises.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
-let subjects: Subjects[];
 let treatises: Treatises[];
-let articleType: ArticleTypes;
-let language: Languages;
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
@@ -93,10 +82,49 @@ export const seed: TesterSeed<DataType> = {
         publishedAt: new Date(new Date().getTime() - 40000),
       },
     ]);
+    // user favorites
+    await tester.userFavoriteTreatisesRepository.save(
+      treatises.map((data) => {
+        return {
+          userId: user.user.id,
+          treatise: {
+            id: data.id,
+          },
+        };
+      })
+    );
+    // user label treatises
+    await tester.userLabelTreatisesRepository.save([
+      ...treatises.map((data) => {
+        return {
+          userId: user.user.id,
+          treatise: {
+            id: data.id,
+          },
+          label: Labels_Enum.Label_001,
+        };
+      }),
+      {
+        userId: '233',
+        treatise: {
+          id: treatises[0].id,
+        },
+        label: Labels_Enum.Label_001,
+      },
+      {
+        userId: '234',
+        treatise: {
+          id: treatises[0].id,
+        },
+        label: Labels_Enum.Label_002,
+      },
+    ]);
     return { user, normalUser, columns, treatises };
   },
   down: async (tester) => {
     await tester.treatisesRepository.delete({});
+    await tester.userFavoriteTreatisesRepository.delete({});
+    await tester.userLabelTreatisesRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.subjectsRepository.delete({});
     await tester.languagesRepository.delete({});

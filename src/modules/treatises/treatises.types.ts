@@ -7,6 +7,13 @@ export class SaveTreatiseResult {
   @ApiProperty({ description: '主键id' })
   id: string;
 }
+export class LabelCountInfo {
+  @ApiProperty({ description: '标签id' })
+  id: string;
+  @ApiProperty({ description: '标记数量' })
+  count: number;
+}
+
 export class GetTreatiseDetailResult extends PickType(Treatises, [
   'id',
   'status',
@@ -59,6 +66,13 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
 
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
+
+  @ApiPropertyOptional({
+    description: '标签统计数,仅在C端请求进行统计',
+    type: LabelCountInfo,
+    isArray: true,
+  })
+  labels: LabelCountInfo[];
 }
 export class ListTreatiseInfo extends PickType(Treatises, [
   'id',
@@ -126,8 +140,8 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
 }
 
 export class ListComplexTreatiseResult {
-  @ApiProperty({ description: '论文数组', type: ListComplexTreatiseInfo , isArray: true })
-  treatises: ListComplexTreatiseInfo [];
+  @ApiProperty({ description: '论文数组', type: ListComplexTreatiseInfo, isArray: true })
+  treatises: ListComplexTreatiseInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;

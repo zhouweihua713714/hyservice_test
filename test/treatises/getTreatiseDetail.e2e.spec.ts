@@ -20,7 +20,7 @@ describe('/treatises/getTreatiseDetail', () => {
     // make request
     const result = await request(tester.server)
       .get('/treatises/getTreatiseDetail')
-      .query({ id: tester.data.treatiseInfo.id });
+      .query({ id: tester.data.treatiseInfo.id, flag: true });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
