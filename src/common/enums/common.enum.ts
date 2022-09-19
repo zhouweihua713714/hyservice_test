@@ -93,3 +93,21 @@ export enum Channels_Enum {
   /** 书*/
   WAY_004 = 'way_004',
 }
+
+export enum Labels_Enum {
+  /** 强烈推荐 */
+  Label_001 = 'label_001',
+  /** 写得好 */
+  Label_002 = 'label_002',
+  /** 有深度 */
+  Label_003 = 'label_003',
+  /** 很实用 */
+  Label_004 = 'label_004',
+}
+
+export enum Operate_types_Enum {
+  /** 加入 */
+  Add = 'add',
+  /** 移除 */
+  Remove = 'remove',
+}

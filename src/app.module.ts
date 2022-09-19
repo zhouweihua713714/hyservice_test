@@ -44,6 +44,8 @@ import { InstitutionsModule } from './modules/institutions/institutions.module';
 import { Universities } from './entities/Universities.entity';
 import { UsersModule } from './modules/users/users.module';
 import { UserHistory } from './entities/UserHistory.entity';
+import { UserFavoriteTreatises } from './entities/UserFavoriteTreatises.entity';
+import { UserLabelTreatises } from './entities/UserLabelTreatises.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -99,6 +101,8 @@ import { UserHistory } from './entities/UserHistory.entity';
       Institutions,
       Universities,
       UserHistory,
+      UserFavoriteTreatises,
+      UserLabelTreatises,
     ]),
     HomeModule,
     AuthModule,
