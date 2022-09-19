@@ -46,7 +46,7 @@ describe('/treatises/listComplexTreatise', () => {
     expect(result.body.data.treatises.length).toBe(2);
     expect(result.body.data.count).toBe(3);
   });
-  test.only('should POST /treatises/listComplexTreatise with all condition', async () => {
+  test('should POST /treatises/listComplexTreatise with all condition', async () => {
     // make request
     const result = await request(tester.server)
       .post('/treatises/listComplexTreatise')
