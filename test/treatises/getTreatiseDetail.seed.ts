@@ -2,7 +2,7 @@ import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
-import { Channels_Enum, Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { Channels_Enum, Content_Types_Enum, Labels_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { Languages } from '@/entities/Languages.entity';
@@ -86,10 +86,35 @@ export const seed: TesterSeed<DataType> = {
       studyField: '研究方向',
       ownerId: user.user.id,
     });
+    // user label treatises
+    await tester.userLabelTreatisesRepository.save([
+      {
+        userId: user.user.id,
+        treatise: {
+          id: treatiseInfo.id,
+        },
+        label: Labels_Enum.Label_001,
+      },
+      {
+        userId: '233',
+        treatise: {
+          id: treatiseInfo.id,
+        },
+        label: Labels_Enum.Label_001,
+      },
+      {
+        userId: '234',
+        treatise: {
+          id: treatiseInfo.id,
+        },
+        label: Labels_Enum.Label_002,
+      },
+    ]);
     return { user, treatiseInfo };
   },
   down: async (tester) => {
     await tester.treatisesRepository.delete({});
+    await tester.userFavoriteTreatisesRepository.delete({});
     await tester.articleTypesRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.subjectsRepository.delete({});

@@ -46,7 +46,7 @@ describe('/treatises/listComplexTreatise', () => {
     expect(result.body.data.treatises.length).toBe(2);
     expect(result.body.data.count).toBe(3);
   });
-  test('should POST /treatises/listComplexTreatise with all condition', async () => {
+  test.only('should POST /treatises/listComplexTreatise with all condition', async () => {
     // make request
     const result = await request(tester.server)
       .post('/treatises/listComplexTreatise')
@@ -54,7 +54,7 @@ describe('/treatises/listComplexTreatise', () => {
       .send({
         keyword: '论文匹配;关键;摘要匹配',
         columnId: tester.data.columns[1].id,
-        deliveryAt:new Date(),
+        deliveryAt: new Date(),
         page: 1,
         size: 2,
       });

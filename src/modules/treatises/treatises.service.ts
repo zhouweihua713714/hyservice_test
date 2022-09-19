@@ -8,7 +8,9 @@ import {
   columnsRepository,
   languagesRepository,
   treatisesRepository,
+  userFavoriteTreatisesRepository,
   userHistoryRepository,
+  userLabelTreatisesRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -23,6 +25,7 @@ import {
   Channels_Enum,
   Content_Status_Enum,
   Content_Types_Enum,
+  Labels_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like } from 'typeorm';
@@ -62,6 +65,39 @@ export class TreatisesService {
         type: Like(`%${Content_Types_Enum.TREATISE}%`),
       });
     }
+    // update clicks
+    let labelCount: { id: string; count: number }[] = [
+      { id: Labels_Enum.Label_001, count: 0 },
+      { id: Labels_Enum.Label_002, count: 0 },
+      { id: Labels_Enum.Label_003, count: 0 },
+      { id: Labels_Enum.Label_004, count: 0 },
+    ];
+    if (params.flag) {
+      await treatisesRepository.update(params.id, { clicks: treatiseInfo.clicks + 1 });
+      const userLabels = await userLabelTreatisesRepository
+        .createQueryBuilder('userLabelTreatises')
+        .select('COUNT(userLabelTreatises.treatiseId)', 'count')
+        .addSelect('userLabelTreatises.label', 'label')
+        .where('userLabelTreatises.treatiseId =:id', {
+          id: params.id,
+        })
+        .groupBy('userLabelTreatises.label')
+        .getRawMany();
+      labelCount = labelCount.map((data) => {
+        return {
+          id: data.id,
+          count: _.find(userLabels, function (o) {
+            return o.label === data.id;
+          })
+            ? Number(
+                _.find(userLabels, function (o) {
+                  return o.label === data.id;
+                }).count
+              )
+            : 0,
+        };
+      });
+    }
     const result = {
       languageName: languageInfo
         ? _.join(
@@ -81,12 +117,10 @@ export class TreatisesService {
           )
         : null,
       owner: userInfo ? userInfo.mobile : null,
+      labels: labelCount,
       ...treatiseInfo,
     };
-    // update clicks
-    if (params.flag) {
-      await treatisesRepository.update(params.id, { clicks: treatiseInfo.clicks + 1 });
-    }
+
     // if user login then record history
     if (params.flag && user) {
       await userHistoryRepository.save({
@@ -393,7 +427,6 @@ export class TreatisesService {
     if (keyword) {
       // get keywords
       const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
-      console.log(keywords);
       [treatises, count] = await treatisesRepository
         .createQueryBuilder('treatises')
         .select([
@@ -447,18 +480,68 @@ export class TreatisesService {
         .take(size)
         .getManyAndCount();
     }
-
-    // 用户收藏,标签置空
     if (count === 0) {
       return ResultData.ok({
         data: { treatises: [], count: 0 },
       });
     }
+    // get user favorites labels
+    let userFavorites;
+    let userLabels;
+    if (user) {
+      // user favorites
+      userFavorites = await userFavoriteTreatisesRepository.find({
+        where: {
+          userId: user.id,
+          treatise: {
+            id: In(
+              treatises.map((treatise) => {
+                return treatise.id;
+              })
+            ),
+          },
+        },
+      });
+      // user labels
+      userLabels = await userLabelTreatisesRepository.find({
+        where: {
+          treatise: {
+            id: In(
+              treatises.map((treatise) => {
+                return treatise.id;
+              })
+            ),
+          },
+        },
+      });
+    }
+    const labels = _.groupBy(userLabels, 'treatiseId');
     const result = treatises.map((treatise) => {
+      // get maxCount
+      let labelCount: { id: string; count: number }[] = [
+        { id: Labels_Enum.Label_001, count: 0 },
+        { id: Labels_Enum.Label_002, count: 0 },
+        { id: Labels_Enum.Label_003, count: 0 },
+        { id: Labels_Enum.Label_004, count: 0 },
+      ];
+      if (labels[treatise.id]) {
+        const groupLabels = _.groupBy(labels[treatise.id], 'label');
+        labelCount = labelCount.map((data) => {
+          return {
+            id: data.id,
+            count: groupLabels[data.id] ? groupLabels[data.id].length : 0,
+          };
+        });
+      }
+      const maxCount = _.maxBy(labelCount, 'count');
       return {
         ...treatise,
-        label: '标签预置',
-        isFavorite: 0,
+        label: maxCount && maxCount.count !== 0 ? maxCount.id : null,
+        isFavorite: _.find(userFavorites, function (o) {
+          return o.treatiseId === treatise.id;
+        })
+          ? 1
+          : 0,
       };
     });
     return ResultData.ok({
