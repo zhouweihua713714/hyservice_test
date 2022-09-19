@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { UserFavoriteTreatises } from './UserFavoriteTreatises.entity';
+import { UserLabelTreatises } from './UserLabelTreatises.entity';
 
 @Index('treatises_pkey', ['id'], { unique: true })
 @Index('index_gin_treatise_title', { synchronize: false })
@@ -340,4 +342,10 @@ export class Treatises {
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean;
+
+  @OneToMany(() => UserFavoriteTreatises, (userFavoriteTreatises) => userFavoriteTreatises.treatise)
+  userFavoriteTreatises: UserFavoriteTreatises[];
+
+  @OneToMany(() => UserLabelTreatises, (userLabelTreatises) => userLabelTreatises.treatise)
+  userLabelTreatises: UserLabelTreatises[];
 }

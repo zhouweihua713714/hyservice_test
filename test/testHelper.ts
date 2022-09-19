@@ -35,6 +35,8 @@ import { Fields } from '@/entities/Fields.entity';
 import { Institutions } from '@/entities/Institutions.entity';
 import { Universities } from '@/entities/Universities.entity';
 import { UserHistory } from '@/entities/UserHistory.entity';
+import { UserFavoriteTreatises } from '@/entities/UserFavoriteTreatises.entity';
+import { UserLabelTreatises } from '@/entities/UserLabelTreatises.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -64,6 +66,8 @@ export class DBTester<T = undefined> {
   fieldsRepository: Repository<Fields>;
   universitiesRepository: Repository<Universities>;
   userHistoryRepository: Repository<UserHistory>;
+  userFavoriteTreatisesRepository: Repository<UserFavoriteTreatises>;
+  userLabelTreatisesRepository: Repository<UserLabelTreatises>;
   config: ConfigService;
   server: any;
 
@@ -143,6 +147,12 @@ export class DBTester<T = undefined> {
       );
       this.userHistoryRepository = this.module.get<Repository<UserHistory>>(
         getRepositoryToken(UserHistory)
+      );
+      this.userFavoriteTreatisesRepository = this.module.get<Repository<UserFavoriteTreatises>>(
+        getRepositoryToken(UserFavoriteTreatises)
+      );
+      this.userLabelTreatisesRepository = this.module.get<Repository<UserLabelTreatises>>(
+        getRepositoryToken(UserLabelTreatises)
       );
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
