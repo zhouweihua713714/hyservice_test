@@ -5,7 +5,7 @@ import { ArrayMinSize, IsArray, IsEnum, IsNotEmpty, IsString } from 'class-valid
 
 export class ListHistoryDto extends PickType(ReqListQuery, ['page', 'size'] as const) {}
 export class OperateLabelTreatisesDto {
-  @ApiProperty({ description: '题目id数组', isArray: true })
+  @ApiProperty({ description: '论文id数组', isArray: true })
   @IsArray({ message: 'ids 类型错误,正确类型 array' })
   @ArrayMinSize(1, { message: '最小长度为1' })
   @IsNotEmpty({ message: 'type 不允许为空' })
