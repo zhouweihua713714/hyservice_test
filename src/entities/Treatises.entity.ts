@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserFavoriteTreatises } from './UserFavoriteTreatises.entity';
 import { UserLabelTreatises } from './UserLabelTreatises.entity';
+import { UserNoteTreatises } from './UserNoteTreatises.entity';
 
 @Index('treatises_pkey', ['id'], { unique: true })
 @Index('index_gin_treatise_title', { synchronize: false })
@@ -348,4 +349,7 @@ export class Treatises {
 
   @OneToMany(() => UserLabelTreatises, (userLabelTreatises) => userLabelTreatises.treatise)
   userLabelTreatises: UserLabelTreatises[];
+
+  @OneToMany(() => UserNoteTreatises, (userNoteTreatises) => userNoteTreatises.treatise)
+  userNoteTreatises: UserNoteTreatises[];
 }

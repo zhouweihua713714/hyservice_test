@@ -13,19 +13,38 @@ import { ModifyUserInfoDto } from './users.dto';
 import { UsersService } from './users.service';
 import { GetUsersDetailResult } from './users.types';
 import { OperateTreatisesDto } from './userFavorites/userFavorites.dto';
-import { OperateTreatisesResult} from './userFavorites/userFavorites.types';
+import { OperateTreatisesResult } from './userFavorites/userFavorites.types';
 import { UserLabelsService } from './userLabels/userLabels.service';
 import { OperateLabelTreatisesDto } from './userLabels/userLabels.dto';
+import {
+  GetNoteTreatiseDetailResult,
+  RemoveNoteTreatisesResult,
+  SaveNoteTreatiseResult,
+} from './userNotes/userNotes.types';
+import { UserNotesService } from './userNotes/userNotes.service';
+import {
+  GetNoteTreatiseDetailDto,
+  RemoveNoteTreatisesDto,
+  SaveNoteTreatiseDto,
+} from './userNotes/userNotes.dto';
 
 @ApiTags('我的空间-用户')
-@ApiExtraModels(ResultData, GetUsersDetailResult, ListHistoryResult)
+@ApiExtraModels(
+  ResultData,
+  GetUsersDetailResult,
+  ListHistoryResult,
+  SaveNoteTreatiseResult,
+  RemoveNoteTreatisesResult,
+  GetNoteTreatiseDetailResult
+)
 @Controller('/users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly userHistoryService: UserHistoryService,
     private readonly userFavoritesService: UserFavoritesService,
-    private readonly userLabelsService: UserLabelsService
+    private readonly userLabelsService: UserLabelsService,
+    private readonly userNotesService: UserNotesService
   ) {}
 
   @Get('/getUserDetail')
@@ -82,6 +101,42 @@ export class UsersController {
   ): Promise<ResultData> {
     const user = <SignInResInfo>req.user;
     return this.userLabelsService.operateLabelTreatises(params, user);
+  }
+
+  @Post('/saveNoteTreatise')
+  @HttpCode(200)
+  @ApiOperation({ summary: '添加/编辑论文笔记或用户添加评论' })
+  @ApiResult(SaveNoteTreatiseResult)
+  @ApiBearerAuth()
+  async saveNoteTreatise(
+    @Body() params: SaveNoteTreatiseDto,
+    @Req() req: any
+  ): Promise<ResultData> {
+    const user = <SignInResInfo>req.user;
+    return this.userNotesService.saveNoteTreatise(params, user);
+  }
+
+  @Post('/removeNoteTreatises')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除论文笔记' })
+  @ApiResult(RemoveNoteTreatisesResult)
+  @ApiBearerAuth()
+  async removeNoteTreatises(
+    @Body() params: RemoveNoteTreatisesDto,
+    @Req() req: any
+  ): Promise<ResultData> {
+    const user = <SignInResInfo>req.user;
+    return this.userNotesService.removeNoteTreatises(params, user);
+  }
+
+  @Get('/getNoteTreatiseDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取用户笔记详情' })
+  @ApiResult(GetNoteTreatiseDetailResult)
+  @ApiBearerAuth()
+  getNoteTreatiseDetail(@Query() params: GetNoteTreatiseDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.userNotesService.getNoteTreatiseDetail(params, user);
   }
   // @Get('/listQuestion')
   // @HttpCode(200)
