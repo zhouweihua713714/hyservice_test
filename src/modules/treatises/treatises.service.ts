@@ -135,7 +135,16 @@ export class TreatisesService {
       ...treatiseInfo,
       noteTreatises: noteTreatises
         ? noteTreatises.map((data) => {
-            return { ...data, title: treatiseInfo.title, url: treatiseInfo.url };
+            return {
+              id: data.id,
+              treatiseId: data.treatiseId,
+              content: data.content,
+              updatedAt: data.updatedAt,
+              comment: data.comment,
+              commentedAt: data.commentedAt,
+              title: treatiseInfo.title,
+              url: treatiseInfo.url,
+            };
           })
         : [],
     };

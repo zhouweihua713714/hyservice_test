@@ -18,12 +18,14 @@ import { UserLabelsService } from './userLabels/userLabels.service';
 import { OperateLabelTreatisesDto } from './userLabels/userLabels.dto';
 import {
   GetNoteTreatiseDetailResult,
+  ListNoteTreatiseResult,
   RemoveNoteTreatisesResult,
   SaveNoteTreatiseResult,
 } from './userNotes/userNotes.types';
 import { UserNotesService } from './userNotes/userNotes.service';
 import {
   GetNoteTreatiseDetailDto,
+  ListNoteTreatiseDto,
   RemoveNoteTreatisesDto,
   SaveNoteTreatiseDto,
 } from './userNotes/userNotes.dto';
@@ -35,7 +37,8 @@ import {
   ListHistoryResult,
   SaveNoteTreatiseResult,
   RemoveNoteTreatisesResult,
-  GetNoteTreatiseDetailResult
+  GetNoteTreatiseDetailResult,
+  ListNoteTreatiseResult
 )
 @Controller('/users')
 export class UsersController {
@@ -138,13 +141,14 @@ export class UsersController {
     const user = <SignInResInfo>req.user;
     return this.userNotesService.getNoteTreatiseDetail(params, user);
   }
-  // @Get('/listQuestion')
-  // @HttpCode(200)
-  // @ApiOperation({ summary: '获取题目收藏列表' })
-  // @ApiResult(ListQuestionResInfo)
-  // @ApiBearerAuth()
-  // listQuestion(@Query() params: ListQuestionDto, @Req() req: any): Promise<ResultData> {
-  //   const user = <SigninResInfo>req.user;
-  //   return this.userFavoritesService.listQuestion(params, user);
-  // }
+
+  @Get('/listNoteTreatise')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取笔记列表' })
+  @ApiResult(ListNoteTreatiseResult)
+  @ApiBearerAuth()
+  listNoteTreatise(@Query() params: ListNoteTreatiseDto, @Req() req: any): Promise<ResultData> {
+    const user = <SignInResInfo>req.user;
+    return this.userNotesService.listNoteTreatise(params, user);
+  }
 }
