@@ -1,30 +1,40 @@
-import _ from 'lodash';
+import _, { isNull } from 'lodash';
 import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
-import { ListHistoryDto, OperateTreatisesDto } from './userFavorites.dto';
+import { ListFavoriteTreatiseDto, OperateTreatisesDto } from './userFavorites.dto';
 import {
   treatisesRepository,
   userFavoriteTreatisesRepository,
   userHistoryRepository,
+  userLabelTreatisesRepository,
 } from '@/modules/repository/repository';
 import { In, IsNull } from 'typeorm';
-import { Content_Status_Enum, Operate_types_Enum } from '@/common/enums/common.enum';
+import { Content_Status_Enum, Labels_Enum, Operate_types_Enum } from '@/common/enums/common.enum';
 
 export class UserFavoritesService {
   /**
-   * @description 用户浏览历史
-   * @param {ListHistoryDto} params 用户浏览历史的相关参数
-   * @returns {ResultData} 返回listHistory信息
+   * @description 用户收藏论文列表
+   * @param {ListFavoriteTreatiseDto} params 用户收藏论文列表的相关参数
+   * @returns {ResultData} 返回listFavoriteTreatise信息
    */
-  async listHistory(params: ListHistoryDto, user: SignInResInfo): Promise<ResultData> {
+  async listFavoriteTreatise(
+    params: ListFavoriteTreatiseDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const { page, size } = params;
-    // get user history
-    const [userHistory, count] = await userHistoryRepository.findAndCount({
+    // get favorite treatise
+    const [favoriteTreatises, count] = await userFavoriteTreatisesRepository.findAndCount({
       where: {
         userId: user.id,
+        treatise: {
+          status: Content_Status_Enum.ACTIVE,
+          deletedAt: IsNull(),
+          enabled: true,
+        },
       },
+      relations: ['treatise'],
       skip: (page - 1) * size,
       take: size,
       order: {
@@ -34,7 +44,45 @@ export class UserFavoritesService {
     if (count === 0) {
       return ResultData.ok({ data: { userHistory: [], count: count } });
     }
-    return ResultData.ok({ data: { userHistory: [], count: count } });
+    // user labels
+    const userLabels = await userLabelTreatisesRepository.find({
+      where: {
+        treatise: {
+          id: In(
+            favoriteTreatises.map((data) => {
+              return data.treatiseId;
+            })
+          ),
+        },
+      },
+    });
+    const labels = _.groupBy(userLabels, 'treatiseId');
+    const result = favoriteTreatises.map((data) => {
+      // get maxCount
+      let labelCount: { id: string; count: number }[] = [
+        { id: Labels_Enum.Label_001, count: 0 },
+        { id: Labels_Enum.Label_002, count: 0 },
+        { id: Labels_Enum.Label_003, count: 0 },
+        { id: Labels_Enum.Label_004, count: 0 },
+      ];
+      if (labels[data.treatiseId]) {
+        const groupLabels = _.groupBy(labels[data.treatiseId], 'label');
+        labelCount = labelCount.map((data) => {
+          return {
+            id: data.id,
+            count: groupLabels[data.id] ? groupLabels[data.id].length : 0,
+          };
+        });
+      }
+      const maxCount = _.maxBy(labelCount, 'count');
+      return {
+        treatiseId: data.treatiseId,
+        createdAt: data.createdAt,
+        title: data.treatise.title,
+        label: maxCount && maxCount.count !== 0 ? maxCount.id : null,
+      };
+    });
+    return ResultData.ok({ data: { favoriteTreatises: result, count: count } });
   }
 
   /**
