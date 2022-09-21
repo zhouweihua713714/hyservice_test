@@ -11,6 +11,7 @@ import {
   userFavoriteTreatisesRepository,
   userHistoryRepository,
   userLabelTreatisesRepository,
+  userNoteTreatisesRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -98,6 +99,19 @@ export class TreatisesService {
         };
       });
     }
+    // if user login then record history and get user notes by params.id
+    let noteTreatises;
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.TREATISE,
+      });
+      //get user note treatises
+      noteTreatises = await userNoteTreatisesRepository.find({
+        where: { treatise: { id: params.id }, userId: user.id },
+      });
+    }
     const result = {
       languageName: languageInfo
         ? _.join(
@@ -119,16 +133,12 @@ export class TreatisesService {
       owner: userInfo ? userInfo.mobile : null,
       labels: labelCount,
       ...treatiseInfo,
+      noteTreatises: noteTreatises
+        ? noteTreatises.map((data) => {
+            return { ...data, title: treatiseInfo.title, url: treatiseInfo.url };
+          })
+        : [],
     };
-
-    // if user login then record history
-    if (params.flag && user) {
-      await userHistoryRepository.save({
-        userId: user.id,
-        relatedId: params.id,
-        type: Content_Types_Enum.TREATISE,
-      });
-    }
     return ResultData.ok({ data: result });
   }
   /**

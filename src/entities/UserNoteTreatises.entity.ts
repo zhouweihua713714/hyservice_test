@@ -25,7 +25,7 @@ export class UserNoteTreatises {
   @Column('text', { name: 'content', comment: '笔记内容' })
   content: string;
 
-  @ApiProperty({ description: '评论', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '评论', type: String, nullable: true })
   @Column('text', { name: 'comment', nullable: true, comment: '评论' })
   comment: string | null;
 
