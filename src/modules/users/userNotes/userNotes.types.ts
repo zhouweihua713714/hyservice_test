@@ -4,7 +4,6 @@ import { Users } from '@/entities/Users.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class GetNoteTreatiseDetailResult extends PickType(UserNoteTreatises, [
-  'userId',
   'id',
   'comment',
   'content',
@@ -30,4 +29,12 @@ export class RemoveNoteTreatisesResult {
 
   @ApiProperty({ description: '失败数量' })
   failed: number;
+}
+
+export class ListNoteTreatiseResult {
+  @ApiProperty({ description: '笔记数组', type: GetNoteTreatiseDetailResult, isArray: true })
+  noteTreatises: GetNoteTreatiseDetailResult[];
+
+  @ApiProperty({ description: '数量' })
+  count: number;
 }

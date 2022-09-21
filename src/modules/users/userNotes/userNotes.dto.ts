@@ -1,4 +1,5 @@
 import { Operate_types_Enum } from '@/common/enums/common.enum';
+import { ReqListQuery } from '@/common/utils/reqListQuery';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import { ArrayMinSize, IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
@@ -34,6 +35,9 @@ export class RemoveNoteTreatisesDto {
   @ArrayMinSize(1, { message: '最小长度为1' })
   @IsNotEmpty({ message: 'type 不允许为空' })
   ids: string[];
+}
+
+export class ListNoteTreatiseDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
 }
 
 
