@@ -110,6 +110,25 @@ export const seed: TesterSeed<DataType> = {
         label: Labels_Enum.Label_002,
       },
     ]);
+    // user note treatises
+    await tester.userNoteTreatisesRepository.save([
+      {
+        userId: user.user.id,
+        treatise: {
+          id: treatiseInfo.id,
+        },
+        comment: '评论',
+        content: '笔记内容',
+      },
+      {
+        userId: user.user.id,
+        treatise: {
+          id: treatiseInfo.id,
+        },
+        comment: '评论',
+        content: '笔记内容',
+      },
+    ]);
     return { user, treatiseInfo };
   },
   down: async (tester) => {

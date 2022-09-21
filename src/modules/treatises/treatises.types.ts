@@ -2,6 +2,7 @@ import { Columns } from '@/entities/Columns.entity';
 import { Treatises } from '@/entities/Treatises.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { GetNoteTreatiseDetailResult } from '../users/userNotes/userNotes.types';
 
 export class SaveTreatiseResult {
   @ApiProperty({ description: '主键id' })
@@ -73,6 +74,13 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
     isArray: true,
   })
   labels: LabelCountInfo[];
+
+  @ApiPropertyOptional({
+    description: '用户笔记列表,仅在C端且用户是登录状态返回的值有效默认为空数组',
+    type: GetNoteTreatiseDetailResult,
+    isArray: true,
+  })
+  noteTreatises: GetNoteTreatiseDetailResult[];
 }
 export class ListTreatiseInfo extends PickType(Treatises, [
   'id',
