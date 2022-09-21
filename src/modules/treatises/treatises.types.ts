@@ -140,10 +140,10 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   'abstract',
   'keyword',
 ] as const) {
-  @ApiProperty({ description: '标签,字段先留着还没做' })
+  @ApiProperty({ description: '标签' })
   label: string;
 
-  @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0) 字段先留着还没做' })
+  @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0)' })
   isFavorite: number;
 }
 

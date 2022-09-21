@@ -12,8 +12,8 @@ import { ListHistoryResult } from './userHistory/userHistory.types';
 import { ModifyUserInfoDto } from './users.dto';
 import { UsersService } from './users.service';
 import { GetUsersDetailResult } from './users.types';
-import { OperateTreatisesDto } from './userFavorites/userFavorites.dto';
-import { OperateTreatisesResult } from './userFavorites/userFavorites.types';
+import { ListFavoriteTreatiseDto, OperateTreatisesDto } from './userFavorites/userFavorites.dto';
+import { ListFavoriteTreatiseResult, OperateTreatisesResult } from './userFavorites/userFavorites.types';
 import { UserLabelsService } from './userLabels/userLabels.service';
 import { OperateLabelTreatisesDto } from './userLabels/userLabels.dto';
 import {
@@ -38,7 +38,8 @@ import {
   SaveNoteTreatiseResult,
   RemoveNoteTreatisesResult,
   GetNoteTreatiseDetailResult,
-  ListNoteTreatiseResult
+  ListNoteTreatiseResult,
+  ListFavoriteTreatiseResult
 )
 @Controller('/users')
 export class UsersController {
@@ -150,5 +151,18 @@ export class UsersController {
   listNoteTreatise(@Query() params: ListNoteTreatiseDto, @Req() req: any): Promise<ResultData> {
     const user = <SignInResInfo>req.user;
     return this.userNotesService.listNoteTreatise(params, user);
+  }
+
+  @Get('/listFavoriteTreatise')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取收藏论文列表（论文集）' })
+  @ApiResult(ListFavoriteTreatiseResult)
+  @ApiBearerAuth()
+  listFavoriteTreatise(
+    @Query() params: ListFavoriteTreatiseDto,
+    @Req() req: any
+  ): Promise<ResultData> {
+    const user = <SignInResInfo>req.user;
+    return this.userFavoritesService.listFavoriteTreatise(params, user);
   }
 }
