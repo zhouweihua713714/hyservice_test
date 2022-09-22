@@ -19,6 +19,7 @@ import {
   ListComplexTreatiseDto,
   ListTreatiseDto,
   OperateTreatisesDto,
+  RecommendTreatisesDto,
   RemoveTreatisesDto,
   SaveTreatiseDto,
 } from './treatises.dto';
@@ -565,6 +566,47 @@ export class TreatisesService {
     });
     return ResultData.ok({
       data: { treatises: result, count: count },
+    });
+  }
+  /**
+   * @description 推荐论文
+   * @param {RecommendTreatisesDto} params 推荐的相关参数
+   * @returns {ResultData} 返回recommendTreatises信息
+   */
+  async recommendTreatises(
+    params: RecommendTreatisesDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { keyword, columnId } = params;
+    let keywordCondition;
+    const basicCondition =
+      'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status';
+    let treatises;
+    if (keyword) {
+      // get keywords
+      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      keywordCondition = {
+        keyword: Like(keywords),
+      };
+      treatises = await treatisesRepository
+        .createQueryBuilder('treatises')
+        .select(['treatises.id', 'treatises.title'])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+        })
+        .andWhere(
+          new Brackets((qb) => {
+            qb.where('treatises.title like any (ARRAY[:...keyword])', {
+              keyword: keywords,
+            }).orWhere('treatises.columnId =:columnId', { columnId: columnId });
+          })
+        )
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data 
+        .take(8)
+        .getMany();
+    }
+    return ResultData.ok({
+      data: { treatises: treatises },
     });
   }
 }
