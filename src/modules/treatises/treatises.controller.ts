@@ -10,6 +10,7 @@ import {
   ListComplexTreatiseDto,
   ListTreatiseDto,
   OperateTreatisesDto,
+  RecommendTreatisesDto,
   RemoveTreatisesDto,
   SaveTreatiseDto,
 } from './treatises.dto';
@@ -20,6 +21,7 @@ import {
   ListComplexTreatiseResult,
   ListTreatiseResult,
   OperateTreatisesResult,
+  RecommendTreatisesResult,
   RemoveTreatisesResult,
   SaveTreatiseResult,
 } from './treatises.types';
@@ -33,7 +35,8 @@ import {
   RemoveTreatisesResult,
   SaveTreatiseResult,
   GetArticleCountResult,
-  ListComplexTreatiseResult
+  ListComplexTreatiseResult,
+  RecommendTreatisesResult,
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -46,7 +49,7 @@ export class TreatisesController {
   @AllowAnon()
   getTreatiseDetail(@Query() params: GetTreatiseDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.treatisesService.getTreatiseDetail(params,user);
+    return this.treatisesService.getTreatiseDetail(params, user);
   }
 
   @Post('/saveTreatise')
@@ -107,5 +110,15 @@ export class TreatisesController {
   listComplexTreatise(@Body() params: ListComplexTreatiseDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatisesService.listComplexTreatise(params, user);
+  }
+
+  @Post('/recommendTreatises')
+  @HttpCode(200)
+  @ApiOperation({ summary: '论文推荐列表（为您推荐）' })
+  @ApiResult(RecommendTreatisesResult)
+  @AllowAnon()
+  recommendTreatises(@Body() params: RecommendTreatisesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatisesService.recommendTreatises(params, user);
   }
 }
