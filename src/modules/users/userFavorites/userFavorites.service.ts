@@ -42,7 +42,7 @@ export class UserFavoritesService {
       },
     });
     if (count === 0) {
-      return ResultData.ok({ data: { userHistory: [], count: count } });
+      return ResultData.ok({ data: { favoriteTreatises: [], count: count } });
     }
     // user labels
     const userLabels = await userLabelTreatisesRepository.find({

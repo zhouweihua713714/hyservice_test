@@ -39,14 +39,6 @@ export class UserLabelTreatises {
   })
   createdAt: Date;
 
-  @ApiProperty({ description: '更新时间' })
-  @Column('timestamp with time zone', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-    comment: '更新时间',
-  })
-  updatedAt: Date;
-
   @ManyToOne(() => Treatises, (treatises) => treatises.userLabelTreatises, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
