@@ -6,6 +6,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
+  GetInstitutionChartsDto,
   GetTreatiseDetailDto,
   ListComplexTreatiseDto,
   ListTreatiseDto,
@@ -17,6 +18,7 @@ import {
 import { TreatisesService } from './treatises.service';
 import {
   GetArticleCountResult,
+  GetInstitutionChartsResult,
   GetTreatiseDetailResult,
   ListComplexTreatiseResult,
   ListTreatiseResult,
@@ -37,6 +39,7 @@ import {
   GetArticleCountResult,
   ListComplexTreatiseResult,
   RecommendTreatisesResult,
+  GetInstitutionChartsResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -114,11 +117,20 @@ export class TreatisesController {
 
   @Post('/recommendTreatises')
   @HttpCode(200)
-  @ApiOperation({ summary: '论文推荐列表（为您推荐）' })
+  @ApiOperation({ summary: '论文推荐列表(为您推荐)' })
   @ApiResult(RecommendTreatisesResult)
   @AllowAnon()
   recommendTreatises(@Body() params: RecommendTreatisesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatisesService.recommendTreatises(params, user);
+  }
+
+  @Get('/getInstitutionCharts')
+  @HttpCode(200)
+  @ApiOperation({ summary: '文献发表机构排名(TOP10)' })
+  @ApiResult(GetInstitutionChartsResult)
+  @AllowAnon()
+  getInstitutionCharts(@Query() params: GetInstitutionChartsDto) {
+    return this.treatisesService.getInstitutionCharts(params);
   }
 }

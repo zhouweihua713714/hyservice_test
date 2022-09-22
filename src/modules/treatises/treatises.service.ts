@@ -15,6 +15,7 @@ import {
   usersRepository,
 } from '../repository/repository';
 import {
+  GetInstitutionChartsDto,
   GetTreatiseDetailDto,
   ListComplexTreatiseDto,
   ListTreatiseDto,
@@ -375,7 +376,6 @@ export class TreatisesService {
       data: { succeed: succeed, failed: ids.length - succeed },
     });
   }
-
   /**
    * @description 获取论文分类下的文章数量
    * @param {} params 获取论文分类下的文章数量的相关参数
@@ -601,12 +601,53 @@ export class TreatisesService {
             }).orWhere('treatises.columnId =:columnId', { columnId: columnId });
           })
         )
-        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data 
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(8)
         .getMany();
     }
     return ResultData.ok({
       data: { treatises: treatises },
+    });
+  }
+
+  /**
+   * @description 文献发表机构排名(TOP10)
+   * @param {GetInstitutionChartsDto} params 文献发表机构排名(TOP10)的相关参数
+   * @returns {ResultData} 返回getInstitutionCharts信息
+   */
+  async getInstitutionCharts(params: GetInstitutionChartsDto): Promise<ResultData> {
+    const { columnId } = params;
+    // ssci
+    let condition = 'treatises.authorUnit';
+    if (columnId === 'column_02_03') {
+      condition = 'treatises.authorAddress';
+    }
+    // get article count and latest date
+    let treatises = await treatisesRepository
+      .createQueryBuilder('treatises')
+      .select('COUNT(treatises.id)', 'count')
+      .addSelect(condition, 'name')
+      .where(
+        'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status and treatises.columnId =:columnId',
+        {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId,
+        }
+      )
+      .groupBy(condition)
+      .getRawMany();
+    // filter null and get order
+    treatises = _.orderBy(
+      _.filter(treatises, function (o) {
+        return o.name;
+      }),
+      'count',
+      'desc'
+    );
+    // get top 10
+    treatises = treatises.slice(0, 10);
+    return ResultData.ok({
+      data: { institutionCharts: treatises },
     });
   }
 }
