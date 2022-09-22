@@ -147,11 +147,7 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0)' })
   isFavorite: number;
 }
-export class RecommendTreatiseInfo extends PickType(Treatises, [
-  'id',
-  'title',
-] as const) {
-}
+export class RecommendTreatiseInfo extends PickType(Treatises, ['id', 'title'] as const) {}
 
 export class ListComplexTreatiseResult {
   @ApiProperty({ description: '论文数组', type: ListComplexTreatiseInfo, isArray: true })
@@ -164,6 +160,17 @@ export class ListComplexTreatiseResult {
 export class RecommendTreatisesResult {
   @ApiProperty({ description: '论文数组', type: RecommendTreatiseInfo, isArray: true })
   treatises: RecommendTreatiseInfo[];
-
 }
 
+export class InstitutionChartInfo {
+  @ApiProperty({ description: '机构名称' })
+  name: string;
+
+  @ApiProperty({ description: '文章数量' })
+  count: number;
+}
+
+export class GetInstitutionChartsResult {
+  @ApiProperty({ description: '机构排名数组', type: InstitutionChartInfo, isArray: true })
+  institutionCharts: InstitutionChartInfo[];
+}
