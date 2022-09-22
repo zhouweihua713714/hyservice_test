@@ -3,39 +3,64 @@ import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
-import { ListHistoryDto, OperateLabelTreatisesDto } from './userLabels.dto';
-import {
-  treatisesRepository,
-  userFavoriteTreatisesRepository,
-  userHistoryRepository,
-  userLabelTreatisesRepository,
-} from '@/modules/repository/repository';
+import { ListLabelTreatiseDto, OperateLabelTreatisesDto } from './userLabels.dto';
+import { treatisesRepository, userLabelTreatisesRepository } from '@/modules/repository/repository';
 import { In, IsNull } from 'typeorm';
 import { Content_Status_Enum, Operate_types_Enum } from '@/common/enums/common.enum';
 
 export class UserLabelsService {
   /**
-   * @description 用户浏览历史
-   * @param {ListHistoryDto} params 用户浏览历史的相关参数
-   * @returns {ResultData} 返回listHistory信息
+   * @description 用户标签论文列表
+   * @param {ListLabelTreatiseDto } params 用户标签论文列表的相关参数
+   * @returns {ResultData} 返回listLabelTreatise信息
    */
-  async listHistory(params: ListHistoryDto, user: SignInResInfo): Promise<ResultData> {
-    const { page, size } = params;
+  async listLabelTreatise(params: ListLabelTreatiseDto, user: SignInResInfo): Promise<ResultData> {
+    const { page, size, flag, label } = params;
+    let labelCondition;
+    if (label) {
+      labelCondition = {
+        label: label,
+      };
+    }
+    let labels;
+    if (flag) {
+      // get user labels
+      labels = await userLabelTreatisesRepository
+        .createQueryBuilder('userLabelTreatises')
+        .select('COUNT(userLabelTreatises.treatiseId)', 'count')
+        .addSelect('userLabelTreatises.label', 'id')
+        .where('userLabelTreatises.userId =:userId', {
+          userId: user.id,
+        })
+        .groupBy('userLabelTreatises.label')
+        .getRawMany();
+    }
     // get user history
-    const [userHistory, count] = await userHistoryRepository.findAndCount({
+    const [labelTreatises, count] = await userLabelTreatisesRepository.findAndCount({
       where: {
         userId: user.id,
+        ...labelCondition,
       },
       skip: (page - 1) * size,
       take: size,
+      relations: ['treatise'],
       order: {
         createdAt: 'DESC',
       },
     });
     if (count === 0) {
-      return ResultData.ok({ data: { userHistory: [], count: count } });
+      return ResultData.ok({ data: { labelTreatises: [], count: 0 } });
     }
-    return ResultData.ok({ data: { userHistory: [], count: count } });
+    const result = labelTreatises.map((data) => {
+      return {
+        treatiseId: data.treatiseId,
+        label: data.label,
+        title: data.treatise.title,
+        author: data.treatise.author,
+        deliveryAt: data.treatise.deliveryAt,
+      };
+    });
+    return ResultData.ok({ data: { labelTreatises: result, count: count, labels: labels } });
   }
 
   /**

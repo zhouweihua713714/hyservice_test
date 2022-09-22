@@ -1,6 +1,5 @@
 import { UserFavoriteTreatises } from '@/entities/UserFavoriteTreatises.entity';
-import { Users } from '@/entities/Users.entity';
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class UserFavoriteTreatisesInfo extends PickType(UserFavoriteTreatises, [
   'treatiseId',
@@ -14,8 +13,8 @@ export class UserFavoriteTreatisesInfo extends PickType(UserFavoriteTreatises, [
 }
 
 export class ListFavoriteTreatiseResult {
-  @ApiProperty({ description: '收藏论文数组', type: UserFavoriteTreatisesInfo , isArray: true })
-  favoriteTreatises: UserFavoriteTreatisesInfo [];
+  @ApiProperty({ description: '收藏论文数组', type: UserFavoriteTreatisesInfo, isArray: true })
+  favoriteTreatises: UserFavoriteTreatisesInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
