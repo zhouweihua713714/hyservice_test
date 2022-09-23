@@ -102,7 +102,7 @@ export class Institutions {
   @ApiPropertyOptional({ description: '图片链接', type: String, nullable: true })
   @Column('character varying', {
     name: 'url',
-    length: 128,
+    length: 255,
     nullable: true,
     comment: '图片链接',
   })

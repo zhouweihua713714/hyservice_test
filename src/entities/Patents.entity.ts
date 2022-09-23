@@ -9,13 +9,12 @@ export class Patents {
   id: string;
 
   @ApiProperty({ description: '专利标题' })
-  @Column('character varying', { name: 'title', length: 300, comment: '专利标题' })
+  @Column('text', { name: 'title', comment: '专利标题' })
   title: string;
 
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
-  @Column('character varying', {
+  @Column('text', {
     name: 'keyword',
-    length: 100,
     nullable: true,
     comment: '关键字',
   })
@@ -26,9 +25,8 @@ export class Patents {
   abstract: string | null;
 
   @ApiPropertyOptional({ description: '申请人(单位)', type: String, nullable: true })
-  @Column('character varying', {
+  @Column('text', {
     name: 'institution',
-    length: 100,
     nullable: true,
     comment: '申请人(单位)',
   })
@@ -81,7 +79,7 @@ export class Patents {
   agency: string | null;
 
   @ApiPropertyOptional({ description: '代理人', type: String, nullable: true })
-  @Column('character varying', { name: 'agent', length: 100, nullable: true, comment: '代理人' })
+  @Column('text', { name: 'agent',  nullable: true, comment: '代理人' })
   agent: string | null;
 
   @ApiPropertyOptional({ description: '专利有效性', type: String, nullable: true })
