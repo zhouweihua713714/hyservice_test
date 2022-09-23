@@ -80,7 +80,7 @@ export class Periodicals {
   minorField: string | null;
 
   @ApiPropertyOptional({ description: '网址', type: String, nullable: true })
-  @Column('character varying', { name: 'url', length: 200, nullable: true, comment: '网址' })
+  @Column('text', { name: 'url',  nullable: true, comment: '网址' })
   url: string | null;
 
   @ApiPropertyOptional({ description: '详细地址', type: String, nullable: true })
@@ -88,7 +88,7 @@ export class Periodicals {
   address: string | null;
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
-  @Column('character varying', { name: 'search', nullable: true, length: 50, comment: '检索情况' })
+  @Column('text', { name: 'search', nullable: true, comment: '检索情况' })
   search: string | null;
 
   @ApiPropertyOptional({ description: '影响因子', type: Number, nullable: true })
