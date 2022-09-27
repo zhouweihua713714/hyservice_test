@@ -35,12 +35,12 @@ export class SavePatentDto {
 
   @ApiProperty({ description: '专利标题' })
   @IsString({ message: 'title 类型错误, 正确类型 string' })
-  @MaxLength(300)
+  // @MaxLength(300)
   title: string;
 
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
-  @MaxLength(100)
+  // @MaxLength(100)
   @IsOptional()
   keyword: string | null;
 
@@ -55,7 +55,7 @@ export class SavePatentDto {
 
   @ApiPropertyOptional({ description: '申请人(单位)', type: String, nullable: true })
   @IsString({ message: 'applicant 类型错误, 正确类型 string' })
-  @MaxLength(100)
+  // @MaxLength(100)
   @IsOptional()
   applicant: string | null;
 
@@ -104,7 +104,7 @@ export class SavePatentDto {
 
   @ApiPropertyOptional({ description: '代理人', type: String, nullable: true })
   @IsString({ message: 'agent 类型错误, 正确类型 string' })
-  @MaxLength(100)
+  // @MaxLength(100)
   @IsOptional()
   agent: string | null;
 

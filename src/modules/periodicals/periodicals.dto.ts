@@ -91,7 +91,7 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '网址', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 number' })
-  @MaxLength(200)
+  // @MaxLength(200)
   @IsOptional()
   url: string | null;
 
@@ -103,7 +103,7 @@ export class SavePeriodicalDto {
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
   @IsString({ message: 'search 类型错误, 正确类型 string' })
-  @MaxLength(50)
+  // @MaxLength(50)
   @IsOptional()
   search: string | null;
 

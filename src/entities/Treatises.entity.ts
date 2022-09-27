@@ -7,7 +7,7 @@ import { UserNoteTreatises } from './UserNoteTreatises.entity';
 @Index('treatises_pkey', ['id'], { unique: true })
 @Index('index_gin_treatise_title', { synchronize: false })
 @Index('index_gin_treatise_keyword', { synchronize: false })
-@Index('index_gin_treatise_abstract', { synchronize: false })
+// @Index('index_gin_treatise_abstract', { synchronize: false })
 @Entity('treatises')
 export class Treatises {
   @ApiProperty({ description: 'id' })
