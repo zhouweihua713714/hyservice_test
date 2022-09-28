@@ -8,7 +8,7 @@ const tester = new DBTester<DataType>().setup();
 
 // mock arguments
 describe('/terms/listComplexTerm', () => {
-  test('should GET /terms/listComplexTerm with invalid type', async () => {
+  test('should POST /terms/listComplexTerm with invalid type', async () => {
     // make request
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
@@ -20,7 +20,7 @@ describe('/terms/listComplexTerm', () => {
     expect(result.body.data.terms).toBeTruthy();
     expect(result.body.data.count).toBe(0);
   });
-  test('should GET /terms/listComplexTerm with type', async () => {
+  test('should POST /terms/listComplexTerm with type', async () => {
     // make request
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
@@ -33,7 +33,7 @@ describe('/terms/listComplexTerm', () => {
     expect(result.body.data.terms.length).toBe(2);
     expect(result.body.data.count).toBe(4);
   });
-  test('should GET /terms/listComplexTerm with authorizeAt', async () => {
+  test('should POST /terms/listComplexTerm with authorizeAt', async () => {
     // make request
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
@@ -46,7 +46,7 @@ describe('/terms/listComplexTerm', () => {
     expect(result.body.data.terms.length).toBe(2);
     expect(result.body.data.count).toBe(4);
   });
-  test('should GET /terms/listComplexTerm with unit', async () => {
+  test('should POST /terms/listComplexTerm with unit', async () => {
     // make request
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
@@ -59,7 +59,7 @@ describe('/terms/listComplexTerm', () => {
     expect(result.body.data.terms.length).toBe(1);
     expect(result.body.data.count).toBe(1);
   });
-  test('should GET /terms/listComplexTerm with principal', async () => {
+  test('should POST /terms/listComplexTerm with principal', async () => {
     // make request
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
@@ -72,7 +72,7 @@ describe('/terms/listComplexTerm', () => {
     expect(result.body.data.terms.length).toBe(2);
     expect(result.body.data.count).toBe(3);
   });
-  test('should GET /terms/listComplexTerm with keyword', async () => {
+  test('should POST /terms/listComplexTerm with keyword', async () => {
     // make request
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
@@ -85,7 +85,7 @@ describe('/terms/listComplexTerm', () => {
     expect(result.body.data.terms.length).toBe(2);
     expect(result.body.data.count).toBe(2);
   });
-  test('should GET /terms/listComplexTerm with all condition', async () => {
+  test('should POST /terms/listComplexTerm with all condition', async () => {
     // make request
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')

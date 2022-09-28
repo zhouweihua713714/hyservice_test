@@ -76,7 +76,7 @@ export class ListPeriodicalInfo extends PickType(Periodicals, [
 }
 
 export class ListPeriodicalResult {
-  @ApiProperty({ description: '项目数组', type: ListPeriodicalInfo, isArray: true })
+  @ApiProperty({ description: '期刊数组', type: ListPeriodicalInfo, isArray: true })
   periodicals: ListPeriodicalInfo[];
 
   @ApiProperty({ description: '总数' })
@@ -95,3 +95,32 @@ export class RemovePeriodicalsResult extends PickType(OperatePeriodicalsResult, 
   'succeed',
   'failed',
 ] as const) {}
+
+export class ListComplexPeriodicalInfo extends PickType(Periodicals, [
+  'id',
+  'name',
+  'subject',
+  'minorField',
+  'type',
+  'period',
+  'articleNumber',
+  'compositeImpactFactor',
+  'ISSN',
+  'citeScore',
+  'citeRate',
+  'quote',
+] as const) {
+  @ApiPropertyOptional({ description: '发刊周期名称' })
+  periodName: string;
+
+  @ApiPropertyOptional({ description: '学科分类名称' })
+  subjectName: string;
+}
+
+export class ListComplexPeriodicalResult {
+  @ApiProperty({ description: '期刊数组', type: ListComplexPeriodicalInfo, isArray: true })
+  periodicals: ListPeriodicalInfo[];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
+}
