@@ -14,6 +14,7 @@ import {
 } from '../repository/repository';
 import {
   GetPeriodicalDetailDto,
+  ListComplexPeriodicalDto,
   ListPeriodicalDto,
   OperatePeriodicalsDto,
   RemovePeriodicalsDto,
@@ -25,7 +26,7 @@ import {
   Peking_Unit_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { In, IsNull, Like } from 'typeorm';
+import { Brackets, In, IsNull, Like } from 'typeorm';
 
 export class PeriodicalsService {
   /**
@@ -349,5 +350,150 @@ export class PeriodicalsService {
     return ResultData.ok({
       data: { succeed: succeed, failed: ids.length - succeed },
     });
+  }
+  /**
+   * @description 期刊列表(c端)
+   * @param {ListComplexPeriodicalDto} params
+   * @returns {ResultData} 返回listComplexPeriodical信息
+   */
+  async listComplexPeriodical(
+    params: ListComplexPeriodicalDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId, keyword, page, size } = params;
+    // get basic condition
+    let basicCondition =
+      'periodicals.enabled = true and periodicals.deletedAt is null and periodicals.status =:status';
+    if (columnId) {
+      basicCondition += ' and periodicals.columnId = :columnId';
+    }
+    // get periodicals and count
+    let periodicals;
+    let count;
+    if (keyword) {
+      // get keywords
+      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      [periodicals, count] = await periodicalsRepository
+        .createQueryBuilder('periodicals')
+        .select([
+          'periodicals.id',
+          'periodicals.name',
+          'periodicals.subject',
+          'periodicals.field',
+          'periodicals.minorField',
+          'periodicals.type',
+          'periodicals.period',
+          'periodicals.articleNumber',
+          'periodicals.compositeImpactFactor',
+          'periodicals.ISSN',
+          'periodicals.citeScore',
+          'periodicals.citeRate',
+          'periodicals.quote',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId,
+        })
+        .andWhere(
+          new Brackets((qb) => {
+            qb.where('periodicals.name like any (ARRAY[:...keyword])', { keyword: keywords });
+          })
+        )
+        .orderBy('periodicals.articleNumber', 'DESC')
+        .orderBy('periodicals.establishedAt', 'DESC')
+        .orderBy('periodicals.publishedAt', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    } else {
+      [periodicals, count] = await periodicalsRepository
+        .createQueryBuilder('periodicals')
+        .select([
+          'periodicals.id',
+          'periodicals.name',
+          'periodicals.subject',
+          'periodicals.field',
+          'periodicals.minorField',
+          'periodicals.type',
+          'periodicals.period',
+          'periodicals.articleNumber',
+          'periodicals.compositeImpactFactor',
+          'periodicals.ISSN',
+          'periodicals.citeScore',
+          'periodicals.citeRate',
+          'periodicals.quote',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId,
+        })
+        .orderBy('periodicals.articleNumber', 'DESC')
+        .orderBy('periodicals.establishedAt', 'DESC')
+        .orderBy('periodicals.publishedAt', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    }
+    if (count === 0) {
+      return ResultData.ok({ data: { periodicals: [], count: count } });
+    }
+    // get subject 、period
+    let subjectIds;
+    let subjects;
+    // let periodIds;
+    let periods;
+    const periodIds = periodicals.map((data) => {
+      subjectIds = _.union(data.subject, subjectIds);
+      return data.period;
+    });
+    if (subjectIds.length > 0) {
+      subjects = await subjectsRepository.find({
+        where: {
+          id: In(subjectIds),
+        },
+      });
+    }
+    if (periodIds.length > 0) {
+      periods = await periodicalPeriodsRepository.find({
+        where: {
+          id: In(periodIds),
+        },
+      });
+    }
+    const result = periodicals.map((data) => {
+      let subjectInfo;
+      if (data.subject) {
+        subjectInfo = data.subject.map((data) => {
+          return {
+            name: _.find(subjects, function (o) {
+              return o.id === data;
+            })
+              ? _.find(subjects, function (o) {
+                  return o.id === data;
+                }).name
+              : null,
+          };
+        });
+      }
+      return {
+        ...data,
+        periodName: _.find(periods, function (o) {
+          return o.id === data.period;
+        })
+          ? _.find(periods, function (o) {
+              return o.id === data.period;
+            }).name
+          : null,
+        subjectName: subjectInfo
+          ? _.join(
+              subjectInfo.map((subject) => {
+                return subject.name;
+              }),
+              ';'
+            )
+          : null,
+      };
+    });
+    return ResultData.ok({ data: { periodicals: result, count: count } });
   }
 }

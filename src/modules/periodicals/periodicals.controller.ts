@@ -7,6 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
   GetPeriodicalDetailDto,
+  ListComplexPeriodicalDto,
   ListPeriodicalDto,
   OperatePeriodicalsDto,
   RemovePeriodicalsDto,
@@ -15,6 +16,7 @@ import {
 import { PeriodicalsService } from './periodicals.service';
 import {
   GetPeriodicalDetailResult,
+  ListComplexPeriodicalResult,
   ListPeriodicalResult,
   OperatePeriodicalsResult,
   RemovePeriodicalsResult,
@@ -28,11 +30,12 @@ import {
   ListPeriodicalResult,
   OperatePeriodicalsResult,
   RemovePeriodicalsResult,
-  SavePeriodicalResult
+  SavePeriodicalResult,
+  ListComplexPeriodicalResult
 )
 @Controller('/periodicals')
 export class PeriodicalsController {
-  constructor(private readonly termsService: PeriodicalsService) {}
+  constructor(private readonly periodicalService: PeriodicalsService) {}
 
   @Get('/getPeriodicalDetail')
   @HttpCode(200)
@@ -41,7 +44,7 @@ export class PeriodicalsController {
   @AllowAnon()
   getPeriodicalDetail(@Query() params: GetPeriodicalDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.getPeriodicalDetail(params, user);
+    return this.periodicalService.getPeriodicalDetail(params, user);
   }
 
   @Post('/savePeriodical')
@@ -51,7 +54,7 @@ export class PeriodicalsController {
   @ApiBearerAuth()
   savePeriodical(@Body() params: SavePeriodicalDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.savePeriodical(params, user);
+    return this.periodicalService.savePeriodical(params, user);
   }
 
   @Get('/listPeriodical')
@@ -61,7 +64,7 @@ export class PeriodicalsController {
   @ApiBearerAuth()
   listPeriodical(@Query() params: ListPeriodicalDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.listPeriodical(params, user);
+    return this.periodicalService.listPeriodical(params, user);
   }
 
   @Post('/operatePeriodicals')
@@ -71,7 +74,7 @@ export class PeriodicalsController {
   @ApiBearerAuth()
   operatePeriodicals(@Body() params: OperatePeriodicalsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.operatePeriodicals(params, user);
+    return this.periodicalService.operatePeriodicals(params, user);
   }
 
   @Post('/removePeriodicals')
@@ -81,6 +84,16 @@ export class PeriodicalsController {
   @ApiBearerAuth()
   removePeriodicals(@Body() params: RemovePeriodicalsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.removePeriodicals(params, user);
+    return this.periodicalService.removePeriodicals(params, user);
+  }
+
+  @Post('/listComplexPeriodical')
+  @HttpCode(200)
+  @ApiOperation({ summary: '项目列表(c端)' })
+  @ApiResult(ListComplexPeriodicalResult)
+  @AllowAnon()
+  listComplexTerm(@Body() params: ListComplexPeriodicalDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.periodicalService.listComplexPeriodical(params, user);
   }
 }
