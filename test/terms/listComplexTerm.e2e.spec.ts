@@ -51,7 +51,7 @@ describe('/terms/listComplexTerm', () => {
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ unit: '单位模糊匹配', page: 1, size: 2});
+      .send({ unit: '单位模糊匹配', page: 1, size: 2 });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
@@ -64,7 +64,7 @@ describe('/terms/listComplexTerm', () => {
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ principal: '项目负责人', page: 1, size: 2});
+      .send({ principal: '项目负责人', page: 1, size: 2 });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
@@ -77,7 +77,7 @@ describe('/terms/listComplexTerm', () => {
     const result = await request(tester.server)
       .post('/terms/listComplexTerm')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ keyword: '名称模糊匹配;关键字词模糊', page: 1, size: 2});
+      .send({ keyword: '名称模糊匹配;关键字词模糊', page: 1, size: 2 });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
@@ -92,10 +92,11 @@ describe('/terms/listComplexTerm', () => {
       .set('Authorization', tester.data.user.headers.authorization)
       .send({
         keyword: '名称模糊匹配;关键字词模糊;项目',
-        type:tester.data.termType.id,
+        type: tester.data.termType.id,
         authorizeAt: new Date(),
-        unit:'单位',
-        principal:'负责人',
+        columnId: tester.data.terms[0].columnId,
+        unit: '单位',
+        principal: '负责人',
         page: 1,
         size: 2,
       });

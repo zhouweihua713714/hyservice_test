@@ -162,6 +162,11 @@ export class ListComplexTermDto extends PickType(ReqListQuery, ['page', 'size'] 
   @IsOptional()
   keyword: string;
 
+  @ApiPropertyOptional({ description: '栏目id' })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  @IsOptional()
+  columnId: string;
+
   @ApiPropertyOptional({ description: '项目类型' })
   @IsString({ message: '项目类型type 类型错误, 正确类型 string' })
   @IsOptional()
