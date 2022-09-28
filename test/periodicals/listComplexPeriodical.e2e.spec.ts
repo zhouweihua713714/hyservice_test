@@ -20,7 +20,7 @@ describe('/periodicals/listComplexPeriodical', () => {
     expect(result.body.data.periodicals.length).toBe(2);
     expect(result.body.data.count).toBe(2);
   });
-  test.only('should POST /periodicals/listComplexPeriodical with all condition', async () => {
+  test('should POST /periodicals/listComplexPeriodical with all condition', async () => {
     // make request
     const result = await request(tester.server)
       .post('/periodicals/listComplexPeriodical')
