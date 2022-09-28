@@ -118,6 +118,7 @@ export class RemoveTreatisesResult extends PickType(OperateTreatisesResult, [
 export class ArticleCountInfo extends PickType(Columns, [
   'id',
   'name',
+  'introduction',
   'sequenceNumber',
   'parentId',
 ] as const) {

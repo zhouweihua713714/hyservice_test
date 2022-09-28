@@ -294,7 +294,7 @@ export class TermsService {
    * @returns {ResultData} 返回listComplexTerm信息
    */
   async listComplexTerm(params: ListComplexTermDto, user: SignInResInfo): Promise<ResultData> {
-    const { keyword, unit, type, principal, authorizedAt, page, size } = params;
+    const { columnId, keyword, unit, type, principal, authorizedAt, page, size } = params;
     // get basic condition
     let basicCondition =
       'terms.enabled = true and terms.deletedAt is null and terms.status =:status';
@@ -309,6 +309,9 @@ export class TermsService {
     }
     if (principal) {
       basicCondition += ' and terms.principal like :principal';
+    }
+    if (columnId) {
+      basicCondition += ' and terms.columnId = :columnId';
     }
     // get terms and count
     let terms;
@@ -334,6 +337,7 @@ export class TermsService {
           type: type,
           principal: `%${principal}%`,
           year: new Date(authorizedAt).getFullYear(),
+          columnId: columnId,
         })
         .andWhere(
           new Brackets((qb) => {
