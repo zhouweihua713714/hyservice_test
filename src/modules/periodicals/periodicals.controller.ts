@@ -5,11 +5,13 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
+import { RecommendTreatisesResult } from '../treatises/treatises.types';
 import {
   GetPeriodicalDetailDto,
   ListComplexPeriodicalDto,
   ListPeriodicalDto,
   OperatePeriodicalsDto,
+  RecommendPeriodicalsDto,
   RemovePeriodicalsDto,
   SavePeriodicalDto,
 } from './periodicals.dto';
@@ -19,6 +21,7 @@ import {
   ListComplexPeriodicalResult,
   ListPeriodicalResult,
   OperatePeriodicalsResult,
+  RecommendPeriodicalsResult,
   RemovePeriodicalsResult,
   SavePeriodicalResult,
 } from './periodicals.types';
@@ -31,7 +34,8 @@ import {
   OperatePeriodicalsResult,
   RemovePeriodicalsResult,
   SavePeriodicalResult,
-  ListComplexPeriodicalResult
+  ListComplexPeriodicalResult,
+  RecommendPeriodicalsResult
 )
 @Controller('/periodicals')
 export class PeriodicalsController {
@@ -95,5 +99,15 @@ export class PeriodicalsController {
   listComplexTerm(@Body() params: ListComplexPeriodicalDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.periodicalService.listComplexPeriodical(params, user);
+  }
+
+  @Post('/recommendPeriodicals')
+  @HttpCode(200)
+  @ApiOperation({ summary: '期刊推荐列表(为您推荐)' })
+  @ApiResult(RecommendPeriodicalsResult)
+  @AllowAnon()
+  recommendPeriodicals(@Body() params: RecommendPeriodicalsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.periodicalService.recommendPeriodicals(params, user);
   }
 }

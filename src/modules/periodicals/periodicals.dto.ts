@@ -296,3 +296,11 @@ export class ListComplexPeriodicalDto extends PickType(ReqListQuery, ['page', 's
   @IsOptional()
   columnId: string;
 }
+
+export class RecommendPeriodicalsDto {
+
+  @ApiPropertyOptional({ description: '栏目id' })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  @IsOptional()
+  columnId: string;
+}

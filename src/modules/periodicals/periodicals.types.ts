@@ -100,6 +100,7 @@ export class ListComplexPeriodicalInfo extends PickType(Periodicals, [
   'id',
   'name',
   'subject',
+  'field',
   'minorField',
   'type',
   'period',
@@ -123,4 +124,18 @@ export class ListComplexPeriodicalResult {
 
   @ApiProperty({ description: '总数' })
   count: number;
+}
+
+export class RecommendPeriodicalInfo extends PickType(Periodicals, [
+  'id',
+  'name',
+  'ISSN',
+  'type',
+  'minorField',
+  'coverUrl',
+] as const) {}
+
+export class RecommendPeriodicalsResult {
+  @ApiProperty({ description: '期刊数组', type: RecommendPeriodicalInfo, isArray: true })
+  periodicals: ListPeriodicalInfo[];
 }

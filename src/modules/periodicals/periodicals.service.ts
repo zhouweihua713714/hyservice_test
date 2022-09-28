@@ -17,6 +17,7 @@ import {
   ListComplexPeriodicalDto,
   ListPeriodicalDto,
   OperatePeriodicalsDto,
+  RecommendPeriodicalsDto,
   RemovePeriodicalsDto,
   SavePeriodicalDto,
 } from './periodicals.dto';
@@ -495,5 +496,40 @@ export class PeriodicalsService {
       };
     });
     return ResultData.ok({ data: { periodicals: result, count: count } });
+  }
+  /**
+   * @description 推荐期刊
+   * @param {RecommendPeriodicalsDto} params 推荐期刊的相关参数
+   * @returns {ResultData} 返回recommendPeriodicals信息
+   */
+  async recommendPeriodicals(
+    params: RecommendPeriodicalsDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId } = params;
+    let columnCondition;
+    if (columnId) {
+      columnCondition = {
+        columnId: columnId,
+      };
+    }
+    // get periodicals
+    const periodicals = await periodicalsRepository.find({
+      where: {
+        ...columnCondition,
+        status: Content_Status_Enum.ACTIVE,
+        enabled: true,
+        deletedAt: IsNull(),
+      },
+      select: ['id', 'name', 'ISSN', 'type', 'minorField', 'coverUrl'],
+      take: 6, // it's up to PM
+      order: {
+        clicks: 'DESC',
+        publishedAt: 'DESC',
+      },
+    });
+    return ResultData.ok({
+      data: { periodicals: periodicals },
+    });
   }
 }
