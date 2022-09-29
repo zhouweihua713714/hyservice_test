@@ -7,6 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
   GetConferenceDetailDto,
+  ListComplexConferenceDto,
   ListConferenceDto,
   OperateConferencesDto,
   RemoveConferencesDto,
@@ -15,6 +16,7 @@ import {
 import { ConferencesService } from './conferences.service';
 import {
   GetConferenceDetailResult,
+  ListComplexConferenceResult,
   ListConferenceResult,
   OperateConferencesResult,
   RemoveConferencesResult,
@@ -28,11 +30,12 @@ import {
   ListConferenceResult,
   OperateConferencesResult,
   RemoveConferencesResult,
-  SaveConferenceResult
+  SaveConferenceResult,
+  ListComplexConferenceResult
 )
 @Controller('/conferences')
 export class ConferencesController {
-  constructor(private readonly termsService: ConferencesService) {}
+  constructor(private readonly conferencesService: ConferencesService) {}
 
   @Get('/getConferenceDetail')
   @HttpCode(200)
@@ -41,7 +44,7 @@ export class ConferencesController {
   @AllowAnon()
   getConferenceDetail(@Query() params: GetConferenceDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.getConferenceDetail(params, user);
+    return this.conferencesService.getConferenceDetail(params, user);
   }
 
   @Post('/saveConference')
@@ -51,7 +54,7 @@ export class ConferencesController {
   @ApiBearerAuth()
   saveConference(@Body() params: SaveConferenceDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.saveConference(params, user);
+    return this.conferencesService.saveConference(params, user);
   }
 
   @Get('/listConference')
@@ -61,7 +64,7 @@ export class ConferencesController {
   @ApiBearerAuth()
   listConference(@Query() params: ListConferenceDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.listConference(params, user);
+    return this.conferencesService.listConference(params, user);
   }
 
   @Post('/operateConferences')
@@ -71,7 +74,7 @@ export class ConferencesController {
   @ApiBearerAuth()
   operateConferences(@Body() params: OperateConferencesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.operateConferences(params, user);
+    return this.conferencesService.operateConferences(params, user);
   }
 
   @Post('/removeConferences')
@@ -81,6 +84,17 @@ export class ConferencesController {
   @ApiBearerAuth()
   removeConferences(@Body() params: RemoveConferencesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.removeConferences(params, user);
+    return this.conferencesService.removeConferences(params, user);
   }
+
+  @Post('/listComplexConference')
+  @HttpCode(200)
+  @ApiOperation({ summary: '会议列表(c端)' })
+  @ApiResult(ListComplexConferenceResult)
+  @AllowAnon()
+  listComplexTerm(@Body() params: ListComplexConferenceDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.conferencesService.listComplexConference(params, user);
+  }
+  
 }

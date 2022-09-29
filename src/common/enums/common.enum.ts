@@ -111,3 +111,12 @@ export enum Operate_types_Enum {
   /** 移除 */
   Remove = 'remove',
 }
+
+export enum Picker_Enum {
+  /** 年 */
+  Year = 'year',
+  /** 月 */
+  Month = 'month',
+  /** 日 */
+  Date = 'date',
+}

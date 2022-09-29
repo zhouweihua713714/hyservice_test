@@ -53,7 +53,11 @@ export class SaveConferenceDto {
   @IsOptional()
   conductedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '政策发布时间不为空，该字段不能为空,日期格式:year、month、date', type: String, nullable: true })
+  @ApiPropertyOptional({
+    description: '会议举办不为空，该字段不能为空,日期格式:year、month、date',
+    type: String,
+    nullable: true,
+  })
   @IsString({ message: 'picker 类型错误, 正确类型 string' })
   @IsOptional()
   picker: string | null;
@@ -88,12 +92,12 @@ export class SaveConferenceDto {
   @IsOptional()
   coverUrl: string | null;
 
-  @ApiPropertyOptional({ description: '主领域', type: String,isArray:true, nullable: true })
+  @ApiPropertyOptional({ description: '主领域', type: String, isArray: true, nullable: true })
   @IsArray({ message: 'field 类型错误, 正确类型 string' })
   @IsOptional()
   field: string[] | null;
 
-  @ApiPropertyOptional({ description: '子领域', type: String,isArray:true, nullable: true })
+  @ApiPropertyOptional({ description: '子领域', type: String, isArray: true, nullable: true })
   @IsArray({ message: 'minorField 类型错误, 正确类型 string' })
   @IsOptional()
   minorField: string[] | null;
@@ -169,4 +173,32 @@ export class RemoveConferencesDto {
   @ApiProperty({ description: 'ids 数组' })
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];
+}
+
+export class ListComplexConferenceDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
+  @ApiPropertyOptional({
+    description: '关键词,多标签需要分号隔开才能进行分词在进行模糊搜索 如果为空则不传或者传null',
+  })
+  @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  @IsOptional()
+  keyword: string;
+
+  @ApiPropertyOptional({ description: '举办时间', type: Date, nullable: true })
+  @IsDateString({ message: ' conductedAt 类型错误, 正确类型 date' })
+  @IsOptional()
+  conductedAt: Date | null;
+
+  @ApiPropertyOptional({
+    description: '会议举办不为空，该字段不能为空,日期格式:year、month、date',
+    type: String,
+    nullable: true,
+  })
+  @IsString({ message: 'picker 类型错误, 正确类型 string' })
+  @IsOptional()
+  picker: string | null;
+
+  @ApiPropertyOptional({ description: '举办结束时间(个别数据有)', type: Date, nullable: true })
+  @IsDateString({ message: 'endedAt 类型错误, 正确类型 date' })
+  @IsOptional()
+  endedAt: Date | null;
 }
