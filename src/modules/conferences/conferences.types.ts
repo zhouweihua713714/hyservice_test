@@ -30,7 +30,7 @@ export class GetConferenceDetailResult extends PickType(Conferences, [
   'deliveryEndedAt',
   'preregisterEndedAt',
   'registerEndedAt',
-  'picker'
+  'picker',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -50,7 +50,7 @@ export class ListConferenceInfo extends PickType(Conferences, [
   'status',
   'updatedAt',
   'name',
-  'clicks'
+  'clicks',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -76,3 +76,31 @@ export class RemoveConferencesResult extends PickType(OperateConferencesResult, 
   'succeed',
   'failed',
 ] as const) {}
+
+export class ListComplexConferenceInfo extends PickType(Conferences, [
+  'id',
+  'name',
+  'conductedAt',
+  'endedAt',
+  'location',
+  'period',
+  'introduction',
+  'field',
+  'minorField',
+  'website',
+  'coverUrl',
+] as const) {
+  @ApiPropertyOptional({ description: '子领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)' })
+  minorFieldName: string;
+
+  @ApiPropertyOptional({ description: '主领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)' })
+  fieldName: string;
+}
+
+export class ListComplexConferenceResult {
+  @ApiProperty({ description: '会议数组', type: ListComplexConferenceInfo, isArray: true })
+  conferences: ListComplexConferenceInfo[];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
+}

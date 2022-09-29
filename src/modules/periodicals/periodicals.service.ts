@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { words } from 'lodash';
 import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../auth/auth.types';
@@ -522,7 +522,7 @@ export class PeriodicalsService {
         deletedAt: IsNull(),
       },
       select: ['id', 'name', 'ISSN', 'type', 'minorField', 'coverUrl'],
-      take: 6, // it's up to PM
+      take: 5, // it's up to PM
       order: {
         clicks: 'DESC',
         publishedAt: 'DESC',

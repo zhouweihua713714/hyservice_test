@@ -12,6 +12,7 @@ import {
 } from '../repository/repository';
 import {
   GetConferenceDetailDto,
+  ListComplexConferenceDto,
   ListConferenceDto,
   OperateConferencesDto,
   RemoveConferencesDto,
@@ -20,9 +21,11 @@ import {
 import {
   Content_Status_Enum,
   Content_Types_Enum,
+  Picker_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
+import { dateFormat } from '@/common/utils/dateFormat';
 
 export class ConferencesService {
   /**
@@ -310,5 +313,144 @@ export class ConferencesService {
     return ResultData.ok({
       data: { succeed: succeed, failed: ids.length - succeed },
     });
+  }
+  /**
+   * @description 会议列表(c端)
+   * @param {ListComplexConferenceDto} params会议列表参数
+   * @returns {ResultData} 返回listComplexConference信息
+   */
+  async listComplexConference(
+    params: ListComplexConferenceDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { conductedAt, picker, endedAt, keyword, page, size } = params;
+    // get basic condition
+    const month = 'yyyy-mm';
+    const date = 'yyyy-mm-dd';
+    let conductedAtDateString;
+    let endedAtDateString;
+    let keywords;
+    let basicCondition =
+      'conferences.enabled = true and conferences.deletedAt is null and conferences.status =:status';
+    if (picker && picker === Picker_Enum.Year && conductedAt) {
+      basicCondition += ' and extract(year from conferences.conductedAt) =:year';
+    }
+    if (picker && picker === Picker_Enum.Date && conductedAt) {
+      conductedAtDateString = dateFormat(conductedAt, Picker_Enum.Date);
+      basicCondition += ` and to_char(conferences.conductedAt,'${date}') >=:conductedAt`;
+    }
+    if (picker && picker === Picker_Enum.Date && endedAt) {
+      endedAtDateString = dateFormat(endedAt, Picker_Enum.Date);
+      basicCondition += ` and to_char(conferences.conductedAt,'${date}') <=:endedAt`;
+    }
+    if (picker && picker === Picker_Enum.Month && conductedAt) {
+      conductedAtDateString = dateFormat(conductedAt, Picker_Enum.Month);
+      basicCondition += ` and to_char(conferences.conductedAt,'${month}') >=:conductedAt`;
+    }
+    if (picker && picker === Picker_Enum.Month && endedAt) {
+      endedAtDateString = dateFormat(endedAt, Picker_Enum.Month);
+      basicCondition += ` and to_char(conferences.endedAt,'${month}') <=:endedAt`;
+    }
+    if (keyword) {
+      // get keywords
+      keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      basicCondition += ' and conferences.name like any (ARRAY[:...keyword])';
+    }
+    // get conferences and count
+    const [conferences, count] = await conferencesRepository
+      .createQueryBuilder('conferences')
+      .select([
+        'conferences.id',
+        'conferences.name',
+        'conferences.conductedAt',
+        'conferences.endedAt',
+        'conferences.location',
+        'conferences.period',
+        'conferences.introduction',
+        'conferences.field',
+        'conferences.minorField',
+        'conferences.website',
+        'conferences.coverUrl',
+      ])
+      .where(`${basicCondition}`, {
+        status: Content_Status_Enum.ACTIVE,
+        year: conductedAt ? new Date(conductedAt).getFullYear() : undefined,
+        conductedAt: conductedAtDateString,
+        endedAt: endedAtDateString,
+        keyword: keywords,
+      })
+      .orderBy('conferences.conductedAt', 'DESC')
+      .orderBy('conferences.publishedAt', 'DESC')
+      .skip(page - 1)
+      .take(size)
+      .getManyAndCount();
+
+    if (count === 0) {
+      return ResultData.ok({ data: { conferences: [], count: count } });
+    }
+    // get fields
+    let periodIds;
+    conferences.map((data) => {
+      periodIds = _.union(data.field as string[], periodIds);
+      periodIds = _.union(data.minorField as string[], periodIds);
+    });
+    periodIds = _.uniq(periodIds);
+    let fields;
+    if (periodIds.length > 0) {
+      fields = await fieldsRepository.findBy({
+        id: In(periodIds),
+        type: Like(`%${Content_Types_Enum.CONFERENCE}%`),
+      });
+    }
+    const result = conferences.map((data) => {
+      let fieldInfo;
+      let minorFieldInfo;
+      if (data.field) {
+        fieldInfo = (data.field as string[]).map((data) => {
+          return {
+            name: _.find(fields, function (o) {
+              return o.id === data;
+            })
+              ? _.find(fields, function (o) {
+                  return o.id === data;
+                }).name
+              : null,
+          };
+        });
+      }
+      if (data.minorField) {
+        minorFieldInfo = (data.minorField as string[]).map((data) => {
+          return {
+            name: _.find(fields, function (o) {
+              return o.id === data;
+            })
+              ? _.find(fields, function (o) {
+                  return o.id === data;
+                }).name
+              : null,
+          };
+        });
+      }
+      return {
+        ...data,
+        fieldName: fieldInfo
+          ? _.join(
+              fieldInfo.map((data) => {
+                return data.name;
+              }),
+              ';'
+            )
+          : null,
+        minorField: minorFieldInfo
+          ? _.join(
+              minorFieldInfo.map((data) => {
+                return data.name;
+              }),
+              ';'
+            )
+          : null,
+      };
+    });
+    return ResultData.ok({ data: { conferences: result, count: count } });
   }
 }
