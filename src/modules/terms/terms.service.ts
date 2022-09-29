@@ -371,6 +371,7 @@ export class TermsService {
           type: type,
           principal: `%${principal}%`,
           year: new Date(authorizedAt).getFullYear(),
+          columnId: columnId,
         })
         .orderBy('terms.publishedAt', 'DESC')
         .orderBy('terms.id', 'DESC')
