@@ -11,6 +11,7 @@ import {
   ListConferenceDto,
   ListRecentConferenceDto,
   OperateConferencesDto,
+  RecommendConferencesDto,
   RemoveConferencesDto,
   SaveConferenceDto,
 } from './conferences.dto';
@@ -21,6 +22,7 @@ import {
   ListConferenceResult,
   ListRecentConferenceResult,
   OperateConferencesResult,
+  RecommendConferenceResult,
   RemoveConferencesResult,
   SaveConferenceResult,
 } from './conferences.types';
@@ -34,7 +36,8 @@ import {
   RemoveConferencesResult,
   SaveConferenceResult,
   ListComplexConferenceResult,
-  ListRecentConferenceResult
+  ListRecentConferenceResult,
+  RecommendConferenceResult
 )
 @Controller('/conferences')
 export class ConferencesController {
@@ -108,6 +111,16 @@ export class ConferencesController {
   listRecentConference(@Query() params: ListRecentConferenceDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.conferencesService.listRecentConference(params, user);
+  }
+
+  @Post('/recommendConferences')
+  @HttpCode(200)
+  @ApiOperation({ summary: '会议推荐列表(为您推荐)' })
+  @ApiResult(RecommendConferenceResult)
+  @AllowAnon()
+  recommendConferences(@Body() params: RecommendConferencesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.conferencesService.recommendConferences(params, user);
   }
   
 }

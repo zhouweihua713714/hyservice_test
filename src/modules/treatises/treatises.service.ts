@@ -626,7 +626,7 @@ export class TreatisesService {
       treatises = _.unionBy(treatises, newTreatises, 'id');
     }
     return ResultData.ok({
-      data: { treatises: treatises },
+      data: { treatises: treatises ? treatises : [] },
     });
   }
 
