@@ -16,6 +16,7 @@ import {
   ListConferenceDto,
   ListRecentConferenceDto,
   OperateConferencesDto,
+  RecommendConferencesDto,
   RemoveConferencesDto,
   SaveConferenceDto,
 } from './conferences.dto';
@@ -25,7 +26,7 @@ import {
   Picker_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { In, IsNull, Like } from 'typeorm';
+import { Brackets, In, IsNull, Like, ArrayOverlap } from 'typeorm';
 import { dateFormat } from '@/common/utils/dateFormat';
 
 export class ConferencesService {
@@ -482,5 +483,115 @@ export class ConferencesService {
       return ResultData.ok({ data: { conferences: [] } });
     }
     return ResultData.ok({ data: { conferences: conferences } });
+  }
+  /**
+   * @description 推荐会议
+   * @param {RecommendConferencesDto} params 推荐的相关参数
+   * @returns {ResultData} 返回recommendConferences信息
+   */
+  async recommendConferences(
+    params: RecommendConferencesDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { id } = params;
+    const conferenceInfo = await conferencesRepository.findOneBy({
+      id: id,
+      status: Content_Status_Enum.ACTIVE,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    const field = conferenceInfo?.field as string[];
+    const minorField = conferenceInfo?.minorField as string[];
+    let conferences;
+    let basicCondition =
+      'conferences.enabled = true and conferences.deletedAt is null and conferences.status =:status';
+    if (conferenceInfo) {
+      basicCondition += ' and conferences.id !=:id';
+    }
+    if (field) {
+      conferences = await conferencesRepository
+        .createQueryBuilder('conferences')
+        .select(['conferences.id', 'conferences.name', 'conferences.columnId'])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: conferenceInfo?.id,
+        })
+        .andWhere('conferences.field::jsonb ?| ARRAY[:...field]', {
+          field: field,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(8)
+        .getMany();
+    }
+    let idsCondition = '';
+    // if conferences count < 8 then minorField recommend
+    if (conferences && conferences.length < 8) {
+      if (conferences.length > 0) {
+        idsCondition = ' and id not in (:...ids)';
+      }
+      if (minorField) {
+        const newConferences = await conferencesRepository
+          .createQueryBuilder('conferences')
+          .select(['conferences.id', 'conferences.name', 'conferences.columnId'])
+          .where(`${basicCondition}${idsCondition}`, {
+            status: Content_Status_Enum.ACTIVE,
+            id: conferenceInfo?.id,
+            ids: conferences.map((data) => {
+              return data.id;
+            }),
+          })
+          .andWhere('conferences.minor_field::jsonb ?| ARRAY[:...minorField]', {
+            minorField: minorField,
+          })
+          .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+          .take(8 - conferences.length)
+          .getMany();
+        conferences = _.unionBy(conferences, newConferences, 'id');
+      }
+    }
+    // if conferences count < 8 then all conference recommend
+    if (!conferenceInfo || (conferences && conferences.length < 8)) {
+      let size = 8;
+      if (conferences) {
+        size = size - conferences.length;
+      }
+      const newConferences = await conferencesRepository
+        .createQueryBuilder('conferences')
+        .select(['conferences.id', 'conferences.name', 'conferences.columnId'])
+        .where(`${basicCondition}${idsCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: conferenceInfo?.id,
+          ids: conferences
+            ? conferences.map((data) => {
+                return data.id;
+              })
+            : undefined,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(size)
+        .getMany();
+      conferences = _.unionBy(conferences, newConferences, 'id');
+    }
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        id: In(
+          conferences.map((conference) => {
+            return conference.columnId;
+          })
+        ),
+      },
+    });
+    const result = conferences.map((conference) => {
+      return {
+        ...conference,
+        columnName: _.find(columns, function (o) {
+          return o.id === conference.columnId;
+        })?.name,
+      };
+    });
+    return ResultData.ok({
+      data: { conferences: result ? result : [] },
+    });
   }
 }

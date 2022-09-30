@@ -203,3 +203,9 @@ export class ListComplexConferenceDto extends PickType(ReqListQuery, ['page', 's
   endedAt: Date | null;
 }
 export class ListRecentConferenceDto {}
+
+export class RecommendConferencesDto {
+  @ApiProperty({ description: '会议id' })
+  @IsString({ message: '会议id 类型错误, 正确类型 string' })
+  id: string;
+}

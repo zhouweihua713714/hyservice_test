@@ -91,10 +91,14 @@ export class ListComplexConferenceInfo extends PickType(Conferences, [
   'website',
   'coverUrl',
 ] as const) {
-  @ApiPropertyOptional({ description: '子领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)' })
+  @ApiPropertyOptional({
+    description: '子领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)',
+  })
   minorFieldName: string;
 
-  @ApiPropertyOptional({ description: '主领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)' })
+  @ApiPropertyOptional({
+    description: '主领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)',
+  })
   fieldName: string;
 }
 
@@ -115,11 +119,23 @@ export class ListRecentConferenceInfo extends PickType(Conferences, [
   'location',
   'period',
   'coverUrl',
-] as const) {
-}
+] as const) {}
 
 export class ListRecentConferenceResult {
-  @ApiProperty({ description: '会议数组', type:ListRecentConferenceInfo, isArray: true })
+  @ApiProperty({ description: '会议数组', type: ListRecentConferenceInfo, isArray: true })
   conferences: ListRecentConferenceInfo[];
 }
 
+export class RecommendConferenceInfo extends PickType(Conferences, [
+  'id',
+  'name',
+  'columnId',
+] as const) {
+  @ApiProperty({ description: '栏目名称' })
+  columnName: string;
+}
+
+export class RecommendConferenceResult {
+  @ApiProperty({ description: '会议数组', type: RecommendConferenceInfo, isArray: true })
+  conferences: RecommendConferenceInfo[];
+}

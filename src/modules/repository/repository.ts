@@ -25,7 +25,7 @@ import { UserLabelTreatises } from '@/entities/UserLabelTreatises.entity';
 import { UserNoteTreatises } from '@/entities/UserNoteTreatises.entity';
 DataSource.initialize()
   .then(() => {
-    console.log('Data Source has been initialized!');
+    // console.log('Data Source has been initialized!');
   })
   .catch((err) => {
     console.error('Error during Data Source initialization', err);
