@@ -126,7 +126,7 @@ export class ListRecentConferenceResult {
   conferences: ListRecentConferenceInfo[];
 }
 
-export class RecommendConferenceInfo extends PickType(Conferences, [
+export class RecommendConferencesInfo extends PickType(Conferences, [
   'id',
   'name',
   'columnId',
@@ -135,7 +135,7 @@ export class RecommendConferenceInfo extends PickType(Conferences, [
   columnName: string;
 }
 
-export class RecommendConferenceResult {
-  @ApiProperty({ description: '会议数组', type: RecommendConferenceInfo, isArray: true })
-  conferences: RecommendConferenceInfo[];
+export class RecommendConferencesResult {
+  @ApiProperty({ description: '会议数组', type: RecommendConferencesInfo, isArray: true })
+  conferences: RecommendConferencesInfo[];
 }
