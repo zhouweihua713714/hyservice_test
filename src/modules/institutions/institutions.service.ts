@@ -12,6 +12,7 @@ import {
 } from '../repository/repository';
 import {
   GetInstitutionDetailDto,
+  ListComplexInstitutionDto,
   ListInstitutionDto,
   OperateInstitutionsDto,
   RemoveInstitutionsDto,
@@ -313,5 +314,120 @@ export class InstitutionsService {
     return ResultData.ok({
       data: { succeed: succeed, failed: ids.length - succeed },
     });
+  }
+  /**
+   * @description 会议列表(c端)
+   * @param {ListComplexInstitutionDto} params会议列表参数
+   * @returns {ResultData} 返回listComplexInstitution信息
+   */
+  async listComplexInstitution(
+    params: ListComplexInstitutionDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { keyword, page, size } = params;
+    // get basic condition
+    const month = 'yyyy-mm';
+    const date = 'yyyy-mm-dd';
+    let conductedAtDateString;
+    let endedAtDateString;
+    let keywords;
+    let basicCondition =
+      'institutions.enabled = true and institutions.deletedAt is null and institutions.status =:status';
+    if (keyword) {
+      // get keywords
+      keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      basicCondition += ' and institutions.name like any (ARRAY[:...keyword])';
+    }
+    // get institutions and count
+    const [institutions, count] = await institutionsRepository
+      .createQueryBuilder('institutions')
+      .select([
+        'institutions.id',
+        'institutions.name',
+        'institutions.foreignName',
+        'institutions.address',
+        'institutions.introduction',
+        'institutions.unit',
+        'institutions.field',
+        'institutions.minorField',
+        'institutions.website',
+        'institutions.url',
+      ])
+      .where(`${basicCondition}`, {
+        status: Content_Status_Enum.ACTIVE,
+        keyword: keywords,
+      })
+      .orderBy('institutions.publishedAt', 'DESC')
+      .skip(page - 1)
+      .take(size)
+      .getManyAndCount();
+
+    if (count === 0) {
+      return ResultData.ok({ data: { institutions: [], count: count } });
+    }
+    // get fields
+    let periodIds;
+    institutions.map((data) => {
+      periodIds = _.union(data.field as string[], periodIds);
+      periodIds = _.union(data.minorField as string[], periodIds);
+    });
+    periodIds = _.uniq(periodIds);
+    let fields;
+    if (periodIds.length > 0) {
+      fields = await fieldsRepository.findBy({
+        id: In(periodIds),
+        type: Like(`%${Content_Types_Enum.INSTITUTION}%`),
+      });
+    }
+    const result = institutions.map((data) => {
+      let fieldInfo;
+      let minorFieldInfo;
+      if (data.field) {
+        fieldInfo = (data.field as string[]).map((data) => {
+          return {
+            name: _.find(fields, function (o) {
+              return o.id === data;
+            })
+              ? _.find(fields, function (o) {
+                  return o.id === data;
+                }).name
+              : null,
+          };
+        });
+      }
+      if (data.minorField) {
+        minorFieldInfo = (data.minorField as string[]).map((data) => {
+          return {
+            name: _.find(fields, function (o) {
+              return o.id === data;
+            })
+              ? _.find(fields, function (o) {
+                  return o.id === data;
+                }).name
+              : null,
+          };
+        });
+      }
+      return {
+        ...data,
+        fieldName: fieldInfo
+          ? _.join(
+              fieldInfo.map((data) => {
+                return data.name;
+              }),
+              ';'
+            )
+          : null,
+        minorField: minorFieldInfo
+          ? _.join(
+              minorFieldInfo.map((data) => {
+                return data.name;
+              }),
+              ';'
+            )
+          : null,
+      };
+    });
+    return ResultData.ok({ data: { institutions: result, count: count } });
   }
 }

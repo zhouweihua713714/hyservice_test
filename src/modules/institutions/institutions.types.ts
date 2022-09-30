@@ -22,7 +22,7 @@ export class GetInstitutionDetailResult extends PickType(Institutions, [
   'minorField',
   'longitude',
   'latitude',
-  'url'
+  'url',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -42,7 +42,7 @@ export class ListInstitutionInfo extends PickType(Institutions, [
   'status',
   'updatedAt',
   'name',
-  'clicks'
+  'clicks',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -68,3 +68,34 @@ export class RemoveInstitutionsResult extends PickType(OperateInstitutionsResult
   'succeed',
   'failed',
 ] as const) {}
+
+export class ListComplexInstitutionInfo extends PickType(Institutions, [
+  'id',
+  'name',
+  'foreignName',
+  'address',
+  'introduction',
+  'unit',
+  'field',
+  'minorField',
+  'website',
+  'url',
+] as const) {
+  @ApiPropertyOptional({
+    description: '子领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)',
+  })
+  minorFieldName: string;
+
+  @ApiPropertyOptional({
+    description: '主领域名称(这里拼接好下发用;隔开如果样式问题可以根据分号进行切割展示)',
+  })
+  fieldName: string;
+}
+
+export class ListComplexInstitutionResult {
+  @ApiProperty({ description: '机构数组', type: ListComplexInstitutionInfo, isArray: true })
+  conferences: ListComplexInstitutionInfo[];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
+}
