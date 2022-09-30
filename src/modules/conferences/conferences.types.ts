@@ -82,6 +82,7 @@ export class ListComplexConferenceInfo extends PickType(Conferences, [
   'name',
   'conductedAt',
   'endedAt',
+  'picker',
   'location',
   'period',
   'introduction',
@@ -104,3 +105,21 @@ export class ListComplexConferenceResult {
   @ApiProperty({ description: '总数' })
   count: number;
 }
+
+export class ListRecentConferenceInfo extends PickType(Conferences, [
+  'id',
+  'name',
+  'conductedAt',
+  'endedAt',
+  'picker',
+  'location',
+  'period',
+  'coverUrl',
+] as const) {
+}
+
+export class ListRecentConferenceResult {
+  @ApiProperty({ description: '会议数组', type:ListRecentConferenceInfo, isArray: true })
+  conferences: ListRecentConferenceInfo[];
+}
+

@@ -578,16 +578,13 @@ export class TreatisesService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { keyword, columnId } = params;
-    let keywordCondition;
     const basicCondition =
       'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status';
     let treatises;
+    // keyword recommend first
     if (keyword) {
       // get keywords
       const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
-      keywordCondition = {
-        keyword: Like(keywords),
-      };
       treatises = await treatisesRepository
         .createQueryBuilder('treatises')
         .select(['treatises.id', 'treatises.title'])
@@ -596,14 +593,37 @@ export class TreatisesService {
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('treatises.title like any (ARRAY[:...keyword])', {
+            qb.where('treatises.keyword like any (ARRAY[:...keyword])', {
               keyword: keywords,
-            }).orWhere('treatises.columnId =:columnId', { columnId: columnId });
+            });
           })
         )
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(8)
         .getMany();
+    }
+    // if treatises count < 8 then columnId recommend
+    if (treatises.length < 8) {
+      let idsCondition = '';
+      if (treatises.length > 0) {
+        idsCondition = ' and id not in (:...ids)';
+      }
+      const newTreatises = await treatisesRepository
+        .createQueryBuilder('treatises')
+        .select(['treatises.id', 'treatises.title'])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+        })
+        .where(`treatises.columnId =:columnId${idsCondition}`, {
+          columnId: columnId,
+          ids: treatises.map((data) => {
+            return data.id;
+          }),
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(8 - treatises.length)
+        .getMany();
+      treatises = _.unionBy(treatises, newTreatises, 'id');
     }
     return ResultData.ok({
       data: { treatises: treatises },

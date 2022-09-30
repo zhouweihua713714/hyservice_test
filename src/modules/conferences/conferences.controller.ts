@@ -9,6 +9,7 @@ import {
   GetConferenceDetailDto,
   ListComplexConferenceDto,
   ListConferenceDto,
+  ListRecentConferenceDto,
   OperateConferencesDto,
   RemoveConferencesDto,
   SaveConferenceDto,
@@ -18,6 +19,7 @@ import {
   GetConferenceDetailResult,
   ListComplexConferenceResult,
   ListConferenceResult,
+  ListRecentConferenceResult,
   OperateConferencesResult,
   RemoveConferencesResult,
   SaveConferenceResult,
@@ -31,7 +33,8 @@ import {
   OperateConferencesResult,
   RemoveConferencesResult,
   SaveConferenceResult,
-  ListComplexConferenceResult
+  ListComplexConferenceResult,
+  ListRecentConferenceResult
 )
 @Controller('/conferences')
 export class ConferencesController {
@@ -95,6 +98,16 @@ export class ConferencesController {
   listComplexTerm(@Body() params: ListComplexConferenceDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.conferencesService.listComplexConference(params, user);
+  }
+
+  @Get('/listRecentConference')
+  @HttpCode(200)
+  @ApiOperation({ summary: '最近会议TOP4' })
+  @ApiResult(ListRecentConferenceResult)
+  @ApiBearerAuth()
+  listRecentConference(@Query() params: ListRecentConferenceDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.conferencesService.listRecentConference(params, user);
   }
   
 }

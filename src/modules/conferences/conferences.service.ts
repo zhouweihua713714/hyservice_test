@@ -14,6 +14,7 @@ import {
   GetConferenceDetailDto,
   ListComplexConferenceDto,
   ListConferenceDto,
+  ListRecentConferenceDto,
   OperateConferencesDto,
   RemoveConferencesDto,
   SaveConferenceDto,
@@ -364,6 +365,7 @@ export class ConferencesService {
         'conferences.name',
         'conferences.conductedAt',
         'conferences.endedAt',
+        'conferences.picker',
         'conferences.location',
         'conferences.period',
         'conferences.introduction',
@@ -452,5 +454,33 @@ export class ConferencesService {
       };
     });
     return ResultData.ok({ data: { conferences: result, count: count } });
+  }
+  /**
+   * @description 最近会议TOP4
+   * @param {ListComplexConferenceDto} params最近会议TOP4参数
+   * @returns {ResultData} 返回listRecentConference信息
+   */
+  async listRecentConference(
+    params: ListRecentConferenceDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    // get conferences and count
+    const [conferences, count] = await conferencesRepository.findAndCount({
+      where: {
+        status: Content_Status_Enum.ACTIVE,
+        enabled: true,
+        deletedAt: IsNull(),
+      },
+      select: ['id', 'name', 'conductedAt', 'endedAt', 'picker', 'period', 'location', 'coverUrl'],
+      take: 4, // it's up to PM
+      order: {
+        conductedAt: 'DESC',
+        publishedAt: 'DESC',
+      },
+    });
+    if (count === 0) {
+      return ResultData.ok({ data: { conferences: [] } });
+    }
+    return ResultData.ok({ data: { conferences: conferences } });
   }
 }

@@ -126,7 +126,6 @@ export class Conferences {
   @Column('timestamp with time zone', {
     name: 'delivery_ended_at',
     nullable: true,
-    default: () => 'CURRENT_TIMESTAMP',
     comment: '送稿截止时间',
   })
   deliveryEndedAt: Date | null;
@@ -135,7 +134,6 @@ export class Conferences {
   @Column('timestamp with time zone', {
     name: 'preregister_ended_at',
     nullable: true,
-    default: () => 'CURRENT_TIMESTAMP',
     comment: '提前注册截止时间',
   })
   preregisterEndedAt: Date | null;
@@ -144,7 +142,6 @@ export class Conferences {
   @Column('timestamp with time zone', {
     name: 'register_ended_at',
     nullable: true,
-    default: () => 'CURRENT_TIMESTAMP',
     comment: '注册截止时间',
   })
   registerEndedAt: Date | null;
