@@ -458,7 +458,7 @@ export class ConferencesService {
   }
   /**
    * @description 最近会议TOP4
-   * @param {ListComplexConferenceDto} params最近会议TOP4参数
+   * @param {ListRecentConferenceDto} params最近会议TOP4参数
    * @returns {ResultData} 返回listRecentConference信息
    */
   async listRecentConference(

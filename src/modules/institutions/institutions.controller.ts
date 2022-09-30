@@ -7,6 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
   GetInstitutionDetailDto,
+  ListComplexInstitutionDto,
   ListInstitutionDto,
   OperateInstitutionsDto,
   RemoveInstitutionsDto,
@@ -15,6 +16,7 @@ import {
 import { InstitutionsService } from './institutions.service';
 import {
   GetInstitutionDetailResult,
+  ListComplexInstitutionResult,
   ListInstitutionResult,
   OperateInstitutionsResult,
   RemoveInstitutionsResult,
@@ -28,11 +30,12 @@ import {
   ListInstitutionResult,
   OperateInstitutionsResult,
   RemoveInstitutionsResult,
-  SaveInstitutionResult
+  SaveInstitutionResult,
+  ListComplexInstitutionResult
 )
 @Controller('/institutions')
 export class InstitutionsController {
-  constructor(private readonly termsService: InstitutionsService) {}
+  constructor(private readonly institutionsService: InstitutionsService) {}
 
   @Get('/getInstitutionDetail')
   @HttpCode(200)
@@ -41,7 +44,7 @@ export class InstitutionsController {
   @AllowAnon()
   getInstitutionDetail(@Query() params: GetInstitutionDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.getInstitutionDetail(params, user);
+    return this.institutionsService.getInstitutionDetail(params, user);
   }
 
   @Post('/saveInstitution')
@@ -51,7 +54,7 @@ export class InstitutionsController {
   @ApiBearerAuth()
   saveInstitution(@Body() params: SaveInstitutionDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.saveInstitution(params, user);
+    return this.institutionsService.saveInstitution(params, user);
   }
 
   @Get('/listInstitution')
@@ -61,7 +64,7 @@ export class InstitutionsController {
   @ApiBearerAuth()
   listInstitution(@Query() params: ListInstitutionDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.listInstitution(params, user);
+    return this.institutionsService.listInstitution(params, user);
   }
 
   @Post('/operateInstitutions')
@@ -71,7 +74,7 @@ export class InstitutionsController {
   @ApiBearerAuth()
   operateInstitutions(@Body() params: OperateInstitutionsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.operateInstitutions(params, user);
+    return this.institutionsService.operateInstitutions(params, user);
   }
 
   @Post('/removeInstitutions')
@@ -81,6 +84,16 @@ export class InstitutionsController {
   @ApiBearerAuth()
   removeInstitutions(@Body() params: RemoveInstitutionsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.removeInstitutions(params, user);
+    return this.institutionsService.removeInstitutions(params, user);
+  }
+
+  @Post('/listComplexInstitution')
+  @HttpCode(200)
+  @ApiOperation({ summary: '结构列表(c端)' })
+  @ApiResult(ListComplexInstitutionResult)
+  @AllowAnon()
+  listComplexTerm(@Body() params: ListComplexInstitutionDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.institutionsService.listComplexInstitution(params, user);
   }
 }
