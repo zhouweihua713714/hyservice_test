@@ -52,7 +52,7 @@ export const seed: TesterSeed<DataType> = {
         deliveryAt: new Date(),
         year: 2022,
         abstract: '摘要匹配',
-        keyword: '关键词',
+        keyword: '关键1词',
         ownerId: user.user.id,
         publishedAt: new Date(new Date().getTime() - 40000),
         status: Content_Status_Enum.ACTIVE,

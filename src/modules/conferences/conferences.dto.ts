@@ -202,3 +202,4 @@ export class ListComplexConferenceDto extends PickType(ReqListQuery, ['page', 's
   @IsOptional()
   endedAt: Date | null;
 }
+export class ListRecentConferenceDto {}
