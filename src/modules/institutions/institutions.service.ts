@@ -15,6 +15,7 @@ import {
   ListComplexInstitutionDto,
   ListInstitutionDto,
   OperateInstitutionsDto,
+  RecommendInstitutionsDto,
   RemoveInstitutionsDto,
   SaveInstitutionDto,
 } from './institutions.dto';
@@ -316,8 +317,8 @@ export class InstitutionsService {
     });
   }
   /**
-   * @description 会议列表(c端)
-   * @param {ListComplexInstitutionDto} params会议列表参数
+   * @description 机构列表(c端)
+   * @param {ListComplexInstitutionDto} params机构列表参数
    * @returns {ResultData} 返回listComplexInstitution信息
    */
   async listComplexInstitution(
@@ -429,5 +430,116 @@ export class InstitutionsService {
       };
     });
     return ResultData.ok({ data: { institutions: result, count: count } });
+  }
+
+  /**
+   * @description 推荐机构
+   * @param {RecommendInstitutionsDto} params 推荐的相关参数
+   * @returns {ResultData} 返回recommendInstitutions信息
+   */
+  async recommendInstitutions(
+    params: RecommendInstitutionsDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { id } = params;
+    const institutionInfo = await institutionsRepository.findOneBy({
+      id: id,
+      status: Content_Status_Enum.ACTIVE,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    const field = institutionInfo?.field as string[];
+    const minorField = institutionInfo?.minorField as string[];
+    let institutions;
+    let basicCondition =
+      'institutions.enabled = true and institutions.deletedAt is null and institutions.status =:status';
+    if (institutionInfo) {
+      basicCondition += ' and institutions.id !=:id';
+    }
+    if (field) {
+      institutions = await institutionsRepository
+        .createQueryBuilder('institutions')
+        .select(['institutions.id', 'institutions.name', 'institutions.columnId'])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: institutionInfo?.id,
+        })
+        .andWhere('institutions.field::jsonb ?| ARRAY[:...field]', {
+          field: field,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(8)
+        .getMany();
+    }
+    let idsCondition = '';
+    // if institutions count < 8 then minorField recommend
+    if (institutions && institutions.length < 8) {
+      if (institutions.length > 0) {
+        idsCondition = ' and id not in (:...ids)';
+      }
+      if (minorField) {
+        const newConferences = await institutionsRepository
+          .createQueryBuilder('institutions')
+          .select(['institutions.id', 'institutions.name', 'institutions.columnId'])
+          .where(`${basicCondition}${idsCondition}`, {
+            status: Content_Status_Enum.ACTIVE,
+            id: institutionInfo?.id,
+            ids: institutions.map((data) => {
+              return data.id;
+            }),
+          })
+          .andWhere('institutions.minor_field::jsonb ?| ARRAY[:...minorField]', {
+            minorField: minorField,
+          })
+          .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+          .take(8 - institutions.length)
+          .getMany();
+        institutions = _.unionBy(institutions, newConferences, 'id');
+      }
+    }
+    // if institutions count < 8 then all institution recommend
+    if (!institutionInfo || (institutions && institutions.length < 8)) {
+      let size = 8;
+      if (institutions) {
+        size = size - institutions.length;
+      }
+      const newConferences = await institutionsRepository
+        .createQueryBuilder('institutions')
+        .select(['institutions.id', 'institutions.name', 'institutions.columnId'])
+        .where(`${basicCondition}${idsCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: institutionInfo?.id,
+          ids: institutions
+            ? institutions.map((data) => {
+                return data.id;
+              })
+            : undefined,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(size)
+        .getMany();
+      institutions = _.unionBy(institutions, newConferences, 'id');
+    }
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        id: In(
+          institutions.map((institution) => {
+            return institution.columnId;
+          })
+        ),
+      },
+    });
+    const result = institutions.map((institution) => {
+      return {
+        ...institution,
+        columnName: _.find(columns, function (o) {
+          return o.id === institution.columnId;
+        })?.name,
+      };
+    });
+    return ResultData.ok({
+      data: { institutions: result ? result : [] },
+    });
   }
 }

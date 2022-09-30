@@ -22,7 +22,7 @@ import {
   ListConferenceResult,
   ListRecentConferenceResult,
   OperateConferencesResult,
-  RecommendConferenceResult,
+  RecommendConferencesResult,
   RemoveConferencesResult,
   SaveConferenceResult,
 } from './conferences.types';
@@ -37,7 +37,7 @@ import {
   SaveConferenceResult,
   ListComplexConferenceResult,
   ListRecentConferenceResult,
-  RecommendConferenceResult
+  RecommendConferencesResult
 )
 @Controller('/conferences')
 export class ConferencesController {
@@ -116,11 +116,10 @@ export class ConferencesController {
   @Post('/recommendConferences')
   @HttpCode(200)
   @ApiOperation({ summary: '会议推荐列表(为您推荐)' })
-  @ApiResult(RecommendConferenceResult)
+  @ApiResult(RecommendConferencesResult)
   @AllowAnon()
   recommendConferences(@Body() params: RecommendConferencesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.conferencesService.recommendConferences(params, user);
   }
-  
 }

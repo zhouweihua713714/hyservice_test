@@ -99,3 +99,17 @@ export class ListComplexInstitutionResult {
   @ApiProperty({ description: '总数' })
   count: number;
 }
+
+export class RecommendInstitutionsInfo extends PickType(Institutions, [
+  'id',
+  'name',
+  'columnId',
+] as const) {
+  @ApiProperty({ description: '栏目名称' })
+  columnName: string;
+}
+
+export class RecommendInstitutionsResult {
+  @ApiProperty({ description: '机构数组', type: RecommendInstitutionsInfo, isArray: true })
+  institutions: RecommendInstitutionsInfo[];
+}

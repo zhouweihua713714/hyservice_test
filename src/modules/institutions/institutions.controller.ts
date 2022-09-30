@@ -10,6 +10,7 @@ import {
   ListComplexInstitutionDto,
   ListInstitutionDto,
   OperateInstitutionsDto,
+  RecommendInstitutionsDto,
   RemoveInstitutionsDto,
   SaveInstitutionDto,
 } from './institutions.dto';
@@ -19,6 +20,7 @@ import {
   ListComplexInstitutionResult,
   ListInstitutionResult,
   OperateInstitutionsResult,
+  RecommendInstitutionsResult,
   RemoveInstitutionsResult,
   SaveInstitutionResult,
 } from './institutions.types';
@@ -31,7 +33,8 @@ import {
   OperateInstitutionsResult,
   RemoveInstitutionsResult,
   SaveInstitutionResult,
-  ListComplexInstitutionResult
+  ListComplexInstitutionResult,
+  RecommendInstitutionsResult
 )
 @Controller('/institutions')
 export class InstitutionsController {
@@ -95,5 +98,15 @@ export class InstitutionsController {
   listComplexTerm(@Body() params: ListComplexInstitutionDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.institutionsService.listComplexInstitution(params, user);
+  }
+
+  @Post('/recommendInstitutions')
+  @HttpCode(200)
+  @ApiOperation({ summary: '机构推荐列表(为您推荐)' })
+  @ApiResult(RecommendInstitutionsResult)
+  @AllowAnon()
+  recommendInstitutions(@Body() params: RecommendInstitutionsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.institutionsService.recommendInstitutions(params, user);
   }
 }
