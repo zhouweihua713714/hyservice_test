@@ -66,7 +66,7 @@ export class Patents {
   })
   appliedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '专利类型' })
+  @ApiPropertyOptional({ description: '专利类型', type: String, nullable: true })
   @Column('character varying', { name: 'type', length: 64, nullable: true, comment: '专利类型' })
   type: string | null;
 
@@ -79,7 +79,7 @@ export class Patents {
   agency: string | null;
 
   @ApiPropertyOptional({ description: '代理人', type: String, nullable: true })
-  @Column('text', { name: 'agent',  nullable: true, comment: '代理人' })
+  @Column('text', { name: 'agent', nullable: true, comment: '代理人' })
   agent: string | null;
 
   @ApiPropertyOptional({ description: '专利有效性', type: String, nullable: true })

@@ -45,7 +45,7 @@ export class ListPatentInfo extends PickType(Patents, [
   'status',
   'updatedAt',
   'title',
-  'clicks'
+  'clicks',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -71,3 +71,21 @@ export class RemovePatentsResult extends PickType(OperatePatentsResult, [
   'succeed',
   'failed',
 ] as const) {}
+
+export class ListComplexPatentInfo extends PickType(Patents, [
+  'id',
+  'title',
+  'announcedAt',
+  'applicant',
+  'abstract',
+  'type',
+  'keyword',
+] as const) {
+  @ApiPropertyOptional({ description: '类型名称' })
+  typeName: string;
+}
+
+export class ListComplexPatentResult {
+  @ApiProperty({ description: '专利数组', type: ListComplexPatentInfo, isArray: true })
+  patents: ListComplexPatentInfo[];
+}

@@ -7,6 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
   GetPatentDetailDto,
+  ListComplexPatentDto,
   ListPatentDto,
   OperatePatentsDto,
   RemovePatentsDto,
@@ -15,6 +16,7 @@ import {
 import { PatentsService } from './patents.service';
 import {
   GetPatentDetailResult,
+  ListComplexPatentResult,
   ListPatentResult,
   OperatePatentsResult,
   RemovePatentsResult,
@@ -28,11 +30,12 @@ import {
   ListPatentResult,
   OperatePatentsResult,
   RemovePatentsResult,
-  SavePatentResult
+  SavePatentResult,
+  ListComplexPatentResult
 )
 @Controller('/patents')
 export class PatentsController {
-  constructor(private readonly termsService: PatentsService) {}
+  constructor(private readonly patentsService: PatentsService) {}
 
   @Get('/getPatentDetail')
   @HttpCode(200)
@@ -41,7 +44,7 @@ export class PatentsController {
   @AllowAnon()
   getPatentDetail(@Query() params: GetPatentDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.getPatentDetail(params, user);
+    return this.patentsService.getPatentDetail(params, user);
   }
 
   @Post('/savePatent')
@@ -51,7 +54,7 @@ export class PatentsController {
   @ApiBearerAuth()
   savePatent(@Body() params: SavePatentDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.savePatent(params, user);
+    return this.patentsService.savePatent(params, user);
   }
 
   @Get('/listPatent')
@@ -61,7 +64,7 @@ export class PatentsController {
   @ApiBearerAuth()
   listPatent(@Query() params: ListPatentDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.listPatent(params, user);
+    return this.patentsService.listPatent(params, user);
   }
 
   @Post('/operatePatents')
@@ -71,7 +74,7 @@ export class PatentsController {
   @ApiBearerAuth()
   operatePatents(@Body() params: OperatePatentsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.operatePatents(params, user);
+    return this.patentsService.operatePatents(params, user);
   }
 
   @Post('/removePatents')
@@ -81,6 +84,16 @@ export class PatentsController {
   @ApiBearerAuth()
   removePatents(@Body() params: RemovePatentsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.removePatents(params, user);
+    return this.patentsService.removePatents(params, user);
+  }
+
+  @Post('/listComplexPatent')
+  @HttpCode(200)
+  @ApiOperation({ summary: '结构列表(c端)' })
+  @ApiResult(ListComplexPatentResult)
+  @AllowAnon()
+  listComplexTerm(@Body() params: ListComplexPatentDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.patentsService.listComplexPatent(params, user);
   }
 }

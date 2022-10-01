@@ -50,7 +50,6 @@ export class UserNotesService {
       updatedAt: userNoteTreatiseInfo.updatedAt,
       commentedAt: userNoteTreatiseInfo.commentedAt,
     };
-    console.log(result);
     return ResultData.ok({ data: result });
   }
   /**

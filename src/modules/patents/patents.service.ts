@@ -13,6 +13,7 @@ import {
 } from '../repository/repository';
 import {
   GetPatentDetailDto,
+  ListComplexPatentDto,
   ListPatentDto,
   OperatePatentsDto,
   RemovePatentsDto,
@@ -23,7 +24,7 @@ import {
   Content_Types_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { In, IsNull, Like } from 'typeorm';
+import { Brackets, In, IsNull, Like } from 'typeorm';
 
 export class PatentsService {
   /**
@@ -291,5 +292,96 @@ export class PatentsService {
     return ResultData.ok({
       data: { succeed: succeed, failed: ids.length - succeed },
     });
+  }
+  /**
+   * @description 机构列表(c端)
+   * @param {ListComplexPatentDto} params机构列表参数
+   * @returns {ResultData} 返回listComplexPatent信息
+   */
+  async listComplexPatent(params: ListComplexPatentDto, user: SignInResInfo): Promise<ResultData> {
+    const { keyword, type, page, size } = params;
+    // get basic condition
+    let patents, count, keywords;
+    let basicCondition =
+      'patents.enabled = true and patents.deletedAt is null and patents.status =:status';
+    if (type) {
+      basicCondition += ' and patents.type =:type';
+    }
+    if (keyword) {
+      // get keywords
+      keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      [patents, count] = await patentsRepository
+        .createQueryBuilder('patents')
+        .select([
+          'patents.id',
+          'patents.title',
+          'patents.announcedAt',
+          'patents.applicant',
+          'patents.abstract',
+          'patents.type',
+          'patents.keyword',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          type: type,
+        })
+        .andWhere(
+          new Brackets((qb) => {
+            qb.where('patents.title like any (ARRAY[:...keyword])', { keyword: keywords })
+              .orWhere('patents.keyword like any (ARRAY[:...keyword])', { keyword: keywords })
+              .orWhere('patents.abstract like any (ARRAY[:...keyword])', { keyword: keywords });
+          })
+        )
+        .orderBy('patents.announcedAt', 'DESC')
+        .orderBy('patents.publishedAt', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    } else {
+      // get patents and count
+      [patents, count] = await patentsRepository
+        .createQueryBuilder('patents')
+        .select([
+          'patents.id',
+          'patents.title',
+          'patents.announcedAt',
+          'patents.applicant',
+          'patents.abstract',
+          'patents.type',
+          'patents.keyword',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          type: type,
+        })
+        .orderBy('patents.announcedAt', 'DESC')
+        .orderBy('patents.publishedAt', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    }
+    if (count === 0) {
+      return ResultData.ok({ data: { patents: [], count: count } });
+    }
+    const types = await patentTypesRepository.findBy({
+      id: In(
+        patents.map((data) => {
+          return data.type;
+        })
+      ),
+    });
+    const result = patents.map((data) => {
+      return {
+        ...data,
+        typeName: _.find(types, function (o) {
+          return o.id === data.type;
+        })
+          ? _.find(types, function (o) {
+              return o.id === data.type;
+            })?.name
+          : null,
+      };
+    });
+    return ResultData.ok({ data: { patents: result, count: count } });
   }
 }

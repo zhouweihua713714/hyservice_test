@@ -146,3 +146,17 @@ export class RemovePatentsDto {
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];
 }
+
+export class ListComplexPatentDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
+  @ApiPropertyOptional({
+    description: '关键词,多标签需要分号隔开才能进行分词在进行模糊搜索 如果为空则不传或者传null',
+  })
+  @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  @IsOptional()
+  keyword: string;
+
+  @ApiPropertyOptional({ description: '专利类型', type: Date, nullable: true })
+  @IsString({ message: 'type 类型错误, 正确类型 string' })
+  @IsOptional()
+  type: string;
+}
