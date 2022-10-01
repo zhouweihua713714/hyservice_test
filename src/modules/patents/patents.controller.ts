@@ -15,6 +15,7 @@ import {
 } from './patents.dto';
 import { PatentsService } from './patents.service';
 import {
+  GePatentCountByAgentResult,
   GetPatentDetailResult,
   ListComplexPatentResult,
   ListPatentResult,
@@ -31,7 +32,8 @@ import {
   OperatePatentsResult,
   RemovePatentsResult,
   SavePatentResult,
-  ListComplexPatentResult
+  ListComplexPatentResult,
+  GePatentCountByAgentResult
 )
 @Controller('/patents')
 export class PatentsController {
@@ -89,11 +91,21 @@ export class PatentsController {
 
   @Post('/listComplexPatent')
   @HttpCode(200)
-  @ApiOperation({ summary: '结构列表(c端)' })
+  @ApiOperation({ summary: '专利列表(c端)' })
   @ApiResult(ListComplexPatentResult)
   @AllowAnon()
   listComplexTerm(@Body() params: ListComplexPatentDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.patentsService.listComplexPatent(params, user);
+  }
+
+  @Get('/getPatentCountByAgent')
+  @HttpCode(200)
+  @ApiOperation({ summary: '高频发明人TOP10' })
+  @ApiResult(GePatentCountByAgentResult)
+  @AllowAnon()
+  getPatentCountByAgent(@Query() params: any, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.patentsService.getPatentCountByAgent(params, user);
   }
 }
