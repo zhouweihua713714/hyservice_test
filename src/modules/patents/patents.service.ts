@@ -294,8 +294,8 @@ export class PatentsService {
     });
   }
   /**
-   * @description 机构列表(c端)
-   * @param {ListComplexPatentDto} params机构列表参数
+   * @description 专利列表(c端)
+   * @param {ListComplexPatentDto} params专利列表参数
    * @returns {ResultData} 返回listComplexPatent信息
    */
   async listComplexPatent(params: ListComplexPatentDto, user: SignInResInfo): Promise<ResultData> {
@@ -383,5 +383,57 @@ export class PatentsService {
       };
     });
     return ResultData.ok({ data: { patents: result, count: count } });
+  }
+  /**
+   * @description 高频发明人TOP10
+   * @param {} params 高频发明人TOP10的相关参数
+   * @returns {ResultData} 返回getPatentCountByAgent信息
+   */
+  async getPatentCountByAgent(params: any, user: SignInResInfo): Promise<ResultData> {
+    // get patent count by agent
+    const patents = await patentsRepository
+      .createQueryBuilder('patents')
+      .select('COUNT(patents.id)', 'count')
+      .addSelect('patents.agent', 'agent')
+      .where('patents.enabled = true and patents.deletedAt is null and patents.status =:status', {
+        status: Content_Status_Enum.ACTIVE,
+      })
+      .groupBy('patents.agent')
+      .getRawMany();
+    // get necessary
+    let agents = _.uniqBy(
+      patents.map((data) => {
+        return { number: data.count };
+      }),
+      'number'
+    );
+    if (patents.length === 0) {
+      return ResultData.ok({
+        data: { agents: [] },
+      });
+    }
+    // get agent and order
+    agents = _.orderBy(
+      agents.map((data) => {
+        return {
+          number: data.number,
+          agent: _.groupBy(patents, 'count')[data.number]
+            ? _.join(
+                _.groupBy(patents, 'count')[data.number].map((data) => {
+                  return data.agent;
+                }),
+                ';'
+              )
+            : null,
+        };
+      }),
+      'number',
+      'desc'
+    );
+    // get top 10  it's up to PM
+    agents = agents.slice(0, 10);
+    return ResultData.ok({
+      data: { agents: agents },
+    });
   }
 }

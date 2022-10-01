@@ -89,3 +89,16 @@ export class ListComplexPatentResult {
   @ApiProperty({ description: '专利数组', type: ListComplexPatentInfo, isArray: true })
   patents: ListComplexPatentInfo[];
 }
+
+export class AgentInfo {
+  @ApiProperty({ description: '发明数量' })
+  number: number;
+
+  @ApiProperty({ description: '代理人,如果发明数相同代理人用分号隔开' })
+  agent: string;
+}
+
+export class GePatentCountByAgentResult {
+  @ApiProperty({ description: '代理人下发明专利数量', type: AgentInfo, isArray: true })
+  agents: AgentInfo[];
+}
