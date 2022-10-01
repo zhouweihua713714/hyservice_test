@@ -47,6 +47,7 @@ import { UserHistory } from './entities/UserHistory.entity';
 import { UserFavoriteTreatises } from './entities/UserFavoriteTreatises.entity';
 import { UserLabelTreatises } from './entities/UserLabelTreatises.entity';
 import { UserNoteTreatises } from './entities/UserNoteTreatises.entity';
+import { AnalysisPolicies } from './entities/AnalysisPolicies.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -105,6 +106,7 @@ import { UserNoteTreatises } from './entities/UserNoteTreatises.entity';
       UserFavoriteTreatises,
       UserLabelTreatises,
       UserNoteTreatises,
+      AnalysisPolicies
     ]),
     HomeModule,
     AuthModule,
