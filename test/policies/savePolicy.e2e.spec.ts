@@ -14,6 +14,7 @@ const payload: SavePolicyDto = {
   name: '政策名称必填',
   columnId: 'tester.data.columns[1].id',
   type: 'tester.data.policyType.id',
+  topicType: '需要赋值',
   announceNo: '发文号',
   level: constant.POLICY_LEVEL,
   institution: '机构名称',
@@ -24,6 +25,7 @@ const payload: SavePolicyDto = {
   introduction: '简介最多300',
   region: '中国',
   url: 'http://baidu.com',
+  content: '正文',
 };
 
 describe('/policies/savePolicy', () => {

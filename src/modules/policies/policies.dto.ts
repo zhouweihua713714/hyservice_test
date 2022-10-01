@@ -49,6 +49,11 @@ export class SavePolicyDto {
   @IsOptional()
   type: string | null;
 
+  @ApiPropertyOptional({ description: '主题类型', type: String, nullable: true })
+  @IsString({ message: 'topicType 类型错误, 正确类型 string' })
+  @IsOptional()
+  topicType: string | null;
+
   @ApiPropertyOptional({
     description: '政策层级:国家级policy_level_001',
     type: String,
@@ -91,7 +96,11 @@ export class SavePolicyDto {
   @IsOptional()
   announcedAt: Date | null;
 
-  @ApiPropertyOptional({ description: '政策发布时间不为空，该字段不能为空,日期格式:year、month、date', type: String, nullable: true })
+  @ApiPropertyOptional({
+    description: '政策发布时间不为空，该字段不能为空,日期格式:year、month、date',
+    type: String,
+    nullable: true,
+  })
   @IsString({ message: 'picker 类型错误, 正确类型 string' })
   @IsOptional()
   picker: string | null;
@@ -100,6 +109,11 @@ export class SavePolicyDto {
   @IsString({ message: 'introduction 类型错误, 正确类型 string' })
   @IsOptional()
   introduction: string | null;
+
+  @ApiPropertyOptional({ description: '正文', type: String, nullable: true })
+  @IsString({ message: 'content 类型错误, 正确类型 string' })
+  @IsOptional()
+  content: string | null;
 
   @ApiPropertyOptional({ description: '政策来源(网址)', type: String, nullable: true })
   @IsString({ message: 'url 类型错误, 正确类型 string' })

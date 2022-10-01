@@ -26,9 +26,14 @@ export class GetPolicyDetailResult extends PickType(Policies, [
   'updatedAt',
   'publishedAt',
   'picker',
+  'topicType',
+  'content',
 ] as const) {
   @ApiPropertyOptional({ description: '政策类型名称' })
   typeName: string;
+
+  @ApiPropertyOptional({ description: '主题类型名称' })
+  topicTypeName: string;
 
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
