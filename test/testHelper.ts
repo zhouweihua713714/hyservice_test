@@ -38,6 +38,7 @@ import { UserHistory } from '@/entities/UserHistory.entity';
 import { UserFavoriteTreatises } from '@/entities/UserFavoriteTreatises.entity';
 import { UserLabelTreatises } from '@/entities/UserLabelTreatises.entity';
 import { UserNoteTreatises } from '@/entities/UserNoteTreatises.entity';
+import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -70,6 +71,7 @@ export class DBTester<T = undefined> {
   userFavoriteTreatisesRepository: Repository<UserFavoriteTreatises>;
   userLabelTreatisesRepository: Repository<UserLabelTreatises>;
   userNoteTreatisesRepository: Repository<UserNoteTreatises>;
+  analysisPoliciesRepository: Repository<AnalysisPolicies>;
   config: ConfigService;
   server: any;
 
@@ -158,6 +160,9 @@ export class DBTester<T = undefined> {
       );
       this.userNoteTreatisesRepository = this.module.get<Repository<UserNoteTreatises>>(
         getRepositoryToken(UserNoteTreatises)
+      );
+      this.analysisPoliciesRepository = this.module.get<Repository<AnalysisPolicies>>(
+        getRepositoryToken(AnalysisPolicies)
       );
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });

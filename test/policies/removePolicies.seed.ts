@@ -11,7 +11,7 @@ import {
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
-import { Terms } from '@/entities/Terms.entity';
+import { Policies } from '@/entities/Policies.entity';
 import { constant } from '@/common/utils/constant';
 const { mobile, password } = samples;
 
@@ -20,11 +20,11 @@ let normalUser: CreateUserRetType;
 let columns: Columns[];
 let subjects: Subjects[];
 let policyType: TermTypes;
-let policies: Terms[];
+let policies: Policies[];
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
-  policies: Terms[];
+  policies: Policies[];
   columns: Columns[];
 };
 
