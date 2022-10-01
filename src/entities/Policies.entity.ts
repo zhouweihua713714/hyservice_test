@@ -25,6 +25,19 @@ export class Policies {
   type: string | null;
 
   @ApiPropertyOptional({
+    description: '主题类型:数据由数据方统计提供下拉项目前暂时没有',
+    type: String,
+    nullable: true,
+  })
+  @Column('character varying', {
+    name: 'topic_type',
+    length: 64,
+    comment: '主题类型',
+    nullable: true,
+  })
+  topicType: string | null;
+
+  @ApiPropertyOptional({
     description: '政策层级:国家级policy_level_001',
     type: String,
     nullable: true,
@@ -86,12 +99,20 @@ export class Policies {
   announcedAt: Date | null;
 
   @ApiPropertyOptional({ description: '日期格式:year、month、date', type: String, nullable: true })
-  @Column('character varying', { name: 'picker', nullable: true, comment: '日期格式:year、month、date' })
+  @Column('character varying', {
+    name: 'picker',
+    nullable: true,
+    comment: '日期格式:year、month、date',
+  })
   picker: string | null;
 
   @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
   @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
   introduction: string | null;
+
+  @ApiPropertyOptional({ description: '正文', type: String, nullable: true })
+  @Column('text', { name: 'content', nullable: true, comment: '简介' })
+  content: string | null;
 
   // @ApiPropertyOptional({ description: '详情' })
   // @Column('jsonb', { name: 'content', nullable: true, comment: '详情' })

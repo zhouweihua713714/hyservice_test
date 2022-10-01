@@ -56,6 +56,7 @@ export class PoliciesService {
       columnName: columnInfo ? columnInfo.name : null,
       owner: userInfo ? userInfo.mobile : null,
       ...policyInfo,
+      topicTypeName: '', // 这里需要返回主题类型的名称 20221001
     };
     // update clicks
     if (params.flag) {
@@ -77,7 +78,9 @@ export class PoliciesService {
    * @returns {ResultData} 返回savePolicy信息
    */
   async savePolicy(params: SavePolicyDto, user: SignInResInfo): Promise<ResultData> {
-    const { id, status, type, columnId, educationLevel, level, announcedAt, picker } = params;
+    const { id, status, type, columnId, educationLevel, level, announcedAt, picker, topicType } =
+      params;
+    // 这里待数据补充需要增加topicType 判断20221001
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
