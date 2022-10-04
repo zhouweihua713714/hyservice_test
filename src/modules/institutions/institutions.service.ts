@@ -478,7 +478,7 @@ export class InstitutionsService {
         idsCondition = ' and id not in (:...ids)';
       }
       if (minorField) {
-        const newConferences = await institutionsRepository
+        const newInstitutions = await institutionsRepository
           .createQueryBuilder('institutions')
           .select(['institutions.id', 'institutions.name', 'institutions.columnId'])
           .where(`${basicCondition}${idsCondition}`, {
@@ -494,7 +494,7 @@ export class InstitutionsService {
           .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
           .take(8 - institutions.length)
           .getMany();
-        institutions = _.unionBy(institutions, newConferences, 'id');
+        institutions = _.unionBy(institutions, newInstitutions, 'id');
       }
     }
     // if institutions count < 8 then all institution recommend
@@ -503,7 +503,7 @@ export class InstitutionsService {
       if (institutions) {
         size = size - institutions.length;
       }
-      const newConferences = await institutionsRepository
+      const newInstitutions = await institutionsRepository
         .createQueryBuilder('institutions')
         .select(['institutions.id', 'institutions.name', 'institutions.columnId'])
         .where(`${basicCondition}${idsCondition}`, {
@@ -518,7 +518,7 @@ export class InstitutionsService {
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(size)
         .getMany();
-      institutions = _.unionBy(institutions, newConferences, 'id');
+      institutions = _.unionBy(institutions, newInstitutions, 'id');
     }
     // get columns
     const columns = await columnsRepository.find({

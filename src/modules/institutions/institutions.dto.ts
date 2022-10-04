@@ -140,8 +140,8 @@ export class ListComplexInstitutionDto extends PickType(ReqListQuery, ['page', '
 }
 
 export class RecommendInstitutionsDto {
-  @ApiProperty({ description: '会议id' })
-  @IsString({ message: '会议id 类型错误, 正确类型 string' })
+  @ApiProperty({ description: '机构id' })
+  @IsString({ message: '机构id 类型错误, 正确类型 string' })
   id: string;
 }
 

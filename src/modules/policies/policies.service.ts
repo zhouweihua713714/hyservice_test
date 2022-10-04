@@ -15,6 +15,7 @@ import {
   ListComplexPolicyDto,
   ListPolicyDto,
   OperatePoliciesDto,
+  RecommendPoliciesDto,
   RemovePoliciesDto,
   SavePolicyDto,
 } from './policies.dto';
@@ -415,5 +416,100 @@ export class PoliciesService {
       };
     });
     return ResultData.ok({ data: { policies: result, count: count } });
+  }
+  /**
+   * @description 推荐机构
+   * @param {RecommendPoliciesDto} params 推荐的相关参数
+   * @returns {ResultData} 返回recommendPolicies信息
+   */
+  async recommendPolicies(params: RecommendPoliciesDto, user: SignInResInfo): Promise<ResultData> {
+    const { id } = params;
+    const policyInfo = await policiesRepository.findOneBy({
+      id: id,
+      status: Content_Status_Enum.ACTIVE,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    const keyword = policyInfo?.keyword;
+    const type = policyInfo?.type;
+    let policies;
+    let basicCondition =
+      'policies.enabled = true and policies.deletedAt is null and policies.status =:status';
+    if (policyInfo) {
+      basicCondition += ' and policies.id !=:id';
+    }
+    if (keyword) {
+      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      policies = await policiesRepository
+        .createQueryBuilder('policies')
+        .select(['policies.id', 'policies.name'])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: policyInfo?.id,
+        })
+        .andWhere('policies.keyword like any (ARRAY[:...keyword])', {
+          keyword: keywords,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(9)
+        .getMany();
+    }
+    let idsCondition = '';
+    // if policies count < 9 then minorField recommend
+    if (policies && policies.length < 9) {
+      if (policies.length > 0) {
+        idsCondition = ' and id not in (:...ids)';
+      }
+      if (type) {
+        const newPolicies = await policiesRepository
+          .createQueryBuilder('policies')
+          .select(['policies.id', 'policies.name'])
+          .where(`${basicCondition}${idsCondition}`, {
+            status: Content_Status_Enum.ACTIVE,
+            id: policyInfo?.id,
+            ids: policies.map((data) => {
+              return data.id;
+            }),
+          })
+          .andWhere('policies.type =:type', {
+            type: type,
+          })
+          .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+          .take(9 - policies.length)
+          .getMany();
+        policies = _.unionBy(policies, newPolicies, 'id');
+      }
+    }
+    // if policies count < 8 then all policy recommend
+    if (!policyInfo || (policies && policies.length < 8)) {
+      let size = 9;
+      if (policies) {
+        size = size - policies.length;
+      }
+      const newPolicies = await policiesRepository
+        .createQueryBuilder('policies')
+        .select(['policies.id', 'policies.name'])
+        .where(`${basicCondition}${idsCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: policyInfo?.id,
+          ids: policies
+            ? policies.map((data) => {
+                return data.id;
+              })
+            : undefined,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(size)
+        .getMany();
+      policies = _.unionBy(policies, newPolicies, 'id');
+    }
+    const result = policies.map((policy) => {
+      return {
+        ...policy,
+      };
+    });
+    return ResultData.ok({
+      data: { policies: result ? result : [] },
+    });
   }
 }

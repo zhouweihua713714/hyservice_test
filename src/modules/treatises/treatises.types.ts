@@ -141,6 +141,7 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   'name',
   'abstract',
   'keyword',
+  'author'
 ] as const) {
   @ApiProperty({ description: '标签' })
   label: string;

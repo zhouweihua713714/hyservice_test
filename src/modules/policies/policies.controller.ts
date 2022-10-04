@@ -25,6 +25,7 @@ import {
   ListComplexPolicyDto,
   ListPolicyDto,
   OperatePoliciesDto,
+  RecommendPoliciesDto,
   RemovePoliciesDto,
   SavePolicyDto,
 } from './policies.dto';
@@ -34,6 +35,7 @@ import {
   ListComplexPolicyResult,
   ListPolicyResult,
   OperatePoliciesResult,
+  RecommendPoliciesResult,
   RemovePoliciesResult,
   SavePolicyResult,
 } from './policies.types';
@@ -51,7 +53,8 @@ import {
   OperateAnalysisPoliciesResult,
   RemoveAnalysisPoliciesResult,
   SaveAnalysisPolicyResult,
-  ListComplexPolicyResult
+  ListComplexPolicyResult,
+  RecommendPoliciesResult
 )
 @Controller('/policies')
 export class PoliciesController {
@@ -169,5 +172,15 @@ export class PoliciesController {
   listComplexTerm(@Body() params: ListComplexPolicyDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.policiesService.listComplexPolicy(params, user);
+  }
+
+  @Post('/recommendPolicies')
+  @HttpCode(200)
+  @ApiOperation({ summary: '政策推荐列表(相关政策)' })
+  @ApiResult(RecommendPoliciesResult)
+  @AllowAnon()
+  recommendPolicies(@Body() params: RecommendPoliciesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.policiesService.recommendPolicies(params, user);
   }
 }
