@@ -123,7 +123,7 @@ export class ArticleCountInfo extends PickType(Columns, [
   'parentId',
 ] as const) {
   @ApiProperty({ description: '文章数量' })
-  number: number;
+  count: number;
 
   @ApiProperty({ description: '最新更新时间' })
   updatedAt: Date;

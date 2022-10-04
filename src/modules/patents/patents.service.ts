@@ -403,9 +403,9 @@ export class PatentsService {
     // get necessary
     let agents = _.uniqBy(
       patents.map((data) => {
-        return { number: data.count };
+        return { count: data.count };
       }),
-      'number'
+      'count'
     );
     if (patents.length === 0) {
       return ResultData.ok({
@@ -416,10 +416,10 @@ export class PatentsService {
     agents = _.orderBy(
       agents.map((data) => {
         return {
-          number: data.number,
-          agent: _.groupBy(patents, 'count')[data.number]
+          count: data.count,
+          agent: _.groupBy(patents, 'count')[data.count]
             ? _.join(
-                _.groupBy(patents, 'count')[data.number].map((data) => {
+                _.groupBy(patents, 'count')[data.count].map((data) => {
                   return data.agent;
                 }),
                 ';'
@@ -427,7 +427,7 @@ export class PatentsService {
             : null,
         };
       }),
-      'number',
+      'count',
       'desc'
     );
     // get top 10  it's up to PM
