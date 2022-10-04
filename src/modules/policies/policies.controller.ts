@@ -22,6 +22,7 @@ import {
 } from './analysisPolicies/analysisPolicies.types';
 import {
   GetPolicyDetailDto,
+  ListComplexPolicyDto,
   ListPolicyDto,
   OperatePoliciesDto,
   RemovePoliciesDto,
@@ -30,6 +31,7 @@ import {
 import { PoliciesService } from './policies.service';
 import {
   GetPolicyDetailResult,
+  ListComplexPolicyResult,
   ListPolicyResult,
   OperatePoliciesResult,
   RemovePoliciesResult,
@@ -48,7 +50,8 @@ import {
   ListAnalysisPolicyResult,
   OperateAnalysisPoliciesResult,
   RemoveAnalysisPoliciesResult,
-  SaveAnalysisPolicyResult
+  SaveAnalysisPolicyResult,
+  ListComplexPolicyResult
 )
 @Controller('/policies')
 export class PoliciesController {
@@ -154,5 +157,17 @@ export class PoliciesController {
   removeAnalysisPolicies(@Body() params: RemoveAnalysisPoliciesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.analysisPoliciesService.removeAnalysisPolicies(params, user);
+  }
+
+  @Post('/listComplexPolicy')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '专利列表(c端:其中最新政策、专题政策得列表也共用该接口选择适当得入参即可)',
+  })
+  @ApiResult(ListComplexPolicyResult)
+  @AllowAnon()
+  listComplexTerm(@Body() params: ListComplexPolicyDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.policiesService.listComplexPolicy(params, user);
   }
 }

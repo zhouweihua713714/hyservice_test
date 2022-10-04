@@ -73,3 +73,30 @@ export class RemovePoliciesResult extends PickType(OperatePoliciesResult, [
   'succeed',
   'failed',
 ] as const) {}
+
+export class ListComplexPolicyInfo extends PickType(Policies, [
+  'id',
+  'name',
+  'announcedAt',
+  'announceNo',
+  'institution',
+  'educationLevel',
+  'region',
+  'introduction',
+  'content',
+  'type',
+  'keyword',
+  'url',
+  'level',
+] as const) {
+  @ApiPropertyOptional({ description: '政策类型名称' })
+  typeName: string;
+}
+
+export class ListComplexPolicyResult {
+  @ApiProperty({ description: '政策数组', type: ListComplexPolicyInfo, isArray: true })
+  policies: ListComplexPolicyInfo[];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
+}

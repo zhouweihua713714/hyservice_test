@@ -12,6 +12,7 @@ import {
 } from '../repository/repository';
 import {
   GetPolicyDetailDto,
+  ListComplexPolicyDto,
   ListPolicyDto,
   OperatePoliciesDto,
   RemovePoliciesDto,
@@ -23,7 +24,7 @@ import {
   Education_Level_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { In, IsNull, Like } from 'typeorm';
+import { Brackets, In, IsNull, Like } from 'typeorm';
 import { constant } from '@/common/utils/constant';
 
 export class PoliciesService {
@@ -294,5 +295,125 @@ export class PoliciesService {
     return ResultData.ok({
       data: { succeed: succeed, failed: ids.length - succeed },
     });
+  }
+  /**
+   * @description 政策列表(c端)
+   * @param {ListComplexPolicyDto} params 政策(c端)列表参数
+   * @returns {ResultData} 返回listComplexPolicy信息
+   */
+  async listComplexPolicy(params: ListComplexPolicyDto, user: SignInResInfo): Promise<ResultData> {
+    const { keyword, type, topicType, educationLevel, columnId, page, size } = params;
+    // get basic condition
+    let policies, count, keywords;
+    let basicCondition =
+      'policies.enabled = true and policies.deletedAt is null and policies.status =:status';
+    if (type) {
+      basicCondition += ' and policies.type =:type';
+    }
+    if (topicType) {
+      basicCondition += ' and policies.topicType =:topicType';
+    }
+    if (columnId) {
+      basicCondition += ' and policies.columnId =:columnId';
+    }
+    if (educationLevel) {
+      basicCondition += ' and policies.educationLevel::jsonb ?| ARRAY[:educationLevel]';
+    }
+    if (keyword) {
+      // get keywords
+      keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      [policies, count] = await policiesRepository
+        .createQueryBuilder('policies')
+        .select([
+          'policies.id',
+          'policies.name',
+          'policies.announcedAt',
+          'policies.announceNo',
+          'policies.institution',
+          'policies.educationLevel',
+          'policies.region',
+          'policies.introduction',
+          'policies.content',
+          'policies.type',
+          'policies.keyword',
+          'policies.url',
+          'policies.level',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          type: type,
+          topicType: topicType,
+          columnId: columnId,
+          educationLevel: educationLevel,
+        })
+        .andWhere(
+          new Brackets((qb) => {
+            qb.where('policies.name like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
+              'policies.keyword like any (ARRAY[:...keyword])',
+              { keyword: keywords }
+            );
+          })
+        )
+        .orderBy('policies.announcedAt', 'DESC')
+        .orderBy('policies.publishedAt', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    } else {
+      // get policies and count
+      [policies, count] = await policiesRepository
+        .createQueryBuilder('policies')
+        .select([
+          'policies.id',
+          'policies.name',
+          'policies.announcedAt',
+          'policies.announceNo',
+          'policies.institution',
+          'policies.educationLevel',
+          'policies.region',
+          'policies.introduction',
+          'policies.content',
+          'policies.type',
+          'policies.keyword',
+          'policies.url',
+          'policies.level',
+        ])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          type: type,
+          topicType: topicType,
+          columnId: columnId,
+          educationLevel: educationLevel,
+        })
+        .orderBy('policies.announcedAt', 'DESC')
+        .orderBy('policies.publishedAt', 'DESC')
+        .skip(page - 1)
+        .take(size)
+        .getManyAndCount();
+    }
+    if (count === 0) {
+      return ResultData.ok({ data: { policies: [], count: count } });
+    }
+    // get types
+    const types = await policyTypesRepository.findBy({
+      id: In(
+        policies.map((data) => {
+          return data.type;
+        })
+      ),
+    });
+    const result = policies.map((data) => {
+      return {
+        ...data,
+        typeName: _.find(types, function (o) {
+          return o.id === data.type;
+        })
+          ? _.find(types, function (o) {
+              return o.id === data.type;
+            })?.name
+          : null,
+      };
+    });
+    return ResultData.ok({ data: { policies: result, count: count } });
   }
 }

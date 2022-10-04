@@ -164,3 +164,34 @@ export class RemovePoliciesDto {
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];
 }
+
+export class ListComplexPolicyDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
+  @ApiPropertyOptional({
+    description: '关键词,多标签需要分号隔开才能进行分词在进行模糊搜索 如果为空则不传或者传null',
+  })
+  @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  @IsOptional()
+  keyword: string;
+
+  @ApiPropertyOptional({ description: '政策类型', type: String, nullable: true })
+  @IsString({ message: 'type 类型错误, 正确类型 string' })
+  @IsOptional()
+  type: string | null;
+
+  @ApiPropertyOptional({ description: '主题类型', type: String })
+  @IsString({ message: 'topicType 类型错误, 正确类型 string' })
+  @IsOptional()
+  topicType: string ;
+
+  @ApiPropertyOptional({
+    description: '教育层次:基础教育basic,高等教育higher,职业教育vocation',
+  })
+  @IsString({ message: 'educationLevel 类型错误, 正确类型 string' })
+  @IsOptional()
+  educationLevel: string;
+
+  @ApiPropertyOptional({ description: '栏目id' })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  @IsOptional()
+  columnId: string;
+}
