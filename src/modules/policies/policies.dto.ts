@@ -63,7 +63,7 @@ export class SavePolicyDto {
   @IsOptional()
   level: string | null;
 
-  @ApiPropertyOptional({ description: '发布机构/部门', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '发布政策/部门', type: String, nullable: true })
   @IsString({ message: 'institution 类型错误, 正确类型 string' })
   @MaxLength(50)
   @IsOptional()
@@ -181,7 +181,7 @@ export class ListComplexPolicyDto extends PickType(ReqListQuery, ['page', 'size'
   @ApiPropertyOptional({ description: '主题类型', type: String })
   @IsString({ message: 'topicType 类型错误, 正确类型 string' })
   @IsOptional()
-  topicType: string ;
+  topicType: string;
 
   @ApiPropertyOptional({
     description: '教育层次:基础教育basic,高等教育higher,职业教育vocation',
@@ -194,4 +194,10 @@ export class ListComplexPolicyDto extends PickType(ReqListQuery, ['page', 'size'
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   @IsOptional()
   columnId: string;
+}
+
+export class RecommendPoliciesDto {
+  @ApiProperty({ description: '政策id' })
+  @IsString({ message: '政策id 类型错误, 正确类型 string' })
+  id: string;
 }
