@@ -110,6 +110,6 @@ export class RecommendInstitutionsInfo extends PickType(Institutions, [
 }
 
 export class RecommendInstitutionsResult {
-  @ApiProperty({ description: '机构数组', type: RecommendInstitutionsInfo, isArray: true })
+  @ApiProperty({ description: '推荐机构数组', type: RecommendInstitutionsInfo, isArray: true })
   institutions: RecommendInstitutionsInfo[];
 }

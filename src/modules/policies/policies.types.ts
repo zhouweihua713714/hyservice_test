@@ -104,6 +104,6 @@ export class ListComplexPolicyResult {
 export class RecommendPoliciesInfo extends PickType(Policies, ['id', 'name'] as const) {}
 
 export class RecommendPoliciesResult {
-  @ApiProperty({ description: '政策数组', type: RecommendPoliciesInfo, isArray: true })
+  @ApiProperty({ description: '推荐政策数组', type: RecommendPoliciesInfo, isArray: true })
   policies: RecommendPoliciesInfo[];
 }

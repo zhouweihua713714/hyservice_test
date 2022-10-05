@@ -160,7 +160,7 @@ export class ListComplexTreatiseResult {
 }
 
 export class RecommendTreatisesResult {
-  @ApiProperty({ description: '论文数组', type: RecommendTreatiseInfo, isArray: true })
+  @ApiProperty({ description: '推荐论文数组', type: RecommendTreatiseInfo, isArray: true })
   treatises: RecommendTreatiseInfo[];
 }
 
