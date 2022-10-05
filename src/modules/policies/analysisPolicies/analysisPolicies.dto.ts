@@ -108,3 +108,9 @@ export class ListComplexAnalysisPolicyDto extends PickType(ReqListQuery, [
   @IsOptional()
   columnId: string;
 }
+
+export class RecommendAnalysisPoliciesDto {
+  @ApiProperty({ description: '政策id' })
+  @IsString({ message: '政策id 类型错误, 正确类型 string' })
+  id: string;
+}

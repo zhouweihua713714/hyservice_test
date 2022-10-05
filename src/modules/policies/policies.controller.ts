@@ -10,6 +10,7 @@ import {
   ListAnalysisPolicyDto,
   ListComplexAnalysisPolicyDto,
   OperateAnalysisPoliciesDto,
+  RecommendAnalysisPoliciesDto,
   RemoveAnalysisPoliciesDto,
   SaveAnalysisPolicyDto,
 } from './analysisPolicies/analysisPolicies.dto';
@@ -197,5 +198,15 @@ export class PoliciesController {
   listComplexAnalysisPolicies(@Body() params: ListComplexAnalysisPolicyDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.analysisPoliciesService.listComplexAnalysisPolicy(params, user);
+  }
+
+  @Post('/recommendAnalysisPolicies')
+  @HttpCode(200)
+  @ApiOperation({ summary: '政策推荐列表(相关政策)' })
+  @ApiResult(OperateAnalysisPoliciesResult)
+  @AllowAnon()
+  recommendAnalysisPolicies(@Body() params: RecommendAnalysisPoliciesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.analysisPoliciesService.recommendAnalysisPolicies(params, user);
   }
 }

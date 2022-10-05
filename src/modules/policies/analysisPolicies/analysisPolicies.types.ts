@@ -72,3 +72,14 @@ export class ListComplexAnalysisPolicyResult {
   @ApiProperty({ description: '总数' })
   count: number;
 }
+
+export class RecommendAnalysisPoliciesInfo extends PickType(AnalysisPolicies, [
+  'id',
+  'title',
+  'source',
+] as const) {}
+
+export class RecommendPoliciesResult {
+  @ApiProperty({ description: '推荐政策解读数组', type: RecommendAnalysisPoliciesInfo, isArray: true })
+  policies: RecommendAnalysisPoliciesInfo[];
+}

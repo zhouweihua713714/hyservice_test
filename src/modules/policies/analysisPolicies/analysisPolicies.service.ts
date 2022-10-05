@@ -14,6 +14,7 @@ import {
   ListAnalysisPolicyDto,
   ListComplexAnalysisPolicyDto,
   OperateAnalysisPoliciesDto,
+  RecommendAnalysisPoliciesDto,
   RemoveAnalysisPoliciesDto,
   SaveAnalysisPolicyDto,
 } from './analysisPolicies.dto';
@@ -25,6 +26,7 @@ import {
 } from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
 import { constant } from '@/common/utils/constant';
+import { ConsoleLogger } from '@nestjs/common';
 
 export class AnalysisPoliciesService {
   /**
@@ -314,5 +316,82 @@ export class AnalysisPoliciesService {
       };
     });
     return ResultData.ok({ data: { analysisPolicies: result, count: count } });
+  }
+  /**
+   * @description 推荐政策解读
+   * @param {RecommendPoliciesDto} params 推荐的相关参数
+   * @returns {ResultData} 返回recommendPolicies信息
+   */
+  async recommendAnalysisPolicies(
+    params: RecommendAnalysisPoliciesDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { id } = params;
+    const analysisPolicyInfo = await analysisPoliciesRepository.findOneBy({
+      id: id,
+      status: Content_Status_Enum.ACTIVE,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    const source = analysisPolicyInfo?.source;
+    let analysisPolicies;
+    let basicCondition =
+      'analysisPolicies.enabled = true and analysisPolicies.deletedAt is null and analysisPolicies.status =:status';
+    if (analysisPolicyInfo) {
+      basicCondition += ' and analysisPolicies.id !=:id';
+    }
+    if (source) {
+      analysisPolicies = await analysisPoliciesRepository
+        .createQueryBuilder('analysisPolicies')
+        .select(['analysisPolicies.id', 'analysisPolicies.title', 'analysisPolicies.source'])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: analysisPolicyInfo?.id,
+        })
+        .andWhere('analysisPolicies.source =:source', {
+          source: source,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(5)
+        .getMany();
+    }
+    let idsCondition = '';
+    // if analysisPolicies count < 5 then random recommend
+    if (analysisPolicies && analysisPolicies.length < 5) {
+      if (analysisPolicies.length > 0) {
+        idsCondition = ' and id not in (:...ids)';
+      }
+    }
+    // if analysisPolicies count < 8 then all analysisPolicy recommend
+    if (!analysisPolicyInfo || (analysisPolicies && analysisPolicies.length < 5)) {
+      let size = 5;
+      if (analysisPolicies) {
+        size = size - analysisPolicies.length;
+      }
+      const newAnalysisPolicies = await analysisPoliciesRepository
+        .createQueryBuilder('analysisPolicies')
+        .select(['analysisPolicies.id', 'analysisPolicies.title', 'analysisPolicies.source'])
+        .where(`${basicCondition}${idsCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: analysisPolicyInfo?.id,
+          ids: analysisPolicies
+            ? analysisPolicies.map((data) => {
+                return data.id;
+              })
+            : undefined,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(size)
+        .getMany();
+      analysisPolicies = _.unionBy(analysisPolicies, newAnalysisPolicies, 'id');
+    }
+    const result = analysisPolicies.map((analysisPolicy) => {
+      return {
+        ...analysisPolicy,
+      };
+    });
+    return ResultData.ok({
+      data: { analysisPolicies: result ? result : [] },
+    });
   }
 }

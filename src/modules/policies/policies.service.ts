@@ -418,7 +418,7 @@ export class PoliciesService {
     return ResultData.ok({ data: { policies: result, count: count } });
   }
   /**
-   * @description 推荐机构
+   * @description 推荐政策
    * @param {RecommendPoliciesDto} params 推荐的相关参数
    * @returns {ResultData} 返回recommendPolicies信息
    */
@@ -455,7 +455,7 @@ export class PoliciesService {
         .getMany();
     }
     let idsCondition = '';
-    // if policies count < 9 then minorField recommend
+    // if policies count < 9 then type recommend
     if (policies && policies.length < 9) {
       if (policies.length > 0) {
         idsCondition = ' and id not in (:...ids)';
@@ -481,7 +481,7 @@ export class PoliciesService {
       }
     }
     // if policies count < 8 then all policy recommend
-    if (!policyInfo || (policies && policies.length < 8)) {
+    if (!policyInfo || (policies && policies.length < 9)) {
       let size = 9;
       if (policies) {
         size = size - policies.length;
