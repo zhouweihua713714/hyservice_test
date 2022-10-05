@@ -98,3 +98,13 @@ export class RemoveAnalysisPoliciesDto {
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];
 }
+
+export class ListComplexAnalysisPolicyDto extends PickType(ReqListQuery, [
+  'page',
+  'size',
+] as const) {
+  @ApiPropertyOptional({ description: '栏目id' })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  @IsOptional()
+  columnId: string;
+}

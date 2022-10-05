@@ -58,3 +58,17 @@ export class RemoveAnalysisPoliciesResult extends PickType(OperateAnalysisPolici
   'succeed',
   'failed',
 ] as const) {}
+
+export class ListComplexAnalysisPolicyInfo extends PickType(AnalysisPolicies, [
+  'id',
+  'title',
+  'announcedAt',
+] as const) {}
+
+export class ListComplexAnalysisPolicyResult {
+  @ApiProperty({ description: '政策解读数组', type: ListComplexAnalysisPolicyInfo, isArray: true })
+  analysisPolicies: ListComplexAnalysisPolicyInfo[];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
+}

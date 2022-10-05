@@ -12,6 +12,7 @@ import {
 import {
   GetAnalysisPolicyDetailDto,
   ListAnalysisPolicyDto,
+  ListComplexAnalysisPolicyDto,
   OperateAnalysisPoliciesDto,
   RemoveAnalysisPoliciesDto,
   SaveAnalysisPolicyDto,
@@ -271,5 +272,47 @@ export class AnalysisPoliciesService {
     return ResultData.ok({
       data: { succeed: succeed, failed: ids.length - succeed },
     });
+  }
+  /**
+   * @description 政策解读列表(c端)
+   * @param {ListComplexAnalysisPolicyDto} params
+   * @returns {ResultData} 返回listComplexAnalysisPolicy信息
+   */
+  async listComplexAnalysisPolicy(
+    params: ListComplexAnalysisPolicyDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId, page, size } = params;
+    let columnCondition;
+    if (columnId) {
+      columnCondition = {
+        columnId: columnId,
+      };
+    }
+    // get analysisPolicies
+    const [analysisPolicies, count] = await analysisPoliciesRepository.findAndCount({
+      where: {
+        ...columnCondition,
+        enabled: true,
+        deletedAt: IsNull(),
+        status: Content_Status_Enum.ACTIVE,
+      },
+      select: ['id', 'title', 'announcedAt'],
+      skip: (page - 1) * size,
+      take: size,
+      order: {
+        announcedAt: 'DESC',
+        publishedAt: 'DESC',
+      },
+    });
+    if (count === 0) {
+      return ResultData.ok({ data: { analysisPolicies: [], count: count } });
+    }
+    const result = analysisPolicies.map((analysisPolicy) => {
+      return {
+        ...analysisPolicy,
+      };
+    });
+    return ResultData.ok({ data: { analysisPolicies: result, count: count } });
   }
 }
