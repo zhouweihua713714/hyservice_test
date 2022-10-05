@@ -8,6 +8,7 @@ import { SignInResInfo } from '../auth/auth.types';
 import {
   GetAnalysisPolicyDetailDto,
   ListAnalysisPolicyDto,
+  ListComplexAnalysisPolicyDto,
   OperateAnalysisPoliciesDto,
   RemoveAnalysisPoliciesDto,
   SaveAnalysisPolicyDto,
@@ -16,6 +17,7 @@ import { AnalysisPoliciesService } from './analysisPolicies/analysisPolicies.ser
 import {
   GetAnalysisPolicyDetailResult,
   ListAnalysisPolicyResult,
+  ListComplexAnalysisPolicyResult,
   OperateAnalysisPoliciesResult,
   RemoveAnalysisPoliciesResult,
   SaveAnalysisPolicyResult,
@@ -54,7 +56,8 @@ import {
   RemoveAnalysisPoliciesResult,
   SaveAnalysisPolicyResult,
   ListComplexPolicyResult,
-  RecommendPoliciesResult
+  RecommendPoliciesResult,
+  ListComplexAnalysisPolicyResult
 )
 @Controller('/policies')
 export class PoliciesController {
@@ -165,11 +168,11 @@ export class PoliciesController {
   @Post('/listComplexPolicy')
   @HttpCode(200)
   @ApiOperation({
-    summary: '专利列表(c端:其中最新政策、专题政策得列表也共用该接口选择适当得入参即可)',
+    summary: '政策列表(c端:其中最新政策、专题政策得列表也共用该接口选择适当得入参即可)',
   })
   @ApiResult(ListComplexPolicyResult)
   @AllowAnon()
-  listComplexTerm(@Body() params: ListComplexPolicyDto, @Req() req: any) {
+  listComplexPolicy(@Body() params: ListComplexPolicyDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.policiesService.listComplexPolicy(params, user);
   }
@@ -182,5 +185,17 @@ export class PoliciesController {
   recommendPolicies(@Body() params: RecommendPoliciesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.policiesService.recommendPolicies(params, user);
+  }
+
+  @Post('/listComplexAnalysisPolicy')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '政策解读列表(c端)',
+  })
+  @ApiResult(ListComplexAnalysisPolicyResult)
+  @AllowAnon()
+  listComplexAnalysisPolicies(@Body() params: ListComplexAnalysisPolicyDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.analysisPoliciesService.listComplexAnalysisPolicy(params, user);
   }
 }
