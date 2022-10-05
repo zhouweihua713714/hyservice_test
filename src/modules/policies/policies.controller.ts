@@ -202,7 +202,7 @@ export class PoliciesController {
 
   @Post('/recommendAnalysisPolicies')
   @HttpCode(200)
-  @ApiOperation({ summary: '政策推荐列表(相关政策)' })
+  @ApiOperation({ summary: '政策解读推荐列表(相关政策解读)' })
   @ApiResult(OperateAnalysisPoliciesResult)
   @AllowAnon()
   recommendAnalysisPolicies(@Body() params: RecommendAnalysisPoliciesDto, @Req() req: any) {
