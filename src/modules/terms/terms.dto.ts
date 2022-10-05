@@ -13,7 +13,7 @@ import {
   Length,
   MaxLength,
 } from 'class-validator';
-
+import { Transform } from 'class-transformer';
 export class GetTermDetailDto {
   @ApiProperty({ description: 'id' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })
@@ -22,6 +22,7 @@ export class GetTermDetailDto {
   @ApiPropertyOptional({ description: '是否C端请求:是 true' })
   @IsBoolean({ message: 'flag 类型错误, 正确类型 boolean' })
   @IsOptional()
+  @Transform(({ value }) => Boolean(value))
   flag: boolean;
 }
 export class SaveTermDto {

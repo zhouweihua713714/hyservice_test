@@ -11,6 +11,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 export class GetConferenceDetailDto {
   @ApiProperty({ description: 'id,' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })
@@ -18,6 +19,7 @@ export class GetConferenceDetailDto {
 
   @ApiPropertyOptional({ description: '是否C端请求:是 true' })
   @IsBoolean({ message: 'flag 类型错误, 正确类型 boolean' })
+  @Transform(({ value }) => Boolean(value))
   @IsOptional()
   flag: boolean;
 }
