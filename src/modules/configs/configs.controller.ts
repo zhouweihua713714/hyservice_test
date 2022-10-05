@@ -19,6 +19,7 @@ import {
   GetPolicyTypesResult,
   GetSubjectsResult,
   GetTermTypesResult,
+  GetTopicTypesResult,
   GetUniversitiesResult,
   SetColumnsTypeResult,
 } from './configs.types';
@@ -38,7 +39,8 @@ import {
   GetSubjectsResult,
   GetTermTypesResult,
   SetColumnsTypeResult,
-  GetUniversitiesResult
+  GetUniversitiesResult,
+  GetTopicTypesResult
 )
 @Controller('/configs')
 export class ConfigsController {
@@ -161,6 +163,15 @@ export class ConfigsController {
   @AllowAnon()
   getUniversities(@Query() params: any) {
     return this.configService.getUniversities();
+  }
+
+  @Get('/getTopicTypes')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取主题类型数据' })
+  @ApiResult(GetTopicTypesResult)
+  @AllowAnon()
+  getTopicTypes(@Query() params: any) {
+    return this.configService.getTopicTypes();
   }
   
 }

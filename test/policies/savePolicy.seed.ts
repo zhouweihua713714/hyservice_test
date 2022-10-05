@@ -5,17 +5,20 @@ import { samples } from '../samples';
 import { User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { PolicyTypes } from '@/entities/PolicyTypes.entity';
+import { TopicTypes } from '@/entities/topicTypes.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
 let policyType: PolicyTypes;
+let topicType: TopicTypes;
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
   columns: Columns[];
   policyType: PolicyTypes;
+  topicType: TopicTypes;
 };
 
 export const seed: TesterSeed<DataType> = {
@@ -36,7 +39,11 @@ export const seed: TesterSeed<DataType> = {
       id: `T${genCodeOfLength(8)}`,
       name: '政策类型名称',
     });
-    return { user, normalUser, columns, policyType };
+    topicType = await tester.topicTypesRepository.save({
+      id: `T${genCodeOfLength(8)}`,
+      name: '政策类型名称',
+    });
+    return { user, normalUser, columns, policyType, topicType };
   },
   down: async (tester) => {
     await tester.usersRepository.delete({});

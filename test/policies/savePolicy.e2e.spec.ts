@@ -98,9 +98,18 @@ describe('/policies/savePolicy', () => {
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(20013);
   });
+  test('should not POST /policies/savePolicy with invalid topicType', async () => {
+    const result = await request(tester.server)
+      .post('/policies/savePolicy')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ columnId: tester.data.columns[1].id, topicType: 'invalid id', name: '政策名称' });
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(20018);
+  });
   test('should POST /policies/savePolicy', async () => {
     payload.columnId = tester.data.columns[1].id;
     payload.type = tester.data.policyType.id;
+    payload.topicType = tester.data.topicType.id;
     // save with
     const result = await request(tester.server)
       .post('/policies/savePolicy')

@@ -8,6 +8,7 @@ import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
 import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
+import { TopicTypes } from '@/entities/topicTypes.entity';
 import { Universities } from '@/entities/Universities.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
@@ -81,11 +82,15 @@ export class GetUniversitiesResult {
   universities: Universities[];
 }
 
-
 export class SetColumnsTypeResult {
   @ApiProperty({ description: '成功数量' })
   success: number;
 
   @ApiProperty({ description: '失败数量' })
   failed: number;
+}
+
+export class GetTopicTypesResult {
+  @ApiProperty({ description: '主题类型数组(这块数据数据方还没给到所以为空)', type: TopicTypes, isArray: true })
+  topicTypes: TopicTypes[];
 }

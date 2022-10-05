@@ -2,7 +2,11 @@ import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
-import {  Content_Status_Enum, Education_Level_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import {
+  Content_Status_Enum,
+  Education_Level_Enum,
+  User_Types_Enum,
+} from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
@@ -34,14 +38,19 @@ export const seed: TesterSeed<DataType> = {
       id: `T${genCodeOfLength(8)}`,
       name: '政策类型名称',
     });
+    const topicType = await tester.topicTypesRepository.save({
+      id: `T${genCodeOfLength(8)}`,
+      name: '政策类型名称',
+    });
     policyInfo = await tester.policiesRepository.save({
       id: new Date().getTime().toString(),
       columnId: columns[1].id,
       type: policyType.id,
+      topicType: topicType.id,
       status: Content_Status_Enum.ACTIVE,
       name: '政策名称必填',
       announceNo: '发文号',
-      level:constant.POLICY_LEVEL,
+      level: constant.POLICY_LEVEL,
       institution: '机构名称',
       educationLevel: [Education_Level_Enum.BASIC, Education_Level_Enum.HIGHER],
       keyword: '关键字;政策',

@@ -7,6 +7,7 @@ import {
   columnsRepository,
   policiesRepository,
   policyTypesRepository,
+  topicTypesRepository,
   userHistoryRepository,
   usersRepository,
 } from '../repository/repository';
@@ -44,10 +45,11 @@ export class PoliciesService {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
     }
     const type = policyInfo.type ? policyInfo.type : '-1';
-
-    const [columnInfo, typeInfo] = await Promise.all([
+    const topicType = policyInfo.topicType ? policyInfo.topicType : '-1';
+    const [columnInfo, typeInfo, topicTypeInfo] = await Promise.all([
       columnsRepository.findOneBy({ id: policyInfo.columnId }),
       policyTypesRepository.findOneBy({ id: type }),
+      topicTypesRepository.findOneBy({ id: topicType }),
     ]);
     let userInfo;
     if (policyInfo.ownerId) {
@@ -58,7 +60,7 @@ export class PoliciesService {
       columnName: columnInfo ? columnInfo.name : null,
       owner: userInfo ? userInfo.mobile : null,
       ...policyInfo,
-      topicTypeName: '', // 这里需要返回主题类型的名称 20221001
+      topicTypeName: topicType ? topicTypeInfo?.name : null,
     };
     // update clicks
     if (params.flag) {
@@ -82,7 +84,6 @@ export class PoliciesService {
   async savePolicy(params: SavePolicyDto, user: SignInResInfo): Promise<ResultData> {
     const { id, status, type, columnId, educationLevel, level, announcedAt, picker, topicType } =
       params;
-    // 这里待数据补充需要增加topicType 判断20221001
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
@@ -96,6 +97,13 @@ export class PoliciesService {
       const typeInfo = await policyTypesRepository.findOneBy({ id: type });
       if (!typeInfo) {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.TYPE_NOT_FOUND_ERROR });
+      }
+    }
+    // if topic type not found in database, then throw error
+    if (topicType) {
+      const topicTypeInfo = await topicTypesRepository.findOneBy({ id: topicType });
+      if (!topicTypeInfo) {
+        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.TOPIC_TYPE_NOT_FOUND_ERROR });
       }
     }
     // if level not found, then throw error
