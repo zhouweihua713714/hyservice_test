@@ -327,10 +327,6 @@ export class InstitutionsService {
   ): Promise<ResultData> {
     const { keyword, page, size } = params;
     // get basic condition
-    const month = 'yyyy-mm';
-    const date = 'yyyy-mm-dd';
-    let conductedAtDateString;
-    let endedAtDateString;
     let keywords;
     let basicCondition =
       'institutions.enabled = true and institutions.deletedAt is null and institutions.status =:status';
@@ -437,6 +433,7 @@ export class InstitutionsService {
    * @param {RecommendInstitutionsDto} params 推荐的相关参数
    * @returns {ResultData} 返回recommendInstitutions信息
    */
+
   async recommendInstitutions(
     params: RecommendInstitutionsDto,
     user: SignInResInfo
@@ -541,5 +538,23 @@ export class InstitutionsService {
     return ResultData.ok({
       data: { institutions: result ? result : [] },
     });
+  }
+
+  /**
+   * @description 机构分布
+   * @param {} params
+   * @returns {ResultData} 返回getInstitutionsByCoordinate信息
+   */
+  async getInstitutionsByCoordinate(params: any, user: SignInResInfo): Promise<ResultData> {
+    // get institutions
+    const institutions = await institutionsRepository.find({
+      where: {
+        status: Content_Status_Enum.ACTIVE,
+        enabled: true,
+        deletedAt: IsNull(),
+      },
+      select: ['name', 'longitude', 'latitude'],
+    });
+    return ResultData.ok({ data: { institutions: institutions } });
   }
 }

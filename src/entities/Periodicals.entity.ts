@@ -4,7 +4,10 @@ export class ColumnNumericTransformer {
   to(data: number): number {
     return data;
   }
-  from(data: string): number {
+  from(data: string): number | null {
+    if (!data) {
+      return null;
+    }
     return parseFloat(data);
   }
 }
@@ -61,7 +64,7 @@ export class Periodicals {
   })
   region: string | null;
 
-  @ApiPropertyOptional({ description: '主领域(大领域之间用“;”隔开)',type:String, nullable: true })
+  @ApiPropertyOptional({ description: '主领域(大领域之间用“;”隔开)', type: String, nullable: true })
   @Column('character varying', {
     name: 'field',
     length: 128,
@@ -80,11 +83,16 @@ export class Periodicals {
   minorField: string | null;
 
   @ApiPropertyOptional({ description: '网址', type: String, nullable: true })
-  @Column('text', { name: 'url',  nullable: true, comment: '网址' })
+  @Column('text', { name: 'url', nullable: true, comment: '网址' })
   url: string | null;
 
   @ApiPropertyOptional({ description: '详细地址', type: String, nullable: true })
-  @Column('character varying', { name: 'address', length: 100, nullable: true, comment: '详细地址' })
+  @Column('character varying', {
+    name: 'address',
+    length: 100,
+    nullable: true,
+    comment: '详细地址',
+  })
   address: string | null;
 
   @ApiPropertyOptional({ description: '检索情况', type: String, nullable: true })
@@ -98,7 +106,7 @@ export class Periodicals {
     scale: 3,
     nullable: true,
     comment: '影响因子',
-    transformer: new ColumnNumericTransformer()
+    transformer: new ColumnNumericTransformer(),
   })
   impactFactor: number | null;
 
@@ -205,7 +213,7 @@ export class Periodicals {
     scale: 3,
     nullable: true,
     comment: '综合影响因子',
-    transformer: new ColumnNumericTransformer()
+    transformer: new ColumnNumericTransformer(),
   })
   compositeImpactFactor: number | null;
 
@@ -244,7 +252,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '录用率',
-    transformer: new ColumnNumericTransformer()
+    transformer: new ColumnNumericTransformer(),
   })
   recordRate: number | null;
 
@@ -255,7 +263,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '审稿费,单位:元',
-    transformer: new ColumnNumericTransformer()
+    transformer: new ColumnNumericTransformer(),
   })
   checkFee: number | null;
 
@@ -266,7 +274,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '版面费,单位:元',
-    transformer: new ColumnNumericTransformer()
+    transformer: new ColumnNumericTransformer(),
   })
   pageFee: number | null;
 
@@ -277,7 +285,7 @@ export class Periodicals {
     scale: 2,
     nullable: true,
     comment: '稿酬,单位:元',
-    transformer: new ColumnNumericTransformer()
+    transformer: new ColumnNumericTransformer(),
   })
   reward: number | null;
 
@@ -297,7 +305,7 @@ export class Periodicals {
     scale: 1,
     nullable: true,
     comment: '引用分',
-    transformer: new ColumnNumericTransformer()
+    transformer: new ColumnNumericTransformer(),
   })
   citeScore: number | null;
 
