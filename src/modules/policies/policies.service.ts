@@ -520,4 +520,26 @@ export class PoliciesService {
       data: { policies: result ? result : [] },
     });
   }
+  /**
+   * @description 政策分布
+   * @param {} params 政策分布的相关参数
+   * @returns {ResultData} 返回getCountBYRegion信息
+   */
+  async getPolicyCountByRegion(params: any, user: SignInResInfo): Promise<ResultData> {
+    const regions = await policiesRepository
+      .createQueryBuilder('policies')
+      .select('COUNT(policies.id)', 'count')
+      .addSelect('policies.region', 'region')
+      .where(
+        'policies.enabled = true and policies.deletedAt is null and policies.status =:status',
+        {
+          status: Content_Status_Enum.ACTIVE,
+        }
+      )
+      .groupBy('policies.region')
+      .getRawMany();
+    return ResultData.ok({
+      data: { regions: regions },
+    });
+  }
 }
