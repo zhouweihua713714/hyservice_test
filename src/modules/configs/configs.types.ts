@@ -8,7 +8,7 @@ import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
 import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
-import { TopicTypes } from '@/entities/topicTypes.entity';
+import { TopicTypes } from '@/entities/TopicTypes.entity';
 import { Universities } from '@/entities/Universities.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';

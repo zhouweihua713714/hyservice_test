@@ -5,7 +5,7 @@ import { samples } from '../samples';
 import { User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { PolicyTypes } from '@/entities/PolicyTypes.entity';
-import { TopicTypes } from '@/entities/topicTypes.entity';
+import { TopicTypes } from '@/entities/TopicTypes.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
