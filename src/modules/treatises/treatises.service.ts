@@ -128,7 +128,6 @@ export class TreatisesService {
         userId: user.id,
       });
     }
-    console.log(userLabel);
     const result = {
       languageName: languageInfo
         ? _.join(
@@ -620,10 +619,12 @@ export class TreatisesService {
         .getMany();
     }
     // if treatises count < 8 then columnId recommend
-    if (treatises.length < 8) {
+    if (!treatises || (treatises && treatises.length < 8)) {
       let idsCondition = '';
-      if (treatises.length > 0) {
+      let size = 8;
+      if (treatises && treatises.length > 0) {
         idsCondition = ' and id not in (:...ids)';
+        size = size - treatises.length;
       }
       const newTreatises = await treatisesRepository
         .createQueryBuilder('treatises')
@@ -633,12 +634,14 @@ export class TreatisesService {
         })
         .where(`treatises.columnId =:columnId${idsCondition}`, {
           columnId: columnId,
-          ids: treatises.map((data) => {
-            return data.id;
-          }),
+          ids: treatises
+            ? treatises.map((data) => {
+                return data.id;
+              })
+            : undefined,
         })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
-        .take(8 - treatises.length)
+        .take(size)
         .getMany();
       treatises = _.unionBy(treatises, newTreatises, 'id');
     }
