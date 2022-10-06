@@ -107,3 +107,16 @@ export class RecommendPoliciesResult {
   @ApiProperty({ description: '推荐政策数组', type: RecommendPoliciesInfo, isArray: true })
   policies: RecommendPoliciesInfo[];
 }
+
+export class RegionInfo {
+  @ApiProperty({ description: '政策数量' })
+  count: number;
+
+  @ApiProperty({ description: '国家/地区' })
+  region: string;
+}
+
+export class GetPolicyCountByRegionResult {
+  @ApiProperty({ description: '政策分布数组', type: RegionInfo, isArray: true })
+  regions: RegionInfo[];
+}

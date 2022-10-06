@@ -34,6 +34,7 @@ import {
 } from './policies.dto';
 import { PoliciesService } from './policies.service';
 import {
+  GetPolicyCountByRegionResult,
   GetPolicyDetailResult,
   ListComplexPolicyResult,
   ListPolicyResult,
@@ -58,7 +59,8 @@ import {
   SaveAnalysisPolicyResult,
   ListComplexPolicyResult,
   RecommendPoliciesResult,
-  ListComplexAnalysisPolicyResult
+  ListComplexAnalysisPolicyResult,
+  GetPolicyCountByRegionResult
 )
 @Controller('/policies')
 export class PoliciesController {
@@ -116,6 +118,7 @@ export class PoliciesController {
     const user = <SignInResInfo>req.user;
     return this.policiesService.removePolicies(params, user);
   }
+
   @Get('/getAnalysisPolicyDetail')
   @HttpCode(200)
   @ApiOperation({ summary: '获取政策解读详情' })
@@ -208,5 +211,15 @@ export class PoliciesController {
   recommendAnalysisPolicies(@Body() params: RecommendAnalysisPoliciesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.analysisPoliciesService.recommendAnalysisPolicies(params, user);
+  }
+
+  @Get('/getPolicyCountByRegion')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取国家下的政策数量(政策分布)' })
+  @ApiResult(GetPolicyCountByRegionResult)
+  @AllowAnon()
+  getPolicyCountByRegion(@Query() params:any, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.policiesService.getPolicyCountByRegion(params, user);
   }
 }
