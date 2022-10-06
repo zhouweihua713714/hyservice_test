@@ -109,7 +109,7 @@ export class TreatisesController {
   @HttpCode(200)
   @ApiOperation({ summary: '论文列表(c端)' })
   @ApiResult(ListComplexTreatiseResult)
-  @ApiBearerAuth()
+  @AllowAnon()
   listComplexTreatise(@Body() params: ListComplexTreatiseDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatisesService.listComplexTreatise(params, user);

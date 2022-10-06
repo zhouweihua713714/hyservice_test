@@ -113,3 +113,18 @@ export class RecommendInstitutionsResult {
   @ApiProperty({ description: '推荐机构数组', type: RecommendInstitutionsInfo, isArray: true })
   institutions: RecommendInstitutionsInfo[];
 }
+
+export class GetInstitutionsByCoordinateInfo extends PickType(Institutions, [
+  'name',
+  'latitude',
+  'longitude',
+] as const) {}
+
+export class GetInstitutionsByCoordinateResult {
+  @ApiProperty({
+    description: '推荐机构数组',
+    type: GetInstitutionsByCoordinateInfo,
+    isArray: true,
+  })
+  institutions: GetInstitutionsByCoordinateInfo[];
+}

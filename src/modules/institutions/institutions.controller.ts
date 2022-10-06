@@ -17,6 +17,7 @@ import {
 import { InstitutionsService } from './institutions.service';
 import {
   GetInstitutionDetailResult,
+  GetInstitutionsByCoordinateResult,
   ListComplexInstitutionResult,
   ListInstitutionResult,
   OperateInstitutionsResult,
@@ -34,7 +35,8 @@ import {
   RemoveInstitutionsResult,
   SaveInstitutionResult,
   ListComplexInstitutionResult,
-  RecommendInstitutionsResult
+  RecommendInstitutionsResult,
+  GetInstitutionsByCoordinateResult
 )
 @Controller('/institutions')
 export class InstitutionsController {
@@ -108,5 +110,15 @@ export class InstitutionsController {
   recommendInstitutions(@Body() params: RecommendInstitutionsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.institutionsService.recommendInstitutions(params, user);
+  }
+
+  @Get('/getInstitutionsByCoordinate')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取所有机构坐标(机构分布)' })
+  @ApiResult(GetInstitutionsByCoordinateResult)
+  @AllowAnon()
+  getInstitutionsByCoordinate(@Query() params: any, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.institutionsService.getInstitutionsByCoordinate(params, user);
   }
 }
