@@ -162,3 +162,13 @@ export class ListComplexPatentDto extends PickType(ReqListQuery, ['page', 'size'
   @IsOptional()
   type: string;
 }
+
+export class GetPatentChartsDto {
+  @ApiProperty({
+    description: '图标类型:申请人(单位)applicant,年份year,类型type',
+    type: Date,
+    nullable: true,
+  })
+  @IsString({ message: 'type 类型错误, 正确类型 string' })
+  type: string;
+}

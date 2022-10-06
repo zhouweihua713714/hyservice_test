@@ -102,3 +102,21 @@ export class GePatentCountByAgentResult {
   @ApiProperty({ description: '代理人下发明专利数量', type: AgentInfo, isArray: true })
   agents: AgentInfo[];
 }
+
+export class GetPatentChartsInfo {
+  @ApiProperty({ description: '专利数量' })
+  count: number;
+
+  @ApiPropertyOptional({ description: '百分比当位专利类型分布时这个值不为空' })
+  percent: number;
+
+  @ApiProperty({
+    description: '不同类型的type对应不同的含义,year 即年份,applicant 申请人年份,type 专利类型名称',
+  })
+  name: string;
+}
+
+export class GetPatentChartsResult {
+  @ApiProperty({ description: '专利图表数组', type: GetPatentChartsInfo, isArray: true })
+  patents: GetPatentChartsInfo[];
+}

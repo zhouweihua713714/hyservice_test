@@ -6,6 +6,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
+  GetPatentChartsDto,
   GetPatentDetailDto,
   ListComplexPatentDto,
   ListPatentDto,
@@ -16,6 +17,7 @@ import {
 import { PatentsService } from './patents.service';
 import {
   GePatentCountByAgentResult,
+  GetPatentChartsResult,
   GetPatentDetailResult,
   ListComplexPatentResult,
   ListPatentResult,
@@ -33,7 +35,8 @@ import {
   RemovePatentsResult,
   SavePatentResult,
   ListComplexPatentResult,
-  GePatentCountByAgentResult
+  GePatentCountByAgentResult,
+  GetPatentChartsResult
 )
 @Controller('/patents')
 export class PatentsController {
@@ -107,5 +110,15 @@ export class PatentsController {
   getPatentCountByAgent(@Query() params: any, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.patentsService.getPatentCountByAgent(params, user);
+  }
+
+  @Get('/getPatentCharts')
+  @HttpCode(200)
+  @ApiOperation({ summary: '专利图表统计(申请单位统计、年份统计、类型统计)' })
+  @ApiResult(GetPatentChartsResult)
+  @AllowAnon()
+  getPatentCharts(@Query() params: GetPatentChartsDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.patentsService.getPatentCharts(params, user);
   }
 }
