@@ -12,6 +12,7 @@ import {
   usersRepository,
 } from '../repository/repository';
 import {
+  GetPatentChartsDto,
   GetPatentDetailDto,
   ListComplexPatentDto,
   ListPatentDto,
@@ -434,6 +435,68 @@ export class PatentsService {
     agents = agents.slice(0, 10);
     return ResultData.ok({
       data: { agents: agents },
+    });
+  }
+  /**
+   * @description 专利图表(学校分布统计、年份分布统计、类型分布统计)
+   * @param {GetPatentChartsDto} params 专利图表的相关参数
+   * @returns {ResultData} 返回getPatentCharts信息
+   */
+  async getPatentCharts(params: GetPatentChartsDto, user: SignInResInfo): Promise<ResultData> {
+    const { type } = params;
+    let patents, groupByCondition;
+    if (type === 'applicant') {
+      groupByCondition = 'patents.applicant';
+    }
+    if (type === 'year') {
+      groupByCondition = 'extract(year from patents.announcedAt) ';
+    }
+    if (type === 'type') {
+      groupByCondition = 'patents.type';
+    }
+    // get patent count by applicant
+    patents = await patentsRepository
+      .createQueryBuilder('patents')
+      .select('COUNT(patents.id)', 'count')
+      .addSelect(`${groupByCondition}`, 'name')
+      .where('patents.enabled = true and patents.deletedAt is null and patents.status =:status', {
+        status: Content_Status_Enum.ACTIVE,
+      })
+      .groupBy(`${groupByCondition}`)
+      .getRawMany();
+    patents = patents.map((data) => {
+      return {
+        name: data.name,
+        count: Number(data.count),
+      };
+    });
+    if (type === 'applicant') {
+      // get applicant and order
+      patents = _.orderBy(patents, 'count', 'desc');
+      // get top 10  it's up to PM
+      patents = patents.slice(0, 10);
+    }
+    if (type === 'year') {
+      patents = _.orderBy(patents, 'name', 'asc');
+    }
+    if (type === 'type') {
+      const types = await patentTypesRepository.find({});
+      patents = patents.map((data) => {
+        return {
+          name: _.find(types, function (o) {
+            return o.id === data.name;
+          })
+            ? _.find(types, function (o) {
+                return o.id === data.name;
+              })?.name
+            : data.type,
+          count: data.count,
+          percent: Number(((data.count / _.sumBy(patents, 'count')) * 100).toFixed(1)),
+        };
+      });
+    }
+    return ResultData.ok({
+      data: { patents: patents ? patents : [] },
     });
   }
 }

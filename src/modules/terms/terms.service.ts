@@ -347,8 +347,9 @@ export class TermsService {
             );
           })
         )
+        .orderBy('terms.year', 'DESC')
         .orderBy('terms.publishedAt', 'DESC')
-        .orderBy('terms.id', 'DESC')
+        .orderBy('terms.name', 'ASC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();
@@ -373,8 +374,9 @@ export class TermsService {
           year: new Date(authorizedAt).getFullYear(),
           columnId: columnId,
         })
+        .orderBy('terms.year', 'DESC')
         .orderBy('terms.publishedAt', 'DESC')
-        .orderBy('terms.id', 'DESC')
+        .orderBy('terms.name', 'ASC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();
