@@ -48,6 +48,7 @@ import { UserFavoriteTreatises } from './entities/UserFavoriteTreatises.entity';
 import { UserLabelTreatises } from './entities/UserLabelTreatises.entity';
 import { UserNoteTreatises } from './entities/UserNoteTreatises.entity';
 import { AnalysisPolicies } from './entities/AnalysisPolicies.entity';
+import { TopicTypes } from './entities/TopicTypes.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -106,7 +107,8 @@ import { AnalysisPolicies } from './entities/AnalysisPolicies.entity';
       UserFavoriteTreatises,
       UserLabelTreatises,
       UserNoteTreatises,
-      AnalysisPolicies
+      AnalysisPolicies,
+      TopicTypes
     ]),
     HomeModule,
     AuthModule,

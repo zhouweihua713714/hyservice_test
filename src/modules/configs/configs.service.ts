@@ -19,6 +19,7 @@ import {
   policyTypesRepository,
   subjectsRepository,
   termTypesRepository,
+  topicTypesRepository,
   universitiesRepository,
   websiteRepository,
 } from '../repository/repository';
@@ -204,4 +205,17 @@ export class ConfigsService {
     });
     return ResultData.ok({ data: { universities: data } });
   }
+    /**
+   * @description 获取主题类型数据
+   * @param {} params
+   * @returns {ResultData} 返回getTopicTypes信息
+   */
+     async getTopicTypes(): Promise<ResultData> {
+      const data = await topicTypesRepository.find({
+        order: {
+          name: 'ASC',
+        },
+      });
+      return ResultData.ok({ data: { topicTypes: data } });
+    }
 }
