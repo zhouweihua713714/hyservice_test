@@ -82,6 +82,12 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
     isArray: true,
   })
   noteTreatises: GetNoteTreatiseDetailResult[];
+
+  @ApiProperty({ description: '用户标签,当前用户登录时有贴就有' })
+  label: string;
+
+  @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0)' })
+  isFavorite: number;
 }
 export class ListTreatiseInfo extends PickType(Treatises, [
   'id',
@@ -143,7 +149,7 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   'keyword',
   'author'
 ] as const) {
-  @ApiProperty({ description: '标签' })
+  @ApiProperty({ description: '标签,列表标签是所有用户贴的最多的' })
   label: string;
 
   @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0)' })

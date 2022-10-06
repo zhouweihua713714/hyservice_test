@@ -2,7 +2,12 @@ import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
-import { Channels_Enum, Content_Types_Enum, Labels_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import {
+  Channels_Enum,
+  Content_Types_Enum,
+  Labels_Enum,
+  User_Types_Enum,
+} from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { Languages } from '@/entities/Languages.entity';
@@ -129,6 +134,13 @@ export const seed: TesterSeed<DataType> = {
         content: '笔记内容',
       },
     ]);
+    // user favorites
+    await tester.userFavoriteTreatisesRepository.save({
+      userId: user.user.id,
+      treatise: {
+        id: treatiseInfo.id,
+      },
+    });
     return { user, treatiseInfo };
   },
   down: async (tester) => {

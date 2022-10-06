@@ -102,7 +102,7 @@ export class TreatisesService {
       });
     }
     // if user login then record history and get user notes by params.id
-    let noteTreatises;
+    let noteTreatises, userFavorite, userLabel;
     if (params.flag && user) {
       await userHistoryRepository.save({
         userId: user.id,
@@ -113,7 +113,22 @@ export class TreatisesService {
       noteTreatises = await userNoteTreatisesRepository.find({
         where: { treatise: { id: params.id }, userId: user.id },
       });
+      // user favorites
+      userFavorite = await userFavoriteTreatisesRepository.findOneBy({
+        userId: user.id,
+        treatise: {
+          id: params.id,
+        },
+      });
+      // user label
+      userLabel = await userLabelTreatisesRepository.findOneBy({
+        treatise: {
+          id: params.id,
+        },
+        userId: user.id,
+      });
     }
+    console.log(userLabel);
     const result = {
       languageName: languageInfo
         ? _.join(
@@ -149,6 +164,8 @@ export class TreatisesService {
             };
           })
         : [],
+      isFavorite: userFavorite ? 1 : 0,
+      label: userLabel ? userLabel.label : null,
     };
     return ResultData.ok({ data: result });
   }
