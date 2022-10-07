@@ -383,7 +383,7 @@ export class ConferencesService {
         keyword: keywords,
       })
       .orderBy('conferences.conductedAt', 'DESC')
-      .orderBy('conferences.publishedAt', 'DESC')
+      .addOrderBy('conferences.publishedAt', 'DESC')
       .skip(page - 1)
       .take(size)
       .getManyAndCount();

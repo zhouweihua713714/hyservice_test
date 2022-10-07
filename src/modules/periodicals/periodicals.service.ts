@@ -401,8 +401,8 @@ export class PeriodicalsService {
           })
         )
         .orderBy('periodicals.articleNumber', 'DESC')
-        .orderBy('periodicals.establishedAt', 'DESC')
-        .orderBy('periodicals.publishedAt', 'DESC')
+        .addOrderBy('periodicals.establishedAt', 'DESC')
+        .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();
@@ -429,8 +429,8 @@ export class PeriodicalsService {
           columnId: columnId,
         })
         .orderBy('periodicals.articleNumber', 'DESC')
-        .orderBy('periodicals.establishedAt', 'DESC')
-        .orderBy('periodicals.publishedAt', 'DESC')
+        .addOrderBy('periodicals.establishedAt', 'DESC')
+        .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();

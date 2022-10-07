@@ -487,8 +487,8 @@ export class TreatisesService {
           })
         )
         .orderBy('treatises.deliveryAt', 'DESC')
-        .orderBy('treatises.publishedAt', 'DESC')
-        .orderBy('treatises.id', 'DESC')
+        .addOrderBy('treatises.publishedAt', 'DESC')
+        .addOrderBy('treatises.id', 'DESC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();
@@ -510,8 +510,8 @@ export class TreatisesService {
           year: new Date(deliveryAt).getFullYear(),
         })
         .orderBy('treatises.deliveryAt', 'DESC')
-        .orderBy('treatises.publishedAt', 'DESC')
-        .orderBy('treatises.id', 'DESC')
+        .addOrderBy('treatises.publishedAt', 'DESC')
+        .addOrderBy('treatises.id', 'DESC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();

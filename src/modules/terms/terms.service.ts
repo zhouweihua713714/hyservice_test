@@ -348,8 +348,8 @@ export class TermsService {
           })
         )
         .orderBy('terms.year', 'DESC')
-        .orderBy('terms.publishedAt', 'DESC')
-        .orderBy('terms.name', 'ASC')
+        .addOrderBy('terms.publishedAt', 'DESC')
+        .addOrderBy('terms.name', 'ASC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();
@@ -375,8 +375,8 @@ export class TermsService {
           columnId: columnId,
         })
         .orderBy('terms.year', 'DESC')
-        .orderBy('terms.publishedAt', 'DESC')
-        .orderBy('terms.name', 'ASC')
+        .addOrderBy('terms.publishedAt', 'DESC')
+        .addOrderBy('terms.name', 'ASC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();

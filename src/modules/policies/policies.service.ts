@@ -364,7 +364,7 @@ export class PoliciesService {
           })
         )
         .orderBy('policies.announcedAt', 'DESC')
-        .orderBy('policies.publishedAt', 'DESC')
+        .addOrderBy('policies.publishedAt', 'DESC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();
@@ -395,7 +395,7 @@ export class PoliciesService {
           educationLevel: educationLevel,
         })
         .orderBy('policies.announcedAt', 'DESC')
-        .orderBy('policies.publishedAt', 'DESC')
+        .addOrderBy('policies.publishedAt', 'DESC')
         .skip(page - 1)
         .take(size)
         .getManyAndCount();
