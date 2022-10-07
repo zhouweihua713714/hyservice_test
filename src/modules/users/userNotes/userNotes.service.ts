@@ -132,7 +132,7 @@ export class UserNotesService {
       order: {
         updatedAt: 'DESC',
       },
-      skip: page - 1,
+      skip: (page - 1) * size,
       take: size,
     });
     if (count === 0) {
