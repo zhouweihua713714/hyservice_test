@@ -60,7 +60,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[0].id,
-        applicant: '申请人单位',
+        applicant: '申请人单位大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -69,7 +69,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[0].id,
-        applicant: '申请人单位',
+        applicant: '申请人单位大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -78,7 +78,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[0].id,
-        applicant: '申请人单位',
+        applicant: '申请人单位大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -87,7 +87,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[1].id,
-        applicant: '申请人单位1',
+        applicant: '申请人单位1大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -96,7 +96,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[1].id,
-        applicant: '申请人单位1',
+        applicant: '申请人单位1大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -105,7 +105,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[2].id,
-        applicant: '申请人单位2',
+        applicant: '申请人单位2大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -114,7 +114,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[2].id,
-        applicant: '申请人单位2',
+        applicant: '申请人单位2大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -123,7 +123,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: new Date(),
         type: patentTypes[1].id,
-        applicant: '申请人单位3',
+        applicant: '申请人单位3学院',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -132,7 +132,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: '2009-10-06T07:51:29.745Z',
         type: patentTypes[0].id,
-        applicant: '申请人单位',
+        applicant: '申请人单位大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -141,7 +141,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: '2000-10-06T07:51:29.745Z',
         type: patentTypes[0].id,
-        applicant: '申请人单位',
+        applicant: '申请人单位大学',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -150,7 +150,7 @@ export const seed: TesterSeed<DataType> = {
         title: '专利标题名称必填',
         announcedAt: '2021-10-06T07:51:29.745Z',
         type: patentTypes[2].id,
-        applicant: '申请人单位',
+        applicant: '申请人单位大学',
         status: Content_Status_Enum.ACTIVE,
       },
     ]);

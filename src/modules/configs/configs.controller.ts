@@ -5,7 +5,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { SetColumnsOrderDto, SetColumnsTypeDto} from './configs.dto';
+import { GetSearchResultByKeywordDto, SetColumnsOrderDto, SetColumnsTypeDto } from './configs.dto';
 import { ConfigsService } from './configs.service';
 import {
   GetArticleTypesResult,
@@ -17,6 +17,7 @@ import {
   GetPatentValidTypesResult,
   GetPeriodicalPeriodsResult,
   GetPolicyTypesResult,
+  GetSearchResultByKeywordResult,
   GetSubjectsResult,
   GetTermTypesResult,
   GetTopicTypesResult,
@@ -40,7 +41,8 @@ import {
   GetTermTypesResult,
   SetColumnsTypeResult,
   GetUniversitiesResult,
-  GetTopicTypesResult
+  GetTopicTypesResult,
+  GetSearchResultByKeywordResult
 )
 @Controller('/configs')
 export class ConfigsController {
@@ -173,5 +175,13 @@ export class ConfigsController {
   getTopicTypes(@Query() params: any) {
     return this.configService.getTopicTypes();
   }
-  
+
+  @Get('/getSearchResultByKeyword')
+  @HttpCode(200)
+  @ApiOperation({ summary: '搜索返回关键词列表' })
+  @ApiResult(GetSearchResultByKeywordResult)
+  @AllowAnon()
+  getSearchResultByKeyword(@Query() params: GetSearchResultByKeywordDto) {
+    return this.configService.getSearchResultByKeyword(params);
+  }
 }

@@ -77,12 +77,12 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
   })
   labels: LabelCountInfo[];
 
-  @ApiPropertyOptional({
-    description: '用户笔记列表,仅在C端且用户是登录状态返回的值有效默认为空数组',
-    type: GetNoteTreatiseDetailResult,
-    isArray: true,
-  })
-  noteTreatises: GetNoteTreatiseDetailResult[];
+  // @ApiPropertyOptional({
+  //   description: '用户笔记列表,仅在C端且用户是登录状态返回的值有效默认为空数组',
+  //   type: GetNoteTreatiseDetailResult,
+  //   isArray: true,
+  // })
+  // noteTreatises: GetNoteTreatiseDetailResult[];
 
   @ApiProperty({ description: '用户标签,当前用户登录时有贴就有' })
   label: string;

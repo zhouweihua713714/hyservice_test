@@ -49,6 +49,7 @@ import { UserLabelTreatises } from './entities/UserLabelTreatises.entity';
 import { UserNoteTreatises } from './entities/UserNoteTreatises.entity';
 import { AnalysisPolicies } from './entities/AnalysisPolicies.entity';
 import { TopicTypes } from './entities/TopicTypes.entity';
+import { Keywords } from './entities/Keywords.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -108,7 +109,8 @@ import { TopicTypes } from './entities/TopicTypes.entity';
       UserLabelTreatises,
       UserNoteTreatises,
       AnalysisPolicies,
-      TopicTypes
+      TopicTypes,
+      Keywords
     ]),
     HomeModule,
     AuthModule,

@@ -334,7 +334,7 @@ export class PatentsService {
           })
         )
         .orderBy('patents.announcedAt', 'DESC')
-        .orderBy('patents.publishedAt', 'DESC')
+        .addOrderBy('patents.publishedAt', 'DESC')
         .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
@@ -356,7 +356,7 @@ export class PatentsService {
           type: type,
         })
         .orderBy('patents.announcedAt', 'DESC')
-        .orderBy('patents.publishedAt', 'DESC')
+        .addOrderBy('patents.publishedAt', 'DESC')
         .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();

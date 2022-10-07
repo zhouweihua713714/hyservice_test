@@ -21,6 +21,7 @@ import { UserLabelsService } from './userLabels/userLabels.service';
 import { ListLabelTreatiseDto, OperateLabelTreatisesDto } from './userLabels/userLabels.dto';
 import {
   GetNoteTreatiseDetailResult,
+  GetNoteTreatisesByTreatiseIdResult,
   ListNoteTreatiseResult,
   RemoveNoteTreatisesResult,
   SaveNoteTreatiseResult,
@@ -28,6 +29,7 @@ import {
 import { UserNotesService } from './userNotes/userNotes.service';
 import {
   GetNoteTreatiseDetailDto,
+  GetNoteTreatisesByTreatiseIdDto,
   ListNoteTreatiseDto,
   RemoveNoteTreatisesDto,
   SaveNoteTreatiseDto,
@@ -44,7 +46,8 @@ import { ListLabelTreatiseResult } from './userLabels/userLabels.types';
   GetNoteTreatiseDetailResult,
   ListNoteTreatiseResult,
   ListFavoriteTreatiseResult,
-  ListLabelTreatiseResult
+  ListLabelTreatiseResult,
+  GetNoteTreatisesByTreatiseIdResult
 )
 @Controller('/users')
 export class UsersController {
@@ -179,5 +182,18 @@ export class UsersController {
   listLabelTreatise(@Query() params: ListLabelTreatiseDto, @Req() req: any): Promise<ResultData> {
     const user = <SignInResInfo>req.user;
     return this.userLabelsService.listLabelTreatise(params, user);
+  }
+
+  @Get('/getNoteTreatisesByTreatiseId')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取该论文下的笔记列表' })
+  @ApiResult(GetNoteTreatisesByTreatiseIdResult)
+  @ApiBearerAuth()
+  getNoteTreatisesByTreatiseId(
+    @Query() params: GetNoteTreatisesByTreatiseIdDto,
+    @Req() req: any
+  ): Promise<ResultData> {
+    const user = <SignInResInfo>req.user;
+    return this.userNotesService.getNoteTreatisesByTreatiseId(params, user);
   }
 }

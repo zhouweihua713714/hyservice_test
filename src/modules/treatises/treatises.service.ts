@@ -110,9 +110,9 @@ export class TreatisesService {
         type: Content_Types_Enum.TREATISE,
       });
       //get user note treatises
-      noteTreatises = await userNoteTreatisesRepository.find({
-        where: { treatise: { id: params.id }, userId: user.id },
-      });
+      // noteTreatises = await userNoteTreatisesRepository.find({
+      //   where: { treatise: { id: params.id }, userId: user.id },
+      // });
       // user favorites
       userFavorite = await userFavoriteTreatisesRepository.findOneBy({
         userId: user.id,
@@ -149,20 +149,20 @@ export class TreatisesService {
       owner: userInfo ? userInfo.mobile : null,
       labels: labelCount,
       ...treatiseInfo,
-      noteTreatises: noteTreatises
-        ? noteTreatises.map((data) => {
-            return {
-              id: data.id,
-              treatiseId: data.treatiseId,
-              content: data.content,
-              updatedAt: data.updatedAt,
-              comment: data.comment,
-              commentedAt: data.commentedAt,
-              title: treatiseInfo.title,
-              url: treatiseInfo.url,
-            };
-          })
-        : [],
+      // noteTreatises: noteTreatises
+      //   ? noteTreatises.map((data) => {
+      //       return {
+      //         id: data.id,
+      //         treatiseId: data.treatiseId,
+      //         content: data.content,
+      //         updatedAt: data.updatedAt,
+      //         comment: data.comment,
+      //         commentedAt: data.commentedAt,
+      //         title: treatiseInfo.title,
+      //         url: treatiseInfo.url,
+      //       };
+      //     })
+      //   : [],
       isFavorite: userFavorite ? 1 : 0,
       label: userLabel ? userLabel.label : null,
     };

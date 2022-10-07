@@ -5,6 +5,7 @@ import { SignInResInfo } from '../../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
   GetNoteTreatiseDetailDto,
+  GetNoteTreatisesByTreatiseIdDto,
   ListNoteTreatiseDto,
   RemoveNoteTreatisesDto,
   SaveNoteTreatiseDto,
@@ -21,8 +22,8 @@ import { skip } from 'rxjs';
 
 export class UserNotesService {
   /**
-   * @description 用户添加/编辑笔记,
-   * @param { GetNoteTreatiseDetailDto} params 用户添加/编辑笔记参数
+   * @description 获取笔记详情,
+   * @param { GetNoteTreatiseDetailDto} params 获取笔记详情
    * @returns {ResultData} 返回操作结果
    */
   async getNoteTreatiseDetail(
@@ -154,6 +155,49 @@ export class UserNotesService {
     });
     return ResultData.ok({
       data: { noteTreatises: result, count: count },
+    });
+  }
+
+  /**
+   * @description 用户论文笔记列表
+   * @param {GetNoteTreatisesByTreatiseIdDto} params 用户论文笔记列表的相关参数
+   * @returns {ResultData} 返回listNoteTreatise信息
+   */
+  async getNoteTreatisesByTreatiseId(
+    params: GetNoteTreatisesByTreatiseIdDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { id } = params;
+    const treatiseInfo = await treatisesRepository.findOneBy({
+      id: params.id,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    if (!treatiseInfo) {
+      return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
+    }
+    //get user note treatises
+    const noteTreatises = await userNoteTreatisesRepository.find({
+      where: { treatise: { id: id }, userId: user.id },
+      order: {
+        updatedAt: 'DESC',
+      },
+      relations: ['treatise'],
+    });
+    const result = noteTreatises.map((data) => {
+      return {
+        id: data.id,
+        treatiseId: data.treatiseId,
+        content: data.content,
+        updatedAt: data.updatedAt,
+        comment: data.comment,
+        commentedAt: data.commentedAt,
+        title: data.treatise.title,
+        url: data.treatise.url,
+      };
+    });
+    return ResultData.ok({
+      data: { noteTreatises: result },
     });
   }
 }

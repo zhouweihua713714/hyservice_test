@@ -38,3 +38,8 @@ export class ListNoteTreatiseResult {
   @ApiProperty({ description: '数量' })
   count: number;
 }
+
+export class GetNoteTreatisesByTreatiseIdResult {
+  @ApiProperty({ description: '笔记数组', type: GetNoteTreatiseDetailResult, isArray: true })
+  noteTreatises: GetNoteTreatiseDetailResult[];
+}
