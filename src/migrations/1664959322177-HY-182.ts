@@ -21,8 +21,7 @@ export class HY1821664959322177 implements MigrationInterface {
         SET "name" = EXCLUDED."name",
         "parent_id" = EXCLUDED."parent_id",
         "sequence_number" = EXCLUDED."sequence_number",
-        "is_hide" = EXCLUDED."is_hide", 
-        "introduction" = EXCLUDED."introduction";
+        "is_hide" = EXCLUDED."is_hide";
     `);
   }
 

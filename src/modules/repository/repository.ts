@@ -25,6 +25,7 @@ import { UserLabelTreatises } from '@/entities/UserLabelTreatises.entity';
 import { UserNoteTreatises } from '@/entities/UserNoteTreatises.entity';
 import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
 import { TopicTypes } from '@/entities/TopicTypes.entity';
+import { Keywords } from '@/entities/Keywords.entity';
 DataSource.initialize()
   .then(() => {
     // console.log('Data Source has been initialized!');
@@ -58,4 +59,5 @@ export const userLabelTreatisesRepository = DataSource.getRepository(UserLabelTr
 export const userNoteTreatisesRepository = DataSource.getRepository(UserNoteTreatises);
 export const analysisPoliciesRepository = DataSource.getRepository(AnalysisPolicies);
 export const topicTypesRepository = DataSource.getRepository(TopicTypes);
+export const keywordsRepository = DataSource.getRepository(Keywords);
 

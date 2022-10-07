@@ -1,17 +1,15 @@
-import _, { isArray, isNull } from 'lodash';
+import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
 import { Injectable } from '@nestjs/common';
 
 import { SignInResInfo } from '../auth/auth.types';
-
-import { Repository, Like, In, IsNull, Not, getRepository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
   articleTypesRepository,
   columnsRepository,
   fieldsRepository,
+  keywordsRepository,
   languagesRepository,
   patentTypesRepository,
   patentValidTypesRepository,
@@ -21,11 +19,10 @@ import {
   termTypesRepository,
   topicTypesRepository,
   universitiesRepository,
-  websiteRepository,
 } from '../repository/repository';
-import { SetColumnsOrderDto, SetColumnsTypeDto } from './configs.dto';
+import { GetSearchResultByKeywordDto, SetColumnsOrderDto, SetColumnsTypeDto } from './configs.dto';
 import { User_Types_Enum } from '@/common/enums/common.enum';
-
+import { Like } from 'typeorm';
 @Injectable()
 export class ConfigsService {
   /**
@@ -205,17 +202,37 @@ export class ConfigsService {
     });
     return ResultData.ok({ data: { universities: data } });
   }
-    /**
+  /**
    * @description 获取主题类型数据
    * @param {} params
    * @returns {ResultData} 返回getTopicTypes信息
    */
-     async getTopicTypes(): Promise<ResultData> {
-      const data = await topicTypesRepository.find({
-        order: {
-          name: 'ASC',
-        },
-      });
-      return ResultData.ok({ data: { topicTypes: data } });
-    }
+  async getTopicTypes(): Promise<ResultData> {
+    const data = await topicTypesRepository.find({
+      order: {
+        name: 'ASC',
+      },
+    });
+    return ResultData.ok({ data: { topicTypes: data } });
+  }
+
+  /**
+   * @description 搜索返回关键词列表
+   * @param {GetSearchResultByKeywordDto } params
+   * @returns {ResultData} 返回getSearchResultByKeyword信息
+   */
+  async getSearchResultByKeyword(params: GetSearchResultByKeywordDto): Promise<ResultData> {
+    const { keyword, type } = params;
+    const data = await keywordsRepository.find({
+      where: {
+        name: Like(`%${keyword}%`),
+        type: type,
+      },
+      order: {
+        name: 'ASC',
+      },
+      select: ['id', 'name'],
+    });
+    return ResultData.ok({ data: { keywords: data } });
+  }
 }

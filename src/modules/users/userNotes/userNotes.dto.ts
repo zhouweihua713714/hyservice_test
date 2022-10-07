@@ -41,4 +41,10 @@ export class RemoveNoteTreatisesDto {
 export class ListNoteTreatiseDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
 }
 
+export class GetNoteTreatisesByTreatiseIdDto {
+  @ApiProperty({ description: '论文id' })
+  @IsString({ message: 'id 类型错误, 正确类型 string' })
+  id: string;
+}
+
 

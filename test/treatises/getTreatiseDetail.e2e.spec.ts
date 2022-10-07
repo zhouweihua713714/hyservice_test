@@ -27,7 +27,7 @@ describe('/treatises/getTreatiseDetail', () => {
     expect(result.body.code).toBe(200);
     expect(result.body.data.id).toBeTruthy();
     expect(result.body.data.labels).toBeTruthy();
-    expect(result.body.data.noteTreatises).toBeTruthy();
-    expect(result.body.data.noteTreatises.length).toBe(2);
+    // expect(result.body.data.noteTreatises).toBeTruthy();
+    // expect(result.body.data.noteTreatises.length).toBe(2);
   });
 });

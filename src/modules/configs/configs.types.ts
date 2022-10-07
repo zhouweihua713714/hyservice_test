@@ -1,6 +1,7 @@
 import { ArticleTypes } from '@/entities/ArticleTypes.entity';
 import { Columns } from '@/entities/Columns.entity';
 import { Fields } from '@/entities/Fields.entity';
+import { Keywords } from '@/entities/Keywords.entity';
 import { Languages } from '@/entities/Languages.entity';
 import { PatentTypes } from '@/entities/PatentTypes.entity';
 import { PatentValidTypes } from '@/entities/PatentValidTypes.entity';
@@ -91,6 +92,20 @@ export class SetColumnsTypeResult {
 }
 
 export class GetTopicTypesResult {
-  @ApiProperty({ description: '主题类型数组(这块数据数据方还没给到所以为空)', type: TopicTypes, isArray: true })
+  @ApiProperty({
+    description: '主题类型数组(这块数据数据方还没给到所以为空)',
+    type: TopicTypes,
+    isArray: true,
+  })
   topicTypes: TopicTypes[];
+}
+
+export class GetSearchResultByKeywordInfo extends PickType(Keywords, ['id', 'name'] as const) {}
+export class GetSearchResultByKeywordResult {
+  @ApiProperty({
+    description: '搜索返回关键词列表',
+    type: GetSearchResultByKeywordInfo,
+    isArray: true,
+  })
+  keywords: GetSearchResultByKeywordInfo[];
 }
