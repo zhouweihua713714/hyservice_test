@@ -384,7 +384,7 @@ export class ConferencesService {
       })
       .orderBy('conferences.conductedAt', 'DESC')
       .addOrderBy('conferences.publishedAt', 'DESC')
-      .skip(page - 1)
+      .skip((page - 1)*size)
       .take(size)
       .getManyAndCount();
 

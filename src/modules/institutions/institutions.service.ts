@@ -355,7 +355,7 @@ export class InstitutionsService {
         keyword: keywords,
       })
       .orderBy('institutions.publishedAt', 'DESC')
-      .skip(page - 1)
+      .skip((page - 1) * size)
       .take(size)
       .getManyAndCount();
 

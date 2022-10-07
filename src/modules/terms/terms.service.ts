@@ -350,7 +350,7 @@ export class TermsService {
         .orderBy('terms.year', 'DESC')
         .addOrderBy('terms.publishedAt', 'DESC')
         .addOrderBy('terms.name', 'ASC')
-        .skip(page - 1)
+        .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -377,7 +377,7 @@ export class TermsService {
         .orderBy('terms.year', 'DESC')
         .addOrderBy('terms.publishedAt', 'DESC')
         .addOrderBy('terms.name', 'ASC')
-        .skip(page - 1)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     }

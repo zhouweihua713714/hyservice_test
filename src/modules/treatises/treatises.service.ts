@@ -489,7 +489,7 @@ export class TreatisesService {
         .orderBy('treatises.deliveryAt', 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
-        .skip(page - 1)
+        .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -512,7 +512,7 @@ export class TreatisesService {
         .orderBy('treatises.deliveryAt', 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
-        .skip(page - 1)
+        .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
     }

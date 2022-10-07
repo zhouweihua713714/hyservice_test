@@ -403,7 +403,7 @@ export class PeriodicalsService {
         .orderBy('periodicals.articleNumber', 'DESC')
         .addOrderBy('periodicals.establishedAt', 'DESC')
         .addOrderBy('periodicals.publishedAt', 'DESC')
-        .skip(page - 1)
+        .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -431,7 +431,7 @@ export class PeriodicalsService {
         .orderBy('periodicals.articleNumber', 'DESC')
         .addOrderBy('periodicals.establishedAt', 'DESC')
         .addOrderBy('periodicals.publishedAt', 'DESC')
-        .skip(page - 1)
+        .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
     }

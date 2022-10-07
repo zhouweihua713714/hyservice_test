@@ -335,7 +335,7 @@ export class PatentsService {
         )
         .orderBy('patents.announcedAt', 'DESC')
         .orderBy('patents.publishedAt', 'DESC')
-        .skip(page - 1)
+        .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -357,7 +357,7 @@ export class PatentsService {
         })
         .orderBy('patents.announcedAt', 'DESC')
         .orderBy('patents.publishedAt', 'DESC')
-        .skip(page - 1)
+        .skip((page - 1)*size)
         .take(size)
         .getManyAndCount();
     }
