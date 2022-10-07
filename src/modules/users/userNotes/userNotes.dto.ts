@@ -22,6 +22,7 @@ export class SaveNoteTreatiseDto {
 
   @ApiPropertyOptional({ description: '笔记评论(自己)', type: String, nullable: true })
   @IsString({ message: 'comment 类型错误, 正确类型 string' })
+  @IsOptional()
   comment: string | null;
 
   @ApiProperty({ description: '论文id' })
