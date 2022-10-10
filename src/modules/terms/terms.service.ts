@@ -12,6 +12,7 @@ import {
   usersRepository,
 } from '../repository/repository';
 import {
+  GetTermCountByUnitDto,
   GetTermDetailDto,
   ListComplexTermDto,
   ListTermDto,
@@ -350,7 +351,7 @@ export class TermsService {
         .orderBy('terms.year', 'DESC')
         .addOrderBy('terms.publishedAt', 'DESC')
         .addOrderBy('terms.name', 'ASC')
-        .skip((page - 1)*size)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -400,5 +401,103 @@ export class TermsService {
       };
     });
     return ResultData.ok({ data: { terms: result, count: count } });
+  }
+  /**
+   * @description 依托单位分布
+   * @param {GetTermCountByUnitDto} params 依托单位分布的相关参数
+   * @returns {ResultData} 返回getTermCountByUnit信息
+   */
+  async getTermCountByUnit(
+    params: GetTermCountByUnitDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId } = params;
+    //get columns
+    // ( 'column_01_01', '国家社会科学基金项目', 'column_01', '1', '0' ),
+    // ( 'column_01_02', '教育部人文社科项目', 'column_01', '2', '0' ),
+    // ( 'column_01_03', '国家自然科学基金项目(F0701)', 'column_01', '3', '0' ),
+    let yearCount, unitTop10, terms;
+    [yearCount, unitTop10, terms] = await Promise.all([
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.year', 'year')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .getRawMany(),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.unit', 'unit')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.unit')
+        .getRawMany(),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.year', 'year')
+        .addSelect('terms.unit', 'unit')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .addGroupBy('terms.unit')
+        .getRawMany(),
+    ]);
+    // get Number count
+    terms = terms.map((data) => {
+      return { unit: data.unit, count: Number(data.count), year: data.year };
+    });
+    unitTop10 = _.orderBy(
+      unitTop10.map((data) => {
+        return {
+          count: Number(data.count),
+          unit: data.unit,
+          yearCount: _.filter(terms, function (o) {
+            return o.unit === data.unit;
+          }),
+        };
+      }),
+      'count',
+      'desc'
+    );
+    // get top 10 unit
+    unitTop10 = unitTop10.slice(0, 10);
+    // get year count and unit details
+    yearCount = _.orderBy(
+      yearCount.map((data) => {
+        let unitCount;
+        if (_.groupBy(terms, 'year')[data.year]) {
+          unitCount = _.intersectionBy(_.groupBy(terms, 'year')[data.year], unitTop10, 'unit');
+        }
+        return {
+          count: Number(data.count),
+          year: data.year,
+          units: unitCount ? unitCount : [],
+          topCount: _.sumBy(unitCount, 'count'),
+        };
+      }),
+      'year',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { yearCounts: yearCount, unitTop10: unitTop10 },
+    });
   }
 }
