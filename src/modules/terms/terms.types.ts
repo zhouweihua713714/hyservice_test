@@ -93,3 +93,75 @@ export class ListComplexTermResult {
   @ApiProperty({ description: '总数' })
   count: number;
 }
+
+export class UnitInfo {
+  @ApiProperty({ description: '依托单位名称' })
+  unit: string;
+
+  @ApiProperty({ description: '该依托单位的项目总数' })
+  count: number;
+
+  @ApiProperty({ description: '年份(这里没啥用就是字段冗余出来没单独处理顺便文档写上了)' })
+  year: number;
+}
+export class GetTermCountByUnitInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({ description: '该年份下的项目的总数' })
+  count: number;
+
+  @ApiProperty({ description: 'top10单位项目的总数(这个y坐标高度可能需要展示这个值)' })
+  topCount: number;
+
+  @ApiProperty({
+    description: '该年份下的依托单位数量分布(根据需求目前只展示top10)',
+    type: UnitInfo,
+    isArray: true,
+  })
+  units: UnitInfo[];
+}
+
+export class YearCountInfo {
+  @ApiProperty({ description: '依托单位名称(这里没啥用就是字段冗余出来没单独处理顺便文档写上了)' })
+  unit: string;
+
+  @ApiProperty({ description: '该依托单位的项目总数' })
+  count: number;
+
+  @ApiProperty({ description: '年份' })
+  year: number;
+}
+
+export class UnitTop10Info {
+  @ApiProperty({ description: '依托单位名称' })
+  unit: string;
+
+  @ApiProperty({ description: '该年份下的项目的总数' })
+  count: number;
+
+  @ApiProperty({
+    description: '该依托单位下不同年份的分布情况',
+    type: YearCountInfo,
+    isArray: true,
+  })
+  yearCount: YearCountInfo[];
+}
+
+export class GetTermCountByUnitResult {
+  @ApiProperty({
+    description:
+      '依托单位分布数组(这里需要注意下国家社会科学基金、教育部人文社科项目基金主要拿这个数组展示就够了)',
+    type: GetTermCountByUnitInfo,
+    isArray: true,
+  })
+  yearCounts: GetTermCountByUnitInfo[];
+
+  @ApiProperty({
+    description:
+      '依托单位top10顺序已经排好(国家自然科学基金项目(F0701)这个图表主要在这个数组里yearCount展示,这里会有yearCount具体你看下ui的xy轴就清楚了),另外两个图表这个top10主要是在x轴上要显示哪top10',
+    type: UnitTop10Info,
+    isArray: true,
+  })
+  unitTop10: UnitTop10Info[];
+}

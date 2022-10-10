@@ -6,6 +6,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
+  GetTermCountByUnitDto,
   GetTermDetailDto,
   ListComplexTermDto,
   ListTermDto,
@@ -15,6 +16,7 @@ import {
 } from './terms.dto';
 import { TermsService } from './terms.service';
 import {
+  GetTermCountByUnitResult,
   GetTermDetailResult,
   ListComplexTermResult,
   ListTermResult,
@@ -31,7 +33,8 @@ import {
   OperateTermsResult,
   RemoveTermsResult,
   SaveTermResult,
-  ListComplexTermResult
+  ListComplexTermResult,
+  GetTermCountByUnitResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -44,7 +47,7 @@ export class TermsController {
   @AllowAnon()
   getTermDetail(@Query() params: GetTermDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
-    return this.termsService.getTermDetail(params,user);
+    return this.termsService.getTermDetail(params, user);
   }
 
   @Post('/saveTerm')
@@ -90,10 +93,20 @@ export class TermsController {
   @Post('/listComplexTerm')
   @HttpCode(200)
   @ApiOperation({ summary: '项目列表(c端)' })
-  @ApiResult(ListComplexTermResult )
+  @ApiResult(ListComplexTermResult)
   @AllowAnon()
   listComplexTerm(@Body() params: ListComplexTermDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.listComplexTerm(params, user);
+  }
+
+  @Get('/getTermCountByUnit')
+  @HttpCode(200)
+  @ApiOperation({ summary: '依托单位分布(国家社会科学基金、教育部人文社科、国家自然科学基金项目)' })
+  @ApiResult(GetTermCountByUnitResult)
+  @AllowAnon()
+  getTermCountByUnit(@Query() params: GetTermCountByUnitDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTermCountByUnit(params, user);
   }
 }
