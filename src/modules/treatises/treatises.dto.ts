@@ -283,10 +283,10 @@ export class ListComplexTreatiseDto extends PickType(ReqListQuery, ['page', 'siz
   @IsOptional()
   columnId: string;
 
-  @ApiPropertyOptional({ description: '发表时间' })
+  @ApiPropertyOptional({ description: '发表时间', type: Date, nullable: true })
   @IsDateString({ message: 'deliveryAt 类型错误, 正确类型 date' })
   @IsOptional()
-  deliveryAt: Date;
+  deliveryAt: Date | null;
 }
 
 export class RecommendTreatisesDto {

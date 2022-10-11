@@ -477,7 +477,7 @@ export class TreatisesService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
-          year: new Date(deliveryAt).getFullYear(),
+          year: deliveryAt ? new Date(deliveryAt).getFullYear() : undefined,
         })
         .andWhere(
           new Brackets((qb) => {
@@ -489,7 +489,7 @@ export class TreatisesService {
         .orderBy('treatises.deliveryAt', 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
-        .skip((page - 1)*size)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -507,12 +507,12 @@ export class TreatisesService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
-          year: new Date(deliveryAt).getFullYear(),
+          year: deliveryAt ? new Date(deliveryAt).getFullYear() : undefined,
         })
         .orderBy('treatises.deliveryAt', 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
-        .skip((page - 1)*size)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     }
