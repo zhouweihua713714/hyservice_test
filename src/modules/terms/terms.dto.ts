@@ -191,7 +191,7 @@ export class ListComplexTermDto extends PickType(ReqListQuery, ['page', 'size'] 
 
 export class GetTermCountByUnitDto {
   @ApiProperty({
-    description: '栏目id,这里栏目id直接对应统计相关的栏目的图表rr不能出错否则数据统计不对齐',
+    description: '栏目id,这里栏目id直接对应统计相关的栏目的图表不能出错否则数据统计不对齐',
   })
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   columnId: string;
@@ -199,7 +199,14 @@ export class GetTermCountByUnitDto {
 
 export class GetTermCountByTypeDto {
   @ApiProperty({
-    description: '栏目id,这里栏目id直接对应统计相关的栏目的图表rr不能出错否则数据统计不对齐',
+    description: '栏目id,这里栏目id直接对应统计相关的栏目的图表不能出错否则数据统计不对齐',
+  })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  columnId: string;
+}
+export class GetTermCountByYearDto {
+  @ApiProperty({
+    description: '栏目id,这里栏目id直接对应统计相关的栏目的图表不能出错否则数据统计不对齐',
   })
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   columnId: string;

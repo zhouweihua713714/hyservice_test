@@ -8,6 +8,7 @@ import { SignInResInfo } from '../auth/auth.types';
 import {
   GetTermCountByTypeDto,
   GetTermCountByUnitDto,
+  GetTermCountByYearDto,
   GetTermDetailDto,
   ListComplexTermDto,
   ListTermDto,
@@ -19,6 +20,7 @@ import { TermsService } from './terms.service';
 import {
   GetTermCountByTypeResult,
   GetTermCountByUnitResult,
+  GetTermCountByYearResult,
   GetTermDetailResult,
   ListComplexTermResult,
   ListTermResult,
@@ -37,7 +39,8 @@ import {
   SaveTermResult,
   ListComplexTermResult,
   GetTermCountByUnitResult,
-  GetTermCountByTypeResult
+  GetTermCountByTypeResult,
+  GetTermCountByYearResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -121,5 +124,15 @@ export class TermsController {
   getTermCountByType(@Query() params: GetTermCountByTypeDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.getTermCountByType(params, user);
+  }
+
+  @Get('/getTermCountByYear')
+  @HttpCode(200)
+  @ApiOperation({ summary: '项目类型时间分析(这里目前仅有教育人文社科项目有~但api均做方便以后拓展)' })
+  @ApiResult(GetTermCountByYearResult)
+  @AllowAnon()
+  getTermCountByYear(@Query() params: GetTermCountByYearDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTermCountByYear(params, user);
   }
 }

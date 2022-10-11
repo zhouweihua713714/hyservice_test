@@ -14,6 +14,7 @@ import {
 import {
   GetTermCountByTypeDto,
   GetTermCountByUnitDto,
+  GetTermCountByYearDto,
   GetTermDetailDto,
   ListComplexTermDto,
   ListTermDto,
@@ -569,6 +570,98 @@ export class TermsService {
     });
     return ResultData.ok({
       data: { typeCounts: typeCount },
+    });
+  }
+  /**
+   * @description 项目类别时间分析(目前只有教育部人文社科项目有)
+   * @param {GetTermCountByYearDto} params 项目类别时间分析(目前只有教育部人文社科项目有)的相关参数
+   * @returns {ResultData} 返回getTermCountByYear信息
+   */
+  async getTermCountByYear(
+    params: GetTermCountByYearDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId } = params;
+    let yearCount, types, terms;
+    [yearCount, types, terms] = await Promise.all([
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.year', 'year')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .getRawMany(),
+      termTypesRepository.find(),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.type', 'type')
+        .addSelect('terms.year', 'year')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .addGroupBy('terms.type')
+        .getRawMany(),
+    ]);
+    types = types.map((data) => {
+      return {
+        id: data.id,
+        name: data.name,
+      };
+    });
+    // get Number count
+    terms = terms.map((data) => {
+      return { type: data.type, count: Number(data.count), year: data.year };
+    });
+    // get type name
+    yearCount = _.orderBy(
+      yearCount.map((data) => {
+        return {
+          year: data.year,
+          count: Number(data.count),
+          types: _.groupBy(terms, 'year')[data.year]
+            ? _.filter(
+                _.orderBy(
+                  _.groupBy(terms, 'year')[data.year].map((data) => {
+                    return {
+                      id: data.type,
+                      name: _.find(types, function (o) {
+                        return o.id === data.type;
+                      })
+                        ? _.find(types, function (o) {
+                            return o.id === data.type;
+                          }).name
+                        : null,
+                      count: data.count,
+                    };
+                  }),
+                  'count',
+                  'desc'
+                ),
+                function (o) {
+                  return o.id; // filter !type
+                }
+              )
+            : [],
+        };
+      }),
+      'year',
+      'asc'
+    );
+
+    return ResultData.ok({
+      data: { yearCounts: yearCount },
     });
   }
 }
