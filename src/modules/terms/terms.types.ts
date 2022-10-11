@@ -186,5 +186,34 @@ export class GetTermCountByTypeResult {
     type: TypeCountInfo,
     isArray: true,
   })
-  TypeCounts: TypeCountInfo[];
+  typeCounts: TypeCountInfo[];
+}
+
+export class TypesInfo extends PickType(TypeCountInfo, ['id', 'name', 'count'] as const) {}
+
+export class GetTermCountByYearInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({
+    description:
+      '该年份下的项目的总数(这里的总数不一定与数组下的总和一致如果项目没类型的情况下无类型的会在types里过滤掉)',
+  })
+  count: number;
+
+  @ApiProperty({
+    description: '该年份下不同类型的项目数据统计',
+    type: TypesInfo,
+    isArray: true,
+  })
+  types: TypesInfo[];
+}
+
+export class GetTermCountByYearResult {
+  @ApiProperty({
+    description: '项目类别时间分析(教育部人文社科项目基金有)',
+    type: GetTermCountByYearInfo,
+    isArray: true,
+  })
+  yearCounts: GetTermCountByYearInfo[];
 }
