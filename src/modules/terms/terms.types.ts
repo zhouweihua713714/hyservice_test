@@ -165,3 +165,26 @@ export class GetTermCountByUnitResult {
   })
   unitTop10: UnitTop10Info[];
 }
+
+export class TypeCountInfo {
+  @ApiProperty({ description: '项目类型id' })
+  id: string;
+
+  @ApiProperty({ description: '项目名称' })
+  name: string;
+
+  @ApiProperty({ description: '该类型下项目的总数' })
+  count: number;
+
+  @ApiProperty({ description: '该类型下项目占比(目前保留一位小数)' })
+  percent: number;
+}
+
+export class GetTermCountByTypeResult {
+  @ApiProperty({
+    description: '类型分布占比,(这里只展示前7,这边全下发因为有百分比)',
+    type: TypeCountInfo,
+    isArray: true,
+  })
+  TypeCounts: TypeCountInfo[];
+}

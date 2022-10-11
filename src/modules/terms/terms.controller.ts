@@ -6,6 +6,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
+  GetTermCountByTypeDto,
   GetTermCountByUnitDto,
   GetTermDetailDto,
   ListComplexTermDto,
@@ -16,6 +17,7 @@ import {
 } from './terms.dto';
 import { TermsService } from './terms.service';
 import {
+  GetTermCountByTypeResult,
   GetTermCountByUnitResult,
   GetTermDetailResult,
   ListComplexTermResult,
@@ -34,7 +36,8 @@ import {
   RemoveTermsResult,
   SaveTermResult,
   ListComplexTermResult,
-  GetTermCountByUnitResult
+  GetTermCountByUnitResult,
+  GetTermCountByTypeResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -108,5 +111,15 @@ export class TermsController {
   getTermCountByUnit(@Query() params: GetTermCountByUnitDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.getTermCountByUnit(params, user);
+  }
+
+  @Get('/getTermCountByType')
+  @HttpCode(200)
+  @ApiOperation({ summary: '项目类型分布' })
+  @ApiResult(GetTermCountByTypeResult)
+  @AllowAnon()
+  getTermCountByType(@Query() params: GetTermCountByTypeDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTermCountByType(params, user);
   }
 }

@@ -56,7 +56,7 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
   'doi',
   'studyField',
   'clicks',
-  'name'
+  'name',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -148,7 +148,9 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   'name',
   'abstract',
   'keyword',
-  'author'
+  'author',
+  'periodical',
+  'releasedAt',
 ] as const) {
   @ApiProperty({ description: '标签,列表标签是所有用户贴的最多的' })
   label: string;
