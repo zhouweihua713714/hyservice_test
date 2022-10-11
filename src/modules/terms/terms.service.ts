@@ -12,6 +12,7 @@ import {
   usersRepository,
 } from '../repository/repository';
 import {
+  GetTermCountByTypeDto,
   GetTermCountByUnitDto,
   GetTermDetailDto,
   ListComplexTermDto,
@@ -412,7 +413,6 @@ export class TermsService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { columnId } = params;
-    //get columns
     // ( 'column_01_01', '国家社会科学基金项目', 'column_01', '1', '0' ),
     // ( 'column_01_02', '教育部人文社科项目', 'column_01', '2', '0' ),
     // ( 'column_01_03', '国家自然科学基金项目(F0701)', 'column_01', '3', '0' ),
@@ -498,6 +498,77 @@ export class TermsService {
     );
     return ResultData.ok({
       data: { yearCounts: yearCount, unitTop10: unitTop10 },
+    });
+  }
+  /**
+   * @description 类型分布占比
+   * @param {GetTermCountByTypeDto} params 类型分布占比的相关参数
+   * @returns {ResultData} 返回getTermCountByType信息
+   */
+  async getTermCountByType(
+    params: GetTermCountByTypeDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId } = params;
+    let typeCount, types;
+    [typeCount, types] = await Promise.all([
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.type', 'type')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.type')
+        .getRawMany(),
+      termTypesRepository.find(),
+    ]);
+    types = types.map((data) => {
+      return {
+        id: data.id,
+        name: data.name,
+      };
+    });
+    // get type name
+    typeCount = _.orderBy(
+      typeCount.map((data) => {
+        return {
+          id: data.type,
+          name: _.find(types, function (o) {
+            return o.id === data.type;
+          })
+            ? _.find(types, function (o) {
+                return o.id === data.type;
+              }).name
+            : null,
+          count: Number(data.count),
+          percent: Number(
+            (
+              (Number(data.count) /
+                _.sumBy(
+                  typeCount.map((data) => {
+                    return { count: Number(data.count) };
+                  }),
+                  'count'
+                )) *
+              100
+            ).toFixed(1)
+          ),
+        };
+      }),
+      'count',
+      'desc'
+    );
+    // filter !type
+    typeCount = _.filter(typeCount, function (o) {
+      return o.id;
+    });
+    return ResultData.ok({
+      data: { typeCounts: typeCount },
     });
   }
 }

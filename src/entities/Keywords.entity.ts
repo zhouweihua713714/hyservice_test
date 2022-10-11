@@ -28,7 +28,7 @@ export class Keywords {
   @Column('integer', { name: 'search', default: 0, comment: '搜索次数(所有用户)' })
   search: number;
 
-  @ApiProperty({ description: '出现内容关键字的频数' })
-  @Column('integer', { name: 'frequency', default: 0, comment: '出现内容关键字的频数' })
+  @ApiProperty({ description: '出现内容关键字的频率' })
+  @Column('integer', { name: 'frequency', default: 0, comment: '出现内容关键字的频率' })
   frequency: number;
 }
