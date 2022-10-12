@@ -12,6 +12,8 @@ import {
   usersRepository,
 } from '../repository/repository';
 import {
+  GetMoneyByYearDto,
+  GetTermCountByProvinceDto,
   GetTermCountByTypeDto,
   GetTermCountByUnitDto,
   GetTermCountByYearDto,
@@ -29,6 +31,7 @@ import {
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like } from 'typeorm';
+import dayjs from 'dayjs';
 
 export class TermsService {
   /**
@@ -512,8 +515,8 @@ export class TermsService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { columnId } = params;
-    let typeCount, types;
-    [typeCount, types] = await Promise.all([
+    let typeCount, yearCount, terms, types;
+    [typeCount, yearCount, terms, types] = await Promise.all([
       termsRepository
         .createQueryBuilder('terms')
         .select('COUNT(terms.id)', 'count')
@@ -527,6 +530,34 @@ export class TermsService {
         )
         .groupBy('terms.type')
         .getRawMany(),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.year', 'year')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .getRawMany(),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.year', 'year')
+        .addSelect('terms.type', 'type')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .addGroupBy('terms.type')
+        .getRawMany(),
       termTypesRepository.find(),
     ]);
     types = types.map((data) => {
@@ -534,6 +565,12 @@ export class TermsService {
         id: data.id,
         name: data.name,
       };
+    });
+    yearCount = yearCount.map((data) => {
+      return { year: data.year, count: Number(data.count) };
+    });
+    terms = terms.map((data) => {
+      return { year: data.year, count: Number(data.count), type: data.type };
     });
     // get type name
     typeCount = _.orderBy(
@@ -565,12 +602,49 @@ export class TermsService {
       'count',
       'desc'
     );
+    yearCount = _.orderBy(
+      yearCount.map((data) => {
+        const percent = Number(((data.count / _.sumBy(yearCount, 'count')) * 100).toFixed(1));
+        return {
+          year: data.year,
+          count: data.count,
+          percent: percent,
+          types: _.groupBy(terms, 'year')[data.year]
+            ? _.orderBy(
+                _.filter(
+                  _.groupBy(terms, 'year')[data.year].map((miniData) => {
+                    return {
+                      id: miniData.type,
+                      name: _.find(types, function (o) {
+                        return o.id === miniData.type;
+                      })
+                        ? _.find(types, function (o) {
+                            return o.id === miniData.type;
+                          }).name
+                        : null,
+                      count: miniData.count,
+                      percent: Number(((miniData.count / data.count) * percent).toFixed(1)),
+                    };
+                  }),
+                  function (o) {
+                    return o.id;
+                  }
+                ),
+                'id',
+                'asc'
+              )
+            : [],
+        };
+      }),
+      'year',
+      'asc'
+    );
     // filter !type
     typeCount = _.filter(typeCount, function (o) {
       return o.id;
     });
     return ResultData.ok({
-      data: { typeCounts: typeCount },
+      data: { typeCounts: typeCount, yearCounts: yearCount },
     });
   }
   /**
@@ -719,7 +793,6 @@ export class TermsService {
     terms = terms.map((data) => {
       return { subject: data.subject, count: Number(data.count), year: data.year };
     });
-    console.log('subject', subjectCount, terms);
     subjectCount = subjectCount.map((data) => {
       return {
         subject: data.subject,
@@ -748,7 +821,7 @@ export class TermsService {
             ? _.groupBy(terms, 'subject')[data.subject].map((miniData) => {
                 return {
                   year: miniData.year,
-                  percent: (miniData.count / data.count) * percent,
+                  percent: Number(((miniData.count / data.count) * percent).toFixed(1)),
                 };
               })
             : [],
@@ -763,6 +836,168 @@ export class TermsService {
     });
     return ResultData.ok({
       data: { subjectCounts: subjectCount },
+    });
+  }
+  /**
+   * @description 资助金额分布(国家自然科学基金有)
+   * @param {GetMoneyByYearDto} params 资助金额分布(国家自然科学基金有)的相关参数
+   * @returns {ResultData} 返回getMoneyByYear信息
+   */
+  async getMoneyByYear(params: GetMoneyByYearDto, user: SignInResInfo): Promise<ResultData> {
+    const { columnId } = params;
+    let moneyCount, types, terms;
+    [moneyCount, types, terms] = await Promise.all([
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('SUM(terms.money)', 'count')
+        .addSelect('terms.year', 'year')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .getRawMany(),
+      termTypesRepository.find(),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('SUM(terms.money)', 'count')
+        .addSelect('terms.year', 'year')
+        .addSelect('terms.type', 'type')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .addGroupBy('terms.type')
+        .getRawMany(),
+    ]);
+    types = types.map((data) => {
+      return {
+        id: data.id,
+        name: data.name,
+      };
+    });
+    // get Number count
+    terms = terms.map((data) => {
+      return { year: data.year, count: Number(data.count), type: data.type };
+    });
+    moneyCount = moneyCount.map((data) => {
+      return {
+        year: data.year,
+        count: Number(data.count),
+      };
+    });
+    // get type name
+    moneyCount = _.orderBy(
+      moneyCount.map((data) => {
+        return {
+          year: data.year,
+          money: data.count,
+          types: _.groupBy(terms, 'year')[data.year]
+            ? _.filter(
+                _.orderBy(
+                  _.groupBy(terms, 'year')[data.year].map((data) => {
+                    return {
+                      id: data.type,
+                      name: _.find(types, function (o) {
+                        return o.id === data.type;
+                      })
+                        ? _.find(types, function (o) {
+                            return o.id === data.type;
+                          }).name
+                        : null,
+                      money: data.count,
+                    };
+                  }),
+                  'id',
+                  'asc'
+                ),
+                function (o) {
+                  return o.id; // filter !type
+                }
+              )
+            : [],
+        };
+      }),
+      'year',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { moneyCounts: moneyCount },
+    });
+  }
+  /**
+   * @description 资助地区分布(国家自然科学基金有)
+   * @param {GetTermCountByProvinceDto} params 资助地区分布(国家自然科学基金有)的相关参数
+   * @returns {ResultData} 返回getTermCountByProvince信息
+   */
+  async getTermCountByProvince(
+    params: GetTermCountByProvinceDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId } = params;
+    let provinceCount, terms;
+    [provinceCount, terms] = await Promise.all([
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.year', 'year')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .getRawMany(),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.year', 'year')
+        .addSelect('terms.province', 'province')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .addGroupBy('terms.province')
+        .getRawMany(),
+    ]);
+    // get Number count
+    terms = terms.map((data) => {
+      return { year: data.year, count: Number(data.count), province: data.province };
+    });
+    provinceCount = _.orderBy(
+      provinceCount.map((data) => {
+        return {
+          year: data.year,
+          count: Number(data.count),
+          provinces: _.groupBy(terms, 'year')[data.year]
+            ? _.orderBy(
+                _.filter(_.groupBy(terms, 'year')[data.year], function (o) {
+                  return o.province;
+                }),
+                'province',
+                'asc'
+              )
+            : [],
+        };
+      }),
+      'year',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { provinceCounts: provinceCount },
     });
   }
 }

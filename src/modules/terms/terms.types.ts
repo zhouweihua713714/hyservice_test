@@ -1,5 +1,6 @@
 import { Terms } from '@/entities/Terms.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { isArray } from 'lodash';
 
 export class SaveTermResult {
   @ApiProperty({ description: '主键id' })
@@ -180,6 +181,24 @@ export class TypeCountInfo {
   percent: number;
 }
 
+export class YearCountByTypeInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({ description: '该年份下项目的总数' })
+  count: number;
+
+  @ApiProperty({ description: '该年份下项目占比(目前保留一位小数)' })
+  percent: number;
+
+  @ApiProperty({
+    description: '该年份下的类型项目占比(目前保留一位小数)',
+    type: TypeCountInfo,
+    isArray: true,
+  })
+  types: TypeCountInfo[];
+}
+
 export class GetTermCountByTypeResult {
   @ApiProperty({
     description: '类型分布占比,(这里只展示前7,这边全下发因为有百分比)',
@@ -187,9 +206,16 @@ export class GetTermCountByTypeResult {
     isArray: true,
   })
   typeCounts: TypeCountInfo[];
+
+  @ApiProperty({
+    description: '年份类型分布占比,(目前仅国家自然科学基金项目需要用到)',
+    type: YearCountByTypeInfo,
+    isArray: true,
+  })
+  yearCounts:YearCountByTypeInfo[];
 }
 
-export class TypesInfo extends PickType(TypeCountInfo, ['id', 'name', 'count'] as const) {}
+export class TypeInfo extends PickType(TypeCountInfo, ['id', 'name', 'count'] as const) {}
 
 export class GetTermCountByYearInfo {
   @ApiProperty({ description: '年份' })
@@ -203,10 +229,10 @@ export class GetTermCountByYearInfo {
 
   @ApiProperty({
     description: '该年份下不同类型的项目数据统计',
-    type: TypesInfo,
+    type: TypeInfo,
     isArray: true,
   })
-  types: TypesInfo[];
+  types: TypeInfo[];
 }
 
 export class GetTermCountByYearResult {
@@ -254,4 +280,66 @@ export class GetTermPercentBySubjectResult {
     isArray: true,
   })
   subjectCounts: GetTermPercentBySubjectInfo[];
+}
+
+export class MoneyTypeInfo extends PickType(TypeCountInfo, ['id', 'name'] as const) {
+  @ApiProperty({ description: '资助金额' })
+  money: number;
+}
+export class GetMoneyByYearInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({ description: '资助金额' })
+  money: number;
+
+  @ApiProperty({
+    description: '该年份下不同类型的项目资助金额(这边的排序已经按照需求id排序好)',
+    type: MoneyTypeInfo,
+    isArray: true,
+  })
+  types: MoneyTypeInfo[];
+}
+
+export class GetMoneyByYearResult {
+  @ApiProperty({
+    description: '资助金额分布数组(国家自然科学基金有)',
+    type: GetMoneyByYearInfo,
+    isArray: true,
+  })
+  moneyCounts: GetMoneyByYearInfo[];
+}
+
+export class ProvinceInfo {
+  @ApiProperty({ description: '年份,该字段这里是冗余' })
+  year: number;
+
+  @ApiProperty({ description: '省份code,这里省份名称前端自主对照本地code码表' })
+  province: string;
+
+  @ApiProperty({ description: '项目数量' })
+  count: number;
+}
+export class GetTermCountByProvinceInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({ description: '项目总数' })
+  count: number;
+
+  @ApiProperty({
+    description: '该年份下不同省份的项目数',
+    type: ProvinceInfo,
+    isArray: true,
+  })
+  provinces: ProvinceInfo[];
+}
+
+export class GetTermCountByProvinceResult {
+  @ApiProperty({
+    description: '资助金额分布数组(国家自然科学基金有)',
+    type: GetTermCountByProvinceInfo,
+    isArray: true,
+  })
+  provinceCounts: GetTermCountByProvinceInfo[];
 }
