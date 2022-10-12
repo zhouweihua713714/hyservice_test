@@ -6,6 +6,8 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
+  GetMoneyByYearDto,
+  GetTermCountByProvinceDto,
   GetTermCountByTypeDto,
   GetTermCountByUnitDto,
   GetTermCountByYearDto,
@@ -19,6 +21,8 @@ import {
 } from './terms.dto';
 import { TermsService } from './terms.service';
 import {
+  GetMoneyByYearResult,
+  GetTermCountByProvinceResult,
   GetTermCountByTypeResult,
   GetTermCountByUnitResult,
   GetTermCountByYearResult,
@@ -43,7 +47,9 @@ import {
   GetTermCountByUnitResult,
   GetTermCountByTypeResult,
   GetTermCountByYearResult,
-  GetTermPercentBySubjectResult
+  GetTermPercentBySubjectResult,
+  GetMoneyByYearResult,
+  GetTermCountByProvinceResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -140,15 +146,40 @@ export class TermsController {
     const user = <SignInResInfo>req.user;
     return this.termsService.getTermCountByYear(params, user);
   }
+
   @Get('/getTermPercentBySubject')
   @HttpCode(200)
   @ApiOperation({
-    summary: '不同研究方向资助率(这里目前仅目前国家自然科学基金有~但api均做方便以后拓展)',
+    summary: '不同研究方向资助率(仅目前国家自然科学基金有~但api均做方便以后拓展)',
   })
   @ApiResult(GetTermPercentBySubjectResult)
   @AllowAnon()
   getTermPercentBySubject(@Query() params: GetTermPercentBySubjectDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.getTermPercentBySubject(params, user);
+  }
+
+  @Get('/getMoneyByYear')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '资助金额分布(仅目前国家自然科学基金有~但api均做方便以后拓展)',
+  })
+  @ApiResult(GetMoneyByYearResult)
+  @AllowAnon()
+  getMoneyByYear(@Query() params: GetMoneyByYearDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getMoneyByYear(params, user);
+  }
+
+  @Get('/getTermCountByProvince')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '资助地区分布(仅目前国家自然科学基金有~但api均做方便以后拓展)',
+  })
+  @ApiResult(GetTermCountByProvinceResult)
+  @AllowAnon()
+  getTermCountByProvince(@Query() params: GetTermCountByProvinceDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTermCountByProvince(params, user);
   }
 }

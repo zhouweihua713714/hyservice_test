@@ -219,3 +219,20 @@ export class GetTermPercentBySubjectDto {
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   columnId: string;
 }
+
+export class GetMoneyByYearDto {
+  @ApiProperty({
+    description: '栏目id,这里栏目id直接对应统计相关的栏目的图表不能出错否则数据统计不对齐',
+  })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  columnId: string;
+}
+
+export class GetTermCountByProvinceDto {
+  @ApiProperty({
+    description: '栏目id,这里栏目id直接对应统计相关的栏目的图表不能出错否则数据统计不对齐',
+  })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  columnId: string;
+}
+

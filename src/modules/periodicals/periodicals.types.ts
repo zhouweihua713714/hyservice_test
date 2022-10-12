@@ -48,6 +48,7 @@ export class GetPeriodicalDetailResult extends PickType(Periodicals, [
   'coverUrl',
   'citeScore',
   'citeRate',
+  'clicks',
 ] as const) {
   @ApiPropertyOptional({ description: '学科分类名称' })
   subjectName: string;
