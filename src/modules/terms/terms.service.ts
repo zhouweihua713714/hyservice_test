@@ -16,6 +16,7 @@ import {
   GetTermCountByUnitDto,
   GetTermCountByYearDto,
   GetTermDetailDto,
+  GetTermPercentBySubjectDto,
   ListComplexTermDto,
   ListTermDto,
   OperateTermsDto,
@@ -662,6 +663,106 @@ export class TermsService {
 
     return ResultData.ok({
       data: { yearCounts: yearCount },
+    });
+  }
+  /**
+   * @description 不同研究方向资助率(国家自然科学基金有)
+   * @param {GetTermPercentBySubjectDto} params 不同研究方向资助率(国家自然科学基金有)的相关参数
+   * @returns {ResultData} 返回getTermPercentBySubject信息
+   */
+  async getTermPercentBySubject(
+    params: GetTermPercentBySubjectDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { columnId } = params;
+    let subjectCount, subjects, terms;
+    [subjectCount, subjects, terms] = await Promise.all([
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.subject', 'subject')
+        .addSelect('terms.subjectNo', 'subjectNo')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.subject')
+        .addGroupBy('terms.subjectNo')
+        .getRawMany(),
+      subjectsRepository.find({ where: { type: Content_Types_Enum.TERM } }),
+      termsRepository
+        .createQueryBuilder('terms')
+        .select('COUNT(terms.id)', 'count')
+        .addSelect('terms.subject', 'subject')
+        .addSelect('terms.year', 'year')
+        .where(
+          'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
+          {
+            status: Content_Status_Enum.ACTIVE,
+            columnId: columnId,
+          }
+        )
+        .groupBy('terms.year')
+        .addGroupBy('terms.subject')
+        .getRawMany(),
+    ]);
+    subjects = subjects.map((data) => {
+      return {
+        id: data.id,
+        name: data.name,
+      };
+    });
+    // get Number count
+    terms = terms.map((data) => {
+      return { subject: data.subject, count: Number(data.count), year: data.year };
+    });
+    console.log('subject', subjectCount, terms);
+    subjectCount = subjectCount.map((data) => {
+      return {
+        subject: data.subject,
+        subjectNo: data.subjectNo,
+        count: Number(data.count),
+      };
+    });
+    // get type name
+    subjectCount = _.orderBy(
+      subjectCount.map((data) => {
+        const percent = Number(
+          ((Number(data.count) / _.sumBy(subjectCount, 'count')) * 100).toFixed(1)
+        );
+        return {
+          subject: data.subject,
+          subjectNo: data.subjectNo,
+          subjectName: _.find(subjects, function (o) {
+            return o.id === data.subject;
+          })
+            ? _.find(subjects, function (o) {
+                return o.id === data.subject;
+              }).name
+            : null,
+          percent: percent,
+          years: _.groupBy(terms, 'subject')[data.subject]
+            ? _.groupBy(terms, 'subject')[data.subject].map((miniData) => {
+                return {
+                  year: miniData.year,
+                  percent: (miniData.count / data.count) * percent,
+                };
+              })
+            : [],
+        };
+      }),
+      'subjectNo',
+      'asc'
+    );
+    // filter !subject
+    subjectCount = _.filter(subjectCount, function (o) {
+      return o.subject;
+    });
+    return ResultData.ok({
+      data: { subjectCounts: subjectCount },
     });
   }
 }

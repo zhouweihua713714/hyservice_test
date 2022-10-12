@@ -10,6 +10,7 @@ import {
   GetTermCountByUnitDto,
   GetTermCountByYearDto,
   GetTermDetailDto,
+  GetTermPercentBySubjectDto,
   ListComplexTermDto,
   ListTermDto,
   OperateTermsDto,
@@ -22,6 +23,7 @@ import {
   GetTermCountByUnitResult,
   GetTermCountByYearResult,
   GetTermDetailResult,
+  GetTermPercentBySubjectResult,
   ListComplexTermResult,
   ListTermResult,
   OperateTermsResult,
@@ -40,7 +42,8 @@ import {
   ListComplexTermResult,
   GetTermCountByUnitResult,
   GetTermCountByTypeResult,
-  GetTermCountByYearResult
+  GetTermCountByYearResult,
+  GetTermPercentBySubjectResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -128,11 +131,24 @@ export class TermsController {
 
   @Get('/getTermCountByYear')
   @HttpCode(200)
-  @ApiOperation({ summary: '项目类型时间分析(这里目前仅有教育人文社科项目有~但api均做方便以后拓展)' })
+  @ApiOperation({
+    summary: '项目类型时间分析(这里目前仅有教育人文社科项目有~但api均做方便以后拓展)',
+  })
   @ApiResult(GetTermCountByYearResult)
   @AllowAnon()
   getTermCountByYear(@Query() params: GetTermCountByYearDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.getTermCountByYear(params, user);
+  }
+  @Get('/getTermPercentBySubject')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '不同研究方向资助率(这里目前仅目前国家自然科学基金有~但api均做方便以后拓展)',
+  })
+  @ApiResult(GetTermPercentBySubjectResult)
+  @AllowAnon()
+  getTermPercentBySubject(@Query() params: GetTermPercentBySubjectDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTermPercentBySubject(params, user);
   }
 }
