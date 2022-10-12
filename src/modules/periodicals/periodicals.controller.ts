@@ -93,7 +93,7 @@ export class PeriodicalsController {
 
   @Post('/listComplexPeriodical')
   @HttpCode(200)
-  @ApiOperation({ summary: '项目列表(c端)' })
+  @ApiOperation({ summary: '期刊列表(c端)' })
   @ApiResult(ListComplexPeriodicalResult)
   @AllowAnon()
   listComplexTerm(@Body() params: ListComplexPeriodicalDto, @Req() req: any) {

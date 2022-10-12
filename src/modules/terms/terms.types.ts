@@ -217,3 +217,41 @@ export class GetTermCountByYearResult {
   })
   yearCounts: GetTermCountByYearInfo[];
 }
+
+export class YearInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({ description: '资助率(学科项目总数/总项目数目前保留以为小数)' })
+  percent: number;
+}
+
+export class GetTermPercentBySubjectInfo {
+  @ApiProperty({ description: '学科id' })
+  subject: string;
+
+  @ApiProperty({ description: '学科名称' })
+  subjectName: string;
+
+  @ApiProperty({ description: '学科代码(这里没有用到~只是需要用这个代码排序进行了冗余)' })
+  subjectNo: string;
+
+  @ApiProperty({ description: '资助率(学科项目总数/总项目数目前保留以为小数)' })
+  percent: number;
+
+  @ApiProperty({
+    description: '该学科下不同年份年份的项目数据统计',
+    type: YearInfo,
+    isArray: true,
+  })
+  years: YearInfo[];
+}
+
+export class GetTermPercentBySubjectResult {
+  @ApiProperty({
+    description: '不同研究方向资助率数组(国家自然科学基金有)',
+    type: GetTermPercentBySubjectInfo,
+    isArray: true,
+  })
+  subjectCounts: GetTermPercentBySubjectInfo[];
+}
