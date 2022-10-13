@@ -133,6 +133,7 @@ export class RecommendPeriodicalInfo extends PickType(Periodicals, [
   'ISSN',
   'type',
   'minorField',
+  'field',
   'coverUrl',
 ] as const) {}
 

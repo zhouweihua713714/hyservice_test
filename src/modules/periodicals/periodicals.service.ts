@@ -522,7 +522,7 @@ export class PeriodicalsService {
         enabled: true,
         deletedAt: IsNull(),
       },
-      select: ['id', 'name', 'ISSN', 'type', 'minorField', 'coverUrl'],
+      select: ['id', 'name', 'ISSN', 'type', 'minorField', 'field', 'coverUrl'],
       take: 5, // it's up to PM
       order: {
         clicks: 'DESC',
