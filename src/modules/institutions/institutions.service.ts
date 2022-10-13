@@ -495,7 +495,7 @@ export class InstitutionsService {
       }
     }
     // if institutions count < 8 then all institution recommend
-    if (!institutionInfo || (institutions && institutions.length < 8)) {
+    if (!institutionInfo || !institutions || (institutions && institutions.length < 8)) {
       let size = 8;
       if (institutions) {
         size = size - institutions.length;

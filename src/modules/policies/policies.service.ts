@@ -365,7 +365,7 @@ export class PoliciesService {
         )
         .orderBy('policies.announcedAt', 'DESC')
         .addOrderBy('policies.publishedAt', 'DESC')
-        .skip((page - 1)*size)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -396,7 +396,7 @@ export class PoliciesService {
         })
         .orderBy('policies.announcedAt', 'DESC')
         .addOrderBy('policies.publishedAt', 'DESC')
-        .skip((page - 1)*size)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     }
@@ -489,7 +489,7 @@ export class PoliciesService {
       }
     }
     // if policies count < 8 then all policy recommend
-    if (!policyInfo || (policies && policies.length < 9)) {
+    if (!policyInfo || !policies || (policies && policies.length < 9)) {
       let size = 9;
       if (policies) {
         size = size - policies.length;

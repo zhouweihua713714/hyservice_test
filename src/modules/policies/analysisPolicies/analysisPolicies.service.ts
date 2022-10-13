@@ -363,7 +363,11 @@ export class AnalysisPoliciesService {
       }
     }
     // if analysisPolicies count < 8 then all analysisPolicy recommend
-    if (!analysisPolicyInfo || (analysisPolicies && analysisPolicies.length < 5)) {
+    if (
+      !analysisPolicyInfo ||
+      !analysisPolicies ||
+      (analysisPolicies && analysisPolicies.length < 5)
+    ) {
       let size = 5;
       if (analysisPolicies) {
         size = size - analysisPolicies.length;

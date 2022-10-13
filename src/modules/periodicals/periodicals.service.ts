@@ -602,7 +602,7 @@ export class PeriodicalsService {
       }
     }
     // if periodicals count < 8 then all periodical recommend
-    if (!periodicalInfo || (periodicals && periodicals.length < 8)) {
+    if (!periodicalInfo || !periodicals || (periodicals && periodicals.length < 8)) {
       let size = 8;
       if (periodicals) {
         size = size - periodicals.length;

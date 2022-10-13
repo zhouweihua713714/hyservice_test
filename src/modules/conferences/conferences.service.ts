@@ -550,7 +550,7 @@ export class ConferencesService {
       }
     }
     // if conferences count < 8 then all conference recommend
-    if (!conferenceInfo || (conferences && conferences.length < 8)) {
+    if (!conferenceInfo || !conferences || (conferences && conferences.length < 8)) {
       let size = 8;
       if (conferences) {
         size = size - conferences.length;
