@@ -384,7 +384,7 @@ export class ConferencesService {
       })
       .orderBy('conferences.conductedAt', 'DESC')
       .addOrderBy('conferences.publishedAt', 'DESC')
-      .skip((page - 1)*size)
+      .skip((page - 1) * size)
       .take(size)
       .getManyAndCount();
 
@@ -444,7 +444,7 @@ export class ConferencesService {
               ';'
             )
           : null,
-        minorField: minorFieldInfo
+        minorFieldName: minorFieldInfo
           ? _.join(
               minorFieldInfo.map((data) => {
                 return data.name;
