@@ -680,6 +680,14 @@ export class TreatisesService {
       )
       .groupBy(condition)
       .getRawMany();
+
+    // get number count
+    treatises = treatises.map((data) => {
+      return {
+        name: data.name,
+        count: Number(data.count),
+      };
+    });
     // filter null and get order
     treatises = _.orderBy(
       _.filter(treatises, function (o) {
