@@ -17,6 +17,7 @@ import {
   ListComplexPeriodicalDto,
   ListPeriodicalDto,
   OperatePeriodicalsDto,
+  RecommendPeriodicalsByIdDto,
   RecommendPeriodicalsDto,
   RemovePeriodicalsDto,
   SavePeriodicalDto,
@@ -403,7 +404,7 @@ export class PeriodicalsService {
         .orderBy('periodicals.articleNumber', 'DESC')
         .addOrderBy('periodicals.establishedAt', 'DESC')
         .addOrderBy('periodicals.publishedAt', 'DESC')
-        .skip((page - 1)*size)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     } else {
@@ -431,7 +432,7 @@ export class PeriodicalsService {
         .orderBy('periodicals.articleNumber', 'DESC')
         .addOrderBy('periodicals.establishedAt', 'DESC')
         .addOrderBy('periodicals.publishedAt', 'DESC')
-        .skip((page - 1)*size)
+        .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
     }
@@ -498,7 +499,7 @@ export class PeriodicalsService {
     return ResultData.ok({ data: { periodicals: result, count: count } });
   }
   /**
-   * @description 推荐期刊
+   * @description 推荐期刊(相关推荐)
    * @param {RecommendPeriodicalsDto} params 推荐期刊的相关参数
    * @returns {ResultData} 返回recommendPeriodicals信息
    */
@@ -530,6 +531,119 @@ export class PeriodicalsService {
     });
     return ResultData.ok({
       data: { periodicals: periodicals },
+    });
+  }
+  /**
+   * @description 推荐期刊(为您推荐)
+   * @param {RecommendPeriodicalsByIdDto} params 推荐期刊的相关参数
+   * @returns {ResultData} 返回recommendPeriodicalsById信息
+   */
+  async recommendPeriodicalsById(
+    params: RecommendPeriodicalsByIdDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const { id } = params;
+    const periodicalInfo = await periodicalsRepository.findOneBy({
+      id: id,
+      status: Content_Status_Enum.ACTIVE,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    const field = periodicalInfo?.field;
+    const minorField = periodicalInfo?.minorField;
+    let periodicals;
+    let basicCondition =
+      'periodicals.enabled = true and periodicals.deletedAt is null and periodicals.status =:status';
+    if (periodicalInfo) {
+      basicCondition += ' and periodicals.id !=:id';
+    }
+    if (field) {
+      const fields = `%${field.replace(';', '%;%')}%`.split(';');
+      periodicals = await periodicalsRepository
+        .createQueryBuilder('periodicals')
+        .select(['periodicals.id', 'periodicals.name', 'periodicals.columnId'])
+        .where(`${basicCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: periodicalInfo?.id,
+        })
+        .andWhere('periodicals.field like any (ARRAY[:...field])', {
+          field: fields,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(8)
+        .getMany();
+    }
+    let idsCondition = '';
+
+    // if periodicals count < 8 then minorField recommend
+    if (periodicals && periodicals.length < 8) {
+      if (periodicals.length > 0) {
+        idsCondition = ' and id not in (:...ids)';
+      }
+      if (minorField) {
+        const minorFields = `%${minorField.replace(';', '%;%')}%`.split(';');
+        const newPeriodicals = await periodicalsRepository
+          .createQueryBuilder('periodicals')
+          .select(['periodicals.id', 'periodicals.name', 'periodicals.columnId'])
+          .where(`${basicCondition}${idsCondition}`, {
+            status: Content_Status_Enum.ACTIVE,
+            id: periodicalInfo?.id,
+            ids: periodicals.map((data) => {
+              return data.id;
+            }),
+          })
+          .andWhere('periodicals.minor_field like any (ARRAY[:...minorField])', {
+            minorField: minorFields,
+          })
+          .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+          .take(8 - periodicals.length)
+          .getMany();
+        periodicals = _.unionBy(periodicals, newPeriodicals, 'id');
+      }
+    }
+    // if periodicals count < 8 then all periodical recommend
+    if (!periodicalInfo || (periodicals && periodicals.length < 8)) {
+      let size = 8;
+      if (periodicals) {
+        size = size - periodicals.length;
+      }
+      const newPeriodicals = await periodicalsRepository
+        .createQueryBuilder('periodicals')
+        .select(['periodicals.id', 'periodicals.name', 'periodicals.columnId'])
+        .where(`${basicCondition}${idsCondition}`, {
+          status: Content_Status_Enum.ACTIVE,
+          id: periodicalInfo?.id,
+          ids: periodicals
+            ? periodicals.map((data) => {
+                return data.id;
+              })
+            : undefined,
+        })
+        .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
+        .take(size)
+        .getMany();
+      periodicals = _.unionBy(periodicals, newPeriodicals, 'id');
+    }
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        id: In(
+          periodicals.map((periodical) => {
+            return periodical.columnId;
+          })
+        ),
+      },
+    });
+    const result = periodicals.map((periodical) => {
+      return {
+        ...periodical,
+        columnName: _.find(columns, function (o) {
+          return o.id === periodical.columnId;
+        })?.name,
+      };
+    });
+    return ResultData.ok({
+      data: { periodicals: result ? result : [] },
     });
   }
 }

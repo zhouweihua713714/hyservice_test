@@ -306,3 +306,12 @@ export class RecommendPeriodicalsDto {
   @IsOptional()
   columnId: string;
 }
+
+export class RecommendPeriodicalsByIdDto {
+
+  @ApiProperty({ description: '期刊id' })
+  @IsString({ message: 'id 类型错误, 正确类型 string' })
+  @IsOptional()
+  id: string;
+}
+

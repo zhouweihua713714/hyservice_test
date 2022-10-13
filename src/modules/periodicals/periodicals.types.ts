@@ -140,3 +140,17 @@ export class RecommendPeriodicalsResult {
   @ApiProperty({ description: '期刊数组', type: RecommendPeriodicalInfo, isArray: true })
   periodicals: ListPeriodicalInfo[];
 }
+
+export class RecommendPeriodicalByIdInfo extends PickType(Periodicals, [
+  'id',
+  'name',
+  'columnId'
+] as const) {
+  @ApiProperty({ description: '栏目名称' })
+  columnName: string;
+}
+
+export class RecommendPeriodicalsByIdResult {
+  @ApiProperty({ description: '期刊数组', type: RecommendPeriodicalByIdInfo, isArray: true })
+  periodicals: ListPeriodicalInfo[];
+}

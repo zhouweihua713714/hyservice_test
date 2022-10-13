@@ -11,6 +11,7 @@ import {
   ListComplexPeriodicalDto,
   ListPeriodicalDto,
   OperatePeriodicalsDto,
+  RecommendPeriodicalsByIdDto,
   RecommendPeriodicalsDto,
   RemovePeriodicalsDto,
   SavePeriodicalDto,
@@ -21,6 +22,7 @@ import {
   ListComplexPeriodicalResult,
   ListPeriodicalResult,
   OperatePeriodicalsResult,
+  RecommendPeriodicalsByIdResult,
   RecommendPeriodicalsResult,
   RemovePeriodicalsResult,
   SavePeriodicalResult,
@@ -35,7 +37,8 @@ import {
   RemovePeriodicalsResult,
   SavePeriodicalResult,
   ListComplexPeriodicalResult,
-  RecommendPeriodicalsResult
+  RecommendPeriodicalsResult,
+  RecommendPeriodicalsByIdResult
 )
 @Controller('/periodicals')
 export class PeriodicalsController {
@@ -103,11 +106,21 @@ export class PeriodicalsController {
 
   @Post('/recommendPeriodicals')
   @HttpCode(200)
-  @ApiOperation({ summary: '期刊推荐列表(为您推荐)' })
+  @ApiOperation({ summary: '期刊推荐列表(相关推荐)' })
   @ApiResult(RecommendPeriodicalsResult)
   @AllowAnon()
   recommendPeriodicals(@Body() params: RecommendPeriodicalsDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.periodicalService.recommendPeriodicals(params, user);
+  }
+
+  @Post('/recommendPeriodicalsById')
+  @HttpCode(200)
+  @ApiOperation({ summary: '期刊推荐列表(为您推荐)' })
+  @ApiResult(RecommendPeriodicalsByIdResult)
+  @AllowAnon()
+  recommendPeriodicalsById(@Body() params: RecommendPeriodicalsByIdDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.periodicalService.recommendPeriodicalsById(params, user);
   }
 }
