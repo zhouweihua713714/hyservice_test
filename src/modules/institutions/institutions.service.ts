@@ -453,7 +453,7 @@ export class InstitutionsService {
     if (institutionInfo) {
       basicCondition += ' and institutions.id !=:id';
     }
-    if (field) {
+    if (field && field.length > 0) {
       institutions = await institutionsRepository
         .createQueryBuilder('institutions')
         .select(['institutions.id', 'institutions.name', 'institutions.columnId'])
@@ -474,7 +474,7 @@ export class InstitutionsService {
       if (institutions.length > 0) {
         idsCondition = ' and id not in (:...ids)';
       }
-      if (minorField) {
+      if (minorField && minorField.length > 0) {
         const newInstitutions = await institutionsRepository
           .createQueryBuilder('institutions')
           .select(['institutions.id', 'institutions.name', 'institutions.columnId'])

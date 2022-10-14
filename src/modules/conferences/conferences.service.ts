@@ -508,7 +508,7 @@ export class ConferencesService {
     if (conferenceInfo) {
       basicCondition += ' and conferences.id !=:id';
     }
-    if (field) {
+    if (field && field.length > 0) {
       conferences = await conferencesRepository
         .createQueryBuilder('conferences')
         .select(['conferences.id', 'conferences.name', 'conferences.columnId'])
@@ -529,7 +529,7 @@ export class ConferencesService {
       if (conferences.length > 0) {
         idsCondition = ' and id not in (:...ids)';
       }
-      if (minorField) {
+      if (minorField && minorField.length > 0) {
         const newConferences = await conferencesRepository
           .createQueryBuilder('conferences')
           .select(['conferences.id', 'conferences.name', 'conferences.columnId'])
