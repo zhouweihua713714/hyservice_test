@@ -58,6 +58,7 @@ export class UserLabelsService {
         title: data.treatise.title,
         author: data.treatise.author,
         deliveryAt: data.treatise.deliveryAt,
+        columnId: data.treatise.columnId,
       };
     });
     return ResultData.ok({ data: { labelTreatises: result, count: count, labels: labels } });

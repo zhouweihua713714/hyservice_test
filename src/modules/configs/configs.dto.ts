@@ -38,3 +38,14 @@ export class GetSearchResultByKeywordDto {
   @IsOptional()
   type: string;
 }
+
+export class GeHotKeywordsDto {
+  @ApiProperty({
+    description:
+      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy',
+  })
+  @IsString({ message: 'type 类型错误,正确类型 string' })
+  @IsEnum(Content_Types_Enum)
+  @IsOptional()
+  type: string;
+}

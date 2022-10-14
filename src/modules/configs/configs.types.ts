@@ -100,7 +100,13 @@ export class GetTopicTypesResult {
   topicTypes: TopicTypes[];
 }
 
-export class GetSearchResultByKeywordInfo extends PickType(Keywords, ['id', 'name'] as const) {}
+export class GetSearchResultByKeywordInfo extends PickType(Keywords, [
+  'name',
+  'type',
+  'frequency',
+  'search',
+  'type',
+] as const) {}
 export class GetSearchResultByKeywordResult {
   @ApiProperty({
     description: '搜索返回关键词列表',
@@ -108,4 +114,20 @@ export class GetSearchResultByKeywordResult {
     isArray: true,
   })
   keywords: GetSearchResultByKeywordInfo[];
+}
+
+export class GetHotKeywordsInfo extends PickType(Keywords, [
+  'name',
+  'type',
+  'frequency',
+  'search',
+  'type',
+] as const) {}
+export class GetHotKeywordsResult {
+  @ApiProperty({
+    description: '热搜关键词TOP50',
+    type: GetHotKeywordsInfo,
+    isArray: true,
+  })
+  keywords: GetHotKeywordsInfo[];
 }

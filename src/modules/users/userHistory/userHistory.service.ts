@@ -117,46 +117,69 @@ export class UserHistoryService {
     // get related's title
     const result = userHistory.map((data) => {
       let title;
+      let columnId;
       switch (data.type) {
         case Content_Types_Enum.TERM:
           title = _.find(terms, function (o) {
             return o.id === data.relatedId;
           })?.name;
+          columnId = _.find(terms, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
           break;
         case Content_Types_Enum.TREATISE:
           title = _.find(treatises, function (o) {
             return o.id === data.relatedId;
           })?.title;
+          columnId = _.find(treatises, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
           break;
         case Content_Types_Enum.POLICY:
           title = _.find(policies, function (o) {
             return o.id === data.relatedId;
           })?.name;
+          columnId = _.find(policies, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
           break;
         case Content_Types_Enum.PERIODICAL:
           title = _.find(periodicals, function (o) {
             return o.id === data.relatedId;
           })?.name;
+          columnId = _.find(periodicals, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
           break;
         case Content_Types_Enum.INSTITUTION:
           title = _.find(institutions, function (o) {
             return o.id === data.relatedId;
           })?.name;
+          columnId = _.find(institutions, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
           break;
         case Content_Types_Enum.PATENT:
           title = _.find(patents, function (o) {
             return o.id === data.relatedId;
           })?.title;
+          columnId = _.find(patents, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
           break;
         default:
           title = _.find(conferences, function (o) {
             return o.id === data.relatedId;
           })?.name;
+          columnId = _.find(conferences, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
           break;
       }
       return {
         ...data,
         title: title,
+        columnId: columnId,
       };
     });
     return ResultData.ok({ data: { userHistory: result, count: count } });

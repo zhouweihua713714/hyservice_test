@@ -308,3 +308,9 @@ export class GetInstitutionChartsDto {
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   columnId: string;
 }
+
+export class GetKeywordChartsDto {
+  @ApiProperty({ description: '论文的栏目id' })
+  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  columnId: string;
+}

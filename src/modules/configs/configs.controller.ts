@@ -5,13 +5,19 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { GetSearchResultByKeywordDto, SetColumnsOrderDto, SetColumnsTypeDto } from './configs.dto';
+import {
+  GeHotKeywordsDto,
+  GetSearchResultByKeywordDto,
+  SetColumnsOrderDto,
+  SetColumnsTypeDto,
+} from './configs.dto';
 import { ConfigsService } from './configs.service';
 import {
   GetArticleTypesResult,
   GetColumnsResult,
   GetConfigsConfigResult,
   GetFieldsResult,
+  GetHotKeywordsResult,
   GetLanguagesResult,
   GetPatentTypesResult,
   GetPatentValidTypesResult,
@@ -42,7 +48,8 @@ import {
   SetColumnsTypeResult,
   GetUniversitiesResult,
   GetTopicTypesResult,
-  GetSearchResultByKeywordResult
+  GetSearchResultByKeywordResult,
+  GetHotKeywordsResult
 )
 @Controller('/configs')
 export class ConfigsController {
@@ -178,10 +185,24 @@ export class ConfigsController {
 
   @Get('/getSearchResultByKeyword')
   @HttpCode(200)
-  @ApiOperation({ summary: '搜索返回关键词列表' })
+  @ApiOperation({
+    summary:
+      '搜索返回关键词列表(这里返回的结果集按照搜索频率第一排序和出现频率第二排序排，目前无搜索频率)',
+  })
   @ApiResult(GetSearchResultByKeywordResult)
   @AllowAnon()
   getSearchResultByKeyword(@Query() params: GetSearchResultByKeywordDto) {
     return this.configService.getSearchResultByKeyword(params);
+  }
+
+  @Get('/getHotKeywords')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '获取热搜关键词(词云,论文图谱取论文的前15个目前只有项目、论文、政策、专利有关键词)',
+  })
+  @ApiResult(GetHotKeywordsResult)
+  @AllowAnon()
+  getHotKeywords(@Query() params: GeHotKeywordsDto) {
+    return this.configService.getHotKeywords(params);
   }
 }

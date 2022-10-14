@@ -16,6 +16,9 @@ export class UserLabelTreatiseInfo extends PickType(UserLabelTreatises, [
 
   @ApiPropertyOptional({ description: '发表时间' })
   deliveryAt: Date;
+
+  @ApiProperty({ description: '栏目id' })
+  columnId: string;
 }
 
 export class ListLabelTreatiseResult {

@@ -10,6 +10,9 @@ export class UserFavoriteTreatisesInfo extends PickType(UserFavoriteTreatises, [
 
   @ApiProperty({ description: '标签' })
   label: string;
+
+  @ApiProperty({ description: '栏目id' })
+  columnId: string;
 }
 
 export class ListFavoriteTreatiseResult {
