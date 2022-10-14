@@ -16,6 +16,9 @@ export class GetNoteTreatiseDetailResult extends PickType(UserNoteTreatises, [
 
   @ApiPropertyOptional({ description: '论文链接' })
   url: string;
+
+  @ApiProperty({ description: '栏目id' })
+  columnId: string;
 }
 
 export class SaveNoteTreatiseResult {

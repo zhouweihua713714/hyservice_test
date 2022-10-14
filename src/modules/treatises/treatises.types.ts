@@ -185,3 +185,17 @@ export class GetInstitutionChartsResult {
   @ApiProperty({ description: '机构排名数组', type: InstitutionChartInfo, isArray: true })
   institutionCharts: InstitutionChartInfo[];
 }
+
+export class KeywordChartInfo {
+  @ApiProperty({ description: '关键词名称' })
+  name: string;
+
+  @ApiProperty({ description: '出现的频率数量' })
+  count: number;
+}
+
+export class GetKeywordChartsResult {
+  @ApiProperty({ description: '关键词数组', type: KeywordChartInfo, isArray: true })
+  keywordCharts: KeywordChartInfo[];
+}
+

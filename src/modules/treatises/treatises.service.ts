@@ -6,12 +6,15 @@ import { ErrorCode } from '@/common/utils/errorCode';
 import {
   articleTypesRepository,
   columnsRepository,
+  keywordsRepository,
   languagesRepository,
+  patentsRepository,
+  policiesRepository,
+  termsRepository,
   treatisesRepository,
   userFavoriteTreatisesRepository,
   userHistoryRepository,
   userLabelTreatisesRepository,
-  userNoteTreatisesRepository,
   usersRepository,
 } from '../repository/repository';
 import {
@@ -31,8 +34,9 @@ import {
   Labels_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { Brackets, In, IsNull, Like } from 'typeorm';
-
+import { Brackets, In, IsNull, Like, Not } from 'typeorm';
+import { ConsoleLogger } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 export class TreatisesService {
   /**
    * @description 获取论文详情
@@ -700,6 +704,241 @@ export class TreatisesService {
     treatises = treatises.slice(0, 10);
     return ResultData.ok({
       data: { institutionCharts: treatises },
+    });
+  }
+  /**
+   * @description 获取论文关键词TOP10(论文知识图谱)
+   * @param {GetInstitutionChartsDto} params  获取论文关键词TOP10(论文知识图谱)的相关参数
+   * @returns {ResultData} 返回getKeywordCharts信息
+   */
+  async getKeywordCharts(params: GetInstitutionChartsDto): Promise<ResultData> {
+    // getTreatise
+    // console.time('queryTime');
+    // const treatises = await treatisesRepository.find({
+    //   where: {
+    //     status: Content_Status_Enum.ACTIVE,
+    //     deletedAt: IsNull(),
+    //     enabled: true,
+    //     keyword: Not(IsNull()),
+    //   },
+    //   select: ['keyword'],
+    // });
+    // console.timeEnd('queryTime');
+    // console.time('keywords');
+    // let keywords: { id: string; name: string; frequency: number }[] = [];
+    // for (let i = 0; i < treatises.length; i++) {
+    //   if (treatises[i].keyword) {
+    //     const keyword = treatises[i].keyword
+    //       ?.replace(/\+/g, '')
+    //       .split(';')
+    //       .map((data) => {
+    //         return {
+    //           id: uuidv4(),
+    //           name: data.toLowerCase(),
+    //           frequency: 0,
+    //           type: Content_Types_Enum.TREATISE,
+    //         };
+    //       });
+    //     keywords = _.unionBy(keywords, keyword, 'id');
+    //   }
+    // }
+    // const keyword = _.uniqBy(
+    //   keywords.map((data) => {
+    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.TREATISE };
+    //   }),
+    //   'name'
+    // );
+    // console.timeEnd('keywords');
+    // console.time('countTime');
+    // for (let i = 0; i < keyword.length; i++) {
+    //   for (let j = 0; j < keywords.length; j++) {
+    //     if (keyword[i].name === keywords[j].name) {
+    //       keyword[i].frequency++;
+    //     }
+    //   }
+    // }
+    // const treatiseKeywords = _.orderBy(keyword, 'frequency', 'desc');
+    // console.timeEnd('countTime');
+    // console.log('treatise',treatiseKeywords.length, treatiseKeywords[0]);
+    // // insert
+    // console.time('insert');
+    // for (let i = 0; i < treatiseKeywords.length; i++) {
+    //   await keywordsRepository.save(treatiseKeywords[i]);
+    // }
+    // console.timeEnd('insert');
+    // getTreatise
+    // console.log('-------------------------------');
+    // console.time('termQueryTime');
+    // const terms = await termsRepository.find({
+    //   where: {
+    //     status: Content_Status_Enum.ACTIVE,
+    //     deletedAt: IsNull(),
+    //     enabled: true,
+    //     keyword: Not(IsNull()),
+    //   },
+    //   select: ['keyword'],
+    // });
+    // console.timeEnd('termQueryTime');
+    // console.time('keywords');
+    // let keywords: { id: string; name: string; frequency: number }[] = [];
+    // for (let i = 0; i < terms.length; i++) {
+    //   if (terms[i].keyword) {
+    //     const keyword = terms[i].keyword
+    //       ?.replace(/\+/g, '')
+    //       .split(';')
+    //       .map((data) => {
+    //         return {
+    //           id: uuidv4(),
+    //           name: data.toLowerCase(),
+    //           frequency: 0,
+    //           type: Content_Types_Enum.TERM,
+    //         };
+    //       });
+    //     keywords = _.unionBy(keywords, keyword, 'id');
+    //   }
+    // }
+    // const keyword = _.uniqBy(
+    //   keywords.map((data) => {
+    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.TERM };
+    //   }),
+    //   'name'
+    // );
+    // console.timeEnd('keywords');
+    // console.time('countTime');
+    // for (let i = 0; i < keyword.length; i++) {
+    //   for (let j = 0; j < keywords.length; j++) {
+    //     if (keyword[i].name === keywords[j].name) {
+    //       keyword[i].frequency++;
+    //     }
+    //   }
+    // }
+    // const termKeywords = _.orderBy(keyword, 'frequency', 'desc');
+    // console.timeEnd('countTime');
+    // console.log('term:', termKeywords.length, termKeywords[0]);
+    // // insert
+    // console.time('insert');
+    // for (let i = 0; i < termKeywords.length; i++) {
+    //   await keywordsRepository.save(termKeywords[i]);
+    // }
+    // console.timeEnd('insert');
+    // console.log('-------------------------------');
+    // console.time('policyQueryTime');
+    // const policies = await policiesRepository.find({
+    //   where: {
+    //     status: Content_Status_Enum.ACTIVE,
+    //     deletedAt: IsNull(),
+    //     enabled: true,
+    //     keyword: Not(IsNull()),
+    //   },
+    //   select: ['keyword'],
+    // });
+    // console.timeEnd('policyQueryTime');
+    // console.time('keywords');
+    // let keywords: { id: string; name: string; frequency: number }[] = [];
+    // for (let i = 0; i < policies.length; i++) {
+    //   if (policies[i].keyword) {
+    //     const keyword = policies[i].keyword
+    //       ?.replace(/\+/g, '')
+    //       .split(';')
+    //       .map((data) => {
+    //         return {
+    //           id: uuidv4(),
+    //           name: data.toLowerCase(),
+    //           frequency: 0,
+    //           type: Content_Types_Enum.POLICY,
+    //         };
+    //       });
+    //     keywords = _.unionBy(keywords, keyword, 'id');
+    //   }
+    // }
+    // const keyword = _.uniqBy(
+    //   keywords.map((data) => {
+    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.POLICY };
+    //   }),
+    //   'name'
+    // );
+    // console.timeEnd('keywords');
+    // console.time('countTime');
+    // for (let i = 0; i < keyword.length; i++) {
+    //   for (let j = 0; j < keywords.length; j++) {
+    //     if (keyword[i].name === keywords[j].name) {
+    //       keyword[i].frequency++;
+    //     }
+    //   }
+    // }
+    // const policyKeywords = _.orderBy(keyword, 'frequency', 'desc');
+    // console.timeEnd('countTime');
+    // console.log('policy:', policyKeywords.length, policyKeywords[0]);
+    // // insert
+    // console.time('insert');
+    // for (let i = 0; i < policyKeywords.length; i++) {
+    //   await keywordsRepository.save(policyKeywords[i]);
+    // }
+    // console.timeEnd('insert');
+    // console.log('-------------------------------');
+    // console.time('patentQueryTime');
+    // const patents = await patentsRepository.find({
+    //   where: {
+    //     status: Content_Status_Enum.ACTIVE,
+    //     deletedAt: IsNull(),
+    //     enabled: true,
+    //     keyword: Not(IsNull()),
+    //   },
+    //   select: ['id','keyword'],
+    // });
+    // console.timeEnd('patentQueryTime');
+    // console.time('keywords');
+    // // let count = 0;
+    // let keywords: { id: string; name: string; frequency: number }[] = [];
+    // for (let i = 0; i < patents.length; i++) {
+    //   if (patents[i].keyword) {
+    //     patents[i].keyword = patents[i].keyword?.replace(/(^;)|(;$)/, '') || null;
+    //     const keyword = patents[i].keyword
+    //       ?.replace(/\+/g, '')
+    //       .split(';')
+    //       .map((data) => {
+    //         return {
+    //           id: uuidv4(),
+    //           name: data.toLowerCase(),
+    //           frequency: 0,
+    //           type: Content_Types_Enum.PATENT,
+    //         };
+    //       });
+    //     keywords = _.unionBy(keywords, keyword, 'id');
+    //     // const result = await patentsRepository.save(patents[i]);
+    //     // if (result) {
+    //     //   count++;
+    //     // }
+    //   }
+    // }
+    // const keyword = _.uniqBy(
+    //   keywords.map((data) => {
+    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.PATENT };
+    //   }),
+    //   'name'
+    // );
+    // // console.log('patentCount:', count);
+    // console.timeEnd('keywords');
+    // console.time('countTime');
+    // for (let i = 0; i < keyword.length; i++) {
+    //   for (let j = 0; j < keywords.length; j++) {
+    //     if (keyword[i].name === keywords[j].name) {
+    //       keyword[i].frequency++;
+    //     }
+    //   }
+    // }
+    // const patentKeywords = _.orderBy(keyword, 'frequency', 'desc');
+    // console.timeEnd('countTime');
+    // console.log('patent:', patentKeywords.length, patentKeywords[0]);
+    // // insert
+    // console.time('insert');
+    // for (let i = 0; i < patentKeywords.length; i++) {
+    //   await keywordsRepository.save(patentKeywords[i]);
+    // }
+    // console.timeEnd('insert');
+
+    return ResultData.ok({
+      data: { keywords: [] },
     });
   }
 }

@@ -10,6 +10,9 @@ export class UserHistoryInfo extends PickType(UserHistory, [
 ] as const) {
   @ApiProperty({ description: '标题' })
   title: string;
+
+  @ApiProperty({ description: '栏目id' })
+  columnId: string;
 }
 
 export class ListHistoryResult {

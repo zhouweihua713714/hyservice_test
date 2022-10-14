@@ -7,6 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
   GetInstitutionChartsDto,
+  GetKeywordChartsDto,
   GetTreatiseDetailDto,
   ListComplexTreatiseDto,
   ListTreatiseDto,
@@ -19,6 +20,7 @@ import { TreatisesService } from './treatises.service';
 import {
   GetArticleCountResult,
   GetInstitutionChartsResult,
+  GetKeywordChartsResult,
   GetTreatiseDetailResult,
   ListComplexTreatiseResult,
   ListTreatiseResult,
@@ -39,7 +41,8 @@ import {
   GetArticleCountResult,
   ListComplexTreatiseResult,
   RecommendTreatisesResult,
-  GetInstitutionChartsResult
+  GetInstitutionChartsResult,
+  GetKeywordChartsResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -132,5 +135,14 @@ export class TreatisesController {
   @AllowAnon()
   getInstitutionCharts(@Query() params: GetInstitutionChartsDto) {
     return this.treatisesService.getInstitutionCharts(params);
+  }
+
+  @Get('/getKeywordCharts')
+  @HttpCode(200)
+  @ApiOperation({ summary: '这里要做定时任务暂放在这里开发请勿调用' })
+  @ApiResult(GetKeywordChartsResult)
+  @AllowAnon()
+  getKeywordCharts(@Query() params: any) {
+    return this.treatisesService.getKeywordCharts(params);
   }
 }

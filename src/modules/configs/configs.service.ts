@@ -20,7 +20,12 @@ import {
   topicTypesRepository,
   universitiesRepository,
 } from '../repository/repository';
-import { GetSearchResultByKeywordDto, SetColumnsOrderDto, SetColumnsTypeDto } from './configs.dto';
+import {
+  GeHotKeywordsDto,
+  GetSearchResultByKeywordDto,
+  SetColumnsOrderDto,
+  SetColumnsTypeDto,
+} from './configs.dto';
 import { User_Types_Enum } from '@/common/enums/common.enum';
 import { Like } from 'typeorm';
 @Injectable()
@@ -225,13 +230,34 @@ export class ConfigsService {
     const { keyword, type } = params;
     const data = await keywordsRepository.find({
       where: {
-        name: Like(`%${keyword}%`),
+        name: Like(`%${keyword.toLowerCase()}%`),
         type: type,
       },
       order: {
-        name: 'ASC',
+        search: 'DESC',
+        frequency: 'DESC',
       },
-      select: ['id', 'name'],
+      select: ['name', 'frequency', 'search', 'type'],
+    });
+    return ResultData.ok({ data: { keywords: data } });
+  }
+  /**
+   * @description 获取热搜关键词
+   * @param {GeHotKeywordsDto}获取热搜关键词 params
+   * @returns {ResultData} 返回getHotKeywords信息
+   */
+  async getHotKeywords(params: GeHotKeywordsDto): Promise<ResultData> {
+    const { type } = params;
+    const data = await keywordsRepository.find({
+      where: {
+        type: type,
+      },
+      order: {
+        search: 'DESC',
+        frequency: 'DESC',
+      },
+      select: ['name', 'frequency', 'search', 'type'],
+      take: 60,
     });
     return ResultData.ok({ data: { keywords: data } });
   }

@@ -194,6 +194,7 @@ export class UserNotesService {
         commentedAt: data.commentedAt,
         title: data.treatise.title,
         url: data.treatise.url,
+        columnId: data.treatise.columnId,
       };
     });
     return ResultData.ok({

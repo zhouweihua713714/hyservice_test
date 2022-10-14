@@ -79,6 +79,7 @@ export class UserFavoritesService {
         treatiseId: data.treatiseId,
         createdAt: data.createdAt,
         title: data.treatise.title,
+        columnId: data.treatise.columnId,
         label: maxCount && maxCount.count !== 0 ? maxCount.id : null,
       };
     });
