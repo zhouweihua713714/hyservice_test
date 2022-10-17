@@ -451,12 +451,15 @@ export class TreatisesService {
     params: ListComplexTreatiseDto,
     user: SignInResInfo
   ): Promise<ResultData> {
-    const { keyword, columnId, deliveryAt, page, size } = params;
+    const { keyword, columnId, deliveryAt, releasedAt, page, size } = params;
     // get basic condition
     let basicCondition =
       'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status';
     if (deliveryAt) {
       basicCondition += ' and treatises.year = :year';
+    }
+    if (releasedAt) {
+      basicCondition += ' and extract(year from treatises.releasedAt) = :releasedAt';
     }
     if (columnId) {
       basicCondition += ' and treatises.columnId = :columnId';
@@ -484,6 +487,7 @@ export class TreatisesService {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
           year: deliveryAt ? new Date(deliveryAt).getFullYear() : undefined,
+          releasedAt: releasedAt ? new Date(releasedAt).getFullYear() : undefined,
         })
         .andWhere(
           new Brackets((qb) => {
@@ -516,6 +520,7 @@ export class TreatisesService {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
           year: deliveryAt ? new Date(deliveryAt).getFullYear() : undefined,
+          releasedAt: releasedAt ? new Date(releasedAt).getFullYear() : undefined,
         })
         .orderBy('treatises.deliveryAt', 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
@@ -601,9 +606,20 @@ export class TreatisesService {
     params: RecommendTreatisesDto,
     user: SignInResInfo
   ): Promise<ResultData> {
-    const { keyword, columnId } = params;
-    const basicCondition =
+    const { id } = params;
+    const treatiseInfo = await treatisesRepository.findOneBy({
+      id: id,
+      status: Content_Status_Enum.ACTIVE,
+      deletedAt: IsNull(),
+      enabled: true,
+    });
+    const keyword = treatiseInfo?.keyword;
+    const columnId = treatiseInfo?.columnId;
+    let basicCondition =
       'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status';
+    if (treatiseInfo) {
+      basicCondition += ' and treatises.id !=:id';
+    }
     let treatises;
     // keyword recommend first
     if (keyword) {
@@ -611,9 +627,10 @@ export class TreatisesService {
       const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
       treatises = await treatisesRepository
         .createQueryBuilder('treatises')
-        .select(['treatises.id', 'treatises.title'])
+        .select(['treatises.id', 'treatises.title', 'treatises.columnId'])
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
+          id: treatiseInfo?.id,
         })
         .andWhere(
           new Brackets((qb) => {
@@ -636,17 +653,18 @@ export class TreatisesService {
       }
       const newTreatises = await treatisesRepository
         .createQueryBuilder('treatises')
-        .select(['treatises.id', 'treatises.title'])
-        .where(`${basicCondition}`, {
+        .select(['treatises.id', 'treatises.title', 'treatises.columnId'])
+        .where(`${basicCondition}${idsCondition}`, {
           status: Content_Status_Enum.ACTIVE,
-        })
-        .where(`treatises.columnId =:columnId${idsCondition}`, {
-          columnId: columnId,
+          id: treatiseInfo?.id,
           ids: treatises
             ? treatises.map((data) => {
                 return data.id;
               })
             : undefined,
+        })
+        .andWhere('treatises.columnId =:columnId', {
+          columnId: columnId,
         })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(size)

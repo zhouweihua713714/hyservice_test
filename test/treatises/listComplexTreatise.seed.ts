@@ -38,6 +38,7 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         title: '论文匹配',
         deliveryAt: new Date(),
+        releasedAt:new Date(),
         year: 2022,
         abstract: '摘要不限制字数',
         keyword: '关键词',
