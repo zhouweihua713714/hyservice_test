@@ -94,7 +94,7 @@ export class ListComplexInstitutionInfo extends PickType(Institutions, [
 
 export class ListComplexInstitutionResult {
   @ApiProperty({ description: '机构数组', type: ListComplexInstitutionInfo, isArray: true })
-  conferences: ListComplexInstitutionInfo[];
+  institutions: ListComplexInstitutionInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
