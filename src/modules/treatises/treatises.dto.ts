@@ -287,20 +287,30 @@ export class ListComplexTreatiseDto extends PickType(ReqListQuery, ['page', 'siz
   @IsDateString({ message: 'deliveryAt 类型错误, 正确类型 date' })
   @IsOptional()
   deliveryAt: Date | null;
+
+  @ApiPropertyOptional({ description: '出版年份', type: Date, nullable: true })
+  @IsDateString({ message: 'releasedAt 类型错误, 正确类型 date' })
+  @IsOptional()
+  releasedAt: Date | null;
 }
 
 export class RecommendTreatisesDto {
-  @ApiPropertyOptional({
-    description:
-      '(论文详情里的关键词为了方便以后拓展这里不用论文id)关键词，如论文关键词为空不传或null',
-  })
-  @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  @ApiPropertyOptional({ description: '论文id' })
+  @IsString({ message: 'id 类型错误, 正确类型 string' })
   @IsOptional()
-  keyword: string;
+  id: string;
 
-  @ApiProperty({ description: '论文的栏目id' })
-  @IsString({ message: 'columnId 类型错误, 正确类型 string' })
-  columnId: string;
+  // @ApiPropertyOptional({
+  //   description:
+  //     '(论文详情里的关键词为了方便以后拓展这里不用论文id)关键词，如论文关键词为空不传或null',
+  // })
+  // @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  // @IsOptional()
+  // keyword: string;
+
+  // @ApiProperty({ description: '论文的栏目id' })
+  // @IsString({ message: 'columnId 类型错误, 正确类型 string' })
+  // columnId: string;
 }
 
 export class GetInstitutionChartsDto {

@@ -1,5 +1,3 @@
-import { Content_Status_Enum } from '@/common/enums/common.enum';
-import dataSource from '@/dataSource';
 import { HttpStatus } from '@nestjs/common';
 import request from 'supertest';
 import { DBTester } from '../testHelper';
@@ -14,8 +12,7 @@ describe('/treatises/recommendTreatises', () => {
       .post('/treatises/recommendTreatises')
       .set('Authorization', tester.data.user.headers.authorization)
       .send({
-        keyword: 'invalid',
-        columnId: 'invalid',
+        id: 'invalid id',
       });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
@@ -28,12 +25,11 @@ describe('/treatises/recommendTreatises', () => {
       .post('/treatises/recommendTreatises')
       .set('Authorization', tester.data.user.headers.authorization)
       .send({
-        keyword: '关键词;关键词匹配',
-        columnId: tester.data.columns[1].id,
+        id: tester.data.treatises[0].id,
       });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.treatises).toBeTruthy;
-    expect(result.body.data.treatises.length).toBe(8);
+    expect(result.body.data.treatises.length).toBe(7);
   });
 });

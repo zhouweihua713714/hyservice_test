@@ -158,7 +158,7 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0)' })
   isFavorite: number;
 }
-export class RecommendTreatiseInfo extends PickType(Treatises, ['id', 'title'] as const) {}
+export class RecommendTreatiseInfo extends PickType(Treatises, ['id', 'title','columnId'] as const) {}
 
 export class ListComplexTreatiseResult {
   @ApiProperty({ description: '论文数组', type: ListComplexTreatiseInfo, isArray: true })
