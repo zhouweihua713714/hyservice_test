@@ -415,7 +415,7 @@ export class InstitutionsService {
               ';'
             )
           : null,
-        minorField: minorFieldInfo
+        minorFieldName: minorFieldInfo
           ? _.join(
               minorFieldInfo.map((data) => {
                 return data.name;
