@@ -215,7 +215,7 @@ export class GetTermCountByTypeResult {
     type: YearCountByTypeInfo,
     isArray: true,
   })
-  yearCounts:YearCountByTypeInfo[];
+  yearCounts: YearCountByTypeInfo[];
 }
 
 export class TypeInfo extends PickType(TypeCountInfo, ['id', 'name', 'count'] as const) {}
@@ -345,4 +345,27 @@ export class GetTermCountByProvinceResult {
     isArray: true,
   })
   provinceCounts: GetTermCountByProvinceInfo[];
+}
+
+export class GetTermPercentByPercentInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({ description: '申请数量' })
+  applicantCount: number;
+
+  @ApiProperty({ description: '资助数量' })
+  count: number;
+
+  @ApiProperty({ description: '资助率' })
+  percent: number;
+}
+
+export class GetTermPercentByYearResult {
+  @ApiProperty({
+    description: '申请资助情况数组(国家自然科学基金有)',
+    type: GetTermPercentByPercentInfo,
+    isArray: true,
+  })
+  yearCounts: GetTermPercentByPercentInfo[];
 }

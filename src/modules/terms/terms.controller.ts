@@ -28,6 +28,7 @@ import {
   GetTermCountByYearResult,
   GetTermDetailResult,
   GetTermPercentBySubjectResult,
+  GetTermPercentByYearResult,
   ListComplexTermResult,
   ListTermResult,
   OperateTermsResult,
@@ -49,7 +50,8 @@ import {
   GetTermCountByYearResult,
   GetTermPercentBySubjectResult,
   GetMoneyByYearResult,
-  GetTermCountByProvinceResult
+  GetTermCountByProvinceResult,
+  GetTermPercentByYearResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -181,5 +183,15 @@ export class TermsController {
   getTermCountByProvince(@Query() params: GetTermCountByProvinceDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.getTermCountByProvince(params, user);
+  }
+
+  @Get('/getTermPercentByYear')
+  @HttpCode(200)
+  @ApiOperation({ summary: '申请资助情况(仅目前国家自然科学基金,静态数据)' })
+  @ApiResult(GetTermPercentByYearResult)
+  @AllowAnon()
+  getTermPercentByYear(@Query() params: any, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.termsService.getTermPercentByYear(params, user);
   }
 }

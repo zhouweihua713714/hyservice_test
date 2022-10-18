@@ -1019,4 +1019,20 @@ export class TermsService {
       data: { provinceCounts: provinceCount },
     });
   }
+  /**
+   * @description 申请、资助情况(国家自然科学基金有)
+   * @param {} params 资助地区分布(国家自然科学基金有)的相关参数
+   * @returns {ResultData} 返回getTermPercentByYear信息
+   */
+  async getTermPercentByYear(params: any, user: SignInResInfo): Promise<ResultData> {
+    const terms = [
+      { year: 2018, applicantCount: 737, count: 60, percent: 8.14 },
+      { year: 2019, applicantCount: 556, count: 82, percent: 14.75 },
+      { year: 2020, applicantCount: 480, count: 85, percent: 17.71 },
+      { year: 2021, applicantCount: 487, count: 96, percent: 19.71 },
+    ];
+    return ResultData.ok({
+      data: { yearCounts: terms },
+    });
+  }
 }
