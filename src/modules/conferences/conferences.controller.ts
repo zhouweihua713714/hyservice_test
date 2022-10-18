@@ -107,7 +107,7 @@ export class ConferencesController {
   @HttpCode(200)
   @ApiOperation({ summary: '最近会议TOP4' })
   @ApiResult(ListRecentConferenceResult)
-  @ApiBearerAuth()
+  @AllowAnon()
   listRecentConference(@Query() params: ListRecentConferenceDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.conferencesService.listRecentConference(params, user);
