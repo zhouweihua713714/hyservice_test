@@ -494,7 +494,26 @@ export class TermsService {
         return {
           count: Number(data.count),
           year: data.year,
-          units: unitCount ? unitCount : [],
+          units: unitCount
+            ? _.orderBy(
+                unitCount.map((data) => {
+                  return {
+                    unit: data.unit,
+                    count: Number(data.count),
+                    year: data.year,
+                    order: _.find(unitTop10, function (o) {
+                      return o.unit === data.unit;
+                    })
+                      ? _.find(unitTop10, function (o) {
+                          return o.unit === data.unit;
+                        }).count
+                      : 0,
+                  };
+                }),
+                'order',
+                'desc'
+              )
+            : [],
           topCount: _.sumBy(unitCount, 'count'),
         };
       }),

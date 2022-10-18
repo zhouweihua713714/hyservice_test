@@ -104,6 +104,9 @@ export class UnitInfo {
 
   @ApiProperty({ description: '年份(这里没啥用就是字段冗余出来没单独处理顺便文档写上了)' })
   year: number;
+
+  @ApiProperty({ description: '与从左往右的排序一致(这里的值是top10的值来排序无其他作用字段)' })
+  order: number;
 }
 export class GetTermCountByUnitInfo {
   @ApiProperty({ description: '年份' })
