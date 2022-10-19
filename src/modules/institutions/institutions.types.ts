@@ -23,6 +23,8 @@ export class GetInstitutionDetailResult extends PickType(Institutions, [
   'longitude',
   'latitude',
   'url',
+  'name',
+  'clicks',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
