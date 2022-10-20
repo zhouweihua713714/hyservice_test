@@ -452,6 +452,7 @@ export class TreatisesService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { keyword, columnId, deliveryAt, releasedAt, page, size } = params;
+    let orderCondition = 'treatises.deliveryAt';
     // get basic condition
     let basicCondition =
       'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status';
@@ -463,6 +464,9 @@ export class TreatisesService {
     }
     if (columnId) {
       basicCondition += ' and treatises.columnId = :columnId';
+      if (columnId === 'column_02_03') {
+        orderCondition = 'treatises.releasedAt';
+      }
     }
     // get treatises and count
     let treatises;
@@ -496,7 +500,7 @@ export class TreatisesService {
               .orWhere('treatises.abstract like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
-        .orderBy('treatises.deliveryAt', 'DESC')
+        .orderBy(`${orderCondition}`, 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
         .skip((page - 1) * size)
@@ -522,7 +526,7 @@ export class TreatisesService {
           year: deliveryAt ? new Date(deliveryAt).getFullYear() : undefined,
           releasedAt: releasedAt ? new Date(releasedAt).getFullYear() : undefined,
         })
-        .orderBy('treatises.deliveryAt', 'DESC')
+        .orderBy(`${orderCondition}`, 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
         .skip((page - 1) * size)
