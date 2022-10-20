@@ -478,7 +478,7 @@ export class ConferencesService {
         'conferences.period',
         'conferences.coverUrl',
       ])
-      .orderBy('conferences.conductedAt IS NOT NULL', 'DESC')
+      .orderBy('conferences.conductedAt', 'DESC','NULLS LAST')
       .addOrderBy('conferences.publishedAt', 'DESC')
       .take(4)
       .getManyAndCount();
