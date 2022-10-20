@@ -466,19 +466,22 @@ export class ConferencesService {
     user: SignInResInfo
   ): Promise<ResultData> {
     // get conferences and count
-    const [conferences, count] = await conferencesRepository.findAndCount({
-      where: {
-        status: Content_Status_Enum.ACTIVE,
-        enabled: true,
-        deletedAt: IsNull(),
-      },
-      select: ['id', 'name', 'conductedAt', 'endedAt', 'picker', 'period', 'location', 'coverUrl'],
-      take: 4, // it's up to PM
-      order: {
-        conductedAt: 'DESC',
-        publishedAt: 'DESC',
-      },
-    });
+    const [conferences, count] = await conferencesRepository
+      .createQueryBuilder('conferences')
+      .select([
+        'conferences.id',
+        'conferences.name',
+        'conferences.conductedAt',
+        'conferences.endedAt',
+        'conferences.picker',
+        'conferences.location',
+        'conferences.period',
+        'conferences.coverUrl',
+      ])
+      .orderBy('conferences.conductedAt IS NOT NULL', 'DESC')
+      .addOrderBy('conferences.publishedAt', 'DESC')
+      .take(4)
+      .getManyAndCount();
     if (count === 0) {
       return ResultData.ok({ data: { conferences: [] } });
     }

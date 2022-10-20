@@ -71,7 +71,7 @@ export const seed: TesterSeed<DataType> = {
         name: '会议名称必填',
         columnId: columns[1].id,
         abbreviation: '会议缩写',
-        conductedAt: new Date(),
+        // conductedAt: new Date(),
         endedAt: new Date(),
         picker: 'date',
         period: 1,
