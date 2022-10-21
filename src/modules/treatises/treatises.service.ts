@@ -10,7 +10,9 @@ import {
   languagesRepository,
   patentsRepository,
   policiesRepository,
+  termKeywordsRepository,
   termsRepository,
+  treatiseKeywordsRepository,
   treatisesRepository,
   userFavoriteTreatisesRepository,
   userHistoryRepository,
@@ -37,6 +39,7 @@ import {
 import { Brackets, In, IsNull, Like, Not } from 'typeorm';
 import { ConsoleLogger } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
+import { TreatiseKeywords } from '@/entities/TreatiseKeywords.entity';
 export class TreatisesService {
   /**
    * @description 获取论文详情
@@ -958,6 +961,167 @@ export class TreatisesService {
     //   await keywordsRepository.save(patentKeywords[i]);
     // }
     // console.timeEnd('insert');
+    //以下代码块需要做定时任务
+    //getTreatise
+    // console.time('查询时间');
+    // const treatises = await treatisesRepository.find({
+    //   where: {
+    //     status: Content_Status_Enum.ACTIVE,
+    //     deletedAt: IsNull(),
+    //     enabled: true,
+    //     keyword: Not(IsNull()),
+    //   },
+    //   select: ['keyword', 'id', 'title', 'columnId'],
+    // });
+    // console.timeEnd('查询时间');
+    // console.time('数据准备时间');
+    // //预插入到treatiseKeywords的数组
+    // let keywords: {
+    //   id: string;
+    //   name: string;
+    //   columnId: string;
+    //   title: string;
+    //   treatiseId: string;
+    // }[] = [];
+    // for (let i = 0; i < treatises.length; i++) {
+    //   if (treatises[i].keyword) {
+    //     const keyword = treatises[i].keyword
+    //       ?.replace(/\+/g, '')
+    //       .split(';')
+    //       .map((data) => {
+    //         return {
+    //           id: uuidv4(),
+    //           name: data.toLowerCase(),
+    //           columnId: treatises[i].columnId,
+    //           title: treatises[i].title,
+    //           treatiseId: treatises[i].id,
+    //         };
+    //       });
+    //     keywords = _.unionBy(keywords, keyword, 'id');
+    //   }
+    // }
+    // console.timeEnd('数据准备时间');
+    // console.log(
+    //   'treatiseCount',
+    //   treatises.length,
+    //   'keywords:',
+    //   keywords.length,
+    //   'keywords[0]',
+    //   keywords[0]
+    // );
+    // //插入之前每次清空表
+    // await treatiseKeywordsRepository.delete({});
+    // // insert 这里逐条插入是因为批量插入会有最大限制且当前论文数据量大批量插入需要分组所以直接单条插入更方便；
+    // console.time('插入执行时间');
+    // for (let i = 0; i < keywords.length; i++) {
+    //   await treatiseKeywordsRepository.save(keywords[i]);
+    // }
+    // console.timeEnd('插入执行时间');
+    // console.log(
+    //   'treatiseCount',
+    //   treatises.length,
+    //   'keywords:',
+    //   keywords.length,
+    //   'keywords[0]',
+    //   keywords[0]
+    // );
+    //getTreatise
+    // console.time('查询时间');
+    // const terms = await termsRepository.find({
+    //   where: {
+    //     status: Content_Status_Enum.ACTIVE,
+    //     deletedAt: IsNull(),
+    //     enabled: true,
+    //     keyword: Not(IsNull()),
+    //   },
+    //   select: ['keyword', 'id', 'columnId'],
+    // });
+    // console.timeEnd('查询时间');
+    // console.time('数据准备时间');
+    // //预插入到termKeywords的数组
+    // let termKeywords: {
+    //   id: string;
+    //   name: string;
+    //   columnId: string;
+    //   termId: string;
+    // }[] = [];
+    // for (let i = 0; i < terms.length; i++) {
+    //   if (terms[i].keyword) {
+    //     const keyword = terms[i].keyword
+    //       ?.replace(/\+/g, '')
+    //       .split(';')
+    //       .map((data) => {
+    //         return {
+    //           id: uuidv4(),
+    //           name: data.toLowerCase(),
+    //           columnId: terms[i].columnId,
+    //           termId: terms[i].id,
+    //         };
+    //       });
+    //     termKeywords = _.unionBy(termKeywords, keyword, 'id');
+    //   }
+    // }
+    // console.timeEnd('数据准备时间');
+    // console.log(
+    //   'termsCount',
+    //   terms.length,
+    //   'keywords:',
+    //   termKeywords.length,
+    //   'keywords[0]',
+    //   termKeywords[0]
+    // );
+    // //插入之前每次清空表
+    // await termKeywordsRepository.delete({});
+    // // insert 这里逐条插入是因为批量插入会有最大限制且当前论文数据量大批量插入需要分组所以直接单条插入更方便；
+    // console.time('插入执行时间');
+    // let insertCount = 0;
+    // for (let i = 0; i < termKeywords.length; i++) {
+    //   if (termKeywords[i].name.replace(/\+/g, '')) {
+    //     await termKeywordsRepository.save(termKeywords[i]);
+    //     insertCount++;
+    //   }
+    // }
+    // console.timeEnd('插入执行时间');
+    // console.log('insertCount', insertCount);
+    // // 查询词云
+    // console.time('查询0');
+    // const treatiseKeywords = await treatiseKeywordsRepository
+    //   .createQueryBuilder('treatise_keywords')
+    //   .select('COUNT(treatise_keywords.treatiseId)', 'frequency')
+    //   .addSelect('treatise_keywords.name', 'name')
+    //   .where('treatise_keywords.columnId =:columnId', {
+    //     columnId: 'column_02_01',
+    //   })
+    //   .groupBy('treatise_keywords.name')
+    //   .getRawMany();
+    // console.timeEnd('查询0');
+    // console.time('查询1');
+    // const keywords = await keywordsRepository.find({
+    //   where: {
+    //     type: Content_Types_Enum.TREATISE,
+    //   },
+    // });
+    // console.timeEnd('查询1');
+    // console.time('组合数据');
+
+    // // treatiseKeywords 20000+
+    // // { name: '五育融合', frequency: '1' }
+    // // keywords 20000+
+    // // { name: '教育信息化', type: 'treatise', search: 0, frequency: 364 }
+
+    // const keywordsDict = _.keyBy(keywords, (v) => v.name);
+    // const result = _.orderBy(
+    //   _.map(treatiseKeywords, (v) => ({
+    //     ...v,
+    //     frequency: Number(v.frequency),
+    //     search: keywordsDict[v.name].search,
+    //   })),
+    //   ['search', 'frequency'],
+    //   ['desc', 'desc']
+    // ).slice(0, 60);
+    // console.log(result);
+    // console.timeEnd('组合数据');
+    // console.log(result.slice(0, 3));
 
     return ResultData.ok({
       data: { keywords: [] },

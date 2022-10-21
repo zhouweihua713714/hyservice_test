@@ -48,4 +48,11 @@ export class GeHotKeywordsDto {
   @IsEnum(Content_Types_Enum)
   @IsOptional()
   type: string;
+
+  @ApiProperty({
+    description: '栏目id(项目、论文必填否则出错这里不做校验前端记得要传)',
+  })
+  @IsString({ message: 'columnId 类型错误,正确类型 string' })
+  @IsOptional()
+  columnId: string;
 }

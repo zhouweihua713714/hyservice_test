@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TreatiseKeywords } from './TreatiseKeywords.entity';
 import { UserFavoriteTreatises } from './UserFavoriteTreatises.entity';
 import { UserLabelTreatises } from './UserLabelTreatises.entity';
 import { UserNoteTreatises } from './UserNoteTreatises.entity';
@@ -188,7 +189,7 @@ export class Treatises {
   @Column('text', { name: 'url', nullable: true, comment: '论文链接' })
   url: string | null;
 
-  @ApiPropertyOptional({ description: '期刊/会议名',type: String, nullable: true })
+  @ApiPropertyOptional({ description: '期刊/会议名', type: String, nullable: true })
   @Column('text', {
     name: 'name',
     comment: '期刊/会议名',
@@ -352,4 +353,7 @@ export class Treatises {
 
   @OneToMany(() => UserNoteTreatises, (userNoteTreatises) => userNoteTreatises.treatise)
   userNoteTreatises: UserNoteTreatises[];
+
+  @OneToMany(() => TreatiseKeywords, (treatiseKeywords) => treatiseKeywords.treatise)
+  treatiseKeywords: TreatiseKeywords[];
 }

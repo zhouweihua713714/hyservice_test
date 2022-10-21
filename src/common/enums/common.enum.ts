@@ -53,7 +53,7 @@ export enum Content_Types_Enum {
   POLICY = 'policy',
   /**项目 */
   TERM = 'term',
-  /**项目 */
+  /**论文 */
   TREATISE = 'treatise',
   /**期刊 */
   PERIODICAL = 'periodical',
