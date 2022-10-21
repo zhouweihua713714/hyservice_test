@@ -17,14 +17,14 @@ export type DataType = {
 
 export const seed: TesterSeed<DataType> = {
   up: async (tester) => {
-    user = await tester.usersDao.createUser(
-      { mobile, password, type: User_Types_Enum.Administrator },
-      tester.authService
-    );
-    columns = await tester.columnsRepository.save([
-      { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: 'column_02', sequenceNumber: 1 },
-      { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: 'column_02', sequenceNumber: 2 },
-    ]);
+    // user = await tester.usersDao.createUser(
+    //   { mobile, password, type: User_Types_Enum.Administrator },
+    //   tester.authService
+    // );
+    // columns = await tester.columnsRepository.save([
+    //   { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: 'column_02', sequenceNumber: 1 },
+    //   { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: 'column_02', sequenceNumber: 2 },
+    // ]);
     // treatises = await tester.treatisesRepository.save([
     //   {
     //     id: (new Date().getTime() - 50000).toString(),
@@ -71,8 +71,8 @@ export const seed: TesterSeed<DataType> = {
   },
   down: async (tester) => {
     // await tester.treatisesRepository.delete({});
-    await tester.columnsRepository.delete({});
-    await tester.usersRepository.delete({});
-    await tester.loginsRepository.delete({});
+    // await tester.columnsRepository.delete({});
+    // await tester.usersRepository.delete({});
+    // await tester.loginsRepository.delete({});
   },
 };

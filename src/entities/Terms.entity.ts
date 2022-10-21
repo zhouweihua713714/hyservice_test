@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TermKeywords } from './TermKeywords.entity';
 
 @Index('terms_pkey', ['id'], { unique: true })
 @Index('index_gin_name', { synchronize: false })
@@ -183,4 +184,7 @@ export class Terms {
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean;
+
+  @OneToMany(() => TermKeywords, (termKeywords) => termKeywords.term)
+  termKeywords: TermKeywords[];
 }

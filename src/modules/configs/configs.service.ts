@@ -16,8 +16,10 @@ import {
   periodicalPeriodsRepository,
   policyTypesRepository,
   subjectsRepository,
+  termKeywordsRepository,
   termTypesRepository,
   topicTypesRepository,
+  treatiseKeywordsRepository,
   universitiesRepository,
 } from '../repository/repository';
 import {
@@ -26,7 +28,7 @@ import {
   SetColumnsOrderDto,
   SetColumnsTypeDto,
 } from './configs.dto';
-import { User_Types_Enum } from '@/common/enums/common.enum';
+import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Like } from 'typeorm';
 @Injectable()
 export class ConfigsService {
@@ -247,18 +249,70 @@ export class ConfigsService {
    * @returns {ResultData} 返回getHotKeywords信息
    */
   async getHotKeywords(params: GeHotKeywordsDto): Promise<ResultData> {
-    const { type } = params;
-    const data = await keywordsRepository.find({
-      where: {
-        type: type,
-      },
-      order: {
-        search: 'DESC',
-        frequency: 'DESC',
-      },
-      select: ['name', 'frequency', 'search', 'type'],
-      take: 60,
-    });
+    const { type, columnId } = params;
+    let data, keywords;
+    if (type === Content_Types_Enum.TERM && columnId) {
+      [data, keywords] = await Promise.all([
+        termKeywordsRepository
+          .createQueryBuilder('term_keywords')
+          .select('COUNT(term_keywords.termId)', 'frequency')
+          .addSelect('term_keywords.name', 'name')
+          .where('term_keywords.columnId =:columnId', {
+            columnId: columnId,
+          })
+          .groupBy('term_keywords.name')
+          .getRawMany(),
+        keywordsRepository.find({
+          where: {
+            type: Content_Types_Enum.TERM,
+          },
+        }),
+      ]);
+    }
+    if (type === Content_Types_Enum.TREATISE && columnId) {
+      [data, keywords] = await Promise.all([
+        treatiseKeywordsRepository
+          .createQueryBuilder('treatise_keywords')
+          .select('COUNT(treatise_keywords.treatiseId)', 'frequency')
+          .addSelect('treatise_keywords.name', 'name')
+          .where('treatise_keywords.columnId =:columnId', {
+            columnId: columnId,
+          })
+          .groupBy('treatise_keywords.name')
+          .getRawMany(),
+        keywordsRepository.find({
+          where: {
+            type: Content_Types_Enum.TREATISE,
+          },
+        }),
+      ]);
+    }
+    // format data and order
+    if (data) {
+      const keywordsDict = _.keyBy(keywords, (v) => v.name);
+      const result = _.orderBy(
+        _.map(data, (v) => ({
+          ...v,
+          frequency: Number(v.frequency),
+          search: keywordsDict[v.name].search,
+        })),
+        ['search', 'frequency'],
+        ['desc', 'desc']
+      ).slice(0, 60);
+      data = result;
+    } else {
+      data = await keywordsRepository.find({
+        where: {
+          type: type,
+        },
+        order: {
+          search: 'DESC',
+          frequency: 'DESC',
+        },
+        select: ['name', 'frequency', 'search'],
+        take: 60,
+      });
+    }
     return ResultData.ok({ data: { keywords: data } });
   }
 }
