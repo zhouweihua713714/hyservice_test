@@ -623,15 +623,21 @@ export class TermsService {
     );
     yearCount = _.orderBy(
       yearCount.map((data) => {
-        const percent = Number(((data.count / _.sumBy(yearCount, 'count')) * 100).toFixed(1));
+        // const percent = Number(((data.count / _.sumBy(yearCount, 'count')) * 100).toFixed(1));
         return {
           year: data.year,
           count: data.count,
-          percent: percent,
+          // percent: percent,
           types: _.groupBy(terms, 'year')[data.year]
             ? _.orderBy(
                 _.filter(
                   _.groupBy(terms, 'year')[data.year].map((miniData) => {
+                    const yearCount = _.sumBy(
+                      _.filter(terms, function (o) {
+                        return o.year === miniData.year;
+                      }),
+                      'count'
+                    );
                     return {
                       id: miniData.type,
                       name: _.find(types, function (o) {
@@ -642,7 +648,7 @@ export class TermsService {
                           }).name
                         : null,
                       count: miniData.count,
-                      percent: Number(((miniData.count / data.count) * percent).toFixed(1)),
+                      percent: Number(((miniData.count / yearCount) * 100).toFixed(1)),
                     };
                   }),
                   function (o) {
@@ -822,9 +828,9 @@ export class TermsService {
     // get type name
     subjectCount = _.orderBy(
       subjectCount.map((data) => {
-        const percent = Number(
-          ((Number(data.count) / _.sumBy(subjectCount, 'count')) * 100).toFixed(1)
-        );
+        // const percent = Number(
+        //   ((Number(data.count) / _.sumBy(subjectCount, 'count')) * 100).toFixed(1)
+        // );
         return {
           subject: data.subject,
           subjectNo: data.subjectNo,
@@ -835,12 +841,18 @@ export class TermsService {
                 return o.id === data.subject;
               }).name
             : null,
-          percent: percent,
+          // percent: percent,
           years: _.groupBy(terms, 'subject')[data.subject]
             ? _.groupBy(terms, 'subject')[data.subject].map((miniData) => {
+                const yearCount = _.sumBy(
+                  _.filter(terms, function (o) {
+                    return o.year === miniData.year;
+                  }),
+                  'count'
+                );
                 return {
                   year: miniData.year,
-                  percent: Number(((miniData.count / data.count) * percent).toFixed(1)),
+                  percent: Number(((miniData.count / yearCount) * 100).toFixed(1)),
                 };
               })
             : [],
@@ -849,6 +861,7 @@ export class TermsService {
       'subjectNo',
       'asc'
     );
+
     // filter !subject
     subjectCount = _.filter(subjectCount, function (o) {
       return o.subject;
