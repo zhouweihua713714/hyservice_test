@@ -21,8 +21,8 @@ export class Keywords {
   })
   type: string;
 
-  @ApiProperty({ description: '搜索次数(所有用户)' })
-  @Column('integer', { name: 'search', default: 0, comment: '搜索次数(所有用户)' })
+  @ApiProperty({ description: '搜索次数(所有用户),默认0' })
+  @Column('integer', { name: 'search', default: 0, comment: '搜索次数(所有用户),默认0' })
   search: number;
 
   @ApiProperty({ description: '出现内容关键字的频率' })

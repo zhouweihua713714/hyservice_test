@@ -265,8 +265,8 @@ export class GetTermPercentBySubjectInfo {
   @ApiProperty({ description: '学科代码(这里没有用到~只是需要用这个代码排序进行了冗余)' })
   subjectNo: string;
 
-  @ApiProperty({ description: '资助率(学科项目总数/总项目数目前保留以为小数)' })
-  percent: number;
+  // @ApiProperty({ description: '资助率(学科项目总数/总项目数目前保留以为小数,这里是学科/项目总数比)' })
+  // percent: number;
 
   @ApiProperty({
     description: '该学科下不同年份年份的项目数据统计',
