@@ -408,7 +408,7 @@ export class TreatisesService {
     //get columns
     const columns = await columnsRepository.find({
       where: { parentId: 'column_02', isHide: 0 },
-      select: ['id', 'name', 'sequenceNumber', 'parentId', 'introduction'],
+      select: ['id', 'name', 'sequenceNumber', 'parentId', 'introduction','isHide'],
     });
     // get article count and latest date
     const treatises = await treatisesRepository

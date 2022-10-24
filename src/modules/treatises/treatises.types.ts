@@ -128,6 +128,7 @@ export class ArticleCountInfo extends PickType(Columns, [
   'introduction',
   'sequenceNumber',
   'parentId',
+  'isHide'
 ] as const) {
   @ApiProperty({ description: '文章数量' })
   count: number;

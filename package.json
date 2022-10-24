@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint && yarn test  --passWithNoTests --forceExit"
+      "pre-commit": "yarn lint && yarn test"
     }
   },
   "scripts": {

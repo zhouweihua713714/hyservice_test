@@ -401,8 +401,8 @@ export class PeriodicalsService {
             qb.where('periodicals.name like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
-        .orderBy('periodicals.articleNumber', 'DESC')
-        .addOrderBy('periodicals.establishedAt', 'DESC')
+        .orderBy('periodicals.articleNumber', 'DESC','NULLS LAST')
+        .addOrderBy('periodicals.establishedAt', 'DESC','NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -429,8 +429,8 @@ export class PeriodicalsService {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
         })
-        .orderBy('periodicals.articleNumber', 'DESC')
-        .addOrderBy('periodicals.establishedAt', 'DESC')
+        .orderBy('periodicals.articleNumber', 'DESC','NULLS LAST')
+        .addOrderBy('periodicals.establishedAt', 'DESC','NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
