@@ -139,10 +139,19 @@ export class TreatisesController {
 
   @Get('/getKeywordCharts')
   @HttpCode(200)
-  @ApiOperation({ summary: '这里要做定时任务暂放在这里开发请勿调用' })
+  @ApiOperation({ summary: '论文关键词TOP10(知识图谱)' })
   @ApiResult(GetKeywordChartsResult)
   @AllowAnon()
-  getKeywordCharts(@Query() params: any) {
+  getKeywordCharts(@Query() params: GetKeywordChartsDto) {
     return this.treatisesService.getKeywordCharts(params);
+  }
+  
+  @Get('/getKeywords')
+  @HttpCode(200)
+  @ApiOperation({ summary: '这里要做定时任务和局部数据调用暂放在这里开发请勿调用' })
+  @ApiResult(GetKeywordChartsResult)
+  @AllowAnon()
+  getKeywords(@Query() params: any) {
+    return this.treatisesService.getKeywords(params);
   }
 }

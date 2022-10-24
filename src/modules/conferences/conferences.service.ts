@@ -382,7 +382,7 @@ export class ConferencesService {
         endedAt: endedAtDateString,
         keyword: keywords,
       })
-      .orderBy('conferences.conductedAt', 'DESC')
+      .orderBy('conferences.conductedAt', 'DESC','NULLS LAST')
       .addOrderBy('conferences.publishedAt', 'DESC')
       .skip((page - 1) * size)
       .take(size)

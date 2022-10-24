@@ -732,11 +732,11 @@ export class TreatisesService {
     });
   }
   /**
-   * @description 获取论文关键词TOP10(论文知识图谱)
-   * @param {GetInstitutionChartsDto} params  获取论文关键词TOP10(论文知识图谱)的相关参数
-   * @returns {ResultData} 返回getKeywordCharts信息
+   * @description 获取内容管理相关的关键词数据脚本
+   * @param {} params  获取内容管理相关的关键词数据脚本的相关参数
+   * @returns {ResultData} 返回getKeywords信息
    */
-  async getKeywordCharts(params: GetInstitutionChartsDto): Promise<ResultData> {
+  async getKeywords(params: any): Promise<ResultData> {
     // getTreatise
     // console.time('queryTime');
     // const treatises = await treatisesRepository.find({
@@ -1083,48 +1083,69 @@ export class TreatisesService {
     // }
     // console.timeEnd('插入执行时间');
     // console.log('insertCount', insertCount);
-    // // 查询词云
-    // console.time('查询0');
-    // const treatiseKeywords = await treatiseKeywordsRepository
-    //   .createQueryBuilder('treatise_keywords')
-    //   .select('COUNT(treatise_keywords.treatiseId)', 'frequency')
-    //   .addSelect('treatise_keywords.name', 'name')
-    //   .where('treatise_keywords.columnId =:columnId', {
-    //     columnId: 'column_02_01',
-    //   })
-    //   .groupBy('treatise_keywords.name')
-    //   .getRawMany();
-    // console.timeEnd('查询0');
-    // console.time('查询1');
-    // const keywords = await keywordsRepository.find({
-    //   where: {
-    //     type: Content_Types_Enum.TREATISE,
-    //   },
-    // });
-    // console.timeEnd('查询1');
-    // console.time('组合数据');
-
-    // // treatiseKeywords 20000+
-    // // { name: '五育融合', frequency: '1' }
-    // // keywords 20000+
-    // // { name: '教育信息化', type: 'treatise', search: 0, frequency: 364 }
-
-    // const keywordsDict = _.keyBy(keywords, (v) => v.name);
-    // const result = _.orderBy(
-    //   _.map(treatiseKeywords, (v) => ({
-    //     ...v,
-    //     frequency: Number(v.frequency),
-    //     search: keywordsDict[v.name].search,
-    //   })),
-    //   ['search', 'frequency'],
-    //   ['desc', 'desc']
-    // ).slice(0, 60);
-    // console.log(result);
-    // console.timeEnd('组合数据');
-    // console.log(result.slice(0, 3));
 
     return ResultData.ok({
       data: { keywords: [] },
+    });
+  }
+
+  /**
+   * @description 获取论文关键词TOP10(论文知识图谱)
+   * @param {GetInstitutionChartsDto} params  获取论文关键词TOP10(论文知识图谱)的相关参数
+   * @returns {ResultData} 返回getKeywordCharts信息
+   */
+  async getKeywordCharts(params: GetInstitutionChartsDto): Promise<ResultData> {
+    const { columnId } = params;
+    //get treatiseKeywords by columnId
+    const treatiseKeywords = await treatiseKeywordsRepository
+      .createQueryBuilder('treatise_keywords')
+      .select('COUNT(treatise_keywords.treatiseId)', 'frequency')
+      .addSelect('treatise_keywords.name', 'name')
+      .where('treatise_keywords.columnId =:columnId', {
+        columnId: columnId,
+      })
+      .groupBy('treatise_keywords.name')
+      .getRawMany();
+    const keywords = await keywordsRepository.find({
+      where: {
+        type: Content_Types_Enum.TREATISE,
+      },
+    });
+    //get map for get search
+    const keywordsDict = _.keyBy(keywords, (v) => v.name);
+    // get top10
+    const keywordTop10 = _.orderBy(
+      _.map(treatiseKeywords, (v) => ({
+        ...v,
+        frequency: Number(v.frequency),
+        search: keywordsDict[v.name].search,
+      })),
+      ['search', 'frequency'],
+      ['desc', 'desc']
+    ).slice(0, 10);
+    //get title by keyword
+    const treatiseKeywordsData = await treatiseKeywordsRepository.find({
+      where: {
+        name: In(
+          keywordTop10.map((data) => {
+            return data.name;
+          })
+        ),
+        columnId: columnId,
+      },
+      select: ['name', 'treatiseId', 'title'],
+    });
+    const treatiseKeywordsDataDict = _.groupBy(treatiseKeywordsData, 'name');
+    const result = keywordTop10.map((data) => {
+      return {
+        ...data,
+        treatises: treatiseKeywordsDataDict[data.name]
+          ? treatiseKeywordsDataDict[data.name].slice(0, 10)
+          : [],
+      };
+    });
+    return ResultData.ok({
+      data: { keywordCharts: result },
     });
   }
 }

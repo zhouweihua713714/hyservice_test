@@ -15,6 +15,6 @@ describe('/treatises/getKeywordCharts', () => {
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
-    expect(result.body.data.keywords).toBeTruthy();
+    expect(result.body.data.keywordCharts).toBeTruthy();
   });
 });
