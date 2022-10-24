@@ -158,7 +158,11 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   @ApiProperty({ description: '是否被收藏:1是,0否(用户未登录默认都是0)' })
   isFavorite: number;
 }
-export class RecommendTreatiseInfo extends PickType(Treatises, ['id', 'title','columnId'] as const) {}
+export class RecommendTreatiseInfo extends PickType(Treatises, [
+  'id',
+  'title',
+  'columnId',
+] as const) {}
 
 export class ListComplexTreatiseResult {
   @ApiProperty({ description: '论文数组', type: ListComplexTreatiseInfo, isArray: true })
@@ -186,16 +190,32 @@ export class GetInstitutionChartsResult {
   institutionCharts: InstitutionChartInfo[];
 }
 
+export class KeywordChartTreatiseInfo {
+  @ApiProperty({ description: '关键词名称字段冗余' })
+  name: string;
+
+  @ApiProperty({ description: '论文id,以防未来需要跳转需要用' })
+  treatiseId: string;
+
+  @ApiProperty({ description: '论文标题' })
+  title: string;
+}
+
 export class KeywordChartInfo {
   @ApiProperty({ description: '关键词名称' })
   name: string;
 
   @ApiProperty({ description: '出现的频率数量' })
-  count: number;
+  frequency: number;
+
+  @ApiProperty({ description: '用户搜索频率,这个得等小俊那边埋点完才有效果' })
+  search: number;
+
+  @ApiProperty({ description: '用户论文数据(目前展示10条,这个数量可由PM的需求调整)', type: KeywordChartTreatiseInfo, isArray: true })
+  treatises: KeywordChartTreatiseInfo[];
 }
 
 export class GetKeywordChartsResult {
   @ApiProperty({ description: '关键词数组', type: KeywordChartInfo, isArray: true })
   keywordCharts: KeywordChartInfo[];
 }
-
