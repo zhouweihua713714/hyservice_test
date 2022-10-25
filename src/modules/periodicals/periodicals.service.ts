@@ -29,8 +29,13 @@ import {
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
 
+@Injectable()
 export class PeriodicalsService {
+  constructor( private readonly usersService: UsersService) {}
+
   /**
    * @description 获取期刊详情
    * @param {GetPeriodicalDetailDto} params
@@ -495,6 +500,13 @@ export class PeriodicalsService {
             )
           : null,
       };
+    });
+    // 搜索埋点
+    await this.usersService.recordUserSearchTimes({
+      keywords: keyword?.split(';') || [],
+      type: Content_Types_Enum.PERIODICAL,
+      userId: user.id,
+      columnId: columnId || '0',
     });
     return ResultData.ok({ data: { periodicals: result, count: count } });
   }
