@@ -58,6 +58,7 @@ export class UserLabelsService {
         title: data.treatise.title,
         author: data.treatise.author,
         deliveryAt: data.treatise.deliveryAt,
+        releasedAt: data.treatise.releasedAt,
         columnId: data.treatise.columnId,
       };
     });
