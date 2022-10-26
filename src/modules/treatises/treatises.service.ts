@@ -37,10 +37,14 @@ import {
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like, Not } from 'typeorm';
-import { ConsoleLogger } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { TreatiseKeywords } from '@/entities/TreatiseKeywords.entity';
+import { UsersService } from '../users/users.service';
+@Injectable()
 export class TreatisesService {
+  constructor( private readonly usersService: UsersService) {}
+
   /**
    * @description 获取论文详情
    * @param {GetTreatiseDetailDto} params
@@ -599,6 +603,13 @@ export class TreatisesService {
           ? 1
           : 0,
       };
+    });
+    // 搜索埋点
+    await this.usersService.recordUserSearchTimes({
+      keywords: keyword?.split(';') || [],
+      type: Content_Types_Enum.TREATISE,
+      userId: user.id,
+      columnId: columnId || '0',
     });
     return ResultData.ok({
       data: { treatises: result, count: count },

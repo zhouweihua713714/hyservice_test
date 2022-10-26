@@ -26,10 +26,13 @@ import {
   Picker_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import { Brackets, In, IsNull, Like, ArrayOverlap } from 'typeorm';
+import { In, IsNull, Like } from 'typeorm';
 import { dateFormat } from '@/common/utils/dateFormat';
-
+import { UsersService } from '../users/users.service';
+import { Injectable } from '@nestjs/common';
+@Injectable()
 export class ConferencesService {
+  constructor( private readonly usersService: UsersService) {}
   /**
    * @description 获取会议详情
    * @param {GetConferenceDetailDto} params
@@ -453,6 +456,13 @@ export class ConferencesService {
             )
           : null,
       };
+    });
+    // 搜索埋点
+    await this.usersService.recordUserSearchTimes({
+      keywords: keyword?.split(';') || [],
+      type: Content_Types_Enum.CONFERENCE,
+      userId: user.id,
+      columnId: '0'
     });
     return ResultData.ok({ data: { conferences: result, count: count } });
   }
