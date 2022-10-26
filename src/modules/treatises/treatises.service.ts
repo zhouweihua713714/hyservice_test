@@ -408,7 +408,7 @@ export class TreatisesService {
     //get columns
     const columns = await columnsRepository.find({
       where: { parentId: 'column_02', isHide: 0 },
-      select: ['id', 'name', 'sequenceNumber', 'parentId', 'introduction','isHide'],
+      select: ['id', 'name', 'sequenceNumber', 'parentId', 'introduction', 'isHide'],
     });
     // get article count and latest date
     const treatises = await treatisesRepository
@@ -759,7 +759,7 @@ export class TreatisesService {
     //       .map((data) => {
     //         return {
     //           id: uuidv4(),
-    //           name: data.toLowerCase(),
+    //           name: data.toLowerCase().trim(),
     //           frequency: 0,
     //           type: Content_Types_Enum.TREATISE,
     //         };
@@ -784,7 +784,7 @@ export class TreatisesService {
     // }
     // const treatiseKeywords = _.orderBy(keyword, 'frequency', 'desc');
     // console.timeEnd('countTime');
-    // console.log('treatise',treatiseKeywords.length, treatiseKeywords[0]);
+    // console.log('treatise', treatiseKeywords.length, treatiseKeywords[0]);
     // // insert
     // console.time('insert');
     // for (let i = 0; i < treatiseKeywords.length; i++) {
@@ -814,7 +814,7 @@ export class TreatisesService {
     //       .map((data) => {
     //         return {
     //           id: uuidv4(),
-    //           name: data.toLowerCase(),
+    //           name: data.toLowerCase().trim(),
     //           frequency: 0,
     //           type: Content_Types_Enum.TERM,
     //         };
@@ -909,7 +909,7 @@ export class TreatisesService {
     //     enabled: true,
     //     keyword: Not(IsNull()),
     //   },
-    //   select: ['id','keyword'],
+    //   select: ['id', 'keyword'],
     // });
     // console.timeEnd('patentQueryTime');
     // console.time('keywords');
@@ -924,7 +924,7 @@ export class TreatisesService {
     //       .map((data) => {
     //         return {
     //           id: uuidv4(),
-    //           name: data.toLowerCase(),
+    //           name: data.toLowerCase().trim(),
     //           frequency: 0,
     //           type: Content_Types_Enum.PATENT,
     //         };
@@ -991,7 +991,7 @@ export class TreatisesService {
     //       .map((data) => {
     //         return {
     //           id: uuidv4(),
-    //           name: data.toLowerCase(),
+    //           name: data.toLowerCase().trim(),
     //           columnId: treatises[i].columnId,
     //           title: treatises[i].title,
     //           treatiseId: treatises[i].id,
@@ -1118,7 +1118,7 @@ export class TreatisesService {
       _.map(treatiseKeywords, (v) => ({
         ...v,
         frequency: Number(v.frequency),
-        search: keywordsDict[v.name].search,
+        search: keywordsDict[v.name] ? keywordsDict[v.name].search :0,
       })),
       ['search', 'frequency'],
       ['desc', 'desc']
