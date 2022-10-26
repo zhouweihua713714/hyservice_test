@@ -28,8 +28,13 @@ import {
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like } from 'typeorm';
 import { constant } from '@/common/utils/constant';
+import { Injectable } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
 
+@Injectable()
 export class PoliciesService {
+  constructor( private readonly usersService: UsersService) {}
+
   /**
    * @description 获取政策详情
    * @param {GetPolicyDetailDto} params
@@ -422,6 +427,13 @@ export class PoliciesService {
             })?.name
           : null,
       };
+    });
+    // 搜索埋点
+    await this.usersService.recordUserSearchTimes({
+      keywords: keyword?.split(';') || [],
+      type: Content_Types_Enum.POLICY,
+      userId: user.id,
+      columnId: columnId || '0',
     });
     return ResultData.ok({ data: { policies: result, count: count } });
   }

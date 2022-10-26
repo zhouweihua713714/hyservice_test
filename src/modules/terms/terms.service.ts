@@ -32,8 +32,13 @@ import {
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like } from 'typeorm';
 import dayjs from 'dayjs';
+import { Injectable } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
 
+@Injectable()
 export class TermsService {
+  constructor( private readonly usersService: UsersService) {}
+
   /**
    * @description 获取项目详情
    * @param {GetTermDetailDto} params
@@ -405,6 +410,13 @@ export class TermsService {
           return o.id === term.type;
         })?.name,
       };
+    });
+    // 搜索埋点
+    await this.usersService.recordUserSearchTimes({
+      keywords: keyword?.split(';') || [],
+      type: Content_Types_Enum.TERM,
+      userId: user.id,
+      columnId: columnId || '0',
     });
     return ResultData.ok({ data: { terms: result, count: count } });
   }
