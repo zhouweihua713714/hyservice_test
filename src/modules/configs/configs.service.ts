@@ -294,7 +294,7 @@ export class ConfigsService {
         _.map(data, (v) => ({
           ...v,
           frequency: Number(v.frequency),
-          search: keywordsDict[v.name].search,
+          search: keywordsDict[v.name] ? keywordsDict[v.name].search : 0,
         })),
         ['search', 'frequency'],
         ['desc', 'desc']
