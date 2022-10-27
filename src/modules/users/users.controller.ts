@@ -49,7 +49,8 @@ import { UserKeywordsService } from './userKeywords/userKeywords.service';
   ListNoteTreatiseResult,
   ListFavoriteTreatiseResult,
   ListLabelTreatiseResult,
-  GetNoteTreatisesByTreatiseIdResult
+  GetNoteTreatisesByTreatiseIdResult,
+  ListUserSearchKeywordsResult
 )
 @Controller('/users')
 export class UsersController {

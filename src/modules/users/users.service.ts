@@ -66,22 +66,40 @@ export class UsersService {
   }): Promise<void> {
     // 查询关键字是否存在
     const { keywords, type, userId, columnId } = params;
-    const existingKeywords = await keywordsRepository.find({
-      where: {
-        type,
-        name: In(keywords)
-      }
-    });
+    const [existingKeywords, userExistingKeywords] = await Promise.all([
+      keywordsRepository.find({
+        where: {
+          type,
+          name: In(keywords)
+        }
+      }),
+      userKeywordStatisticsRepository.find({
+        where: {
+          userId,
+          keyword: In(keywords),
+          columnId
+        }
+      })
+    ]);
     const updateKeywordsStatistics: any[] = [];
     if (!_.isEmpty(existingKeywords)) {
       for (let i = 0; i < existingKeywords.length; i++) {
         const keyword = existingKeywords[i].name;
-        updateKeywordsStatistics.push([
+        updateKeywordsStatistics.push(
           keywordsRepository.increment({name: keyword, type }, 'search', 1)
-        ]);
-        updateKeywordsStatistics.push([
-          userKeywordStatisticsRepository.increment({userId, keyword, columnId }, 'search', 1)
-        ]);
+        );
+        if (userId) { // 此处不加锁，少量数据覆盖不影响业务
+          if(_.findIndex(userExistingKeywords, { keyword }) > -1) {
+            updateKeywordsStatistics.push(
+              userKeywordStatisticsRepository.increment({ userId, keyword, columnId }, 'search', 1)
+            );
+          }
+          else {
+            updateKeywordsStatistics.push(
+              userKeywordStatisticsRepository.save({ userId, keyword, columnId, search: 1 })
+            );
+          }
+        }
       }
       // 用户统计埋点
       await Promise.all(updateKeywordsStatistics);

@@ -434,7 +434,7 @@ export class InstitutionsService {
     await this.usersService.recordUserSearchTimes({
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.INSTITUTION,
-      userId: user.id,
+      userId: user?.id,
       columnId: '0'
     });
     return ResultData.ok({ data: { institutions: result, count: count } });

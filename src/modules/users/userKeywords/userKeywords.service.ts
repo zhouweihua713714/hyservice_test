@@ -18,6 +18,6 @@ export class UserKeywordsService {
         .orderBy('count', 'DESC')
         .limit(60)
         .getRawMany();
-    return ResultData.ok({ data: { keywords: (keywords || []).map(item => item.keyword) } });
+    return ResultData.ok({ data: { keywords }});
   }
 }

@@ -415,7 +415,7 @@ export class TermsService {
     await this.usersService.recordUserSearchTimes({
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.TERM,
-      userId: user.id,
+      userId: user?.id,
       columnId: columnId || '0',
     });
     return ResultData.ok({ data: { terms: result, count: count } });
