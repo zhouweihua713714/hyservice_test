@@ -1,26 +1,25 @@
 import { HttpStatus } from '@nestjs/common';
 import request from 'supertest';
-import { DBTester } from '../testHelper';
-import { DataType } from './getUserDetail.seed';
+import { DBTester } from '../../testHelper';
+import { DataType } from './listUserSearchKeywords.seed';
 
 const tester = new DBTester<DataType>().setup();
 
-describe('/users/getUserDetail', () => {
+describe('/users/listUserSearchKeywords', () => {
   test('should not GET before login', async () => {
     const result = await request(tester.server)
-      .get('/users/getUserDetail')
-      .query({ id: tester.data.user.user.id });
+      .get('/users/listUserSearchKeywords')
+      .query({});
 
     expect(result.status).toBe(HttpStatus.FORBIDDEN);
   });
-  test('should GET /users/getUserDetail', async () => {
+  test('should GET /users/listUserSearchKeywords', async () => {
     const result = await request(tester.server)
-      .get('/users/getUserDetail')
+      .get('/users/listUserSearchKeywords')
       .set('Authorization', tester.data.user.headers.authorization)
-      .query({ id: tester.data.user.user.id });
-
+      .query({});
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
-    expect(result.body.data.id).toBeTruthy();
+    expect(result.body.data.keywords).toBeTruthy();
   });
 });

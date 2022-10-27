@@ -35,6 +35,8 @@ import {
   SaveNoteTreatiseDto,
 } from './userNotes/userNotes.dto';
 import { ListLabelTreatiseResult } from './userLabels/userLabels.types';
+import { ListUserSearchKeywordsResult } from './userKeywords/userKeywords.types';
+import { UserKeywordsService } from './userKeywords/userKeywords.service';
 
 @ApiTags('我的空间-用户')
 @ApiExtraModels(
@@ -56,7 +58,8 @@ export class UsersController {
     private readonly userHistoryService: UserHistoryService,
     private readonly userFavoritesService: UserFavoritesService,
     private readonly userLabelsService: UserLabelsService,
-    private readonly userNotesService: UserNotesService
+    private readonly userNotesService: UserNotesService,
+    private readonly userKeywordsService: UserKeywordsService
   ) {}
 
   @Get('/getUserDetail')
@@ -195,5 +198,16 @@ export class UsersController {
   ): Promise<ResultData> {
     const user = <SignInResInfo>req.user;
     return this.userNotesService.getNoteTreatisesByTreatiseId(params, user);
+  }
+
+
+  @Get('/listUserSearchKeywords')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取用户搜索词云(排名前60个)' })
+  @ApiResult(ListUserSearchKeywordsResult)
+  @ApiBearerAuth()
+  listUserSearchKeywords(@Req() req: any): Promise<ResultData> {
+    const user = <SignInResInfo>req.user;
+    return this.userKeywordsService.listUserSearchKeywords(user);
   }
 }

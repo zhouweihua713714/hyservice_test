@@ -50,6 +50,7 @@ import { UserNoteTreatises } from './entities/UserNoteTreatises.entity';
 import { AnalysisPolicies } from './entities/AnalysisPolicies.entity';
 import { TopicTypes } from './entities/TopicTypes.entity';
 import { Keywords } from './entities/Keywords.entity';
+import { UserKeywordStatistics } from './entities/UserKeywordStatistics.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -110,7 +111,8 @@ import { Keywords } from './entities/Keywords.entity';
       UserNoteTreatises,
       AnalysisPolicies,
       TopicTypes,
-      Keywords
+      Keywords,
+      UserKeywordStatistics
     ]),
     HomeModule,
     AuthModule,

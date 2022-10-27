@@ -41,6 +41,7 @@ import { UserNoteTreatises } from '@/entities/UserNoteTreatises.entity';
 import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
 import { TopicTypes } from '@/entities/TopicTypes.entity';
 import { Keywords } from '@/entities/Keywords.entity';
+import { UserKeywordStatistics } from '@/entities/UserKeywordStatistics.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -76,6 +77,7 @@ export class DBTester<T = undefined> {
   analysisPoliciesRepository: Repository<AnalysisPolicies>;
   topicTypesRepository: Repository<TopicTypes>;
   keywordsRepository: Repository<Keywords>;
+  userKeywordStatisticsRepository: Repository<UserKeywordStatistics>;
   config: ConfigService;
   server: any;
 
@@ -173,6 +175,9 @@ export class DBTester<T = undefined> {
       );
       this.keywordsRepository = this.module.get<Repository<Keywords>>(
         getRepositoryToken(Keywords)
+      );
+      this.userKeywordStatisticsRepository = this.module.get<Repository<UserKeywordStatistics>>(
+        getRepositoryToken(UserKeywordStatistics)
       );
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
