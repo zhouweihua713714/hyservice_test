@@ -608,7 +608,7 @@ export class TreatisesService {
     await this.usersService.recordUserSearchTimes({
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.TREATISE,
-      userId: user.id,
+      userId: user?.id,
       columnId: columnId || '0',
     });
     return ResultData.ok({

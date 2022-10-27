@@ -505,7 +505,7 @@ export class PeriodicalsService {
     await this.usersService.recordUserSearchTimes({
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.PERIODICAL,
-      userId: user.id,
+      userId: user?.id,
       columnId: columnId || '0',
     });
     return ResultData.ok({ data: { periodicals: result, count: count } });

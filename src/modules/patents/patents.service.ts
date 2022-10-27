@@ -392,7 +392,7 @@ export class PatentsService {
     await this.usersService.recordUserSearchTimes({
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.PATENT,
-      userId: user.id,
+      userId: user?.id,
       columnId: '0'
     });
     return ResultData.ok({ data: { patents: result, count: count } });

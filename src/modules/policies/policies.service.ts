@@ -432,7 +432,7 @@ export class PoliciesService {
     await this.usersService.recordUserSearchTimes({
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.POLICY,
-      userId: user.id,
+      userId: user?.id,
       columnId: columnId || '0',
     });
     return ResultData.ok({ data: { policies: result, count: count } });
