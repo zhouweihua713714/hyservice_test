@@ -37,7 +37,7 @@ import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TermsService {
-  constructor( private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * @description 获取项目详情
@@ -307,6 +307,18 @@ export class TermsService {
    */
   async listComplexTerm(params: ListComplexTermDto, user: SignInResInfo): Promise<ResultData> {
     const { columnId, keyword, unit, type, principal, authorizedAt, page, size } = params;
+    //
+    if (
+      columnId &&
+      columnId === 'column_01_03' &&
+      !keyword &&
+      !unit &&
+      !type &&
+      !principal &&
+      !authorizedAt
+    ) {
+      return ResultData.ok({ data: { terms: [], count: 0 } });
+    }
     // get basic condition
     let basicCondition =
       'terms.enabled = true and terms.deletedAt is null and terms.status =:status';

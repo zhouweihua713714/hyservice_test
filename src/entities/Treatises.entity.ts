@@ -301,6 +301,55 @@ export class Treatises {
   })
   keyword: string | null;
 
+  @ApiPropertyOptional({ description: '一级主题', type: String, nullable: true })
+  @Column('text', {
+    name: 'topic',
+    nullable: true,
+    comment: '一级主题',
+  })
+  topic: string | null;
+
+  @ApiPropertyOptional({ description: '二级主题', type: String, nullable: true })
+  @Column('text', {
+    name: 'child_topic',
+    nullable: true,
+    comment: '二级主题',
+  })
+  childTopic: string | null;
+
+  @ApiPropertyOptional({ description: '研究目标', type: String, nullable: true })
+  @Column('text', {
+    name: 'goal',
+    nullable: true,
+    comment: '研究目标',
+  })
+  goal: string | null;
+
+  @ApiPropertyOptional({ description: '研究对象', type: String, nullable: true })
+  @Column('text', {
+    name: 'object',
+    nullable: true,
+    comment: '研究对象',
+  })
+  object: string | null;
+
+  @ApiPropertyOptional({ description: '研究范式', type: String, nullable: true })
+  @Column('text', {
+    name: 'paradigm',
+    nullable: true,
+    comment: '研究范式',
+  })
+  paradigm: string | null;
+
+
+  @ApiPropertyOptional({ description: '数据分析方式', type: String, nullable: true })
+  @Column('text', {
+    name: 'method',
+    nullable: true,
+    comment: '数据分析方式',
+  })
+  method: string | null;
+
   @ApiPropertyOptional({ description: '点击量,暂时不做' })
   @Column('integer', {
     name: 'clicks',
