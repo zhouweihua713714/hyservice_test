@@ -235,6 +235,36 @@ export class SaveTreatiseDto {
   @IsString({ message: 'studyField 类型错误, 正确类型 string' })
   @IsOptional()
   studyField: string | null;
+
+  @ApiPropertyOptional({ description: '一级主题', type: String, nullable: true })
+  @IsString({ message: 'topic 类型错误, 正确类型 string' })
+  @IsOptional()
+  topic: string | null;
+
+  @ApiPropertyOptional({ description: '二级主题', type: String, nullable: true })
+  @IsString({ message: 'childTopic 类型错误, 正确类型 string' })
+  @IsOptional()
+  childTopic: string | null;
+
+  @ApiPropertyOptional({ description: '研究目标', type: String, nullable: true })
+  @IsString({ message: 'goal 类型错误, 正确类型 string' })
+  @IsOptional()
+  goal: string | null;
+
+  @ApiPropertyOptional({ description: '研究对象', type: String, nullable: true })
+  @IsString({ message: 'object 类型错误, 正确类型 string' })
+  @IsOptional()
+  object: string | null;
+
+  @ApiPropertyOptional({ description: '研究范式', type: String, nullable: true })
+  @IsString({ message: 'paradigm 类型错误, 正确类型 string' })
+  @IsOptional()
+  paradigm: string | null;
+
+  @ApiPropertyOptional({ description: '数据分析方式', type: String, nullable: true })
+  @IsString({ message: 'method 类型错误, 正确类型 string' })
+  @IsOptional()
+  method: string | null;
 }
 export class ListTreatiseDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
   @ApiPropertyOptional({ description: '论文名称,支持模糊搜索 如果为空则不传或者传null' })

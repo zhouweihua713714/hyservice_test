@@ -57,6 +57,12 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
   'studyField',
   'clicks',
   'name',
+  'topic',
+  'childTopic',
+  'goal',
+  'object',
+  'paradigm',
+  'method'
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;

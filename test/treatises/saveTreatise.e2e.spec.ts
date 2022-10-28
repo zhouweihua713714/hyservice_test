@@ -44,6 +44,12 @@ const payload: SaveTreatiseDto = {
   releasedAt: new Date(),
   doi: '论文doi',
   studyField: '研究方向',
+  topic:'一级主题',
+  childTopic:'二级主题',
+  goal:'研究目标',
+  object:'研究对象',
+  paradigm:'研究范式',
+  method:'数据分析方法'
 };
 
 describe('/treatises/saveTreatise', () => {
