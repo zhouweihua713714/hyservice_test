@@ -1119,22 +1119,21 @@ export class TreatisesService {
       })
       .groupBy('treatise_keywords.name')
       .getRawMany();
-    const keywords = await keywordsRepository.find({
-      where: {
-        type: Content_Types_Enum.TREATISE,
-      },
-    });
-    //get map for get search
-    const keywordsDict = _.keyBy(keywords, (v) => v.name);
+    // const keywords = await keywordsRepository.find({
+    //   where: {
+    //     type: Content_Types_Enum.TREATISE,
+    //   },
+    // });
+    // //get map for get search
+    // const keywordsDict = _.keyBy(keywords, (v) => v.name);
     // get top10
     const keywordTop10 = _.orderBy(
       _.map(treatiseKeywords, (v) => ({
         ...v,
         frequency: Number(v.frequency),
-        search: keywordsDict[v.name] ? keywordsDict[v.name].search : 0,
       })),
-      ['search', 'frequency'],
-      ['desc', 'desc']
+      ['frequency'],
+      ['desc']
     ).slice(0, 10);
     //get title by keyword
     const treatiseKeywordsData = await treatiseKeywordsRepository.find({

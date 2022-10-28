@@ -215,8 +215,8 @@ export class KeywordChartInfo {
   @ApiProperty({ description: '出现的频率数量' })
   frequency: number;
 
-  @ApiProperty({ description: '用户搜索频率,这个得等小俊那边埋点完才有效果' })
-  search: number;
+  // @ApiProperty({ description: '用户搜索频率,这个得等小俊那边埋点完才有效果' })
+  // search: number;
 
   @ApiProperty({ description: '用户论文数据(目前展示10条,这个数量可由PM的需求调整)', type: KeywordChartTreatiseInfo, isArray: true })
   treatises: KeywordChartTreatiseInfo[];
