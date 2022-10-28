@@ -43,7 +43,7 @@ import { TreatiseKeywords } from '@/entities/TreatiseKeywords.entity';
 import { UsersService } from '../users/users.service';
 @Injectable()
 export class TreatisesService {
-  constructor( private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * @description 获取论文详情
@@ -488,6 +488,7 @@ export class TreatisesService {
           'treatises.title',
           'treatises.deliveryAt',
           'treatises.author',
+          'treatises.authorAbbreviation',
           'treatises.name',
           'treatises.abstract',
           'treatises.keyword',
@@ -521,6 +522,7 @@ export class TreatisesService {
           'treatises.title',
           'treatises.deliveryAt',
           'treatises.author',
+          'treatises.authorAbbreviation',
           'treatises.name',
           'treatises.abstract',
           'treatises.keyword',
@@ -1129,7 +1131,7 @@ export class TreatisesService {
       _.map(treatiseKeywords, (v) => ({
         ...v,
         frequency: Number(v.frequency),
-        search: keywordsDict[v.name] ? keywordsDict[v.name].search :0,
+        search: keywordsDict[v.name] ? keywordsDict[v.name].search : 0,
       })),
       ['search', 'frequency'],
       ['desc', 'desc']

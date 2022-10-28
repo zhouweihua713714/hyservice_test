@@ -107,4 +107,21 @@ describe('/terms/listComplexTerm', () => {
     expect(result.body.data.terms.length).toBe(2);
     expect(result.body.data.count).toBe(4);
   });
+  test('should POST /terms/listComplexTerm with none condition with column_01_03', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/terms/listComplexTerm')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({
+        columnId: 'column_01_03',
+        page: 1,
+        size: 2,
+      });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.terms).toBeTruthy();
+    expect(result.body.data.terms.length).toBe(0);
+    expect(result.body.data.count).toBe(0);
+  });
 });
