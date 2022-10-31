@@ -1,13 +1,13 @@
 import request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
 import { DBTester } from '../testHelper';
-import { DataType } from './getKeywordCharts.seed';
+import { DataType } from './getCountryCooperationNetWorks.seed';
 
 const tester = new DBTester<DataType>().setup();
 
 // mock arguments
-describe('/treatises/getKeywordCharts', () => {
-  test('should GET /treatises/getKeywordCharts', async () => {
+describe('/treatises/getCountryCooperationNetWorks', () => {
+  test('should GET /treatises/getCountryCooperationNetWorks', async () => {
     // make request
     const result = await request(tester.server).get('/treatises/getCountryCooperationNetWorks').query({
       columnId:tester.data.columns[0].id

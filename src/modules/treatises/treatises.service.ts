@@ -21,6 +21,7 @@ import {
 } from '../repository/repository';
 import {
   GetInstitutionChartsDto,
+  GetKeywordChartsDto,
   GetTreatiseDetailDto,
   ListComplexTreatiseDto,
   ListTreatiseDto,
@@ -1104,10 +1105,10 @@ export class TreatisesService {
 
   /**
    * @description 获取论文关键词TOP10(论文知识图谱)
-   * @param {GetInstitutionChartsDto} params  获取论文关键词TOP10(论文知识图谱)的相关参数
+   * @param {GetKeywordChartsDto} params  获取论文关键词TOP10(论文知识图谱)的相关参数
    * @returns {ResultData} 返回getKeywordCharts信息
    */
-  async getKeywordCharts(params: GetInstitutionChartsDto): Promise<ResultData> {
+  async getKeywordCharts(params: GetKeywordChartsDto): Promise<ResultData> {
     const { columnId } = params;
     //get treatiseKeywords by columnId
     const treatiseKeywords = await treatiseKeywordsRepository
@@ -1163,12 +1164,12 @@ export class TreatisesService {
 
   /**
    * @description 获取国家间的合作关系(NS)
-   * @param {GetInstitutionChartsDto} params  获取国家间的合作关系(NS)相关参数
+   * @param {} params  获取国家间的合作关系(NS)相关参数
    * @returns {ResultData} 返回getCountryCooperationNetWorks信息
    */
-  async getCountryCooperationNetWorks(params: GetInstitutionChartsDto): Promise<ResultData> {
+  async getCountryCooperationNetWorks(params: any): Promise<ResultData> {
     const { columnId } = params;
-
+    // get treatises
     const treatises = await treatisesRepository.find({
       where: {
         status: Content_Status_Enum.ACTIVE,
@@ -1215,6 +1216,66 @@ export class TreatisesService {
     );
     return ResultData.ok({
       data: { regions: regions },
+    });
+  }
+
+  /**
+   * @description 获取年份下的论文数量(NS)
+   * @param {} params  获取年份下的论文数量(NS)相关参数
+   * @returns {ResultData} 返回getCountryCooperationNetWorks信息
+   */
+  async getTreatiseCountByYear(params: any): Promise<ResultData> {
+    const { columnId } = params;
+    // get treatise count
+    let treatises = await treatisesRepository
+      .createQueryBuilder('treatises')
+      .select('COUNT(treatises.id)', 'count')
+      .addSelect('extract(year from treatises.releasedAt)', 'year')
+      .where(
+        'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status and treatises.columnId =:columnId',
+        {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId ? columnId : 'column_02_02',
+        }
+      )
+      .groupBy('extract(year from treatises.releasedAt)')
+      .getRawMany();
+    treatises = _.orderBy(
+      treatises.map((data) => {
+        return {
+          count: Number(data.count),
+          year: Number(data.year),
+        };
+      }),
+      'year',
+      'asc'
+    );
+    // it's up to PM
+    let yearCounts = [
+      { startYear: 1982, endYear: 1986, count: 0 },
+      { startYear: 1987, endYear: 1991, count: 0 },
+      { startYear: 1992, endYear: 1996, count: 0 },
+      { startYear: 1997, endYear: 2001, count: 0 },
+      { startYear: 2002, endYear: 2006, count: 0 },
+      { startYear: 2007, endYear: 2011, count: 0 },
+      { startYear: 2012, endYear: 2016, count: 0 },
+      { startYear: 2017, endYear: 2021, count: 0 },
+    ];
+    yearCounts = yearCounts.map((data) => {
+      return {
+        startYear: data.startYear,
+        endYear: data.endYear,
+        count: _.sumBy(
+          _.filter(treatises, function (o) {
+            return o.year >= data.startYear && o.year <= data.endYear;
+          }),
+          'count'
+        ),
+        name: data.startYear + '-' + data.endYear,
+      };
+    });
+    return ResultData.ok({
+      data: { yearCounts: yearCounts },
     });
   }
 }
