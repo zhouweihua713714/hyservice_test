@@ -254,3 +254,24 @@ export class GetCountryCooperationNetWorksResult {
   @ApiProperty({ description: '国家数组', type:CountryCooperationNetWorksRegionInfo, isArray: true })
   regions: CountryCooperationNetWorksRegionInfo[];
 }
+
+export class GetTreatiseCountByYearInfo {
+  @ApiProperty({ description: 'x坐标轴名称,可用也可自己拼接展示' })
+  name: string;
+
+  @ApiProperty({ description: 'x坐标轴区间起始年份,由PM需求定义' })
+  startYear: number;
+
+  @ApiProperty({ description: 'x坐标轴区间结束年份,由PM需求定义' })
+  endYear: number;
+
+  @ApiProperty({ description: '该区间年份下的论文数量' })
+  count: number;
+}
+
+export class GetTreatiseCountByYearResult {
+  @ApiProperty({ description: '年份下的论文数量', type:GetTreatiseCountByYearInfo, isArray: true })
+  yearCounts: GetTreatiseCountByYearInfo[];
+}
+
+
