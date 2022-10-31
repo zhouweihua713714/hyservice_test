@@ -1160,4 +1160,61 @@ export class TreatisesService {
       data: { keywordCharts: result },
     });
   }
+
+  /**
+   * @description 获取国家间的合作关系(NS)
+   * @param {GetInstitutionChartsDto} params  获取国家间的合作关系(NS)相关参数
+   * @returns {ResultData} 返回getCountryCooperationNetWorks信息
+   */
+  async getCountryCooperationNetWorks(params: GetInstitutionChartsDto): Promise<ResultData> {
+    const { columnId } = params;
+
+    const treatises = await treatisesRepository.find({
+      where: {
+        status: Content_Status_Enum.ACTIVE,
+        deletedAt: IsNull(),
+        enabled: true,
+        columnId: columnId ? columnId : 'column_02_02', //NS
+      },
+      select: ['title', 'region', 'id'],
+    });
+    //get region data
+    let treatiseData: { region: string; title: string; id: string; treatiseId: string }[] = [];
+    // let regions: { region: string; count: number; treatise: { title: string; id: string }[] }[] =
+    //   [];
+    treatises.map((data) => {
+      let region;
+      if (data.region) {
+        region = data.region.split(';').map((miniData) => {
+          return {
+            region: miniData,
+            title: data.title,
+            treatiseId: data.id,
+            id: uuidv4(),
+          };
+        });
+        treatiseData = _.unionBy(treatiseData, region);
+      }
+    });
+    // group by
+    const groupByTreatise = _.groupBy(treatiseData, 'region');
+    // get regions
+    const regions = _.orderBy(
+      _.uniqBy(treatiseData, 'region').map((data) => {
+        return {
+          region: data.region,
+          treatises: groupByTreatise[data.region]
+            ? groupByTreatise[data.region].map((data) => {
+                return { title: data.title, id: data.treatiseId };
+              })
+            : [],
+        };
+      }),
+      'region',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { regions: regions },
+    });
+  }
 }
