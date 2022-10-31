@@ -62,7 +62,7 @@ export class GetTreatiseDetailResult extends PickType(Treatises, [
   'goal',
   'object',
   'paradigm',
-  'method'
+  'method',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -134,7 +134,7 @@ export class ArticleCountInfo extends PickType(Columns, [
   'introduction',
   'sequenceNumber',
   'parentId',
-  'isHide'
+  'isHide',
 ] as const) {
   @ApiProperty({ description: '文章数量' })
   count: number;
@@ -218,11 +218,39 @@ export class KeywordChartInfo {
   // @ApiProperty({ description: '用户搜索频率,这个得等小俊那边埋点完才有效果' })
   // search: number;
 
-  @ApiProperty({ description: '用户论文数据(目前展示10条,这个数量可由PM的需求调整)', type: KeywordChartTreatiseInfo, isArray: true })
+  @ApiProperty({
+    description: '用户论文数据(目前展示10条,这个数量可由PM的需求调整)',
+    type: KeywordChartTreatiseInfo,
+    isArray: true,
+  })
   treatises: KeywordChartTreatiseInfo[];
 }
 
 export class GetKeywordChartsResult {
   @ApiProperty({ description: '关键词数组', type: KeywordChartInfo, isArray: true })
   keywordCharts: KeywordChartInfo[];
+}
+export class RegionTreatiseInfo {
+  @ApiProperty({ description: '论文id,以防未来需要跳转需要用' })
+  id: string;
+
+  @ApiProperty({ description: '论文标题' })
+  title: string;
+}
+
+export class CountryCooperationNetWorksRegionInfo {
+  @ApiProperty({ description: '国家名/地区' })
+  region: string;
+
+  @ApiProperty({
+    description: '用户论文数据(该地区下的论文数据)',
+    type: RegionTreatiseInfo,
+    isArray: true,
+  })
+  treatises: RegionTreatiseInfo[];
+}
+
+export class GetCountryCooperationNetWorksResult {
+  @ApiProperty({ description: '国家数组', type:CountryCooperationNetWorksRegionInfo, isArray: true })
+  regions: CountryCooperationNetWorksRegionInfo[];
 }

@@ -19,6 +19,7 @@ import {
 import { TreatisesService } from './treatises.service';
 import {
   GetArticleCountResult,
+  GetCountryCooperationNetWorksResult,
   GetInstitutionChartsResult,
   GetKeywordChartsResult,
   GetTreatiseDetailResult,
@@ -42,7 +43,8 @@ import {
   ListComplexTreatiseResult,
   RecommendTreatisesResult,
   GetInstitutionChartsResult,
-  GetKeywordChartsResult
+  GetKeywordChartsResult,
+  GetCountryCooperationNetWorksResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -153,5 +155,14 @@ export class TreatisesController {
   @AllowAnon()
   getKeywords(@Query() params: any) {
     return this.treatisesService.getKeywords(params);
+  }
+
+  @Get('/getCountryCooperationNetWorks')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取国家间的合作关系(NS)' })
+  @ApiResult(GetCountryCooperationNetWorksResult)
+  @AllowAnon()
+  getCountryCooperationNetWorks(@Query() params: any) {
+    return this.treatisesService.getCountryCooperationNetWorks(params);
   }
 }
