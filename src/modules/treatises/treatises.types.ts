@@ -274,4 +274,18 @@ export class GetTreatiseCountByYearResult {
   yearCounts: GetTreatiseCountByYearInfo[];
 }
 
+export class GetResearchTopicsInfo {
+  @ApiProperty({ description: '一级主题名称' })
+  topic: string;
+
+  @ApiProperty({ description: '二级主题字符串数组' })
+  childTopics: string[];
+
+}
+
+export class GetResearchTopicsResult {
+  @ApiProperty({ description: '年份下的论文数量', type:GetResearchTopicsInfo, isArray: true })
+  topics:GetResearchTopicsInfo[];
+}
+
 
