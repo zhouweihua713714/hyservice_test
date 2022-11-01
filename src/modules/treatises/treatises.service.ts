@@ -1278,4 +1278,51 @@ export class TreatisesService {
       data: { yearCounts: yearCounts },
     });
   }
+
+  /**
+   * @description 获取主题分布数据(NS)
+   * @param {} params  获取主题分布数据(NS)相关参数
+   * @returns {ResultData} 返回getCountryCooperationNetWorks信息
+   */
+  async getResearchTopics(params: any): Promise<ResultData> {
+    const { columnId } = params;
+    // get treatises
+    const treatises = await treatisesRepository.find({
+      where: {
+        status: Content_Status_Enum.ACTIVE,
+        deletedAt: IsNull(),
+        enabled: true,
+        columnId: columnId ? columnId : 'column_02_02', //NS
+      },
+      select: ['topic', 'childTopic', 'id'],
+    });
+    // group by
+    const groupByTreatise = _.groupBy(treatises, 'topic');
+    // get topic
+    const topics = _.orderBy(
+      _.uniqBy(treatises, 'topic').map((data) => {
+        return {
+          topic: data.topic,
+          childTopics:
+            data.topic && groupByTreatise[data.topic]
+              ? _.uniq(
+                  _.filter(
+                    groupByTreatise[data.topic].map((data) => {
+                      return data.childTopic;
+                    }),
+                    function (o) {
+                      return o;
+                    }
+                  )
+                )
+              : [],
+        };
+      }),
+      'topic',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { topics: topics },
+    });
+  }
 }
