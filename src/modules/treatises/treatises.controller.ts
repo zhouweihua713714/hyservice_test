@@ -22,6 +22,7 @@ import {
   GetCountryCooperationNetWorksResult,
   GetInstitutionChartsResult,
   GetKeywordChartsResult,
+  GetResearchObjectsResult,
   GetResearchTopicsResult,
   GetTreatiseCountByYearResult,
   GetTreatiseDetailResult,
@@ -48,7 +49,8 @@ import {
   GetKeywordChartsResult,
   GetCountryCooperationNetWorksResult,
   GetTreatiseCountByYearResult,
-  GetResearchTopicsResult
+  GetResearchTopicsResult,
+  GetResearchObjectsResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -187,5 +189,14 @@ export class TreatisesController {
   getResearchTopics(@Query() params: any) {
     return this.treatisesService.getResearchTopics(params);
   }
+  @Get('/getResearchObjects')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取研究对象下的论文数量(NS,research objects)' })
+  @ApiResult(GetResearchObjectsResult)
+  @AllowAnon()
+  getResearchObjects(@Query() params: any) {
+    return this.treatisesService.getResearchObjects(params);
+  }
+  
   
 }

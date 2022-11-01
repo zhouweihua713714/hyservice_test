@@ -288,4 +288,19 @@ export class GetResearchTopicsResult {
   topics:GetResearchTopicsInfo[];
 }
 
+export class GetResearchObjectsInfo {
+  @ApiProperty({ description: '研究对象名' })
+  object: string;
+
+  @ApiProperty({ description: '该研究对象下的论文数' })
+  count: number;
+
+}
+
+export class GetResearchObjectsResult {
+  @ApiProperty({ description: '年份下的论文数量', type:GetResearchObjectsInfo, isArray: true })
+  objects:GetResearchObjectsInfo[];
+}
+
+
 

@@ -1222,7 +1222,7 @@ export class TreatisesService {
   /**
    * @description 获取年份下的论文数量(NS)
    * @param {} params  获取年份下的论文数量(NS)相关参数
-   * @returns {ResultData} 返回getCountryCooperationNetWorks信息
+   * @returns {ResultData} 返回getTreatiseCountByYear信息
    */
   async getTreatiseCountByYear(params: any): Promise<ResultData> {
     const { columnId } = params;
@@ -1282,7 +1282,7 @@ export class TreatisesService {
   /**
    * @description 获取主题分布数据(NS)
    * @param {} params  获取主题分布数据(NS)相关参数
-   * @returns {ResultData} 返回getCountryCooperationNetWorks信息
+   * @returns {ResultData} 返回getResearchTopics信息
    */
   async getResearchTopics(params: any): Promise<ResultData> {
     const { columnId } = params;
@@ -1323,6 +1323,55 @@ export class TreatisesService {
     );
     return ResultData.ok({
       data: { topics: topics },
+    });
+  }
+  /**
+   * @description 获取研究对象下的论文数量(NS)
+   * @param {} params  获取主题分布数据(NS)相关参数
+   * @returns {ResultData} 返回getResearchObjects信息
+   */
+  async getResearchObjects(params: any): Promise<ResultData> {
+    const { columnId } = params;
+    // get treatise count
+    // get treatises
+    const treatises = await treatisesRepository.find({
+      where: {
+        status: Content_Status_Enum.ACTIVE,
+        deletedAt: IsNull(),
+        enabled: true,
+        columnId: columnId ? columnId : 'column_02_02', //NS
+        object: Not(IsNull()),
+      },
+      select: ['object', 'id'],
+    });
+    //get object data
+    let treatiseData: { object: string; id: string; treatiseId: string }[] = [];
+    treatises.map((data) => {
+      let object;
+      if (data.object) {
+        object = data.object.split(';').map((miniData) => {
+          return {
+            object: miniData,
+            treatiseId: data.id,
+            id: uuidv4(),
+          };
+        });
+        treatiseData = _.unionBy(treatiseData, object);
+      }
+    });
+    const groupByTreatise = _.groupBy(treatiseData, 'object');
+    const objects = _.orderBy(
+      _.uniqBy(treatiseData, 'object').map((data) => {
+        return {
+          object: data.object,
+          count: groupByTreatise[data.object] ? groupByTreatise[data.object].length : 0,
+        };
+      }),
+      'object',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { objects: objects },
     });
   }
 }
