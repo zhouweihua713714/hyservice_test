@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { words } from 'lodash';
 import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../auth/auth.types';
@@ -1332,7 +1332,6 @@ export class TreatisesService {
    */
   async getResearchObjects(params: any): Promise<ResultData> {
     const { columnId } = params;
-    // get treatise count
     // get treatises
     const treatises = await treatisesRepository.find({
       where: {
@@ -1372,6 +1371,52 @@ export class TreatisesService {
     );
     return ResultData.ok({
       data: { objects: objects },
+    });
+  }
+  /**
+   * @description 获取各研究范式的论文总数以及占比(NS)
+   * @param {} params  获取各研究范式的论文总数以及占比(NS)相关参数
+   * @returns {ResultData} 返回getResearchObjects信息
+   */
+  async getResearchParadigm(params: any): Promise<ResultData> {
+    const { columnId } = params;
+    let treatises = await treatisesRepository
+      .createQueryBuilder('treatises')
+      .select('COUNT(treatises.id)', 'count')
+      .addSelect('treatises.paradigm', 'paradigm')
+      .where(
+        'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status and treatises.columnId =:columnId',
+        {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId ? columnId : 'column_02_02',
+        }
+      )
+      .groupBy('treatises.paradigm')
+      .getRawMany();
+    treatises = _.orderBy(
+      treatises.map((data) => {
+        return {
+          paradigm: data.paradigm,
+          count: Number(data.count),
+          percent: Number(
+            (
+              (Number(data.count) /
+                _.sumBy(
+                  treatises.map((data) => {
+                    return { count: Number(data.count) };
+                  }),
+                  'count'
+                )) *
+              100
+            ).toFixed(2)
+          ),
+        };
+      }),
+      'paradigm',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { paradigm: treatises },
     });
   }
 }
