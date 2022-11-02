@@ -1313,16 +1313,16 @@ export class TreatisesService {
                     groupByTreatise[data.topic].map((data) => {
                       return {
                         topic: data.childTopic,
-                        count:_.filter(treatises, function (o) {
+                        count: _.filter(treatises, function (o) {
                           return o.childTopic === data.childTopic;
                         }).length,
                       };
                     }),
                     function (o) {
-                      return o;
+                      return o.topic;
                     }
                   ),
-                  'childTopic'
+                  'topic'
                 )
               : [],
         };
@@ -1385,7 +1385,7 @@ export class TreatisesService {
   /**
    * @description 获取各研究范式的论文总数以及占比(NS)
    * @param {} params  获取各研究范式的论文总数以及占比(NS)相关参数
-   * @returns {ResultData} 返回getResearchObjects信息
+   * @returns {ResultData} 返回getResearchParadigm信息
    */
   async getResearchParadigm(params: any): Promise<ResultData> {
     const { columnId } = params;
@@ -1426,6 +1426,52 @@ export class TreatisesService {
     );
     return ResultData.ok({
       data: { paradigm: treatises },
+    });
+  }
+  /**
+   * @description 获取各研究目标得总数及占比(NS)
+   * @param {} params  获取各研究目标得总数及占比(NS)相关参数
+   * @returns {ResultData} 返回getResearchGoals信息
+   */
+  async getResearchGoals(params: any): Promise<ResultData> {
+    const { columnId } = params;
+    let treatises = await treatisesRepository
+      .createQueryBuilder('treatises')
+      .select('COUNT(treatises.id)', 'count')
+      .addSelect('treatises.goal', 'goal')
+      .where(
+        'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status and treatises.columnId =:columnId and treatises.goal is not null',
+        {
+          status: Content_Status_Enum.ACTIVE,
+          columnId: columnId ? columnId : 'column_02_02',
+        }
+      )
+      .groupBy('treatises.goal')
+      .getRawMany();
+    treatises = _.orderBy(
+      treatises.map((data) => {
+        return {
+          goal: data.goal,
+          count: Number(data.count),
+          percent: Number(
+            (
+              (Number(data.count) /
+                _.sumBy(
+                  treatises.map((data) => {
+                    return { count: Number(data.count) };
+                  }),
+                  'count'
+                )) *
+              100
+            ).toFixed(2)
+          ),
+        };
+      }),
+      'goal',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { goals: treatises },
     });
   }
 }

@@ -283,7 +283,7 @@ export class GetResearchChildTopicsInfo {
   topic: string;
 
   @ApiProperty({ description: '该主题下的论文数量' })
-  count: string;
+  count: number;
 }
 
 export class GetResearchTopicsInfo {
@@ -291,14 +291,18 @@ export class GetResearchTopicsInfo {
   topic: string;
 
   @ApiProperty({ description: '该主题下的论文数量' })
-  count: string;
+  count: number;
 
-  @ApiProperty({ description: '二级主题字符串数组', type: GetResearchChildTopicsInfo })
+  @ApiProperty({
+    description: '二级主题字符串数组',
+    type: GetResearchChildTopicsInfo,
+    isArray: true,
+  })
   childTopics: GetResearchChildTopicsInfo[];
 }
 
 export class GetResearchTopicsResult {
-  @ApiProperty({ description: '年份下的论文数量', type: GetResearchTopicsInfo, isArray: true })
+  @ApiProperty({ description: '主题数组', type: GetResearchTopicsInfo, isArray: true })
   topics: GetResearchTopicsInfo[];
 }
 
@@ -311,7 +315,7 @@ export class GetResearchObjectsInfo {
 }
 
 export class GetResearchObjectsResult {
-  @ApiProperty({ description: '年份下的论文数量', type: GetResearchObjectsInfo, isArray: true })
+  @ApiProperty({ description: '研究对象数组', type: GetResearchObjectsInfo, isArray: true })
   objects: GetResearchObjectsInfo[];
 }
 
@@ -327,6 +331,22 @@ export class GetResearchParadigmInfo {
 }
 
 export class GetResearchParadigmResult {
-  @ApiProperty({ description: '年份下的论文数量', type: GetResearchParadigmInfo, isArray: true })
+  @ApiProperty({ description: '研究范式数组', type: GetResearchParadigmInfo, isArray: true })
   paradigm: GetResearchParadigmInfo[];
+}
+
+export class GetResearchGoalsInfo {
+  @ApiProperty({ description: '研究目标' })
+  goal: string;
+
+  @ApiProperty({ description: '该研究目标下的论文数' })
+  count: number;
+
+  @ApiProperty({ description: '该研究目标下的占比(保留两位小数)' })
+  percent: number;
+}
+
+export class GetResearchGoalsResult {
+  @ApiProperty({ description: '研究目标数组', type: GetResearchGoalsInfo, isArray: true })
+  goals: GetResearchGoalsInfo[];
 }
