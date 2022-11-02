@@ -22,6 +22,7 @@ import {
   GetCountryCooperationNetWorksResult,
   GetInstitutionChartsResult,
   GetKeywordChartsResult,
+  GetResearchGoalsResult,
   GetResearchObjectsResult,
   GetResearchParadigmResult,
   GetResearchTopicsResult,
@@ -52,7 +53,8 @@ import {
   GetTreatiseCountByYearResult,
   GetResearchTopicsResult,
   GetResearchObjectsResult,
-  GetResearchParadigmResult
+  GetResearchParadigmResult,
+  GetResearchGoalsResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -210,5 +212,13 @@ export class TreatisesController {
     return this.treatisesService.getResearchParadigm(params);
   }
   
+  @Get('/getResearchGoals')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取研究目标的论文数量及占比(NS,research objectives)' })
+  @ApiResult(GetResearchGoalsResult)
+  @AllowAnon()
+  getResearchGoals(@Query() params: any) {
+    return this.treatisesService.getResearchGoals(params);
+  }
   
 }
