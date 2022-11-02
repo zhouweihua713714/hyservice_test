@@ -302,5 +302,23 @@ export class GetResearchObjectsResult {
   objects:GetResearchObjectsInfo[];
 }
 
+export class GetResearchParadigmInfo {
+  @ApiProperty({ description: '研究范式名' })
+  paradigm: string;
+
+  @ApiProperty({ description: '该研究范式下的论文数' })
+  count: number;
+
+  @ApiProperty({ description: '该研究范式下的占比(保留两位小数)' })
+  percent: number;
+
+}
+
+export class GetResearchParadigmResult {
+  @ApiProperty({ description: '年份下的论文数量', type:GetResearchParadigmInfo, isArray: true })
+  paradigm:GetResearchParadigmInfo[];
+}
+
+
 
 
