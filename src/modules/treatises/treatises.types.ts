@@ -251,7 +251,11 @@ export class CountryCooperationNetWorksRegionInfo {
 }
 
 export class GetCountryCooperationNetWorksResult {
-  @ApiProperty({ description: '国家数组', type:CountryCooperationNetWorksRegionInfo, isArray: true })
+  @ApiProperty({
+    description: '国家数组',
+    type: CountryCooperationNetWorksRegionInfo,
+    isArray: true,
+  })
   regions: CountryCooperationNetWorksRegionInfo[];
 }
 
@@ -270,22 +274,32 @@ export class GetTreatiseCountByYearInfo {
 }
 
 export class GetTreatiseCountByYearResult {
-  @ApiProperty({ description: '年份下的论文数量', type:GetTreatiseCountByYearInfo, isArray: true })
+  @ApiProperty({ description: '年份下的论文数量', type: GetTreatiseCountByYearInfo, isArray: true })
   yearCounts: GetTreatiseCountByYearInfo[];
+}
+
+export class GetResearchChildTopicsInfo {
+  @ApiProperty({ description: '二级主题名称' })
+  topic: string;
+
+  @ApiProperty({ description: '该主题下的论文数量' })
+  count: string;
 }
 
 export class GetResearchTopicsInfo {
   @ApiProperty({ description: '一级主题名称' })
   topic: string;
 
-  @ApiProperty({ description: '二级主题字符串数组' })
-  childTopics: string[];
+  @ApiProperty({ description: '该主题下的论文数量' })
+  count: string;
 
+  @ApiProperty({ description: '二级主题字符串数组', type: GetResearchChildTopicsInfo })
+  childTopics: GetResearchChildTopicsInfo[];
 }
 
 export class GetResearchTopicsResult {
-  @ApiProperty({ description: '年份下的论文数量', type:GetResearchTopicsInfo, isArray: true })
-  topics:GetResearchTopicsInfo[];
+  @ApiProperty({ description: '年份下的论文数量', type: GetResearchTopicsInfo, isArray: true })
+  topics: GetResearchTopicsInfo[];
 }
 
 export class GetResearchObjectsInfo {
@@ -294,12 +308,11 @@ export class GetResearchObjectsInfo {
 
   @ApiProperty({ description: '该研究对象下的论文数' })
   count: number;
-
 }
 
 export class GetResearchObjectsResult {
-  @ApiProperty({ description: '年份下的论文数量', type:GetResearchObjectsInfo, isArray: true })
-  objects:GetResearchObjectsInfo[];
+  @ApiProperty({ description: '年份下的论文数量', type: GetResearchObjectsInfo, isArray: true })
+  objects: GetResearchObjectsInfo[];
 }
 
 export class GetResearchParadigmInfo {
@@ -311,14 +324,9 @@ export class GetResearchParadigmInfo {
 
   @ApiProperty({ description: '该研究范式下的占比(保留两位小数)' })
   percent: number;
-
 }
 
 export class GetResearchParadigmResult {
-  @ApiProperty({ description: '年份下的论文数量', type:GetResearchParadigmInfo, isArray: true })
-  paradigm:GetResearchParadigmInfo[];
+  @ApiProperty({ description: '年份下的论文数量', type: GetResearchParadigmInfo, isArray: true })
+  paradigm: GetResearchParadigmInfo[];
 }
-
-
-
-

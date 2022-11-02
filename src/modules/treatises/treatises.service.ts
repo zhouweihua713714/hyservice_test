@@ -1303,17 +1303,26 @@ export class TreatisesService {
       _.uniqBy(treatises, 'topic').map((data) => {
         return {
           topic: data.topic,
+          count: _.filter(treatises, function (o) {
+            return o.topic === data.topic;
+          }).length,
           childTopics:
             data.topic && groupByTreatise[data.topic]
-              ? _.uniq(
+              ? _.uniqBy(
                   _.filter(
                     groupByTreatise[data.topic].map((data) => {
-                      return data.childTopic;
+                      return {
+                        topic: data.childTopic,
+                        count:_.filter(treatises, function (o) {
+                          return o.childTopic === data.childTopic;
+                        }).length,
+                      };
                     }),
                     function (o) {
                       return o;
                     }
-                  )
+                  ),
+                  'childTopic'
                 )
               : [],
         };
