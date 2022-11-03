@@ -158,6 +158,7 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   'author',
   'periodical',
   'releasedAt',
+  'channel',
 ] as const) {
   @ApiProperty({ description: '标签,列表标签是所有用户贴的最多的' })
   label: string;

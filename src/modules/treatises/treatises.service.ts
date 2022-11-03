@@ -495,6 +495,7 @@ export class TreatisesService {
           'treatises.keyword',
           'treatises.periodical',
           'treatises.releasedAt',
+          'treatises.channel',
         ])
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
@@ -529,6 +530,7 @@ export class TreatisesService {
           'treatises.keyword',
           'treatises.periodical',
           'treatises.releasedAt',
+          'treatises.channel',
         ])
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
