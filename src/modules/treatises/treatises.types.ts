@@ -351,3 +351,19 @@ export class GetResearchGoalsResult {
   @ApiProperty({ description: '研究目标数组', type: GetResearchGoalsInfo, isArray: true })
   goals: GetResearchGoalsInfo[];
 }
+
+export class GetResearchAnalysisMethodsInfo {
+  @ApiProperty({ description: '分析方法' })
+  method: string;
+
+  @ApiProperty({ description: '该分析方法下的论文数' })
+  count: number;
+
+  @ApiProperty({ description: '该分析方法下的占比(保留两位小数)' })
+  percent: number;
+}
+
+export class GetResearchAnalysisMethodsResult {
+  @ApiProperty({ description: '分析方法数组', type: GetResearchAnalysisMethodsInfo, isArray: true })
+  methods: GetResearchAnalysisMethodsInfo[];
+}
