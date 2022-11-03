@@ -22,6 +22,7 @@ import {
   GetCountryCooperationNetWorksResult,
   GetInstitutionChartsResult,
   GetKeywordChartsResult,
+  GetResearchAnalysisMethodsResult,
   GetResearchGoalsResult,
   GetResearchObjectsResult,
   GetResearchParadigmResult,
@@ -54,7 +55,8 @@ import {
   GetResearchTopicsResult,
   GetResearchObjectsResult,
   GetResearchParadigmResult,
-  GetResearchGoalsResult
+  GetResearchGoalsResult,
+  GetResearchAnalysisMethodsResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -157,7 +159,7 @@ export class TreatisesController {
   getKeywordCharts(@Query() params: GetKeywordChartsDto) {
     return this.treatisesService.getKeywordCharts(params);
   }
-  
+
   @Get('/getKeywords')
   @HttpCode(200)
   @ApiOperation({ summary: '这里要做定时任务和局部数据调用暂放在这里开发请勿调用' })
@@ -211,7 +213,7 @@ export class TreatisesController {
   getResearchParadigm(@Query() params: any) {
     return this.treatisesService.getResearchParadigm(params);
   }
-  
+
   @Get('/getResearchGoals')
   @HttpCode(200)
   @ApiOperation({ summary: '获取研究目标的论文数量及占比(NS,research objectives)' })
@@ -220,5 +222,15 @@ export class TreatisesController {
   getResearchGoals(@Query() params: any) {
     return this.treatisesService.getResearchGoals(params);
   }
-  
+
+  @Get('/getResearchAnalysisMethods')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '获取各分析方法的论文数量及占比(NS,research research analysis methods)',
+  })
+  @ApiResult(GetResearchAnalysisMethodsResult)
+  @AllowAnon()
+  getResearchAnalysisMethods(@Query() params: any) {
+    return this.treatisesService.getResearchAnalysisMethods(params);
+  }
 }

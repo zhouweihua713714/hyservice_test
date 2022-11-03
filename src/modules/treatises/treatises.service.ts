@@ -1476,4 +1476,55 @@ export class TreatisesService {
       data: { goals: treatises },
     });
   }
+  /**
+   * @description 获取各数据分析方法数量以及占比(NS)
+   * @param {} params  取各数据分析方法数量以及占比(NS)相关参数
+   * @returns {ResultData} 返回getResearchAnalysisMethods信息
+   */
+  async getResearchAnalysisMethods(params: any): Promise<ResultData> {
+    const { columnId } = params;
+    // get treatises
+    const treatises = await treatisesRepository.find({
+      where: {
+        status: Content_Status_Enum.ACTIVE,
+        deletedAt: IsNull(),
+        enabled: true,
+        columnId: columnId ? columnId : 'column_02_02', //NS
+        method: Not(IsNull()),
+      },
+      select: ['method', 'id'],
+    });
+    //get method data
+    let treatiseData: { method: string; id: string; treatiseId: string }[] = [];
+    treatises.map((data) => {
+      let method;
+      if (data.method) {
+        method = data.method.split(';').map((miniData) => {
+          return {
+            method: miniData,
+            treatiseId: data.id,
+            id: uuidv4(),
+          };
+        });
+        treatiseData = _.unionBy(treatiseData, method);
+      }
+    });
+    const groupByTreatise = _.groupBy(treatiseData, 'method');
+    const methods = _.orderBy(
+      _.uniqBy(treatiseData, 'method').map((data) => {
+        return {
+          method: data.method,
+          count: groupByTreatise[data.method] ? groupByTreatise[data.method].length : 0,
+          percent: groupByTreatise[data.method]
+            ? Number(((groupByTreatise[data.method].length / treatiseData.length) * 100).toFixed(2))
+            : null,
+        };
+      }),
+      'method',
+      'asc'
+    );
+    return ResultData.ok({
+      data: { methods: methods },
+    });
+  }
 }
