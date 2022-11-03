@@ -1,57 +1,57 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, OneToMany } from 'typeorm';
+import { AmericaTermKeywords } from './AmericaTermKeywords.entity';
 
-@Index('america_terms_pkey', ['id'], { unique: true })
+@Index('america_terms_pkey', ['awardNumber'], { unique: true })
 @Entity('america_terms')
 export class AmericaTerms {
-  @ApiProperty({ description: 'id' })
-  @Column('character varying', { name: 'id', primary: true, length: 128, comment: '主键id' })
-  id: string;
+  @ApiProperty({ description: 'awardNumber, 资助编号, 作为id' })
+  @Column('character varying', { name: 'award_number', primary: true, length: 128, comment: '资助编号' })
+  awardNumber: string;
 
-  @ApiPropertyOptional({ description: 'AwardID' })
-  @Column('character varying', {
-    name: 'award_id',
-    length: 50,
+  @ApiPropertyOptional({ description: 'title' })
+  @Column('character varying', { name: 'title', comment: 'title' })
+  title: string;
+
+  @ApiPropertyOptional({ description: 'program' })
+  @Column('character varying', { name: 'program',  nullable: true, comment: 'program' })
+  program: string | null;
+
+  @ApiPropertyOptional({ description: '开始时间', type: Date, nullable: true })
+  @Column('timestamp with time zone', {
+    name: 'start_date',
     nullable: true,
-    comment: 'AwardID',
+    comment: '开始时间',
   })
-  awardID: string | null;
+  startDate: Date | null;
 
-  @ApiPropertyOptional({ description: 'AwardTitle' })
-  @Column('character varying', { name: 'award_title',  nullable: true, comment: 'AwardTitle' })
-  awardTitle: string | null;
+  @ApiPropertyOptional({ description: '结束时间', type: Date, nullable: true })
+  @Column('timestamp with time zone', {
+    name: 'end_date',
+    nullable: true,
+    comment: '结束时间',
+  })
+  endDate: Date | null;
 
-  @ApiPropertyOptional({ description: '数量' })
-  @Column('integer', { name: 'amount',  nullable: true, comment: '数量' })
-  amount: number | null;
+  @ApiProperty({ description: '项目负责人' })
+  @Column('character varying', { name: 'principal_investigator', comment: '项目负责人' })
+  principalInvestigator: string;
 
-  @ApiPropertyOptional({ description: '研究人' })
-  @Column('character varying', { name: 'investigator', nullable: true, comment: '研究人' })
-  investigator: string | null;
-
-  @ApiPropertyOptional({ description: '资助方式' })
-  @Column('character varying', { name: 'instrument', length: 50, nullable: true, comment: '资助方式' })
-  instrument: string | null;
-
-  @ApiPropertyOptional({ description: '项目负责人' })
-  @Column('character varying', { name: 'program_officer', nullable: true, comment: '项目负责人' })
-  programOfficer: string | null;
-
-  @ApiPropertyOptional({ description: '所属机构' })
-  @Column('character varying', { name: 'institution',  nullable: true, comment: '所属机构' })
-  institution: string | null;
-
-  @ApiPropertyOptional({ description: 'foa信息' })
-  @Column('character varying', { name: 'foa_information',  nullable: true, comment: 'foa信息' })
-  foaInformation: string | null;
+  @ApiProperty({ description: '美国州缩写' })
+  @Column('character varying', { name: 'state', comment: '美国州缩写' })
+  state: string;
 
   @ApiProperty({ description: '组织' })
-  @Column('character varying', { name: 'organization', length: 50, comment: '组织' })
+  @Column('character varying', { name: 'organization', comment: '组织' })
   organization: string;
 
-  @ApiProperty({ description: 'ProgramElement' })
-  @Column('character varying', { name: 'program_element', nullable: true, comment: 'ProgramElement' })
-  programElement: string | null;
+  @ApiPropertyOptional({ description: '资助方式' })
+  @Column('character varying', { name: 'award_instrument', nullable: true, comment: '资助方式' })
+  awardInstrument: string | null;
+
+  @ApiPropertyOptional({ description: '资助金额' })
+  @Column('integer', { name: 'awarded_amount_to_date',  nullable: true, comment: '资助金额' })
+  awardedAmountToDate: number | null;
 
   @ApiProperty({ description: '摘要叙述' })
   @Column('text', {
@@ -61,17 +61,16 @@ export class AmericaTerms {
   })
   abstract: string | null;
 
-  @ApiProperty({ description: 'ProgramReference' })
-  @Column('text', {
-    name: 'reference',
+  @ApiProperty({ description: '学部' })
+  @Column('character varying', {
+    name: 'nsf_directorate',
     nullable: true,
-    comment: 'ProgramReference',
+    comment: '学部',
   })
-  reference: string | null;
-
+  nsfDirectorate: string | null;
   
-  @ApiPropertyOptional({ description: '批准年份' })
-  @Column('character varying', { name: 'year', nullable: true, comment: '批准年份' })
+  @ApiPropertyOptional({ description: '年份' })
+  @Column('character varying', { name: 'year', nullable: true, comment: '年份' })
   year: string | null;
 
   @ApiProperty({ description: '状态:待发布ready,已发布active,已下架inactive' })
@@ -134,4 +133,7 @@ export class AmericaTerms {
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean ;
+
+  @OneToMany(() => AmericaTermKeywords, (americaTermKeywords) => americaTermKeywords.americaTerm)
+  americaTermKeywords: AmericaTermKeywords[];
 }
