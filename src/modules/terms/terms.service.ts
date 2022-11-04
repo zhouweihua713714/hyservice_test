@@ -342,7 +342,7 @@ export class TermsService {
     let count;
     if (keyword) {
       // get keywords
-      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       [terms, count] = await termsRepository
         .createQueryBuilder('terms')
         .select([
@@ -366,12 +366,12 @@ export class TermsService {
         .andWhere(
           new Brackets((qb) => {
             qb.where('terms.name like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
-              'terms.keyword like any (ARRAY[:...keyword])',
+              'LOWER(terms.keyword) like any (ARRAY[:...keyword])',
               { keyword: keywords }
             );
           })
         )
-        .orderBy('terms.year', 'DESC')
+        .orderBy('terms.year', 'DESC','NULLS LAST')
         .addOrderBy('terms.publishedAt', 'DESC')
         .addOrderBy('terms.name', 'ASC')
         .skip((page - 1) * size)
@@ -398,7 +398,7 @@ export class TermsService {
           year: new Date(authorizedAt).getFullYear(),
           columnId: columnId,
         })
-        .orderBy('terms.year', 'DESC')
+        .orderBy('terms.year', 'DESC','NULLS LAST')
         .addOrderBy('terms.publishedAt', 'DESC')
         .addOrderBy('terms.name', 'ASC')
         .skip((page - 1) * size)
