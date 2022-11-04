@@ -78,4 +78,95 @@ describe('/treatises/listComplexTreatise', () => {
     expect(result.body.data.treatises.length).toBe(2);
     expect(result.body.data.count).toBe(2);
   });
+  test('should POST /treatises/listComplexTreatise with startYear、endYear', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ startYear: 2001, endYear: 2022, page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(4);
+  });
+  test('should POST /treatises/listComplexTreatise with topic', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ topic: '一级主题', page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(4);
+  });
+  test('should POST /treatises/listComplexTreatise with childTopic', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ childTopic: '二级主题', page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(4);
+  });
+  test('should POST /treatises/listComplexTreatise with goal', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ goal: '研究目标', page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(4);
+  });
+  test('should POST /treatises/listComplexTreatise with object', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ object: '对象', page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(4);
+  });
+  test('should POST /treatises/listComplexTreatise with paradigm', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ paradigm: '研究范式', page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(4);
+  });
+  test('should POST /treatises/listComplexTreatise with method', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ method: '方法', page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(4);
+  });
 });

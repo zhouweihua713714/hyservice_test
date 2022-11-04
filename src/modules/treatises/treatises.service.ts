@@ -459,7 +459,22 @@ export class TreatisesService {
     params: ListComplexTreatiseDto,
     user: SignInResInfo
   ): Promise<ResultData> {
-    const { keyword, columnId, deliveryAt, releasedAt, page, size } = params;
+    const {
+      keyword,
+      columnId,
+      deliveryAt,
+      releasedAt,
+      startYear,
+      endYear,
+      topic,
+      childTopic,
+      goal,
+      object,
+      paradigm,
+      method,
+      page,
+      size,
+    } = params;
     let orderCondition = 'treatises.deliveryAt';
     // get basic condition
     let basicCondition =
@@ -472,9 +487,33 @@ export class TreatisesService {
     }
     if (columnId) {
       basicCondition += ' and treatises.columnId = :columnId';
-      if (columnId === 'column_02_03') {
+      if (columnId === 'column_02_03' || columnId === 'column_02_02') {
         orderCondition = 'treatises.releasedAt';
       }
+    }
+    if (startYear) {
+      basicCondition += ' and extract(year from treatises.releasedAt) >= :startYear';
+    }
+    if (endYear) {
+      basicCondition += ' and extract(year from treatises.releasedAt) <= :endYear';
+    }
+    if (topic) {
+      basicCondition += ' and treatises.topic = :topic';
+    }
+    if (childTopic) {
+      basicCondition += ' and treatises.childTopic = :childTopic';
+    }
+    if (goal) {
+      basicCondition += ' and treatises.goal = :goal';
+    }
+    if (object) {
+      basicCondition += ' and treatises.object like :object';
+    }
+    if (paradigm) {
+      basicCondition += ' and treatises.paradigm = :paradigm';
+    }
+    if (method) {
+      basicCondition += ' and treatises.method like :method';
     }
     // get treatises and count
     let treatises;
@@ -502,6 +541,14 @@ export class TreatisesService {
           columnId: columnId,
           year: deliveryAt ? new Date(deliveryAt).getFullYear() : undefined,
           releasedAt: releasedAt ? new Date(releasedAt).getFullYear() : undefined,
+          startYear: startYear,
+          endYear: endYear,
+          topic: topic,
+          childTopic: childTopic,
+          goal: goal,
+          object: `%${object}%`,
+          paradigm: paradigm,
+          method: `%${method}%`,
         })
         .andWhere(
           new Brackets((qb) => {
@@ -537,6 +584,14 @@ export class TreatisesService {
           columnId: columnId,
           year: deliveryAt ? new Date(deliveryAt).getFullYear() : undefined,
           releasedAt: releasedAt ? new Date(releasedAt).getFullYear() : undefined,
+          startYear: startYear,
+          endYear: endYear,
+          topic: topic,
+          childTopic: childTopic,
+          goal: goal,
+          object: `%${object}%`,
+          paradigm: paradigm,
+          method: `%${method}%`,
         })
         .orderBy(`${orderCondition}`, 'DESC')
         .addOrderBy('treatises.publishedAt', 'DESC')
