@@ -557,7 +557,7 @@ export class TreatisesService {
               .orWhere('treatises.abstract like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
-        .orderBy(`${orderCondition}`, 'DESC')
+        .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
         .skip((page - 1) * size)
@@ -593,7 +593,7 @@ export class TreatisesService {
           paradigm: paradigm,
           method: `%${method}%`,
         })
-        .orderBy(`${orderCondition}`, 'DESC')
+        .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')
         .addOrderBy('treatises.publishedAt', 'DESC')
         .addOrderBy('treatises.id', 'DESC')
         .skip((page - 1) * size)
