@@ -358,7 +358,7 @@ export class ConferencesService {
     }
     if (keyword) {
       // get keywords
-      keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       basicCondition += ' and conferences.name like any (ARRAY[:...keyword])';
     }
     // get conferences and count

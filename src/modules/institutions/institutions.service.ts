@@ -337,7 +337,7 @@ export class InstitutionsService {
       'institutions.enabled = true and institutions.deletedAt is null and institutions.status =:status';
     if (keyword) {
       // get keywords
-      keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       basicCondition += ' and institutions.name like any (ARRAY[:...keyword])';
     }
     // get institutions and count

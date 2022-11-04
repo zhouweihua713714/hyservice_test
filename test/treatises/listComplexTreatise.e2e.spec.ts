@@ -169,4 +169,17 @@ describe('/treatises/listComplexTreatise', () => {
     expect(result.body.data.treatises.length).toBe(2);
     expect(result.body.data.count).toBe(4);
   });
+  test('should POST /treatises/listComplexTreatise with keyword case-insensitive', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/treatises/listComplexTreatise')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ keyword: 'aa', page: 1, size: 2 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.treatises).toBeTruthy();
+    expect(result.body.data.treatises.length).toBe(2);
+    expect(result.body.data.count).toBe(3);
+  });
 });

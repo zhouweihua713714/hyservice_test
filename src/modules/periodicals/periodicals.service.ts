@@ -379,7 +379,7 @@ export class PeriodicalsService {
     let count;
     if (keyword) {
       // get keywords
-      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       [periodicals, count] = await periodicalsRepository
         .createQueryBuilder('periodicals')
         .select([
@@ -570,7 +570,7 @@ export class PeriodicalsService {
       basicCondition += ' and periodicals.id !=:id';
     }
     if (field) {
-      const fields = `%${field.replace(';', '%;%')}%`.split(';');
+      const fields = `%${field.replace(/;/g, '%;%')}%`.split(';');
       periodicals = await periodicalsRepository
         .createQueryBuilder('periodicals')
         .select(['periodicals.id', 'periodicals.name', 'periodicals.columnId'])
@@ -593,7 +593,7 @@ export class PeriodicalsService {
         idsCondition = ' and id not in (:...ids)';
       }
       if (minorField) {
-        const minorFields = `%${minorField.replace(';', '%;%')}%`.split(';');
+        const minorFields = `%${minorField.replace(/;/g, '%;%')}%`.split(';');
         const newPeriodicals = await periodicalsRepository
           .createQueryBuilder('periodicals')
           .select(['periodicals.id', 'periodicals.name', 'periodicals.columnId'])

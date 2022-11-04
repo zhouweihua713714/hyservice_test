@@ -335,7 +335,7 @@ export class PoliciesService {
     }
     if (keyword) {
       // get keywords
-      keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       [policies, count] = await policiesRepository
         .createQueryBuilder('policies')
         .select([
@@ -363,12 +363,12 @@ export class PoliciesService {
         .andWhere(
           new Brackets((qb) => {
             qb.where('policies.name like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
-              'policies.keyword like any (ARRAY[:...keyword])',
+              'LOWER(policies.keyword) like any (ARRAY[:...keyword])',
               { keyword: keywords }
             );
           })
         )
-        .orderBy('policies.announcedAt', 'DESC')
+        .orderBy('policies.announcedAt', 'DESC','NULLS LAST')
         .addOrderBy('policies.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -399,7 +399,7 @@ export class PoliciesService {
           columnId: columnId,
           educationLevel: educationLevel,
         })
-        .orderBy('policies.announcedAt', 'DESC')
+        .orderBy('policies.announcedAt', 'DESC','NULLS LAST')
         .addOrderBy('policies.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -459,7 +459,7 @@ export class PoliciesService {
       basicCondition += ' and policies.id !=:id';
     }
     if (keyword) {
-      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       policies = await policiesRepository
         .createQueryBuilder('policies')
         .select(['policies.id', 'policies.name'])

@@ -520,7 +520,7 @@ export class TreatisesService {
     let count;
     if (keyword) {
       // get keywords
-      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       [treatises, count] = await treatisesRepository
         .createQueryBuilder('treatises')
         .select([
@@ -553,7 +553,9 @@ export class TreatisesService {
         .andWhere(
           new Brackets((qb) => {
             qb.where('treatises.title like any (ARRAY[:...keyword])', { keyword: keywords })
-              .orWhere('treatises.keyword like any (ARRAY[:...keyword])', { keyword: keywords })
+              .orWhere('LOWER(treatises.keyword) like any (ARRAY[:...keyword])', {
+                keyword: keywords,
+              })
               .orWhere('treatises.abstract like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
@@ -702,7 +704,7 @@ export class TreatisesService {
     // keyword recommend first
     if (keyword) {
       // get keywords
-      const keywords = `%${keyword.replace(';', '%;%')}%`.split(';');
+      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
       treatises = await treatisesRepository
         .createQueryBuilder('treatises')
         .select(['treatises.id', 'treatises.title', 'treatises.columnId'])
