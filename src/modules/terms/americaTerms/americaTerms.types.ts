@@ -11,6 +11,14 @@ export class AmericaTermOverviewInfo {
   amount: number;
 }
 
+export class AmericaTermDistributionInfo {
+  @ApiProperty({ description: '美国州名称' })
+  state: string;
+
+  @ApiProperty({ description: '项目数量' })
+  count: number;
+}
+
 export class GetAmericaTermOverviewResult {
   @ApiProperty({
     description: '美国项目概览',
@@ -18,4 +26,13 @@ export class GetAmericaTermOverviewResult {
     isArray: true,
   })
   americaTerms: AmericaTermOverviewInfo[];
+}
+
+export class GetAmericaTermDistributionResult {
+  @ApiProperty({
+    description: '美国项目立项单位分布',
+    type: AmericaTermDistributionInfo,
+    isArray: true,
+  })
+  americaTerms: AmericaTermDistributionInfo[];
 }

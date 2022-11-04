@@ -6,7 +6,7 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import { AmericaTermsService } from './americaTerms/americaTerms.service';
-import { GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
+import { GetAmericaTermDistributionResult, GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
 import {
   GetMoneyByYearDto,
   GetTermCountByProvinceDto,
@@ -54,7 +54,8 @@ import {
   GetMoneyByYearResult,
   GetTermCountByProvinceResult,
   GetTermPercentByYearResult,
-  GetAmericaTermOverviewResult
+  GetAmericaTermOverviewResult,
+  GetAmericaTermDistributionResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -208,5 +209,14 @@ export class TermsController {
   @AllowAnon()
   getAmericaTermOverview() {
     return this.americaTermsService.getAmericaTermOverview();
+  }
+
+  @Get('/getAmericaTermDistribution')
+  @HttpCode(200)
+  @ApiOperation({ summary: '美国项目立项单位分布' })
+  @ApiResult(GetAmericaTermDistributionResult)
+  @AllowAnon()
+  getAmericaTermDistribution() {
+    return this.americaTermsService.getAmericaTermDistribution();
   }
 }

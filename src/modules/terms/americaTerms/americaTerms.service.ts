@@ -44,4 +44,20 @@ export class AmericaTermsService {
     }
     return ResultData.ok({data: { americaTerms }});
   }
+
+  /**
+   * @description 美国项目立项单位分布
+   * @returns { ResultData } GetAmericaTermDistributionResult 美国项目立项单位分布信息
+   */
+  async getAmericaTermDistribution(): Promise<ResultData> {
+    const americaTerms = await americaTermsRepository.createQueryBuilder('americaTerms')
+    .select('americaTerms.state', 'state')
+    .addSelect('COUNT(americaTerms.awardNumber)::int as count')
+    .andWhere('americaTerms.enabled =:enabled', {enabled: true})
+    .andWhere('americaTerms.status=:status', {status: Content_Status_Enum.ACTIVE})
+    .andWhere('americaTerms.deletedAt is null')
+    .groupBy('americaTerms.state')
+    .getRawMany();
+    return ResultData.ok({data: { americaTerms }});
+  }
 }
