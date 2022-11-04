@@ -42,6 +42,7 @@ import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
 import { TopicTypes } from '@/entities/TopicTypes.entity';
 import { Keywords } from '@/entities/Keywords.entity';
 import { UserKeywordStatistics } from '@/entities/UserKeywordStatistics.entity';
+import { AmericaTerms } from '@/entities/AmericaTerms.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -56,6 +57,7 @@ export class DBTester<T = undefined> {
   termTypesRepository: Repository<TermTypes>;
   subjectsRepository: Repository<Subjects>;
   termsRepository: Repository<Terms>;
+  americaTermsRepository: Repository<AmericaTerms>;
   languagesRepository: Repository<Languages>;
   periodicalPeriodsRepository: Repository<PeriodicalPeriods>;
   periodicalsRepository: Repository<Periodicals>;
@@ -119,6 +121,7 @@ export class DBTester<T = undefined> {
       );
       this.subjectsRepository = this.module.get<Repository<Subjects>>(getRepositoryToken(Subjects));
       this.termsRepository = this.module.get<Repository<Terms>>(getRepositoryToken(Terms));
+      this.americaTermsRepository = this.module.get<Repository<AmericaTerms>>(getRepositoryToken(AmericaTerms));
       this.languagesRepository = this.module.get<Repository<Languages>>(
         getRepositoryToken(Languages)
       );

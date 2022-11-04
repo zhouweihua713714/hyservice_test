@@ -5,6 +5,8 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
+import { AmericaTermsService } from './americaTerms/americaTerms.service';
+import { GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
 import {
   GetMoneyByYearDto,
   GetTermCountByProvinceDto,
@@ -51,11 +53,15 @@ import {
   GetTermPercentBySubjectResult,
   GetMoneyByYearResult,
   GetTermCountByProvinceResult,
-  GetTermPercentByYearResult
+  GetTermPercentByYearResult,
+  GetAmericaTermOverviewResult
 )
 @Controller('/terms')
 export class TermsController {
-  constructor(private readonly termsService: TermsService) {}
+  constructor(
+    private readonly termsService: TermsService, 
+    private readonly americaTermsService: AmericaTermsService
+  ) {}
 
   @Get('/getTermDetail')
   @HttpCode(200)
@@ -193,5 +199,14 @@ export class TermsController {
   getTermPercentByYear(@Query() params: any, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.termsService.getTermPercentByYear(params, user);
+  }
+
+  @Get('/getAmericaTermOverview')
+  @HttpCode(200)
+  @ApiOperation({ summary: '美国项目概览' })
+  @ApiResult(GetAmericaTermOverviewResult)
+  @AllowAnon()
+  getAmericaTermOverview() {
+    return this.americaTermsService.getAmericaTermOverview();
   }
 }

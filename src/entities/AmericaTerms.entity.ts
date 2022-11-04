@@ -130,6 +130,8 @@ export class AmericaTerms {
     nullable: true,
     comment: '删除时间',
   })
+  deletedAt: Date | null;
+
   @ApiPropertyOptional({ description: '是否有效 t是f否' })
   @Column('boolean', { name: 'enabled', nullable: true, default: true })
   enabled: boolean ;
