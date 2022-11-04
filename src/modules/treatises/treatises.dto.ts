@@ -322,6 +322,74 @@ export class ListComplexTreatiseDto extends PickType(ReqListQuery, ['page', 'siz
   @IsDateString({ message: 'releasedAt 类型错误, 正确类型 date' })
   @IsOptional()
   releasedAt: Date | null;
+
+  @ApiPropertyOptional({
+    description: '出版年份起始年份且endYear不为空(仅ns图表跳转使用)',
+    type: Number,
+    nullable: true,
+  })
+  @IsInt({ message: 'startYear 类型错误, 正确类型 int' })
+  @IsOptional()
+  startYear: number | null;
+
+  @ApiPropertyOptional({
+    description: '出版年份结束年份与startYear使用(仅ns图表跳转使用)',
+    type: Number,
+    nullable: true,
+  })
+  @IsInt({ message: 'endYear 类型错误, 正确类型 number' })
+  @IsOptional()
+  endYear: number | null;
+
+  @ApiPropertyOptional({
+    description: '一级主题(目前仅有ns图表跳转使用)',
+    type: String,
+    nullable: true,
+  })
+  @IsString({ message: 'topic 类型错误, 正确类型 string' })
+  @IsOptional()
+  topic: string | null;
+
+  @ApiPropertyOptional({
+    description: '二级主题(目前仅有ns图表跳转使用)',
+    type: String,
+    nullable: true,
+  })
+  @IsString({ message: 'childTopic 类型错误, 正确类型 string' })
+  @IsOptional()
+  childTopic: string | null;
+
+  @ApiPropertyOptional({
+    description: '研究目标(目前仅有ns图表跳转使用)',
+    type: String,
+    nullable: true,
+  })
+  @IsString({ message: 'goal 类型错误, 正确类型 string' })
+  @IsOptional()
+  goal: string | null;
+
+  @ApiPropertyOptional({
+    description: '研究对象(目前仅有ns图表跳转使用)',
+    type: String,
+    nullable: true,
+  })
+  @IsString({ message: 'object 类型错误, 正确类型 string' })
+  @IsOptional()
+  object: string | null;
+
+  @ApiPropertyOptional({
+    description: '研究范式(目前仅有ns图表跳转使用)',
+    type: String,
+    nullable: true,
+  })
+  @IsString({ message: 'paradigm 类型错误, 正确类型 string' })
+  @IsOptional()
+  paradigm: string | null;
+
+  @ApiPropertyOptional({ description: '数据分析方式', type: String, nullable: true })
+  @IsString({ message: 'method 类型错误, 正确类型 string' })
+  @IsOptional()
+  method: string | null;
 }
 
 export class RecommendTreatisesDto {

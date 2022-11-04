@@ -325,11 +325,11 @@ export class Treatises {
   })
   goal: string | null;
 
-  @ApiPropertyOptional({ description: '研究对象', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '研究对象,这里会是多个分号隔开', type: String, nullable: true })
   @Column('text', {
     name: 'object',
     nullable: true,
-    comment: '研究对象',
+    comment: '研究对象,这里会是多个分号隔开',
   })
   object: string | null;
 
@@ -342,11 +342,11 @@ export class Treatises {
   paradigm: string | null;
 
 
-  @ApiPropertyOptional({ description: '数据分析方式', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '数据分析方式,这里会是多个分号隔开', type: String, nullable: true })
   @Column('text', {
     name: 'method',
     nullable: true,
-    comment: '数据分析方式',
+    comment: '数据分析方式,这里会是多个分号隔开',
   })
   method: string | null;
 
