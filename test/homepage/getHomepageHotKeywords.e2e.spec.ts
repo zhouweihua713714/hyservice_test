@@ -5,10 +5,9 @@ import { DBTester } from '../testHelper';
 
 const tester = new DBTester().setup();
 
-describe('/configs/getHotKeywords', () => {
-  test('should get /configs/getHotKeywords', async () => {
-    const result = await request(tester.server).get('/configs/getHotKeywords').query({
-      type: Content_Types_Enum.TERM,
+describe('/homepage/getHomepageHotKeywords', () => {
+  test('should get /homepage/getHomepageHotKeywords', async () => {
+    const result = await request(tester.server).get('/homepage/getHomepageHotKeywords').query({
     });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
