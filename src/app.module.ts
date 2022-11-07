@@ -52,6 +52,7 @@ import { TopicTypes } from './entities/TopicTypes.entity';
 import { Keywords } from './entities/Keywords.entity';
 import { UserKeywordStatistics } from './entities/UserKeywordStatistics.entity';
 import { AmericaTerms } from './entities/AmericaTerms.entity';
+import { AmericaTermKeywords } from './entities/AmericaTermKeywords.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -114,7 +115,8 @@ import { AmericaTerms } from './entities/AmericaTerms.entity';
       TopicTypes,
       Keywords,
       UserKeywordStatistics,
-      AmericaTerms
+      AmericaTerms,
+      AmericaTermKeywords
     ]),
     HomeModule,
     AuthModule,

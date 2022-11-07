@@ -30,6 +30,7 @@ import { TreatiseKeywords } from '@/entities/TreatiseKeywords.entity';
 import { TermKeywords } from '@/entities/TermKeywords.entity';
 import { UserKeywordStatistics } from '@/entities/UserKeywordStatistics.entity';
 import { AmericaTerms } from '@/entities/AmericaTerms.entity';
+import { AmericaTermKeywords } from '@/entities/AmericaTermKeywords.entity';
 DataSource.initialize()
   .then(() => {
     // console.log('Data Source has been initialized!');
@@ -68,6 +69,8 @@ export const treatiseKeywordsRepository = DataSource.getRepository(TreatiseKeywo
 export const termKeywordsRepository = DataSource.getRepository(TermKeywords);
 export const userKeywordStatisticsRepository = DataSource.getRepository(UserKeywordStatistics);
 export const americaTermsRepository = DataSource.getRepository(AmericaTerms);
+export const americaTermKeywordsRepository = DataSource.getRepository(AmericaTermKeywords);
+
 
 
 
