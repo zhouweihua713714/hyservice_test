@@ -81,3 +81,10 @@ export class SetHomepageDto {
   @IsOptional()
   qrCode: string | null;
 }
+export class GetHomepageSearchResultByKeywordDto {
+  @ApiProperty({
+    description: '搜索文本',
+  })
+  @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  keyword: string;
+}

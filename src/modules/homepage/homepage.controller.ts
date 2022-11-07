@@ -5,12 +5,21 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { SetHomepageDto } from './homepage.dto';
+import { GetHomepageSearchResultByKeywordDto, SetHomepageDto } from './homepage.dto';
 import { HomepageService } from './homepage.service';
-import { GetHomepageConfigResult, GetHomepageHotKeywordsResult } from './homepage.types';
+import {
+  GetHomepageConfigResult,
+  GetHomepageHotKeywordsResult,
+  GetHomepageSearchResultByKeywordResult,
+} from './homepage.types';
 
 @ApiTags('首页配置')
-@ApiExtraModels(ResultData, GetHomepageConfigResult, GetHomepageHotKeywordsResult)
+@ApiExtraModels(
+  ResultData,
+  GetHomepageConfigResult,
+  GetHomepageHotKeywordsResult,
+  GetHomepageSearchResultByKeywordResult
+)
 @Controller('/homepage')
 export class HomepageController {
   constructor(private readonly homepageService: HomepageService) {}
@@ -33,6 +42,7 @@ export class HomepageController {
     const user = <SignInResInfo>req.user;
     return this.homepageService.setHomepage(params, user);
   }
+
   @Get('/getHomepageHotKeywords')
   @HttpCode(200)
   @ApiOperation({
@@ -42,5 +52,16 @@ export class HomepageController {
   @AllowAnon()
   getHomepageHotKeywords(@Query() params: any) {
     return this.homepageService.getHomepageHotKeywords(params);
+  }
+
+  @Get('/getHomepageSearchResultByKeyword')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '首页搜索返回关键词列表',
+  })
+  @ApiResult(GetHomepageSearchResultByKeywordResult)
+  @AllowAnon()
+  getHomepageSearchResultByKeyword(@Query() params: GetHomepageSearchResultByKeywordDto) {
+    return this.homepageService.getHomepageSearchResultByKeyword(params);
   }
 }

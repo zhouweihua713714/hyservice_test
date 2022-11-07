@@ -26,3 +26,13 @@ export class GetHomepageHotKeywordsResult {
   })
   keywords: GetHotKeywordsInfo[];
 }
+
+
+export class GetHomepageSearchResultByKeywordResult {
+  @ApiProperty({
+    description: '首页热搜关键词TOP10',
+    type: GetHotKeywordsInfo,
+    isArray: true,
+  })
+  keywords: GetHotKeywordsInfo[];
+}
