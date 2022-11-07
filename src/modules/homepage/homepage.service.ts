@@ -3,8 +3,10 @@ import { ResultData } from '@/common/utils/result';
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import { keywordsRepository, websiteRepository } from '../repository/repository';
-import { SetHomepageDto } from './homepage.dto';
+import { GetHomepageSearchResultByKeywordDto, SetHomepageDto } from './homepage.dto';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { QueryRunner } from 'typeorm';
+
 export class HomepageService {
   /**
    * @description 获取首页配置
@@ -32,22 +34,46 @@ export class HomepageService {
     return ResultData.ok({ data: result });
   }
 
-   /**
+  /**
    * @description 获取首页热搜关键词
    * @param {GeHotKeywordsDto}获取首页热搜关键词 params
    * @returns {ResultData} 返回getHomepageHotKeywords信息
    */
-    async getHomepageHotKeywords(params: any): Promise<ResultData> {
-      const data = await keywordsRepository
-        .createQueryBuilder('keywords')
-        .distinctOn(['keywords.name', 'keywords.search', 'keywords.frequency', 'keywords.type'])
-        .where('keywords.type != :type', { type: Content_Types_Enum.PATENT })
-        .orderBy('keywords.search', 'DESC', 'NULLS LAST')
-        .addOrderBy('keywords.frequency', 'DESC')
-        .addOrderBy('keywords.name', 'ASC')
-        .take(10)
-        .getMany();
-  
-      return ResultData.ok({ data: { keywords: data } });
-    }
+  async getHomepageHotKeywords(params: any): Promise<ResultData> {
+    const data = await keywordsRepository
+      .createQueryBuilder('keywords')
+      .distinctOn(['keywords.name', 'keywords.search', 'keywords.frequency', 'keywords.type'])
+      .where('keywords.type != :type', { type: Content_Types_Enum.PATENT })
+      .orderBy('keywords.search', 'DESC', 'NULLS LAST')
+      .addOrderBy('keywords.frequency', 'DESC')
+      .addOrderBy('keywords.name', 'ASC')
+      .getMany();
+    const result = _.uniqBy(data, 'name').slice(0, 10);
+    return ResultData.ok({ data: { keywords: result } });
+  }
+
+  /**
+   * @description 首页搜索返回关键词列表
+   * @param {GetHomepageSearchResultByKeywordDto } params
+   * @returns {ResultData} 返回getHomepageSearchResultByKeyword信息
+   */
+  async getHomepageSearchResultByKeyword(
+    params: GetHomepageSearchResultByKeywordDto
+  ): Promise<ResultData> {
+    const { keyword } = params;
+    const data = await keywordsRepository
+      .createQueryBuilder('keywords')
+      .select(['keywords.name', 'keywords.search', 'keywords.frequency', 'keywords.type'])
+      .distinct(true)
+      .where('keywords.type != :type and name like :keyword', {
+        type: Content_Types_Enum.PATENT,
+        keyword: `%${keyword.toLowerCase()}%`,
+      })
+      .orderBy('keywords.search', 'DESC', 'NULLS LAST')
+      .addOrderBy('keywords.frequency', 'DESC')
+      .addOrderBy('keywords.name', 'ASC')
+      .getMany();
+    const result = _.uniqBy(data, 'name').slice(0, 8);
+    return ResultData.ok({ data: { keywords: result } });
+  }
 }
