@@ -113,4 +113,22 @@ export class AmericaTermsService {
     }
     return ResultData.ok({data: { americaTerms }});
   }
+
+  /**
+   * @description 热门研究单位
+   * @returns {ResultData} GetAmericaTermHotOrganizationListResult
+   */
+   async getAmericaTermHotOrganizationList(): Promise<ResultData> {
+    const americaTerms = await americaTermsRepository.createQueryBuilder('americaTerms')
+    .select('americaTerms.organization', 'organization')
+    .addSelect('COUNT(americaTerms.awardNumber)::int as count')
+    .andWhere('americaTerms.enabled =:enabled', {enabled: true})
+    .andWhere('americaTerms.status=:status', {status: Content_Status_Enum.ACTIVE})
+    .andWhere('americaTerms.deletedAt is null')
+    .groupBy('americaTerms.organization')
+    .orderBy('americaTerms.organization', 'DESC')
+    .limit(10)
+    .getRawMany();
+    return ResultData.ok({data: { americaTerms }});
+  }
 }
