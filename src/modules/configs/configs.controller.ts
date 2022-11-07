@@ -49,7 +49,7 @@ import {
   GetUniversitiesResult,
   GetTopicTypesResult,
   GetSearchResultByKeywordResult,
-  GetHotKeywordsResult
+  GetHotKeywordsResult,
 )
 @Controller('/configs')
 export class ConfigsController {
@@ -198,11 +198,12 @@ export class ConfigsController {
   @Get('/getHotKeywords')
   @HttpCode(200)
   @ApiOperation({
-    summary: '获取热搜关键词(词云,论文图谱取论文的前15个目前只有项目、论文、政策、专利有关键词)',
+    summary: '获取热搜关键词(词云,目前只有项目、论文、政策、专利有关键词)',
   })
   @ApiResult(GetHotKeywordsResult)
   @AllowAnon()
   getHotKeywords(@Query() params: GeHotKeywordsDto) {
     return this.configService.getHotKeywords(params);
   }
+
 }

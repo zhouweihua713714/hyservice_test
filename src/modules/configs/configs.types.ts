@@ -118,7 +118,6 @@ export class GetSearchResultByKeywordResult {
 
 export class GetHotKeywordsInfo extends PickType(Keywords, [
   'name',
-  'type',
   'frequency',
   'search',
   'type',

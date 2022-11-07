@@ -7,10 +7,10 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import { SetHomepageDto } from './homepage.dto';
 import { HomepageService } from './homepage.service';
-import { GetHomepageConfigResult } from './homepage.types';
+import { GetHomepageConfigResult, GetHomepageHotKeywordsResult } from './homepage.types';
 
 @ApiTags('首页配置')
-@ApiExtraModels(ResultData, GetHomepageConfigResult)
+@ApiExtraModels(ResultData, GetHomepageConfigResult, GetHomepageHotKeywordsResult)
 @Controller('/homepage')
 export class HomepageController {
   constructor(private readonly homepageService: HomepageService) {}
@@ -33,5 +33,14 @@ export class HomepageController {
     const user = <SignInResInfo>req.user;
     return this.homepageService.setHomepage(params, user);
   }
-  
+  @Get('/getHomepageHotKeywords')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '获取首页热搜关键词(不区分类型且暂时过滤专利的关键词)',
+  })
+  @ApiResult(GetHomepageHotKeywordsResult)
+  @AllowAnon()
+  getHomepageHotKeywords(@Query() params: any) {
+    return this.homepageService.getHomepageHotKeywords(params);
+  }
 }

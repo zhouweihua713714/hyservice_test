@@ -1,5 +1,6 @@
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { GetHotKeywordsInfo } from '../configs/configs.types';
 
 export class GetHomepageConfigResult extends PickType(Website, [
   'id',
@@ -16,3 +17,12 @@ export class GetHomepageConfigResult extends PickType(Website, [
   'logo',
   'qrCode',
 ] as const) {}
+
+export class GetHomepageHotKeywordsResult {
+  @ApiProperty({
+    description: '首页热搜关键词TOP10',
+    type: GetHotKeywordsInfo,
+    isArray: true,
+  })
+  keywords: GetHotKeywordsInfo[];
+}

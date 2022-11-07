@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
-import { websiteRepository } from '../repository/repository';
+import { keywordsRepository, websiteRepository } from '../repository/repository';
 import { SetHomepageDto } from './homepage.dto';
-import { User_Types_Enum } from '@/common/enums/common.enum';
+import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 export class HomepageService {
   /**
    * @description 获取首页配置
@@ -31,4 +31,23 @@ export class HomepageService {
     const result = await websiteRepository.save(params);
     return ResultData.ok({ data: result });
   }
+
+   /**
+   * @description 获取首页热搜关键词
+   * @param {GeHotKeywordsDto}获取首页热搜关键词 params
+   * @returns {ResultData} 返回getHomepageHotKeywords信息
+   */
+    async getHomepageHotKeywords(params: any): Promise<ResultData> {
+      const data = await keywordsRepository
+        .createQueryBuilder('keywords')
+        .distinctOn(['keywords.name', 'keywords.search', 'keywords.frequency', 'keywords.type'])
+        .where('keywords.type != :type', { type: Content_Types_Enum.PATENT })
+        .orderBy('keywords.search', 'DESC', 'NULLS LAST')
+        .addOrderBy('keywords.frequency', 'DESC')
+        .addOrderBy('keywords.name', 'ASC')
+        .take(10)
+        .getMany();
+  
+      return ResultData.ok({ data: { keywords: data } });
+    }
 }
