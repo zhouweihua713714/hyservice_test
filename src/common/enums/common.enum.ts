@@ -120,3 +120,9 @@ export enum Picker_Enum {
   /** 日 */
   Date = 'date',
 }
+
+export enum NSFDirectorate_Enum {
+  NSFDirectorate_EHR = 'NSFDirectorate_EHR',
+  NSFDirectorate_SBE = 'NSFDirectorate_SBE',
+  NSFDirectorate_CSE = 'NSFDirectorate_CSE',
+}

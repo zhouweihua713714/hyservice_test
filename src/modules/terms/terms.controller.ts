@@ -5,8 +5,9 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
+import { GetAmericaTermAmountByKeywordsDto } from './americaTerms/americaTerms.dto';
 import { AmericaTermsService } from './americaTerms/americaTerms.service';
-import { GetAmericaTermDistributionResult, GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
+import { GetAmericaTermAmountByKeywordsResult, GetAmericaTermDistributionResult, GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
 import {
   GetMoneyByYearDto,
   GetTermCountByProvinceDto,
@@ -55,7 +56,8 @@ import {
   GetTermCountByProvinceResult,
   GetTermPercentByYearResult,
   GetAmericaTermOverviewResult,
-  GetAmericaTermDistributionResult
+  GetAmericaTermDistributionResult,
+  GetAmericaTermAmountByKeywordsResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -218,5 +220,14 @@ export class TermsController {
   @AllowAnon()
   getAmericaTermDistribution() {
     return this.americaTermsService.getAmericaTermDistribution();
+  }
+
+  @Get('/getAmericaTermAmountByKeywords')
+  @HttpCode(200)
+  @ApiOperation({ summary: '三个学部热力图' })
+  @ApiResult(GetAmericaTermAmountByKeywordsResult)
+  @AllowAnon()
+  getAmericaTermAmountByKeywords(@Query() params: GetAmericaTermAmountByKeywordsDto) {
+    return this.americaTermsService.getAmericaTermAmountByKeywords(params);
   }
 }
