@@ -108,7 +108,6 @@ export class HomepageService {
           name: Like(`%${keyword.toLowerCase()}%`),
         },
         select: ['name', 'columnId', 'title', 'termId'],
-        relations: ['term'],
       }),
       treatiseKeywordsRepository.find({
         where: {
