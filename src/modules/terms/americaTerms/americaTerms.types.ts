@@ -30,6 +30,14 @@ export class AmericaTermAmountByKeywordsInfo {
   amount: number;
 }
 
+export class AmericaTermHotOrganizationInfo {
+  @ApiProperty({ description: '组织' })
+  organization: string;
+
+  @ApiProperty({ description: '项目数量' })
+  count: number;
+}
+
 export class GetAmericaTermOverviewResult {
   @ApiProperty({
     description: '美国项目概览',
@@ -52,6 +60,15 @@ export class GetAmericaTermAmountByKeywordsResult {
   @ApiProperty({
     description: '三个学部热力图',
     type: AmericaTermAmountByKeywordsInfo,
+    isArray: true,
+  })
+  americaTerms: AmericaTermAmountByKeywordsInfo[];
+}
+
+export class GetAmericaTermHotOrganizationListResult {
+  @ApiProperty({
+    description: '热门研究单位',
+    type: AmericaTermHotOrganizationInfo,
     isArray: true,
   })
   americaTerms: AmericaTermAmountByKeywordsInfo[];

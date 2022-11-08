@@ -7,7 +7,7 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import { GetAmericaTermAmountByKeywordsDto } from './americaTerms/americaTerms.dto';
 import { AmericaTermsService } from './americaTerms/americaTerms.service';
-import { GetAmericaTermAmountByKeywordsResult, GetAmericaTermDistributionResult, GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
+import { GetAmericaTermAmountByKeywordsResult, GetAmericaTermDistributionResult, GetAmericaTermHotOrganizationListResult, GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
 import {
   GetMoneyByYearDto,
   GetTermCountByProvinceDto,
@@ -57,7 +57,8 @@ import {
   GetTermPercentByYearResult,
   GetAmericaTermOverviewResult,
   GetAmericaTermDistributionResult,
-  GetAmericaTermAmountByKeywordsResult
+  GetAmericaTermAmountByKeywordsResult,
+  GetAmericaTermHotOrganizationListResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -229,5 +230,14 @@ export class TermsController {
   @AllowAnon()
   getAmericaTermAmountByKeywords(@Query() params: GetAmericaTermAmountByKeywordsDto) {
     return this.americaTermsService.getAmericaTermAmountByKeywords(params);
+  }
+
+  @Get('/getAmericaTermHotOrganizationList')
+  @HttpCode(200)
+  @ApiOperation({ summary: '热门研究单位'})
+  @ApiResult(GetAmericaTermHotOrganizationListResult)
+  @AllowAnon()
+  getAmericaTermHotOrganizationList() {
+    return this.americaTermsService.getAmericaTermHotOrganizationList();
   }
 }
