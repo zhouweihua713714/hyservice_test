@@ -1107,7 +1107,7 @@ export class TreatisesService {
     //     enabled: true,
     //     keyword: Not(IsNull()),
     //   },
-    //   select: ['keyword', 'id', 'columnId'],
+    //   select: ['keyword', 'id', 'columnId', 'name'],
     // });
     // console.timeEnd('查询时间');
     // console.time('数据准备时间');
@@ -1129,6 +1129,7 @@ export class TreatisesService {
     //           name: data.toLowerCase(),
     //           columnId: terms[i].columnId,
     //           termId: terms[i].id,
+    //           title: terms[i].name,
     //         };
     //       });
     //     termKeywords = _.unionBy(termKeywords, keyword, 'id');

@@ -53,6 +53,8 @@ import { Keywords } from './entities/Keywords.entity';
 import { UserKeywordStatistics } from './entities/UserKeywordStatistics.entity';
 import { AmericaTerms } from './entities/AmericaTerms.entity';
 import { AmericaTermKeywords } from './entities/AmericaTermKeywords.entity';
+import { TreatiseKeywords } from './entities/TreatiseKeywords.entity';
+import { TermKeywords } from './entities/TermKeywords.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -116,7 +118,9 @@ import { AmericaTermKeywords } from './entities/AmericaTermKeywords.entity';
       Keywords,
       UserKeywordStatistics,
       AmericaTerms,
-      AmericaTermKeywords
+      AmericaTermKeywords,
+      TreatiseKeywords,
+      TermKeywords,
     ]),
     HomeModule,
     AuthModule,

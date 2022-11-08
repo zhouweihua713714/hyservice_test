@@ -44,6 +44,8 @@ import { Keywords } from '@/entities/Keywords.entity';
 import { UserKeywordStatistics } from '@/entities/UserKeywordStatistics.entity';
 import { AmericaTerms } from '@/entities/AmericaTerms.entity';
 import { AmericaTermKeywords } from '@/entities/AmericaTermKeywords.entity';
+import { TreatiseKeywords } from '@/entities/TreatiseKeywords.entity';
+import { TermKeywords } from '@/entities/TermKeywords.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -82,6 +84,8 @@ export class DBTester<T = undefined> {
   topicTypesRepository: Repository<TopicTypes>;
   keywordsRepository: Repository<Keywords>;
   userKeywordStatisticsRepository: Repository<UserKeywordStatistics>;
+  treatiseKeywordsRepository: Repository<TreatiseKeywords>;
+  termKeywordsRepository: Repository<TermKeywords>;
   config: ConfigService;
   server: any;
 
@@ -123,8 +127,12 @@ export class DBTester<T = undefined> {
       );
       this.subjectsRepository = this.module.get<Repository<Subjects>>(getRepositoryToken(Subjects));
       this.termsRepository = this.module.get<Repository<Terms>>(getRepositoryToken(Terms));
-      this.americaTermsRepository = this.module.get<Repository<AmericaTerms>>(getRepositoryToken(AmericaTerms));
-      this.americaTermKeywordsRepository = this.module.get<Repository<AmericaTermKeywords>>(getRepositoryToken(AmericaTermKeywords));
+      this.americaTermsRepository = this.module.get<Repository<AmericaTerms>>(
+        getRepositoryToken(AmericaTerms)
+      );
+      this.americaTermKeywordsRepository = this.module.get<Repository<AmericaTermKeywords>>(
+        getRepositoryToken(AmericaTermKeywords)
+      );
       this.languagesRepository = this.module.get<Repository<Languages>>(
         getRepositoryToken(Languages)
       );
@@ -179,11 +187,15 @@ export class DBTester<T = undefined> {
       this.topicTypesRepository = this.module.get<Repository<TopicTypes>>(
         getRepositoryToken(TopicTypes)
       );
-      this.keywordsRepository = this.module.get<Repository<Keywords>>(
-        getRepositoryToken(Keywords)
-      );
+      this.keywordsRepository = this.module.get<Repository<Keywords>>(getRepositoryToken(Keywords));
       this.userKeywordStatisticsRepository = this.module.get<Repository<UserKeywordStatistics>>(
         getRepositoryToken(UserKeywordStatistics)
+      );
+      this.treatiseKeywordsRepository = this.module.get<Repository<TreatiseKeywords>>(
+        getRepositoryToken(TreatiseKeywords)
+      );
+      this.termKeywordsRepository = this.module.get<Repository<TermKeywords>>(
+        getRepositoryToken(TermKeywords)
       );
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
