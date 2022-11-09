@@ -105,18 +105,18 @@ export class HomepageService {
     [termKeywords, treatiseKeywords, americaTermKeywords, columns] = await Promise.all([
       termKeywordsRepository.find({
         where: {
-          name: Like(`%${keyword.toLowerCase()}%`),
+          name: keyword.toLowerCase(),
         },
         select: ['name', 'columnId', 'title', 'termId'],
       }),
       treatiseKeywordsRepository.find({
         where: {
-          name: Like(`%${keyword.toLowerCase()}%`),
+          name: keyword.toLowerCase(),
         },
       }),
       americaTermKeywordsRepository.find({
         where: {
-          name: Like(`%${keyword.toLowerCase()}%`),
+          name: keyword.toLowerCase(),
         },
       }),
       columnsRepository.find({

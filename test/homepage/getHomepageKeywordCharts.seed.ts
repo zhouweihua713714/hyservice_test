@@ -68,7 +68,7 @@ export const seed: TesterSeed<DataType> = {
     ]);
     await tester.termKeywordsRepository.save([
       {
-        name: '关键词1',
+        name: '关键词',
         columnId: columns[1].id,
         term: { id: terms[0].id },
         title: '项目标题',
@@ -76,7 +76,7 @@ export const seed: TesterSeed<DataType> = {
     ]);
     await tester.americaTermKeywordsRepository.save([
       {
-        name: '关键词1美国',
+        name: '关键词',
         columnId: columns[0].id,
         awardNumber: terms[0].id,
         // americaTerm: { awardNumber: terms[0].id },
