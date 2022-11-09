@@ -1,12 +1,15 @@
-import { Content_Status_Enum } from '@/common/enums/common.enum';
+import { Content_Status_Enum, Content_Types_Enum } from '@/common/enums/common.enum';
 import { ResultData } from '@/common/utils/result';
+import { AmericaTerms } from '@/entities/AmericaTerms.entity';
+import { SignInResInfo } from '@/modules/auth/auth.types';
 import { americaTermsRepository } from '@/modules/repository/repository';
+import { UsersService } from '@/modules/users/users.service';
 import _ from 'lodash';
-import { GetAmericaTermAmountByKeywordsDto } from './americaTerms.dto';
+import { Brackets } from 'typeorm';
+import { GetAmericaTermAmountByKeywordsDto, ListComplexAmericaTermDto } from './americaTerms.dto';
 import { AmericaTermAmountByKeywordsInfo, AmericaTermOverviewInfo } from './americaTerms.types';
 
 export class AmericaTermsService {
-
   /**
    * @description 美国项目概览
    * @returns { ResultData } GetAmericaTermOverviewResult 概览信息
@@ -118,7 +121,7 @@ export class AmericaTermsService {
    * @description 热门研究单位
    * @returns {ResultData} GetAmericaTermHotOrganizationListResult
    */
-   async getAmericaTermHotOrganizationList(): Promise<ResultData> {
+  async getAmericaTermHotOrganizationList(): Promise<ResultData> {
     const americaTerms = await americaTermsRepository.createQueryBuilder('americaTerms')
     .select('americaTerms.organization', 'organization')
     .addSelect('COUNT(americaTerms.awardNumber)::int as count')
@@ -130,5 +133,103 @@ export class AmericaTermsService {
     .limit(10)
     .getRawMany();
     return ResultData.ok({data: { americaTerms }});
+  }
+
+
+  /**
+   * @description 美国项目列表(c端)
+   * @param { ListComplexAmericaTermDto } params
+   * @returns {ResultData} 返回listComplexAmericaTerm信息
+   */
+  async listComplexAmericaTerm(params: ListComplexAmericaTermDto, user: SignInResInfo): Promise<ResultData> {
+      const { keyword, organization, nsfDirectorate, year, principalInvestigator, page, size } = params;
+      // get basic condition
+      let basicCondition =
+        'americaTerms.enabled = true and americaTerms.deletedAt is null and americaTerms.status =:status';
+      if (organization) {
+        basicCondition += ' and americaTerms.organization like :organization';
+      }
+      if (nsfDirectorate) {
+        basicCondition += ' and americaTerms.nsfDirectorate = :nsfDirectorate';
+      }
+      if (year) {
+        basicCondition += ' and americaTerms.year = :year';
+      }
+      if (principalInvestigator) {
+        basicCondition += ' and americaTerms.principalInvestigator like :principalInvestigator';
+      }
+      // get americaTerms and count
+      let americaTerms: AmericaTerms[];
+      let count: number;
+      if (keyword) {
+        // get keywords
+        const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
+        [americaTerms, count] = await americaTermsRepository
+          .createQueryBuilder('americaTerms')
+          .select([
+            'americaTerms.awardNumber',
+            'americaTerms.title',
+            'americaTerms.startDate',
+            'americaTerms.endDate',
+            'americaTerms.organization',
+            'americaTerms.principalInvestigator',
+            'americaTerms.awardedAmountToDate',
+            'americaTerms.nsfDirectorate',
+          ])
+          .innerJoin('AmericaTermKeywords', 'americaTermKeywords', 'americaTerms.awardNumber = americaTermKeywords.awardNumber')
+          .where(`${basicCondition}`, {
+            status: Content_Status_Enum.ACTIVE,
+            organization: `%${organization}%`,
+            nsfDirectorate,
+            year: new Date(year).getFullYear(),
+            principalInvestigator: `%${principalInvestigator}%`,
+          })
+          .andWhere(
+            new Brackets((qb) => {
+              qb.where('americaTerms.title like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
+                'LOWER(americaTermKeywords.name) like any (ARRAY[:...keyword])',
+                { keyword: keywords }
+              );
+            })
+          )
+          .orderBy('americaTerms.startDate', 'DESC','NULLS LAST')
+          .addOrderBy('americaTerms.awardNumber', 'ASC')
+          .skip((page - 1) * size)
+          .take(size)
+          .getManyAndCount();
+      } else {
+        [americaTerms, count] = await americaTermsRepository
+          .createQueryBuilder('americaTerms')
+          .select([
+            'americaTerms.awardNumber',
+            'americaTerms.title',
+            'americaTerms.startDate',
+            'americaTerms.endDate',
+            'americaTerms.organization',
+            'americaTerms.principalInvestigator',
+            'americaTerms.awardedAmountToDate',
+            'americaTerms.nsfDirectorate',
+          ])
+          .where(`${basicCondition}`, {
+            status: Content_Status_Enum.ACTIVE,
+            organization: `%${organization}%`,
+            nsfDirectorate,
+            year: new Date(year).getFullYear(),
+            principalInvestigator: `%${principalInvestigator}%`,
+          })
+          .orderBy('americaTerms.startDate', 'DESC','NULLS LAST')
+          .addOrderBy('americaTerms.awardNumber', 'ASC')
+          .skip((page - 1) * size)
+          .take(size)
+          .getManyAndCount();
+      }
+      // 搜索埋点
+      await new UsersService().recordUserSearchTimes({
+        keywords: keyword?.split(';') || [],
+        type: Content_Types_Enum.TERM,
+        userId: user?.id,
+        columnId: 'column_01_04',
+      });
+      return ResultData.ok({ data: { americaTerms, count } });
   }
 }
