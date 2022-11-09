@@ -88,3 +88,12 @@ export class GetHomepageSearchResultByKeywordDto {
   @IsString({ message: 'keyword 类型错误,正确类型 string' })
   keyword: string;
 }
+
+export class GetHomepageKeywordChartsDto {
+  @ApiProperty({
+    description: '搜索文本',
+  })
+  @IsString({ message: 'keyword 类型错误,正确类型 string' })
+  keyword: string;
+}
+

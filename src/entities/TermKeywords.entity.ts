@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, Index, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Terms } from './Terms.entity';
 
 @Index('term_keywords_pkey', ['name', 'termId'], { unique: true })
@@ -24,6 +24,14 @@ export class TermKeywords {
   @Index()
   columnId: string;
 
-  @JoinColumn([{ name: 'term_id', referencedColumnName: 'termId' }])
+  @ApiProperty({ description: '标题' })
+  @Column('text', { name: 'title',default:'', comment: '标题' })
+  title: string;
+
+  @ManyToOne(() => Terms, (terms) => terms.termKeywords, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'term_id', referencedColumnName: 'id' }])
   term: Terms;
 }

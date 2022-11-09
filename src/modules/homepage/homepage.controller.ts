@@ -5,11 +5,16 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { GetHomepageSearchResultByKeywordDto, SetHomepageDto } from './homepage.dto';
+import {
+  GetHomepageKeywordChartsDto,
+  GetHomepageSearchResultByKeywordDto,
+  SetHomepageDto,
+} from './homepage.dto';
 import { HomepageService } from './homepage.service';
 import {
   GetHomepageConfigResult,
   GetHomepageHotKeywordsResult,
+  GetHomepageKeywordChartsResult,
   GetHomepageSearchResultByKeywordResult,
 } from './homepage.types';
 
@@ -18,7 +23,8 @@ import {
   ResultData,
   GetHomepageConfigResult,
   GetHomepageHotKeywordsResult,
-  GetHomepageSearchResultByKeywordResult
+  GetHomepageSearchResultByKeywordResult,
+  GetHomepageKeywordChartsResult
 )
 @Controller('/homepage')
 export class HomepageController {
@@ -63,5 +69,16 @@ export class HomepageController {
   @AllowAnon()
   getHomepageSearchResultByKeyword(@Query() params: GetHomepageSearchResultByKeywordDto) {
     return this.homepageService.getHomepageSearchResultByKeyword(params);
+  }
+
+  @Get('/getHomepageKeywordCharts')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '首页知识图谱(关键词-项目/论文前两级自己拼接)',
+  })
+  @ApiResult(GetHomepageKeywordChartsResult)
+  @AllowAnon()
+  getHomepageKeywordCharts(@Query() params: GetHomepageKeywordChartsDto) {
+    return this.homepageService.getHomepageKeywordCharts(params);
   }
 }

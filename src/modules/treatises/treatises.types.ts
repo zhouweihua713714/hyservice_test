@@ -159,6 +159,7 @@ export class ListComplexTreatiseInfo extends PickType(Treatises, [
   'periodical',
   'releasedAt',
   'channel',
+  'authorAbbreviation',
 ] as const) {
   @ApiProperty({ description: '标签,列表标签是所有用户贴的最多的' })
   label: string;
@@ -363,7 +364,45 @@ export class GetResearchAnalysisMethodsInfo {
   percent: number;
 }
 
+export class DetailInfo {
+  @ApiProperty({ description: '相关的实体id' })
+  id: string;
+
+  @ApiProperty({ description: '相关的实体标题' })
+  title: string;
+}
+
+export class ColumnInfo {
+  @ApiProperty({ description: '栏目id' })
+  id: string;
+
+  @ApiProperty({ description: '栏目名称' })
+  name: string;
+
+  @ApiProperty({ description: '该栏目下该关键词的数量' })
+  count: number;
+
+  @ApiProperty({
+    description:
+      '该栏目下的具体数据数组(目前仅展示前20)可以是论文数据/项目数据/政策数据根据在哪个数组里定义含义',
+    type: DetailInfo,
+    isArray: true,
+  })
+  details: DetailInfo[];
+}
+
 export class GetResearchAnalysisMethodsResult {
-  @ApiProperty({ description: '分析方法数组', type: GetResearchAnalysisMethodsInfo, isArray: true })
-  methods: GetResearchAnalysisMethodsInfo[];
+  @ApiProperty({
+    description: '项目栏目下的数据',
+    type: GetResearchAnalysisMethodsInfo,
+    isArray: true,
+  })
+  termColumns: GetResearchAnalysisMethodsInfo[];
+
+  @ApiProperty({
+    description: '论文栏目下的数据',
+    type: GetResearchAnalysisMethodsInfo,
+    isArray: true,
+  })
+  treatiseColumns: GetResearchAnalysisMethodsInfo[];
 }

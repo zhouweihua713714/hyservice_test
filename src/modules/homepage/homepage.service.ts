@@ -2,10 +2,17 @@ import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
-import { keywordsRepository, websiteRepository } from '../repository/repository';
+import {
+  americaTermKeywordsRepository,
+  columnsRepository,
+  keywordsRepository,
+  termKeywordsRepository,
+  treatiseKeywordsRepository,
+  websiteRepository,
+} from '../repository/repository';
 import { GetHomepageSearchResultByKeywordDto, SetHomepageDto } from './homepage.dto';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
-import { QueryRunner } from 'typeorm';
+import { In, Like, Not, QueryRunner } from 'typeorm';
 
 export class HomepageService {
   /**
@@ -75,5 +82,126 @@ export class HomepageService {
       .getMany();
     const result = _.uniqBy(data, 'name').slice(0, 8);
     return ResultData.ok({ data: { keywords: result } });
+  }
+
+  /**
+   * @description 首页搜索结果知识图谱
+   * @param {GetHomepageSearchResultByKeywordDto } params
+   * @returns {ResultData} 返回getHomepageKeywordCharts信息
+   */
+  async getHomepageKeywordCharts(params: GetHomepageSearchResultByKeywordDto): Promise<ResultData> {
+    const { keyword } = params;
+    // term
+    let termKeywords: { name: string; columnId: string; termId: string; title: string }[] = [],
+      treatiseKeywords: { name: string; columnId: string; treatiseId: string; title: string }[] =
+        [],
+      americaTermKeywords: {
+        name: string;
+        columnId: string;
+        awardNumber: string;
+        title: string;
+      }[] = [],
+      columns;
+    [termKeywords, treatiseKeywords, americaTermKeywords, columns] = await Promise.all([
+      termKeywordsRepository.find({
+        where: {
+          name: Like(`%${keyword.toLowerCase()}%`),
+        },
+        select: ['name', 'columnId', 'title', 'termId'],
+      }),
+      treatiseKeywordsRepository.find({
+        where: {
+          name: Like(`%${keyword.toLowerCase()}%`),
+        },
+      }),
+      americaTermKeywordsRepository.find({
+        where: {
+          name: Like(`%${keyword.toLowerCase()}%`),
+        },
+      }),
+      columnsRepository.find({
+        where: {
+          parentId: In(['column_01', 'column_02']),
+        },
+        select: ['id', 'name'],
+      }),
+    ]);
+    columns = columns.map((data) => {
+      return {
+        id: data.id,
+        name: data.name,
+      };
+    });
+    // get group by data
+    const termGroupByColumnId = _.groupBy(termKeywords, 'columnId');
+    const americaTermGroupByColumnId = _.groupBy(americaTermKeywords, 'columnId');
+    const treatiseGroupByColumnId = _.groupBy(treatiseKeywords, 'columnId');
+    // get data by columnId
+    const termColumns = _.uniqBy(termKeywords, 'columnId').map((data) => {
+      return {
+        id: data.columnId,
+        name: _.find(columns, function (o) {
+          return o.id === data.columnId;
+        }).name,
+        count: termGroupByColumnId[data.columnId] ? termGroupByColumnId[data.columnId].length : 0,
+        details: termGroupByColumnId[data.columnId]
+          ? termGroupByColumnId[data.columnId]
+              .map((data) => {
+                return {
+                  id: data.termId,
+                  title: data.title,
+                };
+              })
+              .slice(0, 20)
+          : [],
+      };
+    });
+    const americaTermColumns = _.uniqBy(americaTermKeywords, 'columnId').map((data) => {
+      return {
+        id: data.columnId,
+        name: _.find(columns, function (o) {
+          return o.id === data.columnId;
+        }).name,
+        count: americaTermGroupByColumnId[data.columnId]
+          ? americaTermGroupByColumnId[data.columnId].length
+          : 0,
+        details: americaTermGroupByColumnId[data.columnId]
+          ? americaTermGroupByColumnId[data.columnId]
+              .map((data) => {
+                return {
+                  id: data.awardNumber,
+                  title: data.title,
+                };
+              })
+              .slice(0, 20)
+          : [],
+      };
+    });
+    const treatiseColumns = _.uniqBy(treatiseKeywords, 'columnId').map((data) => {
+      return {
+        id: data.columnId,
+        name: _.find(columns, function (o) {
+          return o.id === data.columnId;
+        }).name,
+        count: treatiseGroupByColumnId[data.columnId]
+          ? treatiseGroupByColumnId[data.columnId].length
+          : 0,
+        details: treatiseGroupByColumnId[data.columnId]
+          ? treatiseGroupByColumnId[data.columnId]
+              .map((data) => {
+                return {
+                  id: data.treatiseId,
+                  title: data.title,
+                };
+              })
+              .slice(0, 20)
+          : [],
+      };
+    });
+    const result = {
+      termColumns: _.unionBy(termColumns, americaTermColumns, 'id'),
+      treatiseColumns,
+    };
+    return ResultData.ok({ data: { ...result } });
   }
 }
