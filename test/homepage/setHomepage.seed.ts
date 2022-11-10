@@ -1,9 +1,7 @@
 import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
-
 import { samples } from '../samples';
 import { User_Types_Enum } from '@/common/enums/common.enum';
-
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;

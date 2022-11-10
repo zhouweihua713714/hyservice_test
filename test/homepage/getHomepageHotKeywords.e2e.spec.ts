@@ -1,4 +1,3 @@
-import { Content_Types_Enum } from '@/common/enums/common.enum';
 import { HttpStatus } from '@nestjs/common';
 import request from 'supertest';
 import { DBTester } from '../testHelper';

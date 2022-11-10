@@ -6,10 +6,8 @@ import {
   IsBoolean,
   IsDateString,
   IsEnum,
-  IsInt,
   IsOptional,
   IsString,
-  Length,
   MaxLength,
 } from 'class-validator';
 import { Transform } from 'class-transformer';

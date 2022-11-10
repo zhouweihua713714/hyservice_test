@@ -7,10 +7,7 @@ import {
   Content_Types_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
-import {
-  termKeywordsRepository,
-  treatiseKeywordsRepository,
-} from '@/modules/repository/repository';
+import { treatiseKeywordsRepository } from '@/modules/repository/repository';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;

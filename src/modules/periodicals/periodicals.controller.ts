@@ -5,7 +5,6 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { RecommendTreatisesResult } from '../treatises/treatises.types';
 import {
   GetPeriodicalDetailDto,
   ListComplexPeriodicalDto,

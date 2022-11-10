@@ -55,8 +55,11 @@ import { AmericaTerms } from './entities/AmericaTerms.entity';
 import { AmericaTermKeywords } from './entities/AmericaTermKeywords.entity';
 import { TreatiseKeywords } from './entities/TreatiseKeywords.entity';
 import { TermKeywords } from './entities/TermKeywords.entity';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksModule } from './modules/tasks/tasks.module';
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       cache: true,
       load: [getConfig],
@@ -136,6 +139,7 @@ import { TermKeywords } from './entities/TermKeywords.entity';
     ConferencesModule,
     InstitutionsModule,
     UsersModule,
+    TasksModule,
   ],
   // 守卫
   providers: [

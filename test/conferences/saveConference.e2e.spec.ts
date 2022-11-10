@@ -1,4 +1,4 @@
-import { Content_Status_Enum, Peking_Unit_Enum } from '@/common/enums/common.enum';
+import { Content_Status_Enum } from '@/common/enums/common.enum';
 import { SaveConferenceDto } from '@/modules/conferences/conferences.dto';
 import { HttpStatus } from '@nestjs/common';
 import request from 'supertest';

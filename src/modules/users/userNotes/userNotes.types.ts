@@ -1,6 +1,4 @@
-import { UserFavoriteTreatises } from '@/entities/UserFavoriteTreatises.entity';
 import { UserNoteTreatises } from '@/entities/UserNoteTreatises.entity';
-import { Users } from '@/entities/Users.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class GetNoteTreatiseDetailResult extends PickType(UserNoteTreatises, [

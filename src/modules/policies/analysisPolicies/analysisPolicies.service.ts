@@ -6,7 +6,6 @@ import { ErrorCode } from '@/common/utils/errorCode';
 import {
   columnsRepository,
   analysisPoliciesRepository,
-  userHistoryRepository,
   usersRepository,
 } from '../../repository/repository';
 import {
@@ -20,13 +19,9 @@ import {
 } from './analysisPolicies.dto';
 import {
   Content_Status_Enum,
-  Content_Types_Enum,
-  Education_Level_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
-import { constant } from '@/common/utils/constant';
-import { ConsoleLogger } from '@nestjs/common';
 
 export class AnalysisPoliciesService {
   /**

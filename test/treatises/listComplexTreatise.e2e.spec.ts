@@ -2,7 +2,6 @@ import request from 'supertest';
 import { HttpStatus } from '@nestjs/common';
 import { DBTester } from '../testHelper';
 import { DataType } from './listTreatise.seed';
-import { Content_Status_Enum } from '@/common/enums/common.enum';
 
 const tester = new DBTester<DataType>().setup();
 

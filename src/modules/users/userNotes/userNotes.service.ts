@@ -12,13 +12,9 @@ import {
 } from './userNotes.dto';
 import {
   treatisesRepository,
-  userFavoriteTreatisesRepository,
-  userHistoryRepository,
   userNoteTreatisesRepository,
 } from '@/modules/repository/repository';
 import { In, IsNull } from 'typeorm';
-import { Content_Status_Enum, Operate_types_Enum } from '@/common/enums/common.enum';
-import { skip } from 'rxjs';
 
 export class UserNotesService {
   /**

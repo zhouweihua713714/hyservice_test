@@ -2,11 +2,7 @@ import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
-import {
-  Content_Status_Enum,
-  Content_Types_Enum,
-  User_Types_Enum,
-} from '@/common/enums/common.enum';
+import { Content_Status_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
@@ -49,20 +45,20 @@ export const seed: TesterSeed<DataType> = {
         id: (new Date().getTime() - 50000).toString(),
         columnId: columns[1].id,
         type: termType.id,
-        province:'350000',
+        province: '350000',
         name: '项目1',
         unit: '依托单位1',
-        year:2022,
+        year: 2022,
         status: Content_Status_Enum.ACTIVE,
       },
       {
         id: (new Date().getTime() - 40000).toString(),
         columnId: columns[1].id,
         type: termType.id,
-        province:'350000',
+        province: '350000',
         name: '项目2',
         unit: '依托单位2',
-        year:2022,
+        year: 2022,
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -70,8 +66,8 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         name: '项目3',
         unit: '依托单位1',
-        province:'350000',
-        year:2022,
+        province: '350000',
+        year: 2022,
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -79,8 +75,8 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         name: '项目4',
         unit: '依托单位1',
-        province:'350000',
-        year:2021,
+        province: '350000',
+        year: 2021,
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -88,7 +84,7 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         name: '项目5',
         unit: '依托单位1',
-        year:2021,
+        year: 2021,
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -96,8 +92,8 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         name: '项目6',
         unit: '依托单位1',
-        province:'350000',
-        year:2021,
+        province: '350000',
+        year: 2021,
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -105,8 +101,8 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         name: '项目7',
         unit: '依托单位3',
-        province:'350000',
-        year:2021,
+        province: '350000',
+        year: 2021,
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -114,8 +110,8 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         name: '项目8',
         unit: '依托单位3',
-        year:2020,
-        province:'350000',
+        year: 2020,
+        province: '350000',
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -123,8 +119,8 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         name: '项目9',
         unit: '依托单位3',
-        province:'350000',
-        year:2019,
+        province: '350000',
+        year: 2019,
         status: Content_Status_Enum.ACTIVE,
       },
       {
@@ -133,8 +129,8 @@ export const seed: TesterSeed<DataType> = {
         type: termType.id,
         name: '项目10',
         unit: '依托单位1',
-        province:'350000',
-        year:2018,
+        province: '350000',
+        year: 2018,
         status: Content_Status_Enum.ACTIVE,
       },
     ]);

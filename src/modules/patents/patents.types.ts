@@ -1,5 +1,4 @@
 import { Patents } from '@/entities/Patents.entity';
-import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class SavePatentResult {

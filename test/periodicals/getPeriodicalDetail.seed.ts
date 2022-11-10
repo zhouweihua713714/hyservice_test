@@ -5,12 +5,9 @@ import { samples } from '../samples';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Subjects } from '@/entities/Subjects.entity';
-import { TermTypes } from '@/entities/TermTypes.entity';
-import { Terms } from '@/entities/Terms.entity';
 import { Languages } from '@/entities/Languages.entity';
 import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
 import { Periodicals } from '@/entities/Periodicals.entity';
-import { userInfo } from 'os';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;

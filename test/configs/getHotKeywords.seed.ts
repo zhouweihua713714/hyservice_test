@@ -1,6 +1,5 @@
 import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
-import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 const { mobile, password } = samples;

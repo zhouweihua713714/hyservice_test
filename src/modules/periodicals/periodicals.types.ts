@@ -1,5 +1,4 @@
 import { Periodicals } from '@/entities/Periodicals.entity';
-import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class SavePeriodicalResult {

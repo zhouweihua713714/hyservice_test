@@ -1,6 +1,5 @@
 import { UserHistory } from '@/entities/UserHistory.entity';
-import { Users } from '@/entities/Users.entity';
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class UserHistoryInfo extends PickType(UserHistory, [
   'id',

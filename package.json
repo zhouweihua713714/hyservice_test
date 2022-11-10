@@ -44,6 +44,7 @@
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.2.4",
+    "@nestjs/schedule": "^2.1.0",
     "@nestjs/serve-static": "^2.2.2",
     "@nestjs/swagger": "^5.1.5",
     "@nestjs/typeorm": "^8.0.2",
@@ -122,6 +123,7 @@
     "typescript": "^4.5.4"
   },
   "jest": {
+    "testTimeout": 10000,
     "maxWorkers": 2,
     "moduleFileExtensions": [
       "js",

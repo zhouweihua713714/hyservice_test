@@ -12,7 +12,7 @@ import { TermTypes } from '@/entities/TermTypes.entity';
 import { TopicTypes } from '@/entities/TopicTypes.entity';
 import { Universities } from '@/entities/Universities.entity';
 import { Website } from '@/entities/Website.entity';
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class GetConfigsConfigResult extends PickType(Website, [
   'id',

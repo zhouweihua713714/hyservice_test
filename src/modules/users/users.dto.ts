@@ -1,15 +1,7 @@
-import { Content_Status_Enum } from '@/common/enums/common.enum';
-import { ReqListQuery } from '@/common/utils/reqListQuery';
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsArray,
-  IsDateString,
-  IsEnum,
-  IsInt,
   IsOptional,
   IsString,
-  Length,
-  MaxLength,
 } from 'class-validator';
 
 export class GetUserDetailDto {

@@ -1,8 +1,6 @@
 import { Columns } from '@/entities/Columns.entity';
 import { Treatises } from '@/entities/Treatises.entity';
-import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
-import { GetNoteTreatiseDetailResult } from '../users/userNotes/userNotes.types';
 
 export class SaveTreatiseResult {
   @ApiProperty({ description: '主键id' })

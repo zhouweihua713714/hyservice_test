@@ -1,6 +1,5 @@
 import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
-import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 const { mobile, password } = samples;
@@ -18,8 +17,8 @@ export const seed: TesterSeed<DataType> = {
       tester.authService
     );
     await tester.keywordsRepository.save([
-      { name: '项目', type: Content_Types_Enum.TERM,frequency:50 },
-      { name: '项目关键词1', type: Content_Types_Enum.TERM },
+      { name: '项目', type: Content_Types_Enum.TERM, frequency: 50 },
+      { name: '项目关键词1', type: Content_Types_Enum.TERM, frequency: 1 },
     ]);
 
     return { user, normalUser };

@@ -1,4 +1,4 @@
-import _, { isNull } from 'lodash';
+import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../../auth/auth.types';
@@ -7,7 +7,6 @@ import { ListFavoriteTreatiseDto, OperateTreatisesDto } from './userFavorites.dt
 import {
   treatisesRepository,
   userFavoriteTreatisesRepository,
-  userHistoryRepository,
   userLabelTreatisesRepository,
 } from '@/modules/repository/repository';
 import { In, IsNull } from 'typeorm';

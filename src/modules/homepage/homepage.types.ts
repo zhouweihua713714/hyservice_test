@@ -1,5 +1,5 @@
 import { Website } from '@/entities/Website.entity';
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { GetHotKeywordsInfo } from '../configs/configs.types';
 
 export class GetHomepageConfigResult extends PickType(Website, [

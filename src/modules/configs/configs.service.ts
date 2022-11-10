@@ -30,7 +30,7 @@ import {
   SetColumnsTypeDto,
 } from './configs.dto';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
-import { Like } from 'typeorm';
+import { Like, Not } from 'typeorm';
 @Injectable()
 export class ConfigsService {
   /**
@@ -235,6 +235,7 @@ export class ConfigsService {
       where: {
         name: Like(`%${keyword.toLowerCase()}%`),
         type: type,
+        frequency: Not(0),
       },
       order: {
         search: 'DESC',
