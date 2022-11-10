@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { Injectable, Logger } from '@nestjs/common';
 import {
+  americaTermKeywordsRepository,
+  americaTermsRepository,
   keywordsRepository,
   termKeywordsRepository,
   termsRepository,
@@ -25,7 +27,7 @@ export class TasksService {
     // 目前只有项目、论文 后续需要什么再继续跟进任务
     console.time('查询时间');
     //先查出最新的实体数据内容
-    const [treatises, terms] = await Promise.all([
+    const [treatises, terms, americaTerms] = await Promise.all([
       treatisesRepository.find({
         where: {
           status: Content_Status_Enum.ACTIVE,
@@ -44,6 +46,15 @@ export class TasksService {
         },
         select: ['keyword', 'id', 'columnId', 'name'],
       }),
+      americaTermsRepository.find({
+        where: {
+          status: Content_Status_Enum.ACTIVE,
+          deletedAt: IsNull(),
+          enabled: true,
+          keyword: Not(IsNull()),
+        },
+        select: ['keyword', 'awardNumber', 'columnId', 'title'],
+      })
     ]);
     console.timeEnd('查询时间');
     console.time('数据准备时间');
@@ -60,6 +71,12 @@ export class TasksService {
         name: string;
         columnId: string;
         termId: string;
+      }[] = [],
+      americaTermsKeywords: {
+        awardNumber: string;
+        name: string;
+        columnId: string;
+        title: string;
       }[] = [];
     //论文
     for (let i = 0; i < treatises.length; i++) {
@@ -97,13 +114,29 @@ export class TasksService {
         termKeywords = _.unionBy(termKeywords, keyword, 'id');
       }
     }
+    // 美国项目
+    for (let i = 0; i < americaTerms.length; i++) {
+      if (americaTerms[i].keyword) {
+        const keyword = americaTerms[i].keyword
+          ?.replace(/\+/g, '')
+          .split(';')
+          .map((data) => {
+            return {
+              awardNumber: americaTerms[i].awardNumber,
+              name: data.toLowerCase().trim(),
+              columnId: americaTerms[i].columnId,
+              title: americaTerms[i].title,
+            };
+          });
+        americaTermsKeywords = _.unionBy(americaTermsKeywords, keyword, (o) => o.awardNumber + o.name);      
+      }
+    }
     console.timeEnd('数据准备时间');
     console.time('插入执行时间');
     //插入之前每次清空表,防止产生一些无效数据,insert 这里逐条插入是因为批量插入会有最大限制且当前论文数据量大批量插入需要分组所以直接单条插入更方便
-    await Promise.all([treatiseKeywordsRepository.delete({}), termKeywordsRepository.delete({})]);
+    await Promise.all([treatiseKeywordsRepository.delete({}), termKeywordsRepository.delete({}), americaTermKeywordsRepository.delete({})]);
     //论文
-    let treatiseCount = 0,
-      termCount = 0;
+    let treatiseCount = 0, termCount = 0, americaTermCount = 0;
     for (let i = 0; i < treatiseKeywords.length; i++) {
       if (treatiseKeywords[i].name.replace(/\+/g, '')) {
         await treatiseKeywordsRepository.save(treatiseKeywords[i]);
@@ -117,10 +150,18 @@ export class TasksService {
         termCount++;
       }
     }
+    // 美国数据
+    for (let i = 0; i < americaTermsKeywords.length; i++) {
+      if (americaTermsKeywords[i].name.replace(/\+/g, '')) {
+        await americaTermKeywordsRepository.save(americaTermsKeywords[i]);
+        americaTermCount++;
+      }
+    }
     console.timeEnd('插入执行时间');
     // 更新keywords数据准备
     console.time('更新keywords数据准备');
     const groupByTermKeywords = _.groupBy(termKeywords, 'name');
+    const groupByAmericaTermKeywords = _.groupBy(americaTermsKeywords, 'name');
     const groupByTreatiseKeywords = _.groupBy(treatiseKeywords, 'name');
     //项目
     const termKeywordData = _.uniqBy(termKeywords, 'name').map((data) => {
@@ -129,6 +170,26 @@ export class TasksService {
         type: Content_Types_Enum.TERM,
         frequency: groupByTermKeywords[data.name].length,
       };
+    }) || [];
+    // 美国项目
+    _.uniqBy(americaTermsKeywords, 'name').map((data) => {
+      const index = _.findIndex(termKeywordData, { name: data.name });
+      if (index > -1) { 
+        const oldData = termKeywordData[index];
+        const length = groupByAmericaTermKeywords[data.name].length || 0;
+        termKeywordData[index] = {
+          name: data.name,
+          type: Content_Types_Enum.TERM,
+          frequency:  oldData.frequency + length,
+        };
+      }
+      else {
+        termKeywordData.push({
+          name: data.name,
+          type: Content_Types_Enum.TERM,
+          frequency: groupByAmericaTermKeywords[data.name].length,
+        });
+      }
     });
     //论文
     const treatiseKeywordData = _.uniqBy(treatiseKeywords, 'name').map((data) => {
@@ -180,6 +241,10 @@ export class TasksService {
       termKeywords.length,
       ' 项目termKeywords插入长度:',
       termCount,
+      ' 美国项目americaTermsKeywords长度:',
+      americaTermsKeywords.length,
+      ' 美国项目americaTermsKeywords插入长度:',
+      americaTermCount,
       ' 论文Keywords长度:',
       treatiseKeywordData.length,
       ' 论文Keywords插入/更新长度:',
