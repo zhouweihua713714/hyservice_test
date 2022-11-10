@@ -73,6 +73,19 @@ export class AmericaTerms {
   @Column('character varying', { name: 'year', nullable: true, comment: '年份' })
   year: string | null;
 
+  @ApiProperty({ description: '栏目id' })
+  @Column('character varying', { name: 'column_id', length: 128, comment: '栏目id' })
+  columnId: string;
+
+  @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
+  @Column('character varying', {
+    name: 'keyword',
+    length: 100,
+    nullable: true,
+    comment: '关键字',
+  })
+  keyword: string | null;
+
   @ApiProperty({ description: '状态:待发布ready,已发布active,已下架inactive' })
   @Column('character varying', {
     name: 'status',
