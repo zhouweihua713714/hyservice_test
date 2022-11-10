@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, Index, JoinColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { AmericaTerms } from './AmericaTerms.entity';
 
 @Index('america_term_keywords_pkey', ['name', 'awardNumber'], { unique: true })
@@ -23,6 +23,10 @@ export class AmericaTermKeywords {
   @Index()
   columnId: string;
 
+  @ManyToOne(() => AmericaTerms, (americaTerm) => americaTerm.americaTermKeywords, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn([{ name: 'award_number', referencedColumnName: 'awardNumber' }])
   americaTerm: AmericaTerms;
 }

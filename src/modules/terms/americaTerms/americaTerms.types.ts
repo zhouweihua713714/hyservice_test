@@ -1,4 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { AmericaTerms } from '@/entities/AmericaTerms.entity';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class AmericaTermOverviewInfo {
   @ApiProperty({ description: '年份' })
@@ -72,4 +73,23 @@ export class GetAmericaTermHotOrganizationListResult {
     isArray: true,
   })
   americaTerms: AmericaTermAmountByKeywordsInfo[];
+}
+
+export class ListComplexAmericaTermInfo extends PickType(AmericaTerms, [
+  'awardNumber',
+  'title',
+  'startDate',
+  'endDate',
+  'organization',
+  'principalInvestigator',
+  'awardedAmountToDate',
+  'nsfDirectorate',
+]){}
+
+export class ListComplexAmericaTermResult {
+  @ApiProperty({ description: '美国项目数组', type: ListComplexAmericaTermInfo, isArray: true })
+  americaTerms: ListComplexAmericaTermInfo[];
+
+  @ApiProperty({ description: '总数' })
+  count: number;
 }
