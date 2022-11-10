@@ -58,6 +58,7 @@ export const seed: TesterSeed<DataType> = {
         year: '2015',
         status: Content_Status_Enum.ACTIVE,
         enabled: true,
+        columnId: 'column_01_04'
       }
     ]);
     return { user, normalUser, americaTerms, termType };

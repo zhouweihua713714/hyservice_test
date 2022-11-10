@@ -62,6 +62,7 @@ export const seed: TesterSeed<DataType> = {
         year: String(new Date().getFullYear()),
         status: Content_Status_Enum.ACTIVE,
         enabled: true,
+        columnId: 'column_01_04'
       },
       {
         awardNumber: (new Date().getTime()+1).toString(),
@@ -79,6 +80,7 @@ export const seed: TesterSeed<DataType> = {
         year: String(new Date().getFullYear()),
         status: Content_Status_Enum.ACTIVE,
         enabled: true,
+        columnId: 'column_01_04'
       },
       {
         awardNumber: (new Date().getTime()+2).toString(),
@@ -96,6 +98,7 @@ export const seed: TesterSeed<DataType> = {
         year: String(new Date().getFullYear()),
         status: Content_Status_Enum.ACTIVE,
         enabled: true,
+        columnId: 'column_01_04'
       }
     ]);
     keywords = await tester.americaTermKeywordsRepository.save([
@@ -103,19 +106,19 @@ export const seed: TesterSeed<DataType> = {
         name: 'keyword1',
         awardNumber: americaTerms[0].awardNumber,
         title: americaTerms[0].title,
-        columnId: ''
+        columnId: 'column_01_04'
       },
       {
         name: 'keyword2',
         awardNumber: americaTerms[1].awardNumber,
         title: americaTerms[1].title,
-        columnId: ''
+        columnId: 'column_01_04'
       },
       {
         name: 'keyword3',
         awardNumber: americaTerms[2].awardNumber,
         title: americaTerms[2].title,
-        columnId: ''
+        columnId: 'column_01_04'
       },
     ]);
 
