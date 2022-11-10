@@ -1,6 +1,6 @@
 import { LinkInfo } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsOptional, IsString, Length, MaxLength } from 'class-validator';
+import { IsArray, IsOptional, IsString, MaxLength } from 'class-validator';
 export class SetHomepageDto {
   @ApiPropertyOptional({ description: 'id,有则传过来无则不传' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })

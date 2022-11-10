@@ -12,7 +12,7 @@ import {
 } from '../repository/repository';
 import { GetHomepageSearchResultByKeywordDto, SetHomepageDto } from './homepage.dto';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
-import { In, Like, Not, QueryRunner } from 'typeorm';
+import { In } from 'typeorm';
 
 export class HomepageService {
   /**

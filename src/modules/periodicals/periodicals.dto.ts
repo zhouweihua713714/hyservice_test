@@ -5,15 +5,11 @@ import {
   IsArray,
   IsBoolean,
   IsDateString,
-  IsDecimal,
   IsEnum,
-  IsIn,
-  isInt,
   IsInt,
   IsNumber,
   IsOptional,
   IsString,
-  Length,
   MaxLength,
 } from 'class-validator';
 import { Transform } from 'class-transformer';

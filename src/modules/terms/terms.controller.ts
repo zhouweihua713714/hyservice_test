@@ -7,7 +7,12 @@ import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import { GetAmericaTermAmountByKeywordsDto } from './americaTerms/americaTerms.dto';
 import { AmericaTermsService } from './americaTerms/americaTerms.service';
-import { GetAmericaTermAmountByKeywordsResult, GetAmericaTermDistributionResult, GetAmericaTermHotOrganizationListResult, GetAmericaTermOverviewResult } from './americaTerms/americaTerms.types';
+import {
+  GetAmericaTermAmountByKeywordsResult,
+  GetAmericaTermDistributionResult,
+  GetAmericaTermHotOrganizationListResult,
+  GetAmericaTermOverviewResult,
+} from './americaTerms/americaTerms.types';
 import {
   GetMoneyByYearDto,
   GetTermCountByProvinceDto,
@@ -63,7 +68,7 @@ import {
 @Controller('/terms')
 export class TermsController {
   constructor(
-    private readonly termsService: TermsService, 
+    private readonly termsService: TermsService,
     private readonly americaTermsService: AmericaTermsService
   ) {}
 
@@ -234,7 +239,7 @@ export class TermsController {
 
   @Get('/getAmericaTermHotOrganizationList')
   @HttpCode(200)
-  @ApiOperation({ summary: '热门研究单位'})
+  @ApiOperation({ summary: '热门研究单位' })
   @ApiResult(GetAmericaTermHotOrganizationListResult)
   @AllowAnon()
   getAmericaTermHotOrganizationList() {

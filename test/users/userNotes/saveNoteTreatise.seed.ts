@@ -2,9 +2,7 @@ import { TesterSeed } from '../../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../../samples';
-import {
-  User_Types_Enum,
-} from '@/common/enums/common.enum';
+import { User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
 import { Treatises } from '@/entities/Treatises.entity';
 const { mobile, password } = samples;

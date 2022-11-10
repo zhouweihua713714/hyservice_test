@@ -3,7 +3,12 @@ import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
-import { keywordsRepository, universitiesRepository, userKeywordStatisticsRepository, usersRepository } from '../repository/repository';
+import {
+  keywordsRepository,
+  universitiesRepository,
+  userKeywordStatisticsRepository,
+  usersRepository,
+} from '../repository/repository';
 import { ModifyUserInfoDto } from './users.dto';
 import { User_Status_Enum } from '@/common/enums/common.enum';
 import { In } from 'typeorm';
@@ -59,10 +64,13 @@ export class UsersService {
 
   /**
    * @description 记录用户关键词搜索次数
-   * @param {ModifyUserInfoDto} params 
+   * @param {ModifyUserInfoDto} params
    */
   async recordUserSearchTimes(params: {
-    keywords: string[], type: string, userId: string, columnId: string
+    keywords: string[];
+    type: string;
+    userId: string;
+    columnId: string;
   }): Promise<void> {
     // 查询关键字是否存在
     const { keywords, type, userId, columnId } = params;
@@ -70,31 +78,31 @@ export class UsersService {
       keywordsRepository.find({
         where: {
           type,
-          name: In(keywords)
-        }
+          name: In(keywords),
+        },
       }),
       userKeywordStatisticsRepository.find({
         where: {
           userId,
           keyword: In(keywords),
-          columnId
-        }
-      })
+          columnId,
+        },
+      }),
     ]);
     const updateKeywordsStatistics: any[] = [];
     if (!_.isEmpty(existingKeywords)) {
       for (let i = 0; i < existingKeywords.length; i++) {
         const keyword = existingKeywords[i].name;
         updateKeywordsStatistics.push(
-          keywordsRepository.increment({name: keyword, type }, 'search', 1)
+          keywordsRepository.increment({ name: keyword, type }, 'search', 1)
         );
-        if (userId) { // 此处不加锁，少量数据覆盖不影响业务
-          if(_.findIndex(userExistingKeywords, { keyword }) > -1) {
+        if (userId) {
+          // 此处不加锁，少量数据覆盖不影响业务
+          if (_.findIndex(userExistingKeywords, { keyword }) > -1) {
             updateKeywordsStatistics.push(
               userKeywordStatisticsRepository.increment({ userId, keyword, columnId }, 'search', 1)
             );
-          }
-          else {
+          } else {
             updateKeywordsStatistics.push(
               userKeywordStatisticsRepository.save({ userId, keyword, columnId, search: 1 })
             );

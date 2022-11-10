@@ -1,5 +1,4 @@
 import { Policies } from '@/entities/Policies.entity';
-import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class SavePolicyResult {

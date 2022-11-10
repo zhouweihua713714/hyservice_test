@@ -1,4 +1,4 @@
-import _, { words } from 'lodash';
+import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
 
 import { SignInResInfo } from '../auth/auth.types';

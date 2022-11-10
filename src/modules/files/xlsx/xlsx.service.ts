@@ -1,11 +1,8 @@
 import _ from 'lodash';
-import crypto from 'crypto';
-import { v4 as uuidv4 } from 'uuid';
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FilesDao } from '../files.dao';
-import { Files } from '@/entities/Files.entity';
-import { ErrorCode } from '@/common/utils/errorCode';
 import { AuthService } from '@/modules/auth/auth.service';
 import xlsx from 'node-xlsx';
 import { ResultData } from '@/common/utils/result';

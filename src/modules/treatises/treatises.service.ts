@@ -6,12 +6,7 @@ import { ErrorCode } from '@/common/utils/errorCode';
 import {
   articleTypesRepository,
   columnsRepository,
-  keywordsRepository,
   languagesRepository,
-  patentsRepository,
-  policiesRepository,
-  termKeywordsRepository,
-  termsRepository,
   treatiseKeywordsRepository,
   treatisesRepository,
   userFavoriteTreatisesRepository,
@@ -38,9 +33,8 @@ import {
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like, Not } from 'typeorm';
-import { ConsoleLogger, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { TreatiseKeywords } from '@/entities/TreatiseKeywords.entity';
 import { UsersService } from '../users/users.service';
 @Injectable()
 export class TreatisesService {
@@ -1157,7 +1151,6 @@ export class TreatisesService {
     // }
     // console.timeEnd('插入执行时间');
     // console.log('insertCount', insertCount);
-
     return ResultData.ok({
       data: { keywords: [] },
     });

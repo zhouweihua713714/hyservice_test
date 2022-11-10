@@ -1,5 +1,4 @@
 import { Institutions } from '@/entities/Institutions.entity';
-import { Website } from '@/entities/Website.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class SaveInstitutionResult {

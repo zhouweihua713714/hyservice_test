@@ -1,6 +1,5 @@
 import { Terms } from '@/entities/Terms.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
-import { isArray } from 'lodash';
 
 export class SaveTermResult {
   @ApiProperty({ description: '主键id' })

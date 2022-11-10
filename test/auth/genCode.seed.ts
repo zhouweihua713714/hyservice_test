@@ -1,6 +1,4 @@
 import { TesterSeed } from '../testHelper';
-import { CreateUserRetType } from '@/dao/users.dao';
-
 import { samples } from '../samples';
 
 const { mobile, password } = samples;

@@ -1,6 +1,6 @@
 import { Content_Types_Enum } from '@/common/enums/common.enum';
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsInt, IsOptional, IsString, Length } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class SetColumnsTypeDto {
   // @ApiPropertyOptional({ description: 'id,有则传过来无则不传' })

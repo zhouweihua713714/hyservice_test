@@ -2,10 +2,8 @@ import { TesterSeed } from '../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
-import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { Subjects } from '@/entities/Subjects.entity';
-import { TermTypes } from '@/entities/TermTypes.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
@@ -31,8 +29,8 @@ export const seed: TesterSeed<DataType> = {
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: '0', sequenceNumber: 2 },
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: '1', sequenceNumber: 1 },
     ]);
-   
-    return { user, normalUser, columns, };
+
+    return { user, normalUser, columns };
   },
   down: async (tester) => {
     await tester.usersRepository.delete({});
