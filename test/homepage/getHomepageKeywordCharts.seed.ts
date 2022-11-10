@@ -71,11 +71,30 @@ export const seed: TesterSeed<DataType> = {
         title: '项目标题',
       },
     ]);
+    const americaTerms = await tester.americaTermsRepository.save([
+      {
+        awardNumber: (new Date().getTime() - 50000).toString(),
+        title: 'Contributions of Hippocampal Subsystems to Different Aspects of Episodic Memory',
+        program: 'Sci of Lrng & Augmented Intel',
+        startDate: '2020-09-01',
+        endDate: '2025-02-28',
+        principalInvestigator: 'Lloyd Slevc',
+        state: 'MD',
+        organization: 'University of Maryland,College Park',
+        awardInstrument: 'Continuing Grant',
+        awardedAmountToDate: 1000000,
+        abstract: 'Contributions of Hippocampal Subsystems to Different Aspects of Episodic Memory',
+        nsfDirectorate: 'NSFDirectorate_SBE',
+        year: '2015',
+        status: Content_Status_Enum.ACTIVE,
+        enabled: true,
+      }
+    ]);
     await tester.americaTermKeywordsRepository.save([
       {
         name: '关键词',
         columnId: columns[0].id,
-        awardNumber: terms[0].id,
+        awardNumber: americaTerms[0].awardNumber,
         // americaTerm: { awardNumber: terms[0].id },
         title: '项目标题1',
       },
@@ -86,6 +105,7 @@ export const seed: TesterSeed<DataType> = {
     await tester.treatisesRepository.delete({});
     await tester.termsRepository.delete({});
     await tester.americaTermKeywordsRepository.delete({});
+    await tester.americaTermsRepository.delete({});
     await tester.termKeywordsRepository.delete({});
     await tester.treatiseKeywordsRepository.delete({});
     await tester.columnsRepository.delete({});

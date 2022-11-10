@@ -5,14 +5,9 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { GetAmericaTermAmountByKeywordsDto } from './americaTerms/americaTerms.dto';
+import { GetAmericaTermAmountByKeywordsDto, ListComplexAmericaTermDto } from './americaTerms/americaTerms.dto';
 import { AmericaTermsService } from './americaTerms/americaTerms.service';
-import {
-  GetAmericaTermAmountByKeywordsResult,
-  GetAmericaTermDistributionResult,
-  GetAmericaTermHotOrganizationListResult,
-  GetAmericaTermOverviewResult,
-} from './americaTerms/americaTerms.types';
+import { GetAmericaTermAmountByKeywordsResult, GetAmericaTermDistributionResult, GetAmericaTermHotOrganizationListResult, GetAmericaTermOverviewResult, ListComplexAmericaTermResult } from './americaTerms/americaTerms.types';
 import {
   GetMoneyByYearDto,
   GetTermCountByProvinceDto,
@@ -63,7 +58,8 @@ import {
   GetAmericaTermOverviewResult,
   GetAmericaTermDistributionResult,
   GetAmericaTermAmountByKeywordsResult,
-  GetAmericaTermHotOrganizationListResult
+  GetAmericaTermHotOrganizationListResult,
+  ListComplexAmericaTermResult
 )
 @Controller('/terms')
 export class TermsController {
@@ -244,5 +240,15 @@ export class TermsController {
   @AllowAnon()
   getAmericaTermHotOrganizationList() {
     return this.americaTermsService.getAmericaTermHotOrganizationList();
+  }
+
+  @Post('/listComplexAmericaTerm')
+  @HttpCode(200)
+  @ApiOperation({ summary: '美国项目列表(c端)' })
+  @ApiResult(ListComplexAmericaTermResult)
+  @AllowAnon()
+  listComplexAmericaTerm(@Body() params: ListComplexAmericaTermDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.americaTermsService.listComplexAmericaTerm(params, user);
   }
 }
