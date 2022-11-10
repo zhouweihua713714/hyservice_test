@@ -80,7 +80,7 @@ export class AmericaTerms {
   @ApiPropertyOptional({ description: '关键字', type: String, nullable: true })
   @Column('character varying', {
     name: 'keyword',
-    length: 100,
+    length: 256,
     nullable: true,
     comment: '关键字',
   })
