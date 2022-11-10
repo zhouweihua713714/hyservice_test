@@ -6,6 +6,7 @@ import { SignInResInfo } from '../auth/auth.types';
 
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
+  americaTermKeywordsRepository,
   articleTypesRepository,
   columnsRepository,
   fieldsRepository,
@@ -251,7 +252,7 @@ export class ConfigsService {
   async getHotKeywords(params: GeHotKeywordsDto): Promise<ResultData> {
     const { type, columnId } = params;
     let data, keywords;
-    if (type === Content_Types_Enum.TERM && columnId) {
+    if (type === Content_Types_Enum.TERM && columnId && columnId !== 'column_01_04') {
       [data, keywords] = await Promise.all([
         termKeywordsRepository
           .createQueryBuilder('term_keywords')
@@ -261,6 +262,24 @@ export class ConfigsService {
             columnId: columnId,
           })
           .groupBy('term_keywords.name')
+          .getRawMany(),
+        keywordsRepository.find({
+          where: {
+            type: Content_Types_Enum.TERM,
+          },
+        }),
+      ]);
+    }
+    else if (type === Content_Types_Enum.TERM && columnId && columnId === 'column_01_04') {
+      [data, keywords] = await Promise.all([
+        americaTermKeywordsRepository
+          .createQueryBuilder('americaTermKeywords')
+          .select('COUNT(americaTermKeywords.awardNumber)', 'frequency')
+          .addSelect('americaTermKeywords.name', 'name')
+          .where('americaTermKeywords.columnId =:columnId', {
+            columnId: columnId,
+          })
+          .groupBy('americaTermKeywords.name')
           .getRawMany(),
         keywordsRepository.find({
           where: {
@@ -288,7 +307,7 @@ export class ConfigsService {
       ]);
     }
     // format data and order
-    if (data) {
+    if (!_.isEmpty(data)) {
       const keywordsDict = _.keyBy(keywords, (v) => v.name);
       const result = _.orderBy(
         _.map(data, (v) => ({
