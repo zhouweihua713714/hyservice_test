@@ -82,7 +82,7 @@ export class AmericaTermsService {
       .andWhere('americaTerms.deletedAt is null')
       .andWhere('americaTerms.nsfDirectorate =:nsfDirectorate', {nsfDirectorate: params.nsfDirectorate})
       .groupBy('year')
-      .addGroupBy('keyword')
+      .addGroupBy('keywords.name')
       .getRawMany(),
       americaTermsRepository.createQueryBuilder('americaTerms')
       .select('DISTINCT keywords.name', 'keyword')
