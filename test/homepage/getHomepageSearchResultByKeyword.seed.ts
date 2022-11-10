@@ -17,8 +17,8 @@ export const seed: TesterSeed<DataType> = {
       tester.authService
     );
     await tester.keywordsRepository.save([
-      { name: '项目', type: Content_Types_Enum.TERM,frequency:50 },
-      { name: '项目关键词1', type: Content_Types_Enum.TERM },
+      { name: '项目', type: Content_Types_Enum.TERM, frequency: 50 },
+      { name: '项目关键词1', type: Content_Types_Enum.TERM, frequency: 1 },
     ]);
 
     return { user, normalUser };
