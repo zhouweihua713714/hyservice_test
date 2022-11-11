@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
@@ -296,7 +295,6 @@ export class InstitutionsService {
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
     }
-
     const success = await institutionsRepository.find({
       where: { id: In(ids), enabled: true, deletedAt: IsNull() },
       select: ['id'],
@@ -439,13 +437,11 @@ export class InstitutionsService {
     });
     return ResultData.ok({ data: { institutions: result, count: count } });
   }
-
   /**
    * @description 推荐机构
    * @param {RecommendInstitutionsDto} params 推荐的相关参数
    * @returns {ResultData} 返回recommendInstitutions信息
    */
-
   async recommendInstitutions(
     params: RecommendInstitutionsDto,
     user: SignInResInfo
@@ -551,7 +547,6 @@ export class InstitutionsService {
       data: { institutions: result ? result : [] },
     });
   }
-
   /**
    * @description 机构分布
    * @param {} params

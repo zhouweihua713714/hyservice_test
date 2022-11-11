@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-
 import { SignInResInfo } from '../../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {

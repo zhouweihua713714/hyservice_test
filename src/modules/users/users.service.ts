@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
@@ -61,7 +60,6 @@ export class UsersService {
     await usersRepository.save(params);
     return ResultData.ok({ data: {} });
   }
-
   /**
    * @description 记录用户关键词搜索次数
    * @param {ModifyUserInfoDto} params

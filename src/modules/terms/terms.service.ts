@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
@@ -441,9 +440,6 @@ export class TermsService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { columnId } = params;
-    // ( 'column_01_01', '国家社会科学基金项目', 'column_01', '1', '0' ),
-    // ( 'column_01_02', '教育部人文社科项目', 'column_01', '2', '0' ),
-    // ( 'column_01_03', '国家自然科学基金项目(F0701)', 'column_01', '3', '0' ),
     let yearCount, unitTop10, terms;
     [yearCount, unitTop10, terms] = await Promise.all([
       termsRepository
@@ -884,7 +880,6 @@ export class TermsService {
       'subjectNo',
       'asc'
     );
-
     // filter !subject
     subjectCount = _.filter(subjectCount, function (o) {
       return o.subject;

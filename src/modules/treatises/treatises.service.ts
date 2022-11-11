@@ -1,6 +1,5 @@
-import _, { words } from 'lodash';
+import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
@@ -39,7 +38,6 @@ import { UsersService } from '../users/users.service';
 @Injectable()
 export class TreatisesService {
   constructor(private readonly usersService: UsersService) {}
-
   /**
    * @description 获取论文详情
    * @param {GetTreatiseDetailDto} params
@@ -749,7 +747,6 @@ export class TreatisesService {
       data: { treatises: treatises ? treatises : [] },
     });
   }
-
   /**
    * @description 文献发表机构排名(TOP10)
    * @param {GetInstitutionChartsDto} params 文献发表机构排名(TOP10)的相关参数
@@ -799,241 +796,6 @@ export class TreatisesService {
     });
   }
   /**
-   * @description 获取内容管理相关的关键词数据脚本
-   * @param {} params  获取内容管理相关的关键词数据脚本的相关参数
-   * @returns {ResultData} 返回getKeywords信息
-   */
-  async getKeywords(params: any): Promise<ResultData> {
-    // getTreatise
-    // console.time('queryTime');
-    // const treatises = await treatisesRepository.find({
-    //   where: {
-    //     status: Content_Status_Enum.ACTIVE,
-    //     deletedAt: IsNull(),
-    //     enabled: true,
-    //     keyword: Not(IsNull()),
-    //   },
-    //   select: ['keyword'],
-    // });
-    // console.timeEnd('queryTime');
-    // console.time('keywords');
-    // let keywords: { id: string; name: string; frequency: number }[] = [];
-    // for (let i = 0; i < treatises.length; i++) {
-    //   if (treatises[i].keyword) {
-    //     const keyword = treatises[i].keyword
-    //       ?.replace(/\+/g, '')
-    //       .split(';')
-    //       .map((data) => {
-    //         return {
-    //           id: uuidv4(),
-    //           name: data.toLowerCase().trim(),
-    //           frequency: 0,
-    //           type: Content_Types_Enum.TREATISE,
-    //         };
-    //       });
-    //     keywords = _.unionBy(keywords, keyword, 'id');
-    //   }
-    // }
-    // const keyword = _.uniqBy(
-    //   keywords.map((data) => {
-    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.TREATISE };
-    //   }),
-    //   'name'
-    // );
-    // console.timeEnd('keywords');
-    // console.time('countTime');
-    // for (let i = 0; i < keyword.length; i++) {
-    //   for (let j = 0; j < keywords.length; j++) {
-    //     if (keyword[i].name === keywords[j].name) {
-    //       keyword[i].frequency++;
-    //     }
-    //   }
-    // }
-    // const treatiseKeywords = _.orderBy(keyword, 'frequency', 'desc');
-    // console.timeEnd('countTime');
-    // console.log('treatise', treatiseKeywords.length, treatiseKeywords[0]);
-    // // insert
-    // console.time('insert');
-    // for (let i = 0; i < treatiseKeywords.length; i++) {
-    //   await keywordsRepository.save(treatiseKeywords[i]);
-    // }
-    // console.timeEnd('insert');
-    // getTreatise
-    // console.log('-------------------------------');
-    // console.time('termQueryTime');
-    // const terms = await termsRepository.find({
-    //   where: {
-    //     status: Content_Status_Enum.ACTIVE,
-    //     deletedAt: IsNull(),
-    //     enabled: true,
-    //     keyword: Not(IsNull()),
-    //   },
-    //   select: ['keyword'],
-    // });
-    // console.timeEnd('termQueryTime');
-    // console.time('keywords');
-    // let keywords: { id: string; name: string; frequency: number }[] = [];
-    // for (let i = 0; i < terms.length; i++) {
-    //   if (terms[i].keyword) {
-    //     const keyword = terms[i].keyword
-    //       ?.replace(/\+/g, '')
-    //       .split(';')
-    //       .map((data) => {
-    //         return {
-    //           id: uuidv4(),
-    //           name: data.toLowerCase().trim(),
-    //           frequency: 0,
-    //           type: Content_Types_Enum.TERM,
-    //         };
-    //       });
-    //     keywords = _.unionBy(keywords, keyword, 'id');
-    //   }
-    // }
-    // const keyword = _.uniqBy(
-    //   keywords.map((data) => {
-    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.TERM };
-    //   }),
-    //   'name'
-    // );
-    // console.timeEnd('keywords');
-    // console.time('countTime');
-    // for (let i = 0; i < keyword.length; i++) {
-    //   for (let j = 0; j < keywords.length; j++) {
-    //     if (keyword[i].name === keywords[j].name) {
-    //       keyword[i].frequency++;
-    //     }
-    //   }
-    // }
-    // const termKeywords = _.orderBy(keyword, 'frequency', 'desc');
-    // console.timeEnd('countTime');
-    // console.log('term:', termKeywords.length, termKeywords[0]);
-    // // insert
-    // console.time('insert');
-    // for (let i = 0; i < termKeywords.length; i++) {
-    //   await keywordsRepository.save(termKeywords[i]);
-    // }
-    // console.timeEnd('insert');
-    // console.log('-------------------------------');
-    // console.time('policyQueryTime');
-    // const policies = await policiesRepository.find({
-    //   where: {
-    //     status: Content_Status_Enum.ACTIVE,
-    //     deletedAt: IsNull(),
-    //     enabled: true,
-    //     keyword: Not(IsNull()),
-    //   },
-    //   select: ['keyword'],
-    // });
-    // console.timeEnd('policyQueryTime');
-    // console.time('keywords');
-    // let keywords: { id: string; name: string; frequency: number }[] = [];
-    // for (let i = 0; i < policies.length; i++) {
-    //   if (policies[i].keyword) {
-    //     const keyword = policies[i].keyword
-    //       ?.replace(/\+/g, '')
-    //       .split(';')
-    //       .map((data) => {
-    //         return {
-    //           id: uuidv4(),
-    //           name: data.toLowerCase(),
-    //           frequency: 0,
-    //           type: Content_Types_Enum.POLICY,
-    //         };
-    //       });
-    //     keywords = _.unionBy(keywords, keyword, 'id');
-    //   }
-    // }
-    // const keyword = _.uniqBy(
-    //   keywords.map((data) => {
-    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.POLICY };
-    //   }),
-    //   'name'
-    // );
-    // console.timeEnd('keywords');
-    // console.time('countTime');
-    // for (let i = 0; i < keyword.length; i++) {
-    //   for (let j = 0; j < keywords.length; j++) {
-    //     if (keyword[i].name === keywords[j].name) {
-    //       keyword[i].frequency++;
-    //     }
-    //   }
-    // }
-    // const policyKeywords = _.orderBy(keyword, 'frequency', 'desc');
-    // console.timeEnd('countTime');
-    // console.log('policy:', policyKeywords.length, policyKeywords[0]);
-    // // insert
-    // console.time('insert');
-    // for (let i = 0; i < policyKeywords.length; i++) {
-    //   await keywordsRepository.save(policyKeywords[i]);
-    // }
-    // console.timeEnd('insert');
-    // console.log('-------------------------------');
-    // console.time('patentQueryTime');
-    // const patents = await patentsRepository.find({
-    //   where: {
-    //     status: Content_Status_Enum.ACTIVE,
-    //     deletedAt: IsNull(),
-    //     enabled: true,
-    //     keyword: Not(IsNull()),
-    //   },
-    //   select: ['id', 'keyword'],
-    // });
-    // console.timeEnd('patentQueryTime');
-    // console.time('keywords');
-    // // let count = 0;
-    // let keywords: { id: string; name: string; frequency: number }[] = [];
-    // for (let i = 0; i < patents.length; i++) {
-    //   if (patents[i].keyword) {
-    //     patents[i].keyword = patents[i].keyword?.replace(/(^;)|(;$)/, '') || null;
-    //     const keyword = patents[i].keyword
-    //       ?.replace(/\+/g, '')
-    //       .split(';')
-    //       .map((data) => {
-    //         return {
-    //           id: uuidv4(),
-    //           name: data.toLowerCase().trim(),
-    //           frequency: 0,
-    //           type: Content_Types_Enum.PATENT,
-    //         };
-    //       });
-    //     keywords = _.unionBy(keywords, keyword, 'id');
-    //     // const result = await patentsRepository.save(patents[i]);
-    //     // if (result) {
-    //     //   count++;
-    //     // }
-    //   }
-    // }
-    // const keyword = _.uniqBy(
-    //   keywords.map((data) => {
-    //     return { name: data.name, frequency: 0, type: Content_Types_Enum.PATENT };
-    //   }),
-    //   'name'
-    // );
-    // // console.log('patentCount:', count);
-    // console.timeEnd('keywords');
-    // console.time('countTime');
-    // for (let i = 0; i < keyword.length; i++) {
-    //   for (let j = 0; j < keywords.length; j++) {
-    //     if (keyword[i].name === keywords[j].name) {
-    //       keyword[i].frequency++;
-    //     }
-    //   }
-    // }
-    // const patentKeywords = _.orderBy(keyword, 'frequency', 'desc');
-    // console.timeEnd('countTime');
-    // console.log('patent:', patentKeywords.length, patentKeywords[0]);
-    // // insert
-    // console.time('insert');
-    // for (let i = 0; i < patentKeywords.length; i++) {
-    //   await keywordsRepository.save(patentKeywords[i]);
-    // }
-    // console.timeEnd('insert');
-    return ResultData.ok({
-      data: { keywords: [] },
-    });
-  }
-
-  /**
    * @description 获取论文关键词TOP10(论文知识图谱)
    * @param {GetKeywordChartsDto} params  获取论文关键词TOP10(论文知识图谱)的相关参数
    * @returns {ResultData} 返回getKeywordCharts信息
@@ -1050,13 +812,6 @@ export class TreatisesService {
       })
       .groupBy('treatise_keywords.name')
       .getRawMany();
-    // const keywords = await keywordsRepository.find({
-    //   where: {
-    //     type: Content_Types_Enum.TREATISE,
-    //   },
-    // });
-    // //get map for get search
-    // const keywordsDict = _.keyBy(keywords, (v) => v.name);
     // get top10
     const keywordTop10 = _.orderBy(
       _.map(treatiseKeywords, (v) => ({
@@ -1091,7 +846,6 @@ export class TreatisesService {
       data: { keywordCharts: result },
     });
   }
-
   /**
    * @description 获取国家间的合作关系(NS)
    * @param {} params  获取国家间的合作关系(NS)相关参数
@@ -1111,8 +865,6 @@ export class TreatisesService {
     });
     //get region data
     let treatiseData: { region: string; title: string; id: string; treatiseId: string }[] = [];
-    // let regions: { region: string; count: number; treatise: { title: string; id: string }[] }[] =
-    //   [];
     treatises.map((data) => {
       let region;
       if (data.region) {
@@ -1148,7 +900,6 @@ export class TreatisesService {
       data: { regions: regions },
     });
   }
-
   /**
    * @description 获取年份下的论文数量(NS)
    * @param {} params  获取年份下的论文数量(NS)相关参数
@@ -1208,7 +959,6 @@ export class TreatisesService {
       data: { yearCounts: yearCounts },
     });
   }
-
   /**
    * @description 获取主题分布数据(NS)
    * @param {} params  获取主题分布数据(NS)相关参数

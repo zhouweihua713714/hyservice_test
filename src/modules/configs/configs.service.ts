@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
 import { Injectable } from '@nestjs/common';
-
 import { SignInResInfo } from '../auth/auth.types';
-
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
   americaTermKeywordsRepository,
@@ -31,6 +29,7 @@ import {
 } from './configs.dto';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Like, Not } from 'typeorm';
+
 @Injectable()
 export class ConfigsService {
   /**
@@ -196,7 +195,6 @@ export class ConfigsService {
     });
     return ResultData.ok({ data: { termTypes: data } });
   }
-
   /**
    * @description 获取学校数据
    * @param {} params
@@ -223,7 +221,6 @@ export class ConfigsService {
     });
     return ResultData.ok({ data: { topicTypes: data } });
   }
-
   /**
    * @description 搜索返回关键词列表
    * @param {GetSearchResultByKeywordDto } params

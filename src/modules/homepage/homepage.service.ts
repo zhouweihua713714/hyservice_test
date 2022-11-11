@@ -40,7 +40,6 @@ export class HomepageService {
     const result = await websiteRepository.save(params);
     return ResultData.ok({ data: result });
   }
-
   /**
    * @description 获取首页热搜关键词
    * @param {GeHotKeywordsDto}获取首页热搜关键词 params
@@ -58,7 +57,6 @@ export class HomepageService {
     const result = _.uniqBy(data, 'name').slice(0, 10);
     return ResultData.ok({ data: { keywords: result } });
   }
-
   /**
    * @description 首页搜索返回关键词列表
    * @param {GetHomepageSearchResultByKeywordDto } params
@@ -83,7 +81,6 @@ export class HomepageService {
     const result = _.uniqBy(data, 'name').slice(0, 8);
     return ResultData.ok({ data: { keywords: result } });
   }
-
   /**
    * @description 首页搜索结果知识图谱
    * @param {GetHomepageSearchResultByKeywordDto } params

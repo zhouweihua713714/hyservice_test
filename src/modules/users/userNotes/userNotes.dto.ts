@@ -3,7 +3,6 @@ import { ReqListQuery } from '@/common/utils/reqListQuery';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import { ArrayMinSize, IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-
 export class GetNoteTreatiseDetailDto {
   @ApiProperty({ description: 'id,笔记id' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })

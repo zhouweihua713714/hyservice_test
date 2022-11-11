@@ -2,7 +2,6 @@ import { ApiResult } from '@/common/decorators/apiResult.decorator';
 import { ResultData } from '@/common/utils/result';
 import { Body, Controller, Get, HttpCode, Post, Query, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/swagger';
-
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
 import {
@@ -158,15 +157,6 @@ export class TreatisesController {
   @AllowAnon()
   getKeywordCharts(@Query() params: GetKeywordChartsDto) {
     return this.treatisesService.getKeywordCharts(params);
-  }
-
-  @Get('/getKeywords')
-  @HttpCode(200)
-  @ApiOperation({ summary: '这里要做定时任务和局部数据调用暂放在这里开发请勿调用' })
-  @ApiResult(GetKeywordChartsResult)
-  @AllowAnon()
-  getKeywords(@Query() params: any) {
-    return this.treatisesService.getKeywords(params);
   }
 
   @Get('/getCountryCooperationNetWorks')

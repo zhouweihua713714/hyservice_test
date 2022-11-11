@@ -1,6 +1,5 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags, ApiExtraModels, ApiBearerAuth } from '@nestjs/swagger';
-
 import { ResultData } from '../../common/utils/result';
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { ApiResult } from '../../common/decorators/apiResult.decorator';
