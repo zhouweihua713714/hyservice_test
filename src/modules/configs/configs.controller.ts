@@ -18,6 +18,7 @@ import {
   GetFieldsResult,
   GetHotKeywordsResult,
   GetLanguagesResult,
+  GetNSFDirectorateTypesResult,
   GetPatentTypesResult,
   GetPatentValidTypesResult,
   GetPeriodicalPeriodsResult,
@@ -47,6 +48,7 @@ import {
   SetColumnsTypeResult,
   GetUniversitiesResult,
   GetTopicTypesResult,
+  GetNSFDirectorateTypesResult,
   GetSearchResultByKeywordResult,
   GetHotKeywordsResult,
 )
@@ -180,6 +182,15 @@ export class ConfigsController {
   @AllowAnon()
   getTopicTypes(@Query() params: any) {
     return this.configService.getTopicTypes();
+  }
+
+  @Get('/getNSFDirectorateTypes')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取美国项目学部类型数据' })
+  @ApiResult(GetNSFDirectorateTypesResult)
+  @AllowAnon()
+  getNSFDirectorateTypes() {
+    return this.configService.getNSFDirectorateTypes();
   }
 
   @Get('/getSearchResultByKeyword')

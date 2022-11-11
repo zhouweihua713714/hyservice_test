@@ -10,6 +10,7 @@ import {
   fieldsRepository,
   keywordsRepository,
   languagesRepository,
+  nsfDirectorateTypesRepository,
   patentTypesRepository,
   patentValidTypesRepository,
   periodicalPeriodsRepository,
@@ -221,6 +222,21 @@ export class ConfigsService {
     });
     return ResultData.ok({ data: { topicTypes: data } });
   }
+  /**
+   * @description 获取美国项目学部类型数据
+   * @param {} params
+   * @returns {ResultData} 返回getNSFDirectorateTypes信息
+   */
+  async getNSFDirectorateTypes(): Promise<ResultData> {
+    const data = await nsfDirectorateTypesRepository.find({
+      order: {
+        name: 'ASC',
+      },
+    });
+    return ResultData.ok({ data: { nsfDirectorateTypes: data } });
+  }
+  
+
   /**
    * @description 搜索返回关键词列表
    * @param {GetSearchResultByKeywordDto } params

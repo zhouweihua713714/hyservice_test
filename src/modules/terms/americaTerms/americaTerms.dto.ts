@@ -6,6 +6,7 @@ import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 export class GetAmericaTermAmountByKeywordsDto {
   @ApiProperty({
     description: '学部',
+    enum: NSFDirectorate_Enum
   })
   @IsString({ message: 'nsfDirectorate 类型错误,正确类型 string' })
   @IsEnum(NSFDirectorate_Enum)
@@ -35,7 +36,7 @@ export class ListComplexAmericaTermDto extends PickType(ReqListQuery, ['page', '
   @IsOptional()
   organization: string;
 
-  @ApiProperty({description: '学部'})
+  @ApiProperty({description: '学部', enum: NSFDirectorate_Enum})
   @IsString({ message: 'nsfDirectorate 类型错误,正确类型 string' })
   @IsEnum(NSFDirectorate_Enum)
   @IsOptional()

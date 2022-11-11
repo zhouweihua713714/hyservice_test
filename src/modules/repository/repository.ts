@@ -31,6 +31,7 @@ import { TermKeywords } from '@/entities/TermKeywords.entity';
 import { UserKeywordStatistics } from '@/entities/UserKeywordStatistics.entity';
 import { AmericaTerms } from '@/entities/AmericaTerms.entity';
 import { AmericaTermKeywords } from '@/entities/AmericaTermKeywords.entity';
+import { NSFDirectorateTypes } from '@/entities/NSFDirectorateTypes.entity';
 DataSource.initialize()
   .then(() => {
     // console.log('Data Source has been initialized!');
@@ -64,6 +65,7 @@ export const userLabelTreatisesRepository = DataSource.getRepository(UserLabelTr
 export const userNoteTreatisesRepository = DataSource.getRepository(UserNoteTreatises);
 export const analysisPoliciesRepository = DataSource.getRepository(AnalysisPolicies);
 export const topicTypesRepository = DataSource.getRepository(TopicTypes);
+export const nsfDirectorateTypesRepository = DataSource.getRepository(NSFDirectorateTypes);
 export const keywordsRepository = DataSource.getRepository(Keywords);
 export const treatiseKeywordsRepository = DataSource.getRepository(TreatiseKeywords);
 export const termKeywordsRepository = DataSource.getRepository(TermKeywords);
