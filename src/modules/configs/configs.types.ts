@@ -3,6 +3,7 @@ import { Columns } from '@/entities/Columns.entity';
 import { Fields } from '@/entities/Fields.entity';
 import { Keywords } from '@/entities/Keywords.entity';
 import { Languages } from '@/entities/Languages.entity';
+import { NSFDirectorateTypes } from '@/entities/NSFDirectorateTypes.entity';
 import { PatentTypes } from '@/entities/PatentTypes.entity';
 import { PatentValidTypes } from '@/entities/PatentValidTypes.entity';
 import { PeriodicalPeriods } from '@/entities/PeriodicalPeriods.entity';
@@ -99,6 +100,16 @@ export class GetTopicTypesResult {
   })
   topicTypes: TopicTypes[];
 }
+
+export class GetNSFDirectorateTypesResult {
+  @ApiProperty({
+    description: '美国数据学部类型数组',
+    type: NSFDirectorateTypes,
+    isArray: true,
+  })
+  topicTypes: NSFDirectorateTypes[];
+}
+
 
 export class GetSearchResultByKeywordInfo extends PickType(Keywords, [
   'name',

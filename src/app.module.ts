@@ -57,6 +57,7 @@ import { TreatiseKeywords } from './entities/TreatiseKeywords.entity';
 import { TermKeywords } from './entities/TermKeywords.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './modules/tasks/tasks.module';
+import { NSFDirectorateTypes } from './entities/NSFDirectorateTypes.entity';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -118,6 +119,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
       UserNoteTreatises,
       AnalysisPolicies,
       TopicTypes,
+      NSFDirectorateTypes,
       Keywords,
       UserKeywordStatistics,
       AmericaTerms,

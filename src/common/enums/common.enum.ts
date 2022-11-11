@@ -122,7 +122,11 @@ export enum Picker_Enum {
 }
 
 export enum NSFDirectorate_Enum {
-  NSFDirectorate_EHR = 'NSFDirectorate_EHR',
-  NSFDirectorate_SBE = 'NSFDirectorate_SBE',
-  NSFDirectorate_CSE = 'NSFDirectorate_CSE',
+  NSFDirectorate_EHR = 'nsfdirectorate_ehr',
+  NSFDirectorate_SBE = 'nsfdirectorate_sbe',
+  NSFDirectorate_CSE = 'nsfdirectorate_cse',
+  NSFDirectorate_BIO = 'nsfdirectorate_bio',
+  NSFDirectorate_ENG = 'nsfdirectorate_eng',
+  NSFDirectorate_GEO = 'nsfdirectorate_geo',
+  NSFDirectorate_MPS = 'nsfdirectorate_mps',
 }
