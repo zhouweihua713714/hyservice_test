@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-
 import { SignInResInfo } from '../../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import { ListFavoriteTreatiseDto, OperateTreatisesDto } from './userFavorites.dto';
@@ -84,7 +83,6 @@ export class UserFavoritesService {
     });
     return ResultData.ok({ data: { favoriteTreatises: result, count: count } });
   }
-
   /**
    * @description 用户操作收藏论文（加入、移出）,
    * @param {OperateTreatisesDto} params 用户操作收藏论文参数
@@ -102,7 +100,6 @@ export class UserFavoritesService {
       },
       select: ['id'],
     });
-
     // filter status is permitted
     if (treatises.length === 0) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });

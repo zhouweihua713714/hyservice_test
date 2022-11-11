@@ -5,9 +5,18 @@ import { ApiBearerAuth, ApiExtraModels, ApiOperation, ApiTags } from '@nestjs/sw
 
 import { AllowAnon } from '../../common/decorators/allowAnon.decorator';
 import { SignInResInfo } from '../auth/auth.types';
-import { GetAmericaTermAmountByKeywordsDto, ListComplexAmericaTermDto } from './americaTerms/americaTerms.dto';
+import {
+  GetAmericaTermAmountByKeywordsDto,
+  ListComplexAmericaTermDto,
+} from './americaTerms/americaTerms.dto';
 import { AmericaTermsService } from './americaTerms/americaTerms.service';
-import { GetAmericaTermAmountByKeywordsResult, GetAmericaTermDistributionResult, GetAmericaTermHotOrganizationListResult, GetAmericaTermOverviewResult, ListComplexAmericaTermResult } from './americaTerms/americaTerms.types';
+import {
+  GetAmericaTermAmountByKeywordsResult,
+  GetAmericaTermDistributionResult,
+  GetAmericaTermHotOrganizationListResult,
+  GetAmericaTermOverviewResult,
+  ListComplexAmericaTermResult,
+} from './americaTerms/americaTerms.types';
 import {
   GetMoneyByYearDto,
   GetTermCountByProvinceDto,

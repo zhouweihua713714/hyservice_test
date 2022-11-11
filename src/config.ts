@@ -5,7 +5,6 @@ import { options } from './dataSource';
 export const getConfig = () => {
   const env = dotenv.config();
   dotenvExpand.expand(env);
-
   const ossCallbackPath = '/api/file/callback';
 
   return {

@@ -3,11 +3,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class SetColumnsTypeDto {
-  // @ApiPropertyOptional({ description: 'id,有则传过来无则不传' })
-  // @IsString({ message: 'id 类型错误, 正确类型 string' })
-  // @IsOptional()
-  // id: string | null;
-
   @ApiProperty({ description: '栏目id数组', type: String, isArray: true })
   @IsArray({ message: 'ids 类型错误, 正确类型 array' })
   ids: string[];

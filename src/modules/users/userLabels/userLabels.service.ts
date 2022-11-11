@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ResultData } from '@/common/utils/result';
-
 import { SignInResInfo } from '../../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import { ListLabelTreatiseDto, OperateLabelTreatisesDto } from './userLabels.dto';
@@ -64,7 +63,6 @@ export class UserLabelsService {
     });
     return ResultData.ok({ data: { labelTreatises: result, count: count, labels: labels } });
   }
-
   /**
    * @description 用户操作论文标签（加入、移出）,
    * @param {OperateLabelTreatisesDto} params 用户操作论文标签参数
@@ -85,7 +83,6 @@ export class UserLabelsService {
       },
       select: ['id'],
     });
-
     // filter status is permitted
     if (treatises.length === 0) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });

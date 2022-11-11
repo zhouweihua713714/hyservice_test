@@ -11,6 +11,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+
 export class GetAnalysisPolicyDetailDto {
   @ApiProperty({ description: 'id,' })
   @IsString({ message: 'id 类型错误, 正确类型 string' })
