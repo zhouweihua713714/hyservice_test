@@ -283,8 +283,7 @@ export class ConfigsService {
           },
         }),
       ]);
-    }
-    else if (type === Content_Types_Enum.TERM && columnId && columnId === 'column_01_04') {
+    } else if (type === Content_Types_Enum.TERM && columnId && columnId === 'column_01_04') {
       [data, keywords] = await Promise.all([
         americaTermKeywordsRepository
           .createQueryBuilder('americaTermKeywords')
@@ -321,31 +320,20 @@ export class ConfigsService {
       ]);
     }
     // format data and order
-    if (!_.isEmpty(data)) {
-      const keywordsDict = _.keyBy(keywords, (v) => v.name);
-      const result = _.orderBy(
-        _.map(data, (v) => ({
-          ...v,
-          frequency: Number(v.frequency),
-          search: keywordsDict[v.name] ? keywordsDict[v.name].search : 0,
-        })),
-        ['search', 'frequency'],
-        ['desc', 'desc']
-      ).slice(0, 60);
-      data = result;
-    } else {
-      data = await keywordsRepository.find({
-        where: {
-          type: type,
-        },
-        order: {
-          search: 'DESC',
-          frequency: 'DESC',
-        },
-        select: ['name', 'frequency', 'search'],
-        take: 60,
-      });
+    if (_.isEmpty(data)) {
+      return ResultData.ok({ data: { keywords: [] } });
     }
+    const keywordsDict = _.keyBy(keywords, (v) => v.name);
+    const result = _.orderBy(
+      _.map(data, (v) => ({
+        ...v,
+        frequency: Number(v.frequency),
+        search: keywordsDict[v.name] ? keywordsDict[v.name].search : 0,
+      })),
+      ['search', 'frequency'],
+      ['desc', 'desc']
+    ).slice(0, 60);
+    data = result;
     return ResultData.ok({ data: { keywords: data } });
   }
 }

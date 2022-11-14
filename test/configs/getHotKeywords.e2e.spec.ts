@@ -14,6 +14,6 @@ describe('/configs/getHotKeywords', () => {
     expect(result.body.code).toBe(200);
     expect(result.body.message).toBe('ok');
     expect(result.body.data.keywords).toBeTruthy();
-    expect(result.body.data.keywords.length).toBe(2);
+    expect(result.body.data.keywords.length).toBe(0);
   });
 });
