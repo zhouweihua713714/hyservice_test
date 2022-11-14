@@ -235,7 +235,7 @@ export class TermsController {
 
   @Get('/getAmericaTermAmountByKeywords')
   @HttpCode(200)
-  @ApiOperation({ summary: '三个学部热力图' })
+  @ApiOperation({ summary: '三个学部热力图, 总数前10个关键字' })
   @ApiResult(GetAmericaTermAmountByKeywordsResult)
   @AllowAnon()
   getAmericaTermAmountByKeywords(@Query() params: GetAmericaTermAmountByKeywordsDto) {

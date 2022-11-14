@@ -85,13 +85,16 @@ export class AmericaTermsService {
       .addGroupBy('keywords.name')
       .getRawMany(),
       americaTermsRepository.createQueryBuilder('americaTerms')
-      .select('DISTINCT keywords.name', 'keyword')
+      .select('keywords.name', 'keyword')
+      .addSelect('SUM(americaTerms.awardedAmountToDate) ::int as amount')
       .innerJoin('AmericaTermKeywords', 'keywords', 'americaTerms.awardNumber = keywords.awardNumber')
       .andWhere('americaTerms.enabled =:enabled', {enabled: true})
       .andWhere('americaTerms.status=:status', {status: Content_Status_Enum.ACTIVE})
       .andWhere('americaTerms.deletedAt is null')
       .andWhere('americaTerms.nsfDirectorate =:nsfDirectorate', {nsfDirectorate: params.nsfDirectorate})
-      .orderBy('keywords.name', 'ASC')
+      .groupBy('keywords.name')
+      .orderBy('amount', 'DESC')
+      .limit(10)
       .getRawMany(),
     ]);
     const americaTerms: AmericaTermAmountByKeywordsInfo[] = [];
