@@ -36,7 +36,7 @@ export class ListComplexAmericaTermDto extends PickType(ReqListQuery, ['page', '
   @IsOptional()
   organization: string;
 
-  @ApiProperty({description: '学部', enum: NSFDirectorate_Enum})
+  @ApiPropertyOptional({description: '学部', enum: NSFDirectorate_Enum})
   @IsString({ message: 'nsfDirectorate 类型错误,正确类型 string' })
   @IsEnum(NSFDirectorate_Enum)
   @IsOptional()
