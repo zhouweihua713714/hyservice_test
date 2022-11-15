@@ -306,6 +306,7 @@ export class TreatisesService {
         clicks: treatise.clicks,
         status: treatise.status,
         updatedAt: treatise.updatedAt,
+        columnId:treatise.columnId,
         columnName: _.find(columns, function (o) {
           return o.id === treatise.columnId;
         })?.name,
