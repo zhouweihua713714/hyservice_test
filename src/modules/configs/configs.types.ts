@@ -107,7 +107,7 @@ export class GetNSFDirectorateTypesResult {
     type: NSFDirectorateTypes,
     isArray: true,
   })
-  topicTypes: NSFDirectorateTypes[];
+  nsfDirectorateTypes: NSFDirectorateTypes[];
 }
 
 

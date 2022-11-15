@@ -82,9 +82,13 @@ export class ListComplexAmericaTermInfo extends PickType(AmericaTerms, [
   'endDate',
   'organization',
   'principalInvestigator',
-  'awardedAmountToDate',
-  'nsfDirectorate',
-]){}
+]){
+  @ApiProperty({ description: '资助金额' })
+  awardedAmountToDate: number;
+
+  @ApiProperty({ description: '学部' })
+  nsfDirectorate: string;
+}
 
 export class ListComplexAmericaTermResult {
   @ApiProperty({ description: '美国项目数组', type: ListComplexAmericaTermInfo, isArray: true })
