@@ -2,7 +2,7 @@ import { Content_Status_Enum, Content_Types_Enum } from '@/common/enums/common.e
 import { ResultData } from '@/common/utils/result';
 import { AmericaTerms } from '@/entities/AmericaTerms.entity';
 import { SignInResInfo } from '@/modules/auth/auth.types';
-import { americaTermsRepository } from '@/modules/repository/repository';
+import { americaTermKeywordsRepository, americaTermsRepository } from '@/modules/repository/repository';
 import { UsersService } from '@/modules/users/users.service';
 import _ from 'lodash';
 import { Brackets } from 'typeorm';
@@ -84,16 +84,16 @@ export class AmericaTermsService {
       .groupBy('year')
       .addGroupBy('keywords.name')
       .getRawMany(),
-      americaTermsRepository.createQueryBuilder('americaTerms')
-      .select('keywords.name', 'keyword')
-      .addSelect('SUM(americaTerms.awardedAmountToDate) ::int as amount')
-      .innerJoin('AmericaTermKeywords', 'keywords', 'americaTerms.awardNumber = keywords.awardNumber')
+      americaTermKeywordsRepository.createQueryBuilder('americaTermKeywords')
+      .select('americaTermKeywords.name', 'keyword')
+      .addSelect('COUNT(americaTermKeywords.name) ::int as frequency')
+      .innerJoin('AmericaTerms', 'americaTerms', 'americaTermKeywords.awardNumber = americaTerms.awardNumber')
       .andWhere('americaTerms.enabled =:enabled', {enabled: true})
       .andWhere('americaTerms.status=:status', {status: Content_Status_Enum.ACTIVE})
       .andWhere('americaTerms.deletedAt is null')
       .andWhere('americaTerms.nsfDirectorate =:nsfDirectorate', {nsfDirectorate: params.nsfDirectorate})
-      .groupBy('keywords.name')
-      .orderBy('amount', 'DESC')
+      .groupBy('americaTermKeywords.name')
+      .orderBy('frequency', 'DESC')
       .limit(10)
       .getRawMany(),
     ]);
@@ -132,7 +132,7 @@ export class AmericaTermsService {
     .andWhere('americaTerms.status=:status', {status: Content_Status_Enum.ACTIVE})
     .andWhere('americaTerms.deletedAt is null')
     .groupBy('americaTerms.organization')
-    .orderBy('americaTerms.organization', 'DESC')
+    .orderBy('count', 'DESC')
     .limit(10)
     .getRawMany();
     return ResultData.ok({data: { americaTerms }});
