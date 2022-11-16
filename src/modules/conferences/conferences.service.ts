@@ -31,7 +31,7 @@ import { UsersService } from '../users/users.service';
 import { Injectable } from '@nestjs/common';
 @Injectable()
 export class ConferencesService {
-  constructor( private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
   /**
    * @description 获取会议详情
    * @param {GetConferenceDetailDto} params
@@ -384,7 +384,7 @@ export class ConferencesService {
         endedAt: endedAtDateString,
         keyword: keywords,
       })
-      .orderBy('conferences.conductedAt', 'DESC','NULLS LAST')
+      .orderBy('conferences.conductedAt', 'DESC', 'NULLS LAST')
       .addOrderBy('conferences.publishedAt', 'DESC')
       .skip((page - 1) * size)
       .take(size)
@@ -461,7 +461,7 @@ export class ConferencesService {
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.CONFERENCE,
       userId: user?.id,
-      columnId: '0'
+      columnId: '0',
     });
     return ResultData.ok({ data: { conferences: result, count: count } });
   }
@@ -487,7 +487,7 @@ export class ConferencesService {
         'conferences.period',
         'conferences.coverUrl',
       ])
-      .orderBy('conferences.conductedAt', 'DESC','NULLS LAST')
+      .orderBy('conferences.conductedAt', 'DESC', 'NULLS LAST')
       .addOrderBy('conferences.publishedAt', 'DESC')
       .take(4)
       .getManyAndCount();
@@ -512,6 +512,14 @@ export class ConferencesService {
       deletedAt: IsNull(),
       enabled: true,
     });
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        parentId: In(['column_06']),
+        isHide: 0,
+      },
+      select: ['id', 'name'],
+    });
     const field = conferenceInfo?.field as string[];
     const minorField = conferenceInfo?.minorField as string[];
     let conferences;
@@ -520,6 +528,14 @@ export class ConferencesService {
     if (conferenceInfo) {
       basicCondition += ' and conferences.id !=:id';
     }
+    // if columns is hide, related data is hide
+    if (columns && columns.length > 0) {
+      basicCondition += ' and conferences.columnId in (:...columnIds)';
+    }
+    if (columns && columns.length === 0) {
+      // eslint-disable-next-line quotes
+      basicCondition += ` and conferences.columnId ='-1'`;
+    }
     if (field && field.length > 0) {
       conferences = await conferencesRepository
         .createQueryBuilder('conferences')
@@ -527,6 +543,9 @@ export class ConferencesService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           id: conferenceInfo?.id,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .andWhere('conferences.field::jsonb ?| ARRAY[:...field]', {
           field: field,
@@ -549,6 +568,9 @@ export class ConferencesService {
             status: Content_Status_Enum.ACTIVE,
             id: conferenceInfo?.id,
             ids: conferences.map((data) => {
+              return data.id;
+            }),
+            columnIds: columns.map((data) => {
               return data.id;
             }),
           })
@@ -578,22 +600,15 @@ export class ConferencesService {
                 return data.id;
               })
             : undefined,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(size)
         .getMany();
       conferences = _.unionBy(conferences, newConferences, 'id');
     }
-    // get columns
-    const columns = await columnsRepository.find({
-      where: {
-        id: In(
-          conferences.map((conference) => {
-            return conference.columnId;
-          })
-        ),
-      },
-    });
     const result = conferences.map((conference) => {
       return {
         ...conference,

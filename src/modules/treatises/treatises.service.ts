@@ -306,7 +306,7 @@ export class TreatisesService {
         clicks: treatise.clicks,
         status: treatise.status,
         updatedAt: treatise.updatedAt,
-        columnId:treatise.columnId,
+        columnId: treatise.columnId,
         columnName: _.find(columns, function (o) {
           return o.id === treatise.columnId;
         })?.name,
@@ -686,12 +686,28 @@ export class TreatisesService {
       deletedAt: IsNull(),
       enabled: true,
     });
+    // get columns and isHide = 0
+    const columns = await columnsRepository.find({
+      where: {
+        parentId: In(['column_02']),
+        isHide: 0,
+      },
+      select: ['id', 'name'],
+    });
     const keyword = treatiseInfo?.keyword;
     const columnId = treatiseInfo?.columnId;
     let basicCondition =
       'treatises.enabled = true and treatises.deletedAt is null and treatises.status =:status';
     if (treatiseInfo) {
       basicCondition += ' and treatises.id !=:id';
+    }
+    // if columns is hide, related data is hide
+    if (columns && columns.length > 0) {
+      basicCondition += ' and treatises.columnId in (:...columnIds)';
+    }
+    if (columns && columns.length === 0) {
+      // eslint-disable-next-line quotes
+      basicCondition += ` and treatises.columnId ='-1'`;
     }
     let treatises;
     // keyword recommend first
@@ -704,6 +720,9 @@ export class TreatisesService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           id: treatiseInfo?.id,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .andWhere(
           new Brackets((qb) => {
@@ -735,6 +754,9 @@ export class TreatisesService {
                 return data.id;
               })
             : undefined,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .andWhere('treatises.columnId =:columnId', {
           columnId: columnId,

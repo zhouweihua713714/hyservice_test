@@ -29,7 +29,7 @@ import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class InstitutionsService {
-  constructor( private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * @description 获取机构详情
@@ -433,7 +433,7 @@ export class InstitutionsService {
       keywords: keyword?.split(';') || [],
       type: Content_Types_Enum.INSTITUTION,
       userId: user?.id,
-      columnId: '0'
+      columnId: '0',
     });
     return ResultData.ok({ data: { institutions: result, count: count } });
   }
@@ -453,6 +453,14 @@ export class InstitutionsService {
       deletedAt: IsNull(),
       enabled: true,
     });
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        parentId: In(['column_07']),
+        isHide: 0,
+      },
+      select: ['id', 'name'],
+    });
     const field = institutionInfo?.field as string[];
     const minorField = institutionInfo?.minorField as string[];
     let institutions;
@@ -461,6 +469,14 @@ export class InstitutionsService {
     if (institutionInfo) {
       basicCondition += ' and institutions.id !=:id';
     }
+    // if columns is hide, related data is hide
+    if (columns && columns.length > 0) {
+      basicCondition += ' and institutions.columnId in (:...columnIds)';
+    }
+    if (columns && columns.length === 0) {
+      // eslint-disable-next-line quotes
+      basicCondition += ` and institutions.columnId ='-1'`;
+    }
     if (field && field.length > 0) {
       institutions = await institutionsRepository
         .createQueryBuilder('institutions')
@@ -468,6 +484,9 @@ export class InstitutionsService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           id: institutionInfo?.id,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .andWhere('institutions.field::jsonb ?| ARRAY[:...field]', {
           field: field,
@@ -490,6 +509,9 @@ export class InstitutionsService {
             status: Content_Status_Enum.ACTIVE,
             id: institutionInfo?.id,
             ids: institutions.map((data) => {
+              return data.id;
+            }),
+            columnIds: columns.map((data) => {
               return data.id;
             }),
           })
@@ -519,22 +541,15 @@ export class InstitutionsService {
                 return data.id;
               })
             : undefined,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(size)
         .getMany();
       institutions = _.unionBy(institutions, newInstitutions, 'id');
     }
-    // get columns
-    const columns = await columnsRepository.find({
-      where: {
-        id: In(
-          institutions.map((institution) => {
-            return institution.columnId;
-          })
-        ),
-      },
-    });
     const result = institutions.map((institution) => {
       return {
         ...institution,

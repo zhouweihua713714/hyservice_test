@@ -36,8 +36,8 @@ export const seed: TesterSeed<DataType> = {
       tester.authService
     );
     columns = await tester.columnsRepository.save([
-      { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: '0', sequenceNumber: 1 },
-      { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: '1', sequenceNumber: 1 },
+      { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: 'column_07', sequenceNumber: 1 },
+      { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: 'column_07', sequenceNumber: 1 },
     ]);
     fields = await tester.fieldsRepository.save([
       {
