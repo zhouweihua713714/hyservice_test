@@ -334,7 +334,7 @@ export class PoliciesService {
     }
     if (keyword) {
       // get keywords
-      keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
+      keywords = `%${keyword.toLowerCase().replace(/;/g, '%;%')}%`.split(';');
       [policies, count] = await policiesRepository
         .createQueryBuilder('policies')
         .select([
@@ -361,7 +361,7 @@ export class PoliciesService {
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('policies.name like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
+            qb.where('LOWER(policies.name) like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
               'LOWER(policies.keyword) like any (ARRAY[:...keyword])',
               { keyword: keywords }
             );

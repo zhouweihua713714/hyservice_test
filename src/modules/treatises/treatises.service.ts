@@ -513,7 +513,7 @@ export class TreatisesService {
     let count;
     if (keyword) {
       // get keywords
-      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
+      const keywords = `%${keyword.toLowerCase().replace(/;/g, '%;%')}%`.split(';');
       [treatises, count] = await treatisesRepository
         .createQueryBuilder('treatises')
         .select([
@@ -545,11 +545,11 @@ export class TreatisesService {
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('treatises.title like any (ARRAY[:...keyword])', { keyword: keywords })
+            qb.where('LOWER(treatises.title) like any (ARRAY[:...keyword])', { keyword: keywords })
               .orWhere('LOWER(treatises.keyword) like any (ARRAY[:...keyword])', {
                 keyword: keywords,
               })
-              .orWhere('treatises.abstract like any (ARRAY[:...keyword])', { keyword: keywords });
+              .orWhere('(treatises.abstract) like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
         .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')

@@ -340,7 +340,7 @@ export class TermsService {
     let count;
     if (keyword) {
       // get keywords
-      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
+      const keywords = `%${keyword.toLowerCase().replace(/;/g, '%;%')}%`.split(';');
       [terms, count] = await termsRepository
         .createQueryBuilder('terms')
         .select([
@@ -363,7 +363,7 @@ export class TermsService {
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('terms.name like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
+            qb.where('LOWER(terms.name) like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
               'LOWER(terms.keyword) like any (ARRAY[:...keyword])',
               { keyword: keywords }
             );

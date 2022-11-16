@@ -314,7 +314,7 @@ export class PatentsService {
     }
     if (keyword) {
       // get keywords
-      keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
+      keywords = `%${keyword.toLowerCase().replace(/;/g, '%;%')}%`.split(';');
       [patents, count] = await patentsRepository
         .createQueryBuilder('patents')
         .select([
@@ -332,9 +332,9 @@ export class PatentsService {
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('patents.title like any (ARRAY[:...keyword])', { keyword: keywords })
+            qb.where('LOWER(patents.title) like any (ARRAY[:...keyword])', { keyword: keywords })
               .orWhere('LOWER(patents.keyword) like any (ARRAY[:...keyword])', { keyword: keywords })
-              .orWhere('patents.abstract like any (ARRAY[:...keyword])', { keyword: keywords });
+              .orWhere('LOWER(patents.abstract) like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
         .orderBy('patents.announcedAt', 'DESC','NULLS LAST')
