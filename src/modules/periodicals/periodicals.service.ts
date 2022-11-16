@@ -33,7 +33,7 @@ import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class PeriodicalsService {
-  constructor( private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * @description 获取期刊详情
@@ -405,8 +405,8 @@ export class PeriodicalsService {
             qb.where('periodicals.name like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
-        .orderBy('periodicals.articleNumber', 'DESC','NULLS LAST')
-        .addOrderBy('periodicals.establishedAt', 'DESC','NULLS LAST')
+        .orderBy('periodicals.articleNumber', 'DESC', 'NULLS LAST')
+        .addOrderBy('periodicals.establishedAt', 'DESC', 'NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -433,8 +433,8 @@ export class PeriodicalsService {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
         })
-        .orderBy('periodicals.articleNumber', 'DESC','NULLS LAST')
-        .addOrderBy('periodicals.establishedAt', 'DESC','NULLS LAST')
+        .orderBy('periodicals.articleNumber', 'DESC', 'NULLS LAST')
+        .addOrderBy('periodicals.establishedAt', 'DESC', 'NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -560,6 +560,14 @@ export class PeriodicalsService {
       deletedAt: IsNull(),
       enabled: true,
     });
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        parentId: In(['column_03']),
+        isHide: 0,
+      },
+      select: ['id', 'name'],
+    });
     const field = periodicalInfo?.field;
     const minorField = periodicalInfo?.minorField;
     let periodicals;
@@ -567,6 +575,14 @@ export class PeriodicalsService {
       'periodicals.enabled = true and periodicals.deletedAt is null and periodicals.status =:status';
     if (periodicalInfo) {
       basicCondition += ' and periodicals.id !=:id';
+    }
+    // if columns is hide, related data is hide
+    if (columns && columns.length > 0) {
+      basicCondition += ' and periodicals.columnId in (:...columnIds)';
+    }
+    if (columns && columns.length === 0) {
+      // eslint-disable-next-line quotes
+      basicCondition += ` and periodicals.columnId ='-1'`;
     }
     if (field) {
       const fields = `%${field.replace(/;/g, '%;%')}%`.split(';');
@@ -576,6 +592,9 @@ export class PeriodicalsService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           id: periodicalInfo?.id,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .andWhere('periodicals.field like any (ARRAY[:...field])', {
           field: fields,
@@ -585,7 +604,6 @@ export class PeriodicalsService {
         .getMany();
     }
     let idsCondition = '';
-
     // if periodicals count < 8 then minorField recommend
     if (periodicals && periodicals.length < 8) {
       if (periodicals.length > 0) {
@@ -600,6 +618,9 @@ export class PeriodicalsService {
             status: Content_Status_Enum.ACTIVE,
             id: periodicalInfo?.id,
             ids: periodicals.map((data) => {
+              return data.id;
+            }),
+            columnIds: columns.map((data) => {
               return data.id;
             }),
           })
@@ -629,22 +650,15 @@ export class PeriodicalsService {
                 return data.id;
               })
             : undefined,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(size)
         .getMany();
       periodicals = _.unionBy(periodicals, newPeriodicals, 'id');
     }
-    // get columns
-    const columns = await columnsRepository.find({
-      where: {
-        id: In(
-          periodicals.map((periodical) => {
-            return periodical.columnId;
-          })
-        ),
-      },
-    });
     const result = periodicals.map((periodical) => {
       return {
         ...periodical,

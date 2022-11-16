@@ -12,7 +12,7 @@ import {
 } from '../repository/repository';
 import { GetHomepageSearchResultByKeywordDto, SetHomepageDto } from './homepage.dto';
 import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
-import { In } from 'typeorm';
+import { Brackets, In } from 'typeorm';
 
 export class HomepageService {
   /**
@@ -99,28 +99,45 @@ export class HomepageService {
         title: string;
       }[] = [],
       columns;
-    [termKeywords, treatiseKeywords, americaTermKeywords, columns] = await Promise.all([
+    // get columns
+    columns = await columnsRepository.find({
+      where: {
+        parentId: In(['column_01', 'column_02']),
+        isHide: 0,
+      },
+      select: ['id', 'name'],
+    });
+    [termKeywords, treatiseKeywords, americaTermKeywords] = await Promise.all([
       termKeywordsRepository.find({
         where: {
           name: keyword.toLowerCase(),
-        },
+          columnId: In(
+            columns.map((data) => {
+              return data.id;
+            })
+          ),
+        }, // if columns is hide, related data is hide
         select: ['name', 'columnId', 'title', 'termId'],
       }),
       treatiseKeywordsRepository.find({
         where: {
           name: keyword.toLowerCase(),
+          columnId: In(
+            columns.map((data) => {
+              return data.id;
+            })
+          ),
         },
       }),
       americaTermKeywordsRepository.find({
         where: {
           name: keyword.toLowerCase(),
+          columnId: In(
+            columns.map((data) => {
+              return data.id;
+            })
+          ),
         },
-      }),
-      columnsRepository.find({
-        where: {
-          parentId: In(['column_01', 'column_02']),
-        },
-        select: ['id', 'name'],
       }),
     ]);
     columns = columns.map((data) => {

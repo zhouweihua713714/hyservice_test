@@ -32,7 +32,7 @@ import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class PoliciesService {
-  constructor( private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /**
    * @description 获取政策详情
@@ -367,7 +367,7 @@ export class PoliciesService {
             );
           })
         )
-        .orderBy('policies.announcedAt', 'DESC','NULLS LAST')
+        .orderBy('policies.announcedAt', 'DESC', 'NULLS LAST')
         .addOrderBy('policies.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -398,7 +398,7 @@ export class PoliciesService {
           columnId: columnId,
           educationLevel: educationLevel,
         })
-        .orderBy('policies.announcedAt', 'DESC','NULLS LAST')
+        .orderBy('policies.announcedAt', 'DESC', 'NULLS LAST')
         .addOrderBy('policies.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -449,6 +449,14 @@ export class PoliciesService {
       deletedAt: IsNull(),
       enabled: true,
     });
+    // get columns
+    const columns = await columnsRepository.find({
+      where: {
+        parentId: In(['column_04']),
+        isHide: 0,
+      },
+      select: ['id', 'name'],
+    });
     const keyword = policyInfo?.keyword;
     const type = policyInfo?.type;
     let policies;
@@ -456,6 +464,14 @@ export class PoliciesService {
       'policies.enabled = true and policies.deletedAt is null and policies.status =:status';
     if (policyInfo) {
       basicCondition += ' and policies.id !=:id';
+    }
+    // if columns is hide, related data is hide
+    if (columns && columns.length > 0) {
+      basicCondition += ' and policies.columnId in (:...columnIds)';
+    }
+    if (columns && columns.length === 0) {
+      // eslint-disable-next-line quotes
+      basicCondition += ` and policies.columnId ='-1'`;
     }
     if (keyword) {
       const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
@@ -465,6 +481,9 @@ export class PoliciesService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           id: policyInfo?.id,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .andWhere('policies.keyword like any (ARRAY[:...keyword])', {
           keyword: keywords,
@@ -487,6 +506,9 @@ export class PoliciesService {
             status: Content_Status_Enum.ACTIVE,
             id: policyInfo?.id,
             ids: policies.map((data) => {
+              return data.id;
+            }),
+            columnIds: columns.map((data) => {
               return data.id;
             }),
           })
@@ -516,6 +538,9 @@ export class PoliciesService {
                 return data.id;
               })
             : undefined,
+          columnIds: columns.map((data) => {
+            return data.id;
+          }),
         })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(size)
