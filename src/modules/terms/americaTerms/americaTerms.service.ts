@@ -166,7 +166,7 @@ export class AmericaTermsService {
       let count: number;
       if (keyword) {
         // get keywords
-        const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
+        const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';').map(keyword => keyword.toLowerCase());
         [americaTerms, count] = await americaTermsRepository
           .createQueryBuilder('americaTerms')
           .select([

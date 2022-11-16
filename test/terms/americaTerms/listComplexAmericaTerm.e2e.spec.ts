@@ -81,7 +81,7 @@ describe('/terms/listComplexAmericaTerm', () => {
       .set('Authorization', tester.data.user.headers.authorization)
       .send({
         year: new Date(),       
-        keyword: 'keyword',
+        keyword: 'Keyword',
         nsfDirectorate: NSFDirectorate_Enum.NSFDirectorate_SBE,
         organization: 'University of Maryland,College Park',
         principalInvestigator: 'Lloyd Slevc',
