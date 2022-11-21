@@ -25,8 +25,12 @@ export class AnalysisPolicies {
   source: string | null;
 
   @ApiPropertyOptional({ description: '正文', type: String, nullable: true })
-  @Column('text', { name: 'content', nullable: true, comment: '简介' })
+  @Column('text', { name: 'content', nullable: true, comment: '正文' })
   content: string | null;
+
+  @ApiPropertyOptional({ description: '简介', type: String, nullable: true })
+  @Column('text', { name: 'introduction', nullable: true, comment: '简介' })
+  introduction: string | null;
 
   @ApiPropertyOptional({ description: '链接', type: String, nullable: true })
   @Column('character varying', {

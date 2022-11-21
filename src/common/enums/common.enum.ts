@@ -57,6 +57,8 @@ export enum Content_Types_Enum {
   TREATISE = 'treatise',
   /**期刊 */
   PERIODICAL = 'periodical',
+  /**精选文库 */
+  TREATISE_LIBRARY='treatiseLibrary'
 }
 
 export enum Content_Status_Enum {

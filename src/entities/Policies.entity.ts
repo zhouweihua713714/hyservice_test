@@ -111,7 +111,7 @@ export class Policies {
   introduction: string | null;
 
   @ApiPropertyOptional({ description: '正文', type: String, nullable: true })
-  @Column('text', { name: 'content', nullable: true, comment: '简介' })
+  @Column('text', { name: 'content', nullable: true, comment: '正文' })
   content: string | null;
 
   // @ApiPropertyOptional({ description: '详情' })
