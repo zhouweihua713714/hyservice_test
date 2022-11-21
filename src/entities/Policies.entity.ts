@@ -53,7 +53,7 @@ export class Policies {
   @ApiPropertyOptional({ description: '发布机构/部门', type: String, nullable: true })
   @Column('character varying', {
     name: 'institution',
-    length: 50,
+    length: 200,
     nullable: true,
     comment: '发布机构/部门',
   })
