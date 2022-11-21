@@ -23,12 +23,14 @@ import {
   Content_Status_Enum,
   Content_Types_Enum,
   Education_Level_Enum,
+  Picker_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like } from 'typeorm';
 import { constant } from '@/common/utils/constant';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
+import { dateFormat } from '@/common/utils/dateFormat';
 
 @Injectable()
 export class PoliciesService {
@@ -315,9 +317,12 @@ export class PoliciesService {
    * @returns {ResultData} 返回listComplexPolicy信息
    */
   async listComplexPolicy(params: ListComplexPolicyDto, user: SignInResInfo): Promise<ResultData> {
-    const { keyword, type, topicType, educationLevel, columnId, page, size } = params;
+    const { keyword, type, topicType, announcedAt,picker,educationLevel, columnId, page, size } = params;
     // get basic condition
     let policies, count, keywords;
+    const month = 'yyyy-mm';
+    const date = 'yyyy-mm-dd';
+    let announcedAtDateString;
     let basicCondition =
       'policies.enabled = true and policies.deletedAt is null and policies.status =:status';
     if (type) {
@@ -332,6 +337,17 @@ export class PoliciesService {
     if (educationLevel) {
       basicCondition += ' and policies.educationLevel::jsonb ?| ARRAY[:educationLevel]';
     }
+    if (picker && picker === Picker_Enum.Year && announcedAt) {
+      basicCondition += ' and extract(year from policies.announcedAt) =:year';
+    }
+    if (picker && picker === Picker_Enum.Date && announcedAt) {
+      announcedAtDateString = dateFormat(announcedAt, Picker_Enum.Date);
+      basicCondition += ` and to_char(policies.announcedAt,'${date}') =:announcedAt`;
+    }
+    if (picker && picker === Picker_Enum.Month && announcedAt) {
+      announcedAtDateString = dateFormat(announcedAt, Picker_Enum.Month);
+      basicCondition += ` and to_char(policies.announcedAt,'${month}') =:announcedAt`;
+    }
     if (keyword) {
       // get keywords
       keywords = `%${keyword.toLowerCase().replace(/;/g, '%;%')}%`.split(';');
@@ -341,6 +357,7 @@ export class PoliciesService {
           'policies.id',
           'policies.name',
           'policies.announcedAt',
+          'policies.picker',
           'policies.announceNo',
           'policies.institution',
           'policies.educationLevel',
@@ -358,6 +375,8 @@ export class PoliciesService {
           topicType: topicType,
           columnId: columnId,
           educationLevel: educationLevel,
+          year: announcedAt ? new Date(announcedAt).getFullYear() : undefined,
+          announcedAt: announcedAtDateString,
         })
         .andWhere(
           new Brackets((qb) => {
@@ -380,6 +399,7 @@ export class PoliciesService {
           'policies.id',
           'policies.name',
           'policies.announcedAt',
+          'policies.picker',
           'policies.announceNo',
           'policies.institution',
           'policies.educationLevel',
@@ -397,6 +417,8 @@ export class PoliciesService {
           topicType: topicType,
           columnId: columnId,
           educationLevel: educationLevel,
+          year: announcedAt ? new Date(announcedAt).getFullYear() : undefined,
+          announcedAt: announcedAtDateString,
         })
         .orderBy('policies.announcedAt', 'DESC', 'NULLS LAST')
         .addOrderBy('policies.publishedAt', 'DESC')

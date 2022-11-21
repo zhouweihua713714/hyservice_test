@@ -27,13 +27,13 @@ describe('/policies/listComplexAnalysisPolicy', () => {
       .send({
         columnId: tester.data.columns[1].id,
         page: 1,
-        size: 2,
+        size: 3,
       });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.analysisPolicies).toBeTruthy();
-    expect(result.body.data.analysisPolicies.length).toBe(2);
+    expect(result.body.data.analysisPolicies.length).toBe(3);
     expect(result.body.data.count).toBe(3);
   });
 });

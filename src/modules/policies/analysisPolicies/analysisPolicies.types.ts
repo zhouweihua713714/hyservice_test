@@ -63,6 +63,8 @@ export class ListComplexAnalysisPolicyInfo extends PickType(AnalysisPolicies, [
   'id',
   'title',
   'announcedAt',
+  'source',
+  'content',
 ] as const) {}
 
 export class ListComplexAnalysisPolicyResult {
@@ -77,9 +79,14 @@ export class RecommendAnalysisPoliciesInfo extends PickType(AnalysisPolicies, [
   'id',
   'title',
   'source',
+  'announcedAt'
 ] as const) {}
 
-export class RecommendPoliciesResult {
-  @ApiProperty({ description: '推荐政策解读数组', type: RecommendAnalysisPoliciesInfo, isArray: true })
+export class RecommendAnalysisPoliciesResult {
+  @ApiProperty({
+    description: '推荐政策解读数组',
+    type: RecommendAnalysisPoliciesInfo,
+    isArray: true,
+  })
   policies: RecommendAnalysisPoliciesInfo[];
 }
