@@ -8,6 +8,10 @@ export class Conferences {
   @Column('character varying', { name: 'id', primary: true, length: 128, comment: '主键id' })
   id: string;
 
+  @ApiProperty({ description: '父级会议id,一级为0,默认值0' })
+  @Column('character varying', { name: 'parent_id',default:'0', length: 128, comment: '父级会议id,一级为0,默认值0' })
+  parentId: string ;
+
   @ApiProperty({ description: '栏目id,会议只能选择会议相关的栏目id' })
   @Column('character varying', {
     name: 'column_id',

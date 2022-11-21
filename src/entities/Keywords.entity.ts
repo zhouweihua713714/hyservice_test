@@ -10,14 +10,14 @@ export class Keywords {
 
   @ApiProperty({
     description:
-      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy',
+      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy,精选文库treatiseLibrary',
   })
   @Column('character varying', {
     name: 'type',
     length: 32,
     primary: true,
     comment:
-      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy',
+      '类型:项目term,论文treatise,会议:conference,期刊periodical,机构institution,专利patent,政策policy,精选文库treatiseLibrary',
   })
   type: string;
 
