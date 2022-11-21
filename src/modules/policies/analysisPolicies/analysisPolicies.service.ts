@@ -6,6 +6,7 @@ import {
   columnsRepository,
   analysisPoliciesRepository,
   usersRepository,
+  userHistoryRepository,
 } from '../../repository/repository';
 import {
   GetAnalysisPolicyDetailDto,
@@ -16,10 +17,7 @@ import {
   RemoveAnalysisPoliciesDto,
   SaveAnalysisPolicyDto,
 } from './analysisPolicies.dto';
-import {
-  Content_Status_Enum,
-  User_Types_Enum,
-} from '@/common/enums/common.enum';
+import { Content_Status_Enum, Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { In, IsNull, Like } from 'typeorm';
 
 export class AnalysisPoliciesService {
@@ -55,13 +53,13 @@ export class AnalysisPoliciesService {
       await analysisPoliciesRepository.update(params.id, { clicks: analysisPolicyInfo.clicks + 1 });
     }
     // if user login then record history
-    // if (params.flag && user) {
-    //   await userHistoryRepository.save({
-    //     userId: user.id,
-    //     relatedId: params.id,
-    //     type: Content_Types_Enum.POLICY,
-    //   });
-    // }
+    if (params.flag && user) {
+      await userHistoryRepository.save({
+        userId: user.id,
+        relatedId: params.id,
+        type: Content_Types_Enum.POLICY,
+      });
+    }
     return ResultData.ok({ data: result });
   }
   /**
@@ -279,28 +277,29 @@ export class AnalysisPoliciesService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { columnId, page, size } = params;
-    let columnCondition;
+    let basicCondition =
+      'analysis_policies.enabled = true and analysis_policies.deletedAt is null and analysis_policies.status =:status';
     if (columnId) {
-      columnCondition = {
-        columnId: columnId,
-      };
+      basicCondition += ' and analysis_policies.columnId =:columnId';
     }
     // get analysisPolicies
-    const [analysisPolicies, count] = await analysisPoliciesRepository.findAndCount({
-      where: {
-        ...columnCondition,
-        enabled: true,
-        deletedAt: IsNull(),
+    const [analysisPolicies, count] = await analysisPoliciesRepository
+      .createQueryBuilder('analysis_policies')
+      .select([
+        'analysis_policies.id',
+        'analysis_policies.title',
+        'analysis_policies.announcedAt',
+        'analysis_policies.source',
+      ])
+      .where(`${basicCondition}`, {
         status: Content_Status_Enum.ACTIVE,
-      },
-      select: ['id', 'title', 'announcedAt'],
-      skip: (page - 1) * size,
-      take: size,
-      order: {
-        announcedAt: 'DESC',
-        publishedAt: 'DESC',
-      },
-    });
+        columnId: columnId,
+      })
+      .orderBy('analysis_policies.announcedAt', 'DESC', 'NULLS LAST')
+      .addOrderBy('analysis_policies.publishedAt', 'DESC')
+      .skip((page - 1) * size)
+      .take(size)
+      .getManyAndCount();
     if (count === 0) {
       return ResultData.ok({ data: { analysisPolicies: [], count: count } });
     }
@@ -337,7 +336,12 @@ export class AnalysisPoliciesService {
     if (source) {
       analysisPolicies = await analysisPoliciesRepository
         .createQueryBuilder('analysisPolicies')
-        .select(['analysisPolicies.id', 'analysisPolicies.title', 'analysisPolicies.source'])
+        .select([
+          'analysisPolicies.id',
+          'analysisPolicies.title',
+          'analysisPolicies.source',
+          'analysisPolicies.announcedAt',
+        ])
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           id: analysisPolicyInfo?.id,
@@ -368,7 +372,12 @@ export class AnalysisPoliciesService {
       }
       const newAnalysisPolicies = await analysisPoliciesRepository
         .createQueryBuilder('analysisPolicies')
-        .select(['analysisPolicies.id', 'analysisPolicies.title', 'analysisPolicies.source'])
+        .select([
+          'analysisPolicies.id',
+          'analysisPolicies.title',
+          'analysisPolicies.source',
+          'analysisPolicies.announcedAt',
+        ])
         .where(`${basicCondition}${idsCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           id: analysisPolicyInfo?.id,

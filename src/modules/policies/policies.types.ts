@@ -77,6 +77,7 @@ export class ListComplexPolicyInfo extends PickType(Policies, [
   'id',
   'name',
   'announcedAt',
+  'picker',
   'announceNo',
   'institution',
   'educationLevel',

@@ -63,7 +63,7 @@ export const seed: TesterSeed<DataType> = {
         columnId: columns[1].id,
         title: '政策解读标题',
         source: '文章来源',
-        announcedAt: new Date(),
+        // announcedAt: new Date(),
         url: 'http://baidu.com',
         content: '正文',
         ownerId: user.user.id,

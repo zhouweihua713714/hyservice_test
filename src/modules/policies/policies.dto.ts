@@ -189,6 +189,20 @@ export class ListComplexPolicyDto extends PickType(ReqListQuery, ['page', 'size'
   @IsOptional()
   educationLevel: string;
 
+  @ApiPropertyOptional({ description: '政策发布时间(出台时间)', type: Date, nullable: true })
+  @IsDateString({ message: 'announcedAt 类型错误, 正确类型 date' })
+  @IsOptional()
+  announcedAt: Date | null;
+
+  @ApiPropertyOptional({
+    description: '政策发布时间不为空，该字段不能为空,日期格式:year、month、date(当前需求只有year)',
+    type: String,
+    nullable: true,
+  })
+  @IsString({ message: 'picker 类型错误, 正确类型 string' })
+  @IsOptional()
+  picker: string | null;
+
   @ApiPropertyOptional({ description: '栏目id' })
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   @IsOptional()
