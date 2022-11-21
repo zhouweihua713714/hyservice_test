@@ -64,7 +64,7 @@ export class SavePolicyDto {
 
   @ApiPropertyOptional({ description: '发布政策/部门', type: String, nullable: true })
   @IsString({ message: 'institution 类型错误, 正确类型 string' })
-  @MaxLength(50)
+  @MaxLength(200)
   @IsOptional()
   institution: string | null;
 
