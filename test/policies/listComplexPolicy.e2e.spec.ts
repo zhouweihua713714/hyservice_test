@@ -79,4 +79,17 @@ describe('/policies/listComplexPolicy', () => {
     expect(result.body.data.policies.length).toBe(3);
     expect(result.body.data.count).toBe(3);
   });
+  test('should POST /policies/listComplexPolicy with announcedAt', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/policies/listComplexPolicy')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ announcedAt: new Date(),picker:'year', page: 1, size: 3 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.policies).toBeTruthy();
+    expect(result.body.data.policies.length).toBe(3);
+    expect(result.body.data.count).toBe(5);
+  });
 });

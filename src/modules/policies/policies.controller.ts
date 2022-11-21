@@ -19,6 +19,7 @@ import {
   ListAnalysisPolicyResult,
   ListComplexAnalysisPolicyResult,
   OperateAnalysisPoliciesResult,
+  RecommendAnalysisPoliciesResult,
   RemoveAnalysisPoliciesResult,
   SaveAnalysisPolicyResult,
 } from './analysisPolicies/analysisPolicies.types';
@@ -59,7 +60,8 @@ import {
   ListComplexPolicyResult,
   RecommendPoliciesResult,
   ListComplexAnalysisPolicyResult,
-  GetPolicyCountByRegionResult
+  GetPolicyCountByRegionResult,
+  RecommendAnalysisPoliciesResult
 )
 @Controller('/policies')
 export class PoliciesController {
@@ -205,7 +207,7 @@ export class PoliciesController {
   @Post('/recommendAnalysisPolicies')
   @HttpCode(200)
   @ApiOperation({ summary: '政策解读推荐列表(相关政策解读)' })
-  @ApiResult(OperateAnalysisPoliciesResult)
+  @ApiResult(RecommendAnalysisPoliciesResult)
   @AllowAnon()
   recommendAnalysisPolicies(@Body() params: RecommendAnalysisPoliciesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
