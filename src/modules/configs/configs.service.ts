@@ -216,6 +216,9 @@ export class ConfigsService {
    */
   async getTopicTypes(): Promise<ResultData> {
     const data = await topicTypesRepository.find({
+      where: {
+        id: Not('topic_type_002'),
+      },
       order: {
         name: 'ASC',
       },
@@ -235,7 +238,6 @@ export class ConfigsService {
     });
     return ResultData.ok({ data: { nsfDirectorateTypes: data } });
   }
-  
 
   /**
    * @description 搜索返回关键词列表

@@ -11,6 +11,7 @@ import { Periodicals } from '@/entities/Periodicals.entity';
 import { Patents } from '@/entities/Patents.entity';
 import { Institutions } from '@/entities/Institutions.entity';
 import { Conferences } from '@/entities/Conferences.entity';
+import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
@@ -22,6 +23,7 @@ let periodical: Periodicals;
 let patent: Patents;
 let institution: Institutions;
 let conference: Conferences;
+let analysisPolicies: AnalysisPolicies;
 export type DataType = {
   user: CreateUserRetType;
 };
@@ -74,6 +76,12 @@ export const seed: TesterSeed<DataType> = {
       name: '会议名称必填',
       columnId: columns[1].id,
     });
+    analysisPolicies = await tester.analysisPoliciesRepository.save({
+      id: new Date().getTime().toString(),
+      columnId: columns[1].id,
+      title: '政策解读必填',
+      ownerId: user.user.id,
+    });
     // insert user history
     await tester.userHistoryRepository.save([
       { userId: user.user.id, relatedId: term.id, type: Content_Types_Enum.TERM },
@@ -83,6 +91,8 @@ export const seed: TesterSeed<DataType> = {
       { userId: user.user.id, relatedId: patent.id, type: Content_Types_Enum.PATENT },
       { userId: user.user.id, relatedId: institution.id, type: Content_Types_Enum.INSTITUTION },
       { userId: user.user.id, relatedId: conference.id, type: Content_Types_Enum.CONFERENCE },
+      { userId: user.user.id, relatedId: analysisPolicies.id, type: Content_Types_Enum.POLICY },
+      { userId: user.user.id, relatedId: '-1', type: Content_Types_Enum.POLICY },
     ]);
 
     return { user };
@@ -96,6 +106,7 @@ export const seed: TesterSeed<DataType> = {
     await tester.institutionsRepository.delete({});
     await tester.conferencesRepository.delete({});
     await tester.userHistoryRepository.delete({});
+    await tester.analysisPoliciesRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.subjectsRepository.delete({});
     await tester.usersRepository.delete({});

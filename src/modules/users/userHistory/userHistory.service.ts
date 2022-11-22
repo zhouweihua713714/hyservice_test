@@ -4,6 +4,7 @@ import { ResultData } from '@/common/utils/result';
 import { SignInResInfo } from '../../auth/auth.types';
 import { ListHistoryDto } from './userHistory.dto';
 import {
+  analysisPoliciesRepository,
   conferencesRepository,
   institutionsRepository,
   patentsRepository,
@@ -43,13 +44,14 @@ export class UserHistoryService {
       userHistory,
       'type'
     );
-    let terms;
-    let treatises;
-    let policies;
-    let periodicals;
-    let patents;
-    let institutions;
-    let conferences;
+    let terms,
+      treatises,
+      policies,
+      analysisPolicies,
+      periodicals,
+      patents,
+      institutions,
+      conferences;
     if (term) {
       terms = await termsRepository.findBy({
         id: In(
@@ -70,6 +72,13 @@ export class UserHistoryService {
     }
     if (policy) {
       policies = await policiesRepository.findBy({
+        id: In(
+          policy.map((data) => {
+            return data.relatedId;
+          })
+        ),
+      });
+      analysisPolicies = await analysisPoliciesRepository.findBy({
         id: In(
           policy.map((data) => {
             return data.relatedId;
@@ -137,10 +146,22 @@ export class UserHistoryService {
         case Content_Types_Enum.POLICY:
           title = _.find(policies, function (o) {
             return o.id === data.relatedId;
-          })?.name;
+          })
+            ? _.find(policies, function (o) {
+                return o.id === data.relatedId;
+              }).name
+            : _.find(analysisPolicies, function (o) {
+                return o.id === data.relatedId;
+              })?.title;
           columnId = _.find(policies, function (o) {
             return o.id === data.relatedId;
-          })?.columnId;
+          })
+            ? _.find(policies, function (o) {
+                return o.id === data.relatedId;
+              }).columnId
+            : _.find(analysisPolicies, function (o) {
+                return o.id === data.relatedId;
+              })?.columnId;
           break;
         case Content_Types_Enum.PERIODICAL:
           title = _.find(periodicals, function (o) {
