@@ -1,21 +1,24 @@
-import { TesterSeed } from '../testHelper';
+import { TesterSeed } from '../../testHelper';
 import { CreateUserRetType } from '@/dao/users.dao';
 import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
-import { samples } from '../samples';
-import { Content_Status_Enum, Labels_Enum, User_Types_Enum } from '@/common/enums/common.enum';
+import { samples } from '../../samples';
+import { Content_Status_Enum, User_Types_Enum } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { Treatises } from '@/entities/Treatises.entity';
+import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
+import { TreatiseLibraryTypes } from '@/entities/TreatiseLibraryTypes.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
-let treatises: Treatises[];
+let treatiseLibraries: TreatiseLibrary[];
+let sorts: TreatiseLibraryTypes[];
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
   columns: Columns[];
-  treatises: Treatises[];
+  treatiseLibraries: TreatiseLibrary[];
+  sorts: TreatiseLibraryTypes[];
 };
 
 export const seed: TesterSeed<DataType> = {
@@ -32,7 +35,14 @@ export const seed: TesterSeed<DataType> = {
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: '0', sequenceNumber: 1 },
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: '1', sequenceNumber: 1 },
     ]);
-    treatises = await tester.treatisesRepository.save([
+    sorts = await tester.treatiseLibraryTypesRepository.save([
+      {
+        id: `C${genCodeOfLength(8)}`,
+        name: '分类名称',
+        columnId: columns[1].id,
+      },
+    ]);
+    treatiseLibraries = await tester.treatiseLibraryRepository.save([
       {
         id: (new Date().getTime() - 50000).toString(),
         columnId: columns[1].id,
@@ -42,13 +52,7 @@ export const seed: TesterSeed<DataType> = {
         abstract: '摘要不限制字数',
         keyword: '关键词',
         ownerId: user.user.id,
-        releasedAt:'2001-06-09',
-        topic:'一级主题',
-        childTopic:'二级主题',
-        goal:'研究目标',
-        object:'研究;对象',
-        paradigm:'研究范式',
-        method:'分析;方法',
+        sort: sorts[0].id,
         publishedAt: new Date(new Date().getTime() - 50000),
         status: Content_Status_Enum.ACTIVE,
       },
@@ -61,13 +65,7 @@ export const seed: TesterSeed<DataType> = {
         abstract: '摘要匹配',
         keyword: '关键词;AA',
         ownerId: user.user.id,
-        releasedAt:new Date(),
-        topic:'一级主题',
-        childTopic:'二级主题',
-        goal:'研究目标',
-        object:'研究;对象1',
-        paradigm:'研究范式',
-        method:'分析;方法',
+        sort: sorts[0].id,
         publishedAt: new Date(new Date().getTime() - 40000),
         status: Content_Status_Enum.ACTIVE,
       },
@@ -80,13 +78,7 @@ export const seed: TesterSeed<DataType> = {
         abstract: '摘要不限制字数',
         keyword: '关键词匹配;aa',
         ownerId: user.user.id,
-        releasedAt:'2001-06-09',
-        topic:'一级主题',
-        childTopic:'二级主题',
-        goal:'研究目标',
-        object:'研究;对象1',
-        paradigm:'研究范式',
-        method:'分析;方法',
+        sort: '',
         status: Content_Status_Enum.ACTIVE,
         publishedAt: new Date(new Date().getTime() - 40000),
       },
@@ -99,60 +91,16 @@ export const seed: TesterSeed<DataType> = {
         abstract: '摘要不限制字数',
         keyword: '关键;Aa',
         ownerId: user.user.id,
-        releasedAt:'2001-06-09',
-        topic:'一级主题',
-        childTopic:'二级主题',
-        goal:'研究目标',
-        object:'研究;对象1',
-        paradigm:'研究范式',
-        method:'分析;方法',
+        sort: '',
         status: Content_Status_Enum.ACTIVE,
         publishedAt: new Date(new Date().getTime() - 40000),
       },
     ]);
-    // user favorites
-    await tester.userFavoriteTreatisesRepository.save(
-      treatises.map((data) => {
-        return {
-          userId: user.user.id,
-          treatise: {
-            id: data.id,
-          },
-        };
-      })
-    );
-    // user label treatises
-    await tester.userLabelTreatisesRepository.save([
-      ...treatises.map((data) => {
-        return {
-          userId: user.user.id,
-          treatise: {
-            id: data.id,
-          },
-          label: Labels_Enum.Label_001,
-        };
-      }),
-      {
-        userId: '233',
-        treatise: {
-          id: treatises[0].id,
-        },
-        label: Labels_Enum.Label_001,
-      },
-      {
-        userId: '234',
-        treatise: {
-          id: treatises[0].id,
-        },
-        label: Labels_Enum.Label_002,
-      },
-    ]);
-    return { user, normalUser, columns, treatises };
+    return { user, normalUser, columns, treatiseLibraries, sorts };
   },
   down: async (tester) => {
-    await tester.treatisesRepository.delete({});
-    await tester.userFavoriteTreatisesRepository.delete({});
-    await tester.userLabelTreatisesRepository.delete({});
+    await tester.treatiseLibraryRepository.delete({});
+    await tester.treatiseLibraryTypesRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.usersRepository.delete({});
     await tester.loginsRepository.delete({});

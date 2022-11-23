@@ -151,7 +151,7 @@ export class SaveTreatiseDto {
   minorField: string | null;
 
   @ApiPropertyOptional({ description: '文章类型', type: String, isArray: true, nullable: true })
-  @IsArray({ message: 'sort 类型错误, 正确类型 string' })
+  @IsArray({ message: 'sort 类型错误, 正确类型 array' })
   @IsOptional()
   sort: string[] | null;
 

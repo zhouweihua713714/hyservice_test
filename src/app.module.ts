@@ -58,6 +58,9 @@ import { TermKeywords } from './entities/TermKeywords.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { NSFDirectorateTypes } from './entities/NSFDirectorateTypes.entity';
+import { TreatiseLibraryModule } from './modules/treatises/treatiseLibrary/treatiseLibrary.module';
+import { TreatiseLibrary } from './entities/TreatiseLibrary.entity';
+import { TreatiseLibraryTypes } from './entities/TreatiseLibraryTypes.entity';
 import { ResearchReports } from './entities/ResearchReports.entity';
 import { ReportsModule } from './modules/reports/reports.module';
 @Module({
@@ -128,6 +131,8 @@ import { ReportsModule } from './modules/reports/reports.module';
       AmericaTermKeywords,
       TreatiseKeywords,
       TermKeywords,
+      TreatiseLibrary,
+      TreatiseLibraryTypes,
       ResearchReports
     ]),
     HomeModule,
@@ -145,6 +150,7 @@ import { ReportsModule } from './modules/reports/reports.module';
     InstitutionsModule,
     UsersModule,
     TasksModule,
+    TreatiseLibraryModule,
     ReportsModule
   ],
   // 守卫

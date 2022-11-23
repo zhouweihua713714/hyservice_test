@@ -32,6 +32,7 @@ import { UserKeywordStatistics } from '@/entities/UserKeywordStatistics.entity';
 import { AmericaTerms } from '@/entities/AmericaTerms.entity';
 import { AmericaTermKeywords } from '@/entities/AmericaTermKeywords.entity';
 import { NSFDirectorateTypes } from '@/entities/NSFDirectorateTypes.entity';
+import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
 import { ResearchReports } from '@/entities/ResearchReports.entity';
 DataSource.initialize()
   .then(() => {
@@ -73,9 +74,8 @@ export const termKeywordsRepository = DataSource.getRepository(TermKeywords);
 export const userKeywordStatisticsRepository = DataSource.getRepository(UserKeywordStatistics);
 export const americaTermsRepository = DataSource.getRepository(AmericaTerms);
 export const americaTermKeywordsRepository = DataSource.getRepository(AmericaTermKeywords);
+export const treatiseLibraryRepository = DataSource.getRepository(TreatiseLibrary);
 export const researchReportsRepository = DataSource.getRepository(ResearchReports);
-
-
 
 
 

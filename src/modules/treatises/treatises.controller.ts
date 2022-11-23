@@ -16,6 +16,7 @@ import {
   SaveTreatiseDto,
 } from './treatises.dto';
 import { TreatisesService } from './treatises.service';
+import {  TreatiseLibraryService } from './treatiseLibrary/treatiseLibrary.service';
 import {
   GetArticleCountResult,
   GetCountryCooperationNetWorksResult,
@@ -35,6 +36,8 @@ import {
   RemoveTreatisesResult,
   SaveTreatiseResult,
 } from './treatises.types';
+import { ListComplexTreatiseLibraryDto } from './treatiseLibrary/treatiseLibrary.dto';
+import { ListComplexTreatiseLibraryResult } from './treatiseLibrary/treatiseLibray.types';
 
 @ApiTags('内容管理-论文')
 @ApiExtraModels(
@@ -55,11 +58,15 @@ import {
   GetResearchObjectsResult,
   GetResearchParadigmResult,
   GetResearchGoalsResult,
-  GetResearchAnalysisMethodsResult
+  GetResearchAnalysisMethodsResult,
+  ListComplexTreatiseLibraryResult
 )
 @Controller('/treatises')
 export class TreatisesController {
-  constructor(private readonly treatisesService: TreatisesService) {}
+  constructor(
+    private readonly treatisesService: TreatisesService,
+    private readonly treatiseLibraryService: TreatiseLibraryService
+  ) {}
 
   @Get('/getTreatiseDetail')
   @HttpCode(200)
@@ -222,5 +229,15 @@ export class TreatisesController {
   @AllowAnon()
   getResearchAnalysisMethods(@Query() params: any) {
     return this.treatisesService.getResearchAnalysisMethods(params);
+  }
+
+  @Post('/listComplexTreatiseLibrary')
+  @HttpCode(200)
+  @ApiOperation({ summary: '精选文库列表(c端)' })
+  @ApiResult(ListComplexTreatiseLibraryResult)
+  @AllowAnon()
+  listComplexTreatiseLibrary(@Body() params: ListComplexTreatiseLibraryDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatiseLibraryService.listComplexTreatiseLibrary(params, user);
   }
 }
