@@ -58,6 +58,8 @@ import { TermKeywords } from './entities/TermKeywords.entity';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { NSFDirectorateTypes } from './entities/NSFDirectorateTypes.entity';
+import { ResearchReports } from './entities/ResearchReports.entity';
+import { ReportsModule } from './modules/reports/reports.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -126,6 +128,7 @@ import { NSFDirectorateTypes } from './entities/NSFDirectorateTypes.entity';
       AmericaTermKeywords,
       TreatiseKeywords,
       TermKeywords,
+      ResearchReports
     ]),
     HomeModule,
     AuthModule,
@@ -142,6 +145,7 @@ import { NSFDirectorateTypes } from './entities/NSFDirectorateTypes.entity';
     InstitutionsModule,
     UsersModule,
     TasksModule,
+    ReportsModule
   ],
   // 守卫
   providers: [
