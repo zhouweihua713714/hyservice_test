@@ -61,6 +61,8 @@ import { NSFDirectorateTypes } from './entities/NSFDirectorateTypes.entity';
 import { TreatiseLibraryModule } from './modules/treatises/treatiseLibrary/treatiseLibrary.module';
 import { TreatiseLibrary } from './entities/TreatiseLibrary.entity';
 import { TreatiseLibraryTypes } from './entities/TreatiseLibraryTypes.entity';
+import { ResearchReports } from './entities/ResearchReports.entity';
+import { ReportsModule } from './modules/reports/reports.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -130,7 +132,8 @@ import { TreatiseLibraryTypes } from './entities/TreatiseLibraryTypes.entity';
       TreatiseKeywords,
       TermKeywords,
       TreatiseLibrary,
-      TreatiseLibraryTypes
+      TreatiseLibraryTypes,
+      ResearchReports
     ]),
     HomeModule,
     AuthModule,
@@ -147,7 +150,8 @@ import { TreatiseLibraryTypes } from './entities/TreatiseLibraryTypes.entity';
     InstitutionsModule,
     UsersModule,
     TasksModule,
-    TreatiseLibraryModule
+    TreatiseLibraryModule,
+    ReportsModule
   ],
   // 守卫
   providers: [

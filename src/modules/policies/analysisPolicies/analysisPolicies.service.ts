@@ -289,6 +289,7 @@ export class AnalysisPoliciesService {
         'analysis_policies.id',
         'analysis_policies.title',
         'analysis_policies.announcedAt',
+        'analysis_policies.content',
         'analysis_policies.source',
       ])
       .where(`${basicCondition}`, {
