@@ -45,6 +45,8 @@ import { AmericaTerms } from '@/entities/AmericaTerms.entity';
 import { AmericaTermKeywords } from '@/entities/AmericaTermKeywords.entity';
 import { TreatiseKeywords } from '@/entities/TreatiseKeywords.entity';
 import { TermKeywords } from '@/entities/TermKeywords.entity';
+import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
+import { TreatiseLibraryTypes } from '@/entities/TreatiseLibraryTypes.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -85,6 +87,8 @@ export class DBTester<T = undefined> {
   userKeywordStatisticsRepository: Repository<UserKeywordStatistics>;
   treatiseKeywordsRepository: Repository<TreatiseKeywords>;
   termKeywordsRepository: Repository<TermKeywords>;
+  treatiseLibraryRepository: Repository<TreatiseLibrary>;
+  treatiseLibraryTypesRepository:Repository<TreatiseLibraryTypes>;
   config: ConfigService;
   server: any;
 
@@ -195,6 +199,12 @@ export class DBTester<T = undefined> {
       );
       this.termKeywordsRepository = this.module.get<Repository<TermKeywords>>(
         getRepositoryToken(TermKeywords)
+      );
+      this.treatiseLibraryRepository = this.module.get<Repository<TreatiseLibrary>>(
+        getRepositoryToken(TreatiseLibrary)
+      );
+      this.treatiseLibraryTypesRepository = this.module.get<Repository<TreatiseLibraryTypes>>(
+        getRepositoryToken(TreatiseLibraryTypes)
       );
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });
