@@ -80,7 +80,7 @@ export class OperateTreatiseLibraryResult {
 export class RemoveTreatiseLibraryResult extends PickType(OperateTreatiseLibraryResult, [
   'succeed',
   'failed',
-] as const) {}
+] as const) { }
 export class ListComplexTreatiseLibraryInfo extends PickType(TreatiseLibrary, [
   'id',
   'title',
@@ -90,16 +90,16 @@ export class ListComplexTreatiseLibraryInfo extends PickType(TreatiseLibrary, [
   'name',
   'abstract',
   'keyword',
-] as const) {}
+] as const) { }
 export class RecommendTreatiseInfo extends PickType(TreatiseLibrary, [
   'id',
   'title',
   'columnId',
-] as const) {}
+] as const) { }
 
 export class ListComplexTreatiseLibraryResult {
   @ApiProperty({ description: '精选文库数组', type: ListComplexTreatiseLibraryInfo, isArray: true })
-  treatiseLibraries:ListComplexTreatiseLibraryInfo[];
+  treatiseLibraries: ListComplexTreatiseLibraryInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;
@@ -139,14 +139,32 @@ export class KeywordChartInfo {
   treatises: KeywordChartTreatiseInfo[];
 }
 
-export class GetKeywordChartsResult {
-  @ApiProperty({ description: '关键词数组', type: KeywordChartInfo, isArray: true })
-  keywordCharts: KeywordChartInfo[];
-}
-export class RegionTreatiseInfo {
-  @ApiProperty({ description: '精选文库id,以防未来需要跳转需要用' })
-  id: string;
+export class SortCountsInfo {
+  @ApiProperty({ description: '分类id' })
+  sort: string;
 
-  @ApiProperty({ description: '精选文库标题' })
-  title: string;
+  @ApiProperty({ description: '分类名称' })
+  sortName: string;
+
+  @ApiProperty({ description: '精选文库数量' })
+  count: number;
+}
+
+export class YearCountsInfo {
+  @ApiProperty({ description: '年份' })
+  year: number;
+
+  @ApiProperty({ description: '年份下分类数据', type: SortCountsInfo, isArray: true })
+  sortCounts: SortCountsInfo[];
+
+  @ApiProperty({ description: '精选文库数量' })
+  count: number;
+}
+
+export class GetTreatiseLibraryCountBySortAndYearResult {
+  @ApiProperty({ description: '分类下数据统计', type: SortCountsInfo, isArray: true })
+  sortCounts: SortCountsInfo[];
+
+  @ApiProperty({ description: '年份下数据统计', type: YearCountsInfo, isArray: true })
+  yearCounts: YearCountsInfo[];
 }

@@ -103,15 +103,15 @@ export class TreatiseLibrary {
   })
   minorField: string | null;
 
-  @ApiPropertyOptional({ description: '杂志文章主领域', type: String, nullable: true })
-  @Column('text', { name: 'magazine_field', nullable: true, comment: '杂志文章主领域' })
+  @ApiPropertyOptional({ description: '杂志会议所属主领域', type: String, nullable: true })
+  @Column('text', { name: 'magazine_field', nullable: true, comment: '杂志会议所属主领域' })
   magazineField: string | null;
 
-  @ApiPropertyOptional({ description: '杂志文章子领域', type: String, nullable: true })
+  @ApiPropertyOptional({ description: '杂志会议所属子领域', type: String, nullable: true })
   @Column('text', {
     name: 'magazine_minor_field',
     nullable: true,
-    comment: '杂志文章子领域',
+    comment: '杂志会议所属子领域',
   })
   magazineMinorField: string | null;
 

@@ -36,8 +36,8 @@ import {
   RemoveTreatisesResult,
   SaveTreatiseResult,
 } from './treatises.types';
-import { ListComplexTreatiseLibraryDto } from './treatiseLibrary/treatiseLibrary.dto';
-import { ListComplexTreatiseLibraryResult } from './treatiseLibrary/treatiseLibray.types';
+import { GetTreatiseLibraryCountBySortAndYearDto, ListComplexTreatiseLibraryDto } from './treatiseLibrary/treatiseLibrary.dto';
+import { GetTreatiseLibraryCountBySortAndYearResult, ListComplexTreatiseLibraryResult } from './treatiseLibrary/treatiseLibray.types';
 
 @ApiTags('内容管理-论文')
 @ApiExtraModels(
@@ -59,7 +59,8 @@ import { ListComplexTreatiseLibraryResult } from './treatiseLibrary/treatiseLibr
   GetResearchParadigmResult,
   GetResearchGoalsResult,
   GetResearchAnalysisMethodsResult,
-  ListComplexTreatiseLibraryResult
+  ListComplexTreatiseLibraryResult,
+  GetTreatiseLibraryCountBySortAndYearResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -239,5 +240,16 @@ export class TreatisesController {
   listComplexTreatiseLibrary(@Body() params: ListComplexTreatiseLibraryDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatiseLibraryService.listComplexTreatiseLibrary(params, user);
+  }
+
+  @Get('/getTreatiseLibraryCountBySortAndYear')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '获取河流图表',
+  })
+  @ApiResult(GetTreatiseLibraryCountBySortAndYearResult)
+  @AllowAnon()
+  getTreatiseLibraryCountBySortAndYear(@Query() params: GetTreatiseLibraryCountBySortAndYearDto) {
+    return this.treatiseLibraryService.getTreatiseLibraryCountBySortAndYear(params);
   }
 }

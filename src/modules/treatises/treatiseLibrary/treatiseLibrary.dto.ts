@@ -218,8 +218,9 @@ export class RecommendTreatiseLibrariesDto {
   @IsOptional()
   id: string;
 }
-export class GetKeywordChartsDto {
-  @ApiProperty({ description: '论文的栏目id' })
+export class GetTreatiseLibraryCountBySortAndYearDto {
+  @ApiProperty({ description: '精选文库的栏目id' })
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   columnId: string;
 }
+

@@ -5,14 +5,13 @@ import { ErrorCode } from '@/common/utils/errorCode';
 import {
   articleTypesRepository,
   columnsRepository,
-  languagesRepository,
-  treatiseKeywordsRepository,
   treatiseLibraryRepository,
+  treatiseLibraryTypesRepository,
   userHistoryRepository,
   usersRepository,
 } from '../../repository/repository';
 import {
-  GetKeywordChartsDto,
+  GetTreatiseLibraryCountBySortAndYearDto,
   GetTreatiseLibraryDetailDto,
   ListComplexTreatiseLibraryDto,
   ListTreatiseLibraryDto,
@@ -22,10 +21,8 @@ import {
   SaveTreatiseLibraryDto,
 } from './treatiseLibrary.dto';
 import {
-  Channels_Enum,
   Content_Status_Enum,
   Content_Types_Enum,
-  Labels_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Brackets, In, IsNull, Like } from 'typeorm';
@@ -33,7 +30,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
 @Injectable()
 export class TreatiseLibraryService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
   /**
    * @description 获取精选文库详情
    * @param {GetTreatiseLibraryDetailDto} params
@@ -57,7 +54,7 @@ export class TreatiseLibraryService {
     }
     if (treatiseInfo.sort) {
       articleTypeInfo = await articleTypesRepository.findBy({
-        id:treatiseInfo.sort,
+        id: treatiseInfo.sort,
         type: Like(`%${Content_Types_Enum.TREATISE}%`),
       });
     }
@@ -77,11 +74,11 @@ export class TreatiseLibraryService {
       columnName: columnInfo ? columnInfo.name : null,
       sortName: articleTypeInfo
         ? _.join(
-            articleTypeInfo.map((articleType) => {
-              return articleType.name;
-            }),
-            ';'
-          )
+          articleTypeInfo.map((articleType) => {
+            return articleType.name;
+          }),
+          ';'
+        )
         : null,
       owner: userInfo ? userInfo.mobile : null,
       ...treatiseInfo,
@@ -102,7 +99,7 @@ export class TreatiseLibraryService {
     // if sort not found in database, then throw error
     if (sort) {
       const articleTypeInfo = await articleTypesRepository.findBy({
-        id:sort,
+        id: sort,
         type: Like(`%${Content_Types_Enum.TREATISE}%`),
       });
       if (!articleTypeInfo || (articleTypeInfo && articleTypeInfo.length !== sort.length)) {
@@ -314,7 +311,7 @@ export class TreatiseLibraryService {
     if (columnId) {
       basicCondition += ' and treatiseLibrary.columnId = :columnId';
     }
-    if(sort){
+    if (sort) {
       basicCondition += ' and treatiseLibrary.sort = :sort';
     }
     // get treatiseLibraries and count
@@ -338,7 +335,7 @@ export class TreatiseLibraryService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
-          sort:sort
+          sort: sort
         })
         .andWhere(
           new Brackets((qb) => {
@@ -371,7 +368,7 @@ export class TreatiseLibraryService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
-          sort:sort
+          sort: sort
         })
         .orderBy('treatiseLibrary.deliveryAt', 'DESC', 'NULLS LAST')
         .addOrderBy('treatiseLibrary.publishedAt', 'DESC')
@@ -482,8 +479,8 @@ export class TreatiseLibraryService {
           id: treatiseInfo?.id,
           ids: treatiseLibrary
             ? treatiseLibrary.map((data) => {
-                return data.id;
-              })
+              return data.id;
+            })
             : undefined,
           columnIds: columns.map((data) => {
             return data.id;
@@ -502,54 +499,72 @@ export class TreatiseLibraryService {
     });
   }
   /**
-   * @description 获取精选文库关键词TOP10(精选文库知识图谱)
-   * @param {GetKeywordChartsDto} params  获取精选文库关键词TOP10(精选文库知识图谱)的相关参数
-   * @returns {ResultData} 返回getKeywordCharts信息
+   * @description 获取河流图表
+   * @param {GetTreatiseLibraryCountBySortAndYearDto} params  获取河流图表的相关参数
+   * @returns {ResultData} 返回getTreatiseLibraryCountBySortAndYear信息
    */
-  async getKeywordCharts(params: GetKeywordChartsDto): Promise<ResultData> {
+  async getTreatiseLibraryCountBySortAndYear(params: GetTreatiseLibraryCountBySortAndYearDto): Promise<ResultData> {
     const { columnId } = params;
-    //get treatiseKeywords by columnId
-    const treatiseKeywords = await treatiseKeywordsRepository
-      .createQueryBuilder('treatise_keywords')
-      .select('COUNT(treatise_keywords.treatiseId)', 'frequency')
-      .addSelect('treatise_keywords.name', 'name')
-      .where('treatise_keywords.columnId =:columnId', {
+    //get sortCounts,yearCounts,sorts
+    let sortCounts, yearCounts, sorts;
+    [sortCounts, yearCounts, sorts] = await Promise.all([treatiseLibraryRepository
+      .createQueryBuilder('treatise_library')
+      .select('COUNT(treatise_library.id)', 'count')
+      .addSelect('treatise_library.sort', 'sort')
+      .where('treatise_library.enabled = true and treatise_library.deletedAt is null and treatise_library.status =:status and treatise_library.columnId =:columnId', {
         columnId: columnId,
+        status: Content_Status_Enum.ACTIVE
       })
-      .groupBy('treatise_keywords.name')
-      .getRawMany();
-    // get top10
-    const keywordTop10 = _.orderBy(
-      _.map(treatiseKeywords, (v) => ({
-        ...v,
-        frequency: Number(v.frequency),
-      })),
-      ['frequency'],
-      ['desc']
-    ).slice(0, 10);
-    //get title by keyword
-    const treatiseKeywordsData = await treatiseKeywordsRepository.find({
-      where: {
-        name: In(
-          keywordTop10.map((data) => {
-            return data.name;
-          })
-        ),
+      .groupBy('treatise_library.sort')
+      .getRawMany(),
+    treatiseLibraryRepository
+      .createQueryBuilder('treatise_library')
+      .select('COUNT(treatise_library.id)', 'count')
+      .addSelect('treatise_library.sort', 'sort')
+      .addSelect('treatise_library.year', 'year')
+      .where('treatise_library.enabled = true and treatise_library.deletedAt is null and treatise_library.status =:status and treatise_library.columnId =:columnId', {
         columnId: columnId,
-      },
-      select: ['name', 'treatiseId', 'title'],
-    });
-    const treatiseKeywordsDataDict = _.groupBy(treatiseKeywordsData, 'name');
-    const result = keywordTop10.map((data) => {
+        status: Content_Status_Enum.ACTIVE
+      })
+      .groupBy('treatise_library.year')
+      .addGroupBy('treatise_library.sort')
+      .getRawMany(),
+    treatiseLibraryTypesRepository.find({
+      where: {
+        columnId: columnId
+      }
+    })
+    ]);
+    sorts = sorts.map(data => {
       return {
-        ...data,
-        treatiseLibrary: treatiseKeywordsDataDict[data.name]
-          ? treatiseKeywordsDataDict[data.name].slice(0, 10)
-          : [],
+        id: data.id,
+        name: data.name
       };
     });
+    sortCounts = _.orderBy(sortCounts.map(data => {
+      return {
+        sort: data.sort,
+        sortName: _.find(sorts, function (o) { return o.id === data.sort; })?.name,
+        count: Number(data.count)
+      };
+    }), 'sortName', 'asc');
+    yearCounts = yearCounts.map(data => { return { count: Number(data.count), sort: data.sort, year: data.year, sortName: _.find(sorts, function (o) { return o.id === data.sort; })?.name }; });
+    yearCounts = _.orderBy(_.uniqBy(yearCounts.map(data => {
+      const yearCount = _.filter(yearCounts, function (o) { return o.year === data.year; }).map(data => {
+        return {
+          sort: data.sort,
+          sortName: data.sortName,
+          count: data.count
+        };
+      });
+      return {
+        year: data.year,
+        count: _.sumBy(yearCount, 'count'),
+        sortCounts: _.orderBy(yearCount, 'sortName', 'asc')
+      };
+    }), 'year'), 'year', 'asc');
     return ResultData.ok({
-      data: { keywordCharts: result },
+      data: { sortCounts: sortCounts, yearCounts: yearCounts },
     });
   }
 }
