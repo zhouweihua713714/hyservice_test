@@ -131,14 +131,13 @@ export class TreatiseLibrary {
   })
   name: string | null;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: '栏目id,精选文库只能选择精选文库相关的栏目且不为空',
     type: String,
   })
   @Column('character varying', {
     name: 'column_id',
     length: 128,
-    nullable: true,
     comment: '栏目id,精选文库只能选择精选文库相关的栏目且不为空',
   })
   @Index()
@@ -170,11 +169,11 @@ export class TreatiseLibrary {
   })
   keyword: string | null;
 
-  @ApiPropertyOptional({ description: '点击量,暂时不做' })
+  @ApiPropertyOptional({ description: '点击量' })
   @Column('integer', {
     name: 'clicks',
     default: 0,
-    comment: '点击量,暂时不做',
+    comment: '点击量',
   })
   clicks: number;
 
