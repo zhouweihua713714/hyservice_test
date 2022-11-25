@@ -16,7 +16,7 @@ import {
   SaveTreatiseDto,
 } from './treatises.dto';
 import { TreatisesService } from './treatises.service';
-import {  TreatiseLibraryService } from './treatiseLibrary/treatiseLibrary.service';
+import { TreatiseLibraryService } from './treatiseLibrary/treatiseLibrary.service';
 import {
   GetArticleCountResult,
   GetCountryCooperationNetWorksResult,
@@ -36,8 +36,18 @@ import {
   RemoveTreatisesResult,
   SaveTreatiseResult,
 } from './treatises.types';
-import { GetTreatiseLibraryCountBySortAndYearDto, GetTreatiseLibraryDetailDto, ListComplexTreatiseLibraryDto } from './treatiseLibrary/treatiseLibrary.dto';
-import { GetTreatiseLibraryCountBySortAndYearResult, GetTreatiseLibraryDetailResult, ListComplexTreatiseLibraryResult } from './treatiseLibrary/treatiseLibray.types';
+import {
+  GetTreatiseLibraryCountBySortAndYearDto,
+  GetTreatiseLibraryDetailDto,
+  ListComplexTreatiseLibraryDto,
+  RecommendTreatiseLibrariesDto,
+} from './treatiseLibrary/treatiseLibrary.dto';
+import {
+  GetTreatiseLibraryCountBySortAndYearResult,
+  GetTreatiseLibraryDetailResult,
+  ListComplexTreatiseLibraryResult,
+  RecommendTreatiseLibrariesResult,
+} from './treatiseLibrary/treatiseLibrary.types';
 
 @ApiTags('内容管理-论文')
 @ApiExtraModels(
@@ -61,7 +71,8 @@ import { GetTreatiseLibraryCountBySortAndYearResult, GetTreatiseLibraryDetailRes
   GetResearchAnalysisMethodsResult,
   ListComplexTreatiseLibraryResult,
   GetTreatiseLibraryCountBySortAndYearResult,
-  GetTreatiseLibraryDetailResult
+  GetTreatiseLibraryDetailResult,
+  RecommendTreatiseLibrariesResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -262,5 +273,15 @@ export class TreatisesController {
   getTreatiseLibraryDetail(@Query() params: GetTreatiseLibraryDetailDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatiseLibraryService.getTreatiseLibraryDetail(params, user);
+  }
+
+  @Post('/recommendTreatiseLibraries')
+  @HttpCode(200)
+  @ApiOperation({ summary: '精选文库推荐列表(相关推荐)' })
+  @ApiResult(RecommendTreatiseLibrariesResult)
+  @AllowAnon()
+  recommendTreatiseLibraries(@Body() params: RecommendTreatiseLibrariesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatiseLibraryService.recommendTreatiseLibraries(params, user);
   }
 }

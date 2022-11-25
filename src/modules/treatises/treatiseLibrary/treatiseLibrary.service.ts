@@ -426,7 +426,7 @@ export class TreatiseLibraryService {
       },
       select: ['id', 'name'],
     });
-    const keyword = treatiseInfo?.keyword;
+    const sort = treatiseInfo?.sort;
     const columnId = treatiseInfo?.columnId;
     let basicCondition =
       'treatiseLibrary.enabled = true and treatiseLibrary.deletedAt is null and treatiseLibrary.status =:status';
@@ -442,10 +442,8 @@ export class TreatiseLibraryService {
       basicCondition += ` and treatiseLibrary.columnId ='-1'`;
     }
     let treatiseLibrary;
-    // keyword recommend first
-    if (keyword) {
-      // get keywords
-      const keywords = `%${keyword.replace(/;/g, '%;%')}%`.split(';');
+    // sort recommend first
+    if (sort) {
       treatiseLibrary = await treatiseLibraryRepository
         .createQueryBuilder('treatiseLibrary')
         .select(['treatiseLibrary.id', 'treatiseLibrary.title', 'treatiseLibrary.columnId'])
@@ -456,13 +454,10 @@ export class TreatiseLibraryService {
             return data.id;
           }),
         })
-        .andWhere(
-          new Brackets((qb) => {
-            qb.where('treatiseLibrary.keyword like any (ARRAY[:...keyword])', {
-              keyword: keywords,
-            });
-          })
-        )
+        .andWhere('treatiseLibrary.sort =:sort', { sort: sort })
+        .andWhere('treatiseLibrary.columnId =:columnId', {
+          columnId: columnId,
+        })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(8)
         .getMany();
@@ -498,8 +493,9 @@ export class TreatiseLibraryService {
         .getMany();
       treatiseLibrary = _.unionBy(treatiseLibrary, newTreatiseLibraryLibrary, 'id');
     }
+
     return ResultData.ok({
-      data: { treatiseLibrary: treatiseLibrary ? treatiseLibrary : [] },
+      data: { treatiseLibraries: treatiseLibrary ? treatiseLibrary : [] },
     });
   }
   /**
