@@ -9,7 +9,7 @@ import {
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { TreatiseLibrary } from '@/entities/treatiseLibrary.entity';
+import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
