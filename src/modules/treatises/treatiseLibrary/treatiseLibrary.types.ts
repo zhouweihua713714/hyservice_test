@@ -105,9 +105,9 @@ export class ListComplexTreatiseLibraryResult {
   count: number;
 }
 
-export class RecommendTreatiseLibraryResult {
+export class RecommendTreatiseLibrariesResult {
   @ApiProperty({ description: '推荐精选文库数组', type: RecommendTreatiseInfo, isArray: true })
-  treatises: RecommendTreatiseInfo[];
+  treatiseLibraries: RecommendTreatiseInfo[];
 }
 
 export class KeywordChartTreatiseInfo {
