@@ -36,8 +36,8 @@ import {
   RemoveTreatisesResult,
   SaveTreatiseResult,
 } from './treatises.types';
-import { GetTreatiseLibraryCountBySortAndYearDto, ListComplexTreatiseLibraryDto } from './treatiseLibrary/treatiseLibrary.dto';
-import { GetTreatiseLibraryCountBySortAndYearResult, ListComplexTreatiseLibraryResult } from './treatiseLibrary/treatiseLibray.types';
+import { GetTreatiseLibraryCountBySortAndYearDto, GetTreatiseLibraryDetailDto, ListComplexTreatiseLibraryDto } from './treatiseLibrary/treatiseLibrary.dto';
+import { GetTreatiseLibraryCountBySortAndYearResult, GetTreatiseLibraryDetailResult, ListComplexTreatiseLibraryResult } from './treatiseLibrary/treatiseLibray.types';
 
 @ApiTags('内容管理-论文')
 @ApiExtraModels(
@@ -60,7 +60,8 @@ import { GetTreatiseLibraryCountBySortAndYearResult, ListComplexTreatiseLibraryR
   GetResearchGoalsResult,
   GetResearchAnalysisMethodsResult,
   ListComplexTreatiseLibraryResult,
-  GetTreatiseLibraryCountBySortAndYearResult
+  GetTreatiseLibraryCountBySortAndYearResult,
+  GetTreatiseLibraryDetailResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -251,5 +252,15 @@ export class TreatisesController {
   @AllowAnon()
   getTreatiseLibraryCountBySortAndYear(@Query() params: GetTreatiseLibraryCountBySortAndYearDto) {
     return this.treatiseLibraryService.getTreatiseLibraryCountBySortAndYear(params);
+  }
+
+  @Get('/getTreatiseLibraryDetail')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取精选文库详情' })
+  @ApiResult(GetTreatiseLibraryDetailResult)
+  @AllowAnon()
+  getTreatiseLibraryDetail(@Query() params: GetTreatiseLibraryDetailDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatiseLibraryService.getTreatiseLibraryDetail(params, user);
   }
 }

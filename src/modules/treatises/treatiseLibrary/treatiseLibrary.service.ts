@@ -30,58 +30,52 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
 @Injectable()
 export class TreatiseLibraryService {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
   /**
    * @description 获取精选文库详情
    * @param {GetTreatiseLibraryDetailDto} params
    * @returns {ResultData} 返回getTreatiseLibraryDetail信息
    */
-  async getTreatiseLibraryDetail(params: GetTreatiseLibraryDetailDto, user: SignInResInfo): Promise<ResultData> {
-    const treatiseInfo = await treatiseLibraryRepository.findOneBy({
+  async getTreatiseLibraryDetail(
+    params: GetTreatiseLibraryDetailDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
+    const treatiseLibraryInfo = await treatiseLibraryRepository.findOneBy({
       id: params.id,
       deletedAt: IsNull(),
       enabled: true,
     });
-    if (!treatiseInfo) {
+    if (!treatiseLibraryInfo) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
     }
-    const columnInfo = await columnsRepository.findOneBy({ id: treatiseInfo.columnId });
+    const columnInfo = await columnsRepository.findOneBy({ id: treatiseLibraryInfo.columnId });
     // get necessary data
-    let userInfo;
-    let articleTypeInfo;
-    if (treatiseInfo.ownerId) {
-      userInfo = await usersRepository.findOneBy({ id: treatiseInfo.ownerId });
+    let userInfo, treatiseLibraryTypeInfo;
+    if (treatiseLibraryInfo.ownerId) {
+      userInfo = await usersRepository.findOneBy({ id: treatiseLibraryInfo.ownerId });
     }
-    if (treatiseInfo.sort) {
-      articleTypeInfo = await articleTypesRepository.findBy({
-        id: treatiseInfo.sort,
-        type: Like(`%${Content_Types_Enum.TREATISE}%`),
+    if (treatiseLibraryInfo.sort) {
+      treatiseLibraryTypeInfo = await treatiseLibraryTypesRepository.findBy({
+        id: treatiseLibraryInfo.sort,
       });
     }
     // update clicks
     if (params.flag) {
-      await treatiseLibraryRepository.update(params.id, { clicks: treatiseInfo.clicks + 1 });
+      await treatiseLibraryRepository.update(params.id, { clicks: treatiseLibraryInfo.clicks + 1 });
     }
     // if user login then record history and get user notes by params.id
     if (params.flag && user) {
       await userHistoryRepository.save({
         userId: user.id,
         relatedId: params.id,
-        type: Content_Types_Enum.TREATISE,
+        type: Content_Types_Enum.TREATISE_LIBRARY,
       });
     }
     const result = {
       columnName: columnInfo ? columnInfo.name : null,
-      sortName: articleTypeInfo
-        ? _.join(
-          articleTypeInfo.map((articleType) => {
-            return articleType.name;
-          }),
-          ';'
-        )
-        : null,
+      sortName: treatiseLibraryTypeInfo ? treatiseLibraryTypeInfo.name : null,
       owner: userInfo ? userInfo.mobile : null,
-      ...treatiseInfo,
+      ...treatiseLibraryInfo,
     };
     return ResultData.ok({ data: result });
   }
@@ -90,7 +84,10 @@ export class TreatiseLibraryService {
    * @param {SaveTreatiseLibraryDto} params 保存精选文库的相关参数
    * @returns {ResultData} 返回saveTreatiseLibrary信息
    */
-  async saveTreatiseLibrary(params: SaveTreatiseLibraryDto, user: SignInResInfo): Promise<ResultData> {
+  async saveTreatiseLibrary(
+    params: SaveTreatiseLibraryDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const { id, status, columnId, sort } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
@@ -137,7 +134,10 @@ export class TreatiseLibraryService {
    * @param {ListTreatiseLibraryDto} params
    * @returns {ResultData} 返回listTreatiseLibrary信息
    */
-  async listTreatiseLibrary(params: ListTreatiseLibraryDto, user: SignInResInfo): Promise<ResultData> {
+  async listTreatiseLibrary(
+    params: ListTreatiseLibraryDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const { columnId, title, status, page, size } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
@@ -211,7 +211,10 @@ export class TreatiseLibraryService {
    * @param {OperateTreatiseLibrariesDto} params 操作精选文库的相关参数
    * @returns {ResultData} 返回operateTreatiseLibraries信息
    */
-  async operateTreatiseLibraries(params: OperateTreatiseLibrariesDto, user: SignInResInfo): Promise<ResultData> {
+  async operateTreatiseLibraries(
+    params: OperateTreatiseLibrariesDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const { ids, status } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
@@ -258,7 +261,10 @@ export class TreatiseLibraryService {
    * @param {RemoveTreatiseLibrariesDto} params 删除精选文库的相关参数
    * @returns {ResultData} 返回removeTreatiseLibraries信息
    */
-  async removeTreatiseLibraries(params: RemoveTreatiseLibrariesDto, user: SignInResInfo): Promise<ResultData> {
+  async removeTreatiseLibraries(
+    params: RemoveTreatiseLibrariesDto,
+    user: SignInResInfo
+  ): Promise<ResultData> {
     const { ids } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
@@ -298,13 +304,7 @@ export class TreatiseLibraryService {
     params: ListComplexTreatiseLibraryDto,
     user: SignInResInfo
   ): Promise<ResultData> {
-    const {
-      keyword,
-      sort,
-      columnId,
-      page,
-      size,
-    } = params;
+    const { keyword, sort, columnId, page, size } = params;
     // get basic condition
     let basicCondition =
       'treatiseLibrary.enabled = true and treatiseLibrary.deletedAt is null and treatiseLibrary.status =:status';
@@ -335,15 +335,19 @@ export class TreatiseLibraryService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
-          sort: sort
+          sort: sort,
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('LOWER(treatiseLibrary.title) like any (ARRAY[:...keyword])', { keyword: keywords })
+            qb.where('LOWER(treatiseLibrary.title) like any (ARRAY[:...keyword])', {
+              keyword: keywords,
+            })
               .orWhere('LOWER(treatiseLibrary.keyword) like any (ARRAY[:...keyword])', {
                 keyword: keywords,
               })
-              .orWhere('(treatiseLibrary.abstract) like any (ARRAY[:...keyword])', { keyword: keywords });
+              .orWhere('(treatiseLibrary.abstract) like any (ARRAY[:...keyword])', {
+                keyword: keywords,
+              });
           })
         )
         .orderBy('treatiseLibrary.deliveryAt', 'DESC', 'NULLS LAST')
@@ -368,7 +372,7 @@ export class TreatiseLibraryService {
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
-          sort: sort
+          sort: sort,
         })
         .orderBy('treatiseLibrary.deliveryAt', 'DESC', 'NULLS LAST')
         .addOrderBy('treatiseLibrary.publishedAt', 'DESC')
@@ -479,8 +483,8 @@ export class TreatiseLibraryService {
           id: treatiseInfo?.id,
           ids: treatiseLibrary
             ? treatiseLibrary.map((data) => {
-              return data.id;
-            })
+                return data.id;
+              })
             : undefined,
           columnIds: columns.map((data) => {
             return data.id;
@@ -503,66 +507,99 @@ export class TreatiseLibraryService {
    * @param {GetTreatiseLibraryCountBySortAndYearDto} params  获取河流图表的相关参数
    * @returns {ResultData} 返回getTreatiseLibraryCountBySortAndYear信息
    */
-  async getTreatiseLibraryCountBySortAndYear(params: GetTreatiseLibraryCountBySortAndYearDto): Promise<ResultData> {
+  async getTreatiseLibraryCountBySortAndYear(
+    params: GetTreatiseLibraryCountBySortAndYearDto
+  ): Promise<ResultData> {
     const { columnId } = params;
     //get sortCounts,yearCounts,sorts
     let sortCounts, yearCounts, sorts;
-    [sortCounts, yearCounts, sorts] = await Promise.all([treatiseLibraryRepository
-      .createQueryBuilder('treatise_library')
-      .select('COUNT(treatise_library.id)', 'count')
-      .addSelect('treatise_library.sort', 'sort')
-      .where('treatise_library.enabled = true and treatise_library.deletedAt is null and treatise_library.status =:status and treatise_library.columnId =:columnId', {
-        columnId: columnId,
-        status: Content_Status_Enum.ACTIVE
-      })
-      .groupBy('treatise_library.sort')
-      .getRawMany(),
-    treatiseLibraryRepository
-      .createQueryBuilder('treatise_library')
-      .select('COUNT(treatise_library.id)', 'count')
-      .addSelect('treatise_library.sort', 'sort')
-      .addSelect('treatise_library.year', 'year')
-      .where('treatise_library.enabled = true and treatise_library.deletedAt is null and treatise_library.status =:status and treatise_library.columnId =:columnId', {
-        columnId: columnId,
-        status: Content_Status_Enum.ACTIVE
-      })
-      .groupBy('treatise_library.year')
-      .addGroupBy('treatise_library.sort')
-      .getRawMany(),
-    treatiseLibraryTypesRepository.find({
-      where: {
-        columnId: columnId
-      }
-    })
+    [sortCounts, yearCounts, sorts] = await Promise.all([
+      treatiseLibraryRepository
+        .createQueryBuilder('treatise_library')
+        .select('COUNT(treatise_library.id)', 'count')
+        .addSelect('treatise_library.sort', 'sort')
+        .where(
+          'treatise_library.enabled = true and treatise_library.deletedAt is null and treatise_library.status =:status and treatise_library.columnId =:columnId',
+          {
+            columnId: columnId,
+            status: Content_Status_Enum.ACTIVE,
+          }
+        )
+        .groupBy('treatise_library.sort')
+        .getRawMany(),
+      treatiseLibraryRepository
+        .createQueryBuilder('treatise_library')
+        .select('COUNT(treatise_library.id)', 'count')
+        .addSelect('treatise_library.sort', 'sort')
+        .addSelect('treatise_library.year', 'year')
+        .where(
+          'treatise_library.enabled = true and treatise_library.deletedAt is null and treatise_library.status =:status and treatise_library.columnId =:columnId',
+          {
+            columnId: columnId,
+            status: Content_Status_Enum.ACTIVE,
+          }
+        )
+        .groupBy('treatise_library.year')
+        .addGroupBy('treatise_library.sort')
+        .getRawMany(),
+      treatiseLibraryTypesRepository.find({
+        where: {
+          columnId: columnId,
+        },
+      }),
     ]);
-    sorts = sorts.map(data => {
+    sorts = sorts.map((data) => {
       return {
         id: data.id,
-        name: data.name
+        name: data.name,
       };
     });
-    sortCounts = _.orderBy(sortCounts.map(data => {
-      return {
-        sort: data.sort,
-        sortName: _.find(sorts, function (o) { return o.id === data.sort; })?.name,
-        count: Number(data.count)
-      };
-    }), 'sortName', 'asc');
-    yearCounts = yearCounts.map(data => { return { count: Number(data.count), sort: data.sort, year: data.year, sortName: _.find(sorts, function (o) { return o.id === data.sort; })?.name }; });
-    yearCounts = _.orderBy(_.uniqBy(yearCounts.map(data => {
-      const yearCount = _.filter(yearCounts, function (o) { return o.year === data.year; }).map(data => {
+    sortCounts = _.orderBy(
+      sortCounts.map((data) => {
         return {
           sort: data.sort,
-          sortName: data.sortName,
-          count: data.count
+          sortName: _.find(sorts, function (o) {
+            return o.id === data.sort;
+          })?.name,
+          count: Number(data.count),
         };
-      });
+      }),
+      'sortName',
+      'asc'
+    );
+    yearCounts = yearCounts.map((data) => {
       return {
+        count: Number(data.count),
+        sort: data.sort,
         year: data.year,
-        count: _.sumBy(yearCount, 'count'),
-        sortCounts: _.orderBy(yearCount, 'sortName', 'asc')
+        sortName: _.find(sorts, function (o) {
+          return o.id === data.sort;
+        })?.name,
       };
-    }), 'year'), 'year', 'asc');
+    });
+    yearCounts = _.orderBy(
+      _.uniqBy(
+        yearCounts.map((data) => {
+          const yearCount = _.filter(yearCounts, function (o) {
+            return o.year === data.year;
+          }).map((data) => {
+            return {
+              sort: data.sort,
+              sortName: data.sortName,
+              count: data.count,
+            };
+          });
+          return {
+            year: data.year,
+            count: _.sumBy(yearCount, 'count'),
+            sortCounts: _.orderBy(yearCount, 'sortName', 'asc'),
+          };
+        }),
+        'year'
+      ),
+      'year',
+      'asc'
+    );
     return ResultData.ok({
       data: { sortCounts: sortCounts, yearCounts: yearCounts },
     });

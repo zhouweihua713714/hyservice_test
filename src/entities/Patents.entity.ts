@@ -121,11 +121,11 @@ export class Patents {
   })
   ownerId: string | null;
 
-  @ApiPropertyOptional({ description: '点击量,暂时不做' })
+  @ApiPropertyOptional({ description: '点击量' })
   @Column('integer', {
     name: 'clicks',
     default: 0,
-    comment: '点击量,暂时不做',
+    comment: '点击量',
   })
   clicks: number;
 

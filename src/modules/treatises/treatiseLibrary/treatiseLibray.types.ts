@@ -13,7 +13,7 @@ export class LabelCountInfo {
   count: number;
 }
 
-export class GetTreatiseDetailResult extends PickType(TreatiseLibrary, [
+export class GetTreatiseLibraryDetailResult extends PickType(TreatiseLibrary, [
   'id',
   'status',
   'ownerId',
@@ -43,7 +43,7 @@ export class GetTreatiseDetailResult extends PickType(TreatiseLibrary, [
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
 
-  @ApiPropertyOptional({ description: '类型名称' })
+  @ApiProperty({ description: '类型名称' })
   sortName: string;
 
   @ApiPropertyOptional({ description: '责任人' })

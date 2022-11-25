@@ -253,14 +253,13 @@ export class Treatises {
   })
   studyField: string | null;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: '栏目id,期刊论文只能选择期刊相关的栏目且不为空',
     type: String,
   })
   @Column('character varying', {
     name: 'column_id',
     length: 128,
-    nullable: true,
     comment: '栏目id,期刊论文只能选择期刊相关的栏目且不为空',
   })
   @Index()
@@ -350,11 +349,11 @@ export class Treatises {
   })
   method: string | null;
 
-  @ApiPropertyOptional({ description: '点击量,暂时不做' })
+  @ApiPropertyOptional({ description: '点击量' })
   @Column('integer', {
     name: 'clicks',
     default: 0,
-    comment: '点击量,暂时不做',
+    comment: '点击量',
   })
   clicks: number;
 
