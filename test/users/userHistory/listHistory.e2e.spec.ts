@@ -25,7 +25,7 @@ describe('/users/listHistory', () => {
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.userHistory).toBeTruthy();
-    expect(result.body.data.userHistory.length).toBe(9);
-    expect(result.body.data.count).toBe(9);
+    expect(result.body.data.userHistory.length).toBe(10);
+    expect(result.body.data.count).toBe(10);
   });
 });
