@@ -11,6 +11,7 @@ import {
   periodicalsRepository,
   policiesRepository,
   termsRepository,
+  treatiseLibraryRepository,
   treatisesRepository,
   userHistoryRepository,
 } from '@/modules/repository/repository';
@@ -40,10 +41,16 @@ export class UserHistoryService {
       return ResultData.ok({ data: { userHistory: [], count: count } });
     }
     // get ids by type
-    const { term, treatise, policy, periodical, patent, institution, conference } = _.groupBy(
-      userHistory,
-      'type'
-    );
+    const {
+      term,
+      treatise,
+      policy,
+      periodical,
+      patent,
+      institution,
+      conference,
+      treatise_library,
+    } = _.groupBy(userHistory, 'type');
     let terms,
       treatises,
       policies,
@@ -51,7 +58,8 @@ export class UserHistoryService {
       periodicals,
       patents,
       institutions,
-      conferences;
+      conferences,
+      treatiseLibraries;
     if (term) {
       terms = await termsRepository.findBy({
         id: In(
@@ -122,6 +130,15 @@ export class UserHistoryService {
         ),
       });
     }
+    if (treatise_library) {
+      treatiseLibraries = await treatiseLibraryRepository.findBy({
+        id: In(
+          treatise_library.map((data) => {
+            return data.relatedId;
+          })
+        ),
+      });
+    }
     // get related's title
     const result = userHistory.map((data) => {
       let title;
@@ -184,6 +201,14 @@ export class UserHistoryService {
             return o.id === data.relatedId;
           })?.title;
           columnId = _.find(patents, function (o) {
+            return o.id === data.relatedId;
+          })?.columnId;
+          break;
+        case Content_Types_Enum.TREATISE_LIBRARY:
+          title = _.find(treatiseLibraries, function (o) {
+            return o.id === data.relatedId;
+          })?.title;
+          columnId = _.find(treatiseLibraries, function (o) {
             return o.id === data.relatedId;
           })?.columnId;
           break;

@@ -12,6 +12,7 @@ import { Patents } from '@/entities/Patents.entity';
 import { Institutions } from '@/entities/Institutions.entity';
 import { Conferences } from '@/entities/Conferences.entity';
 import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
+import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
@@ -24,6 +25,7 @@ let patent: Patents;
 let institution: Institutions;
 let conference: Conferences;
 let analysisPolicies: AnalysisPolicies;
+let treatiseLibrary: TreatiseLibrary;
 export type DataType = {
   user: CreateUserRetType;
 };
@@ -82,6 +84,13 @@ export const seed: TesterSeed<DataType> = {
       title: '政策解读必填',
       ownerId: user.user.id,
     });
+    treatiseLibrary = await tester.treatiseLibraryRepository.save({
+      id: new Date().getTime().toString(),
+      sort: '分类',
+      columnId: columns[1].id,
+      title: '精选文库标题必填',
+      ownerId: user.user.id,
+    });
     // insert user history
     await tester.userHistoryRepository.save([
       { userId: user.user.id, relatedId: term.id, type: Content_Types_Enum.TERM },
@@ -92,6 +101,11 @@ export const seed: TesterSeed<DataType> = {
       { userId: user.user.id, relatedId: institution.id, type: Content_Types_Enum.INSTITUTION },
       { userId: user.user.id, relatedId: conference.id, type: Content_Types_Enum.CONFERENCE },
       { userId: user.user.id, relatedId: analysisPolicies.id, type: Content_Types_Enum.POLICY },
+      {
+        userId: user.user.id,
+        relatedId: treatiseLibrary.id,
+        type: Content_Types_Enum.TREATISE_LIBRARY,
+      },
       { userId: user.user.id, relatedId: '-1', type: Content_Types_Enum.POLICY },
     ]);
 
