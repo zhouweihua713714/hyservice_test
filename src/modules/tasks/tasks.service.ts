@@ -4,9 +4,12 @@ import {
   americaTermKeywordsRepository,
   americaTermsRepository,
   keywordsRepository,
+  policiesRepository,
   termKeywordsRepository,
   termsRepository,
   treatiseKeywordsRepository,
+  treatiseLibraryKeywordsRepository,
+  treatiseLibraryRepository,
   treatisesRepository,
 } from '../repository/repository';
 import { Content_Status_Enum, Content_Types_Enum } from '@/common/enums/common.enum';
@@ -27,7 +30,7 @@ export class TasksService {
     // 目前只有项目、论文 后续需要什么再继续跟进任务
     console.time('查询时间');
     //先查出最新的实体数据内容
-    const [treatises, terms, americaTerms] = await Promise.all([
+    const [treatises, terms, americaTerms, policies, treatiseLibraries] = await Promise.all([
       treatisesRepository.find({
         where: {
           status: Content_Status_Enum.ACTIVE,
@@ -54,7 +57,25 @@ export class TasksService {
           keyword: Not(IsNull()),
         },
         select: ['keyword', 'awardNumber', 'columnId', 'title'],
-      })
+      }),
+      policiesRepository.find({
+        where: {
+          status: Content_Status_Enum.ACTIVE,
+          deletedAt: IsNull(),
+          enabled: true,
+          keyword: Not(IsNull()),
+        },
+        select: ['keyword'],
+      }),
+      treatiseLibraryRepository.find({
+        where: {
+          status: Content_Status_Enum.ACTIVE,
+          deletedAt: IsNull(),
+          enabled: true,
+          keyword: Not(IsNull()),
+        },
+        select: ['keyword', 'id', 'title', 'columnId'],
+      }),
     ]);
     console.timeEnd('查询时间');
     console.time('数据准备时间');
@@ -77,6 +98,14 @@ export class TasksService {
         name: string;
         columnId: string;
         title: string;
+      }[] = [],
+      policiesKeywords: { id: string; name: string; frequency: number }[] = [],
+      treatiseLibraryKeywords: {
+        id: string;
+        name: string;
+        columnId: string;
+        title: string;
+        treatiseId: string;
       }[] = [];
     //论文
     for (let i = 0; i < treatises.length; i++) {
@@ -128,15 +157,62 @@ export class TasksService {
               title: americaTerms[i].title,
             };
           });
-        americaTermsKeywords = _.unionBy(americaTermsKeywords, keyword, (o) => o.awardNumber + o.name);      
+        americaTermsKeywords = _.unionBy(
+          americaTermsKeywords,
+          keyword,
+          (o) => o.awardNumber + o.name
+        );
+      }
+    }
+    // 政策
+    for (let i = 0; i < policies.length; i++) {
+      if (policies[i].keyword) {
+        const keyword = policies[i].keyword
+          ?.replace(/\+/g, '')
+          .split(';')
+          .map((data) => {
+            return {
+              id: uuidv4(),
+              name: data.toLowerCase().trim(),
+              frequency: 0,
+              type: Content_Types_Enum.POLICY,
+            };
+          });
+        policiesKeywords = _.unionBy(policiesKeywords, keyword, 'id');
+      }
+    }
+    // 精选文库
+    for (let i = 0; i < treatiseLibraries.length; i++) {
+      if (treatiseLibraries[i].keyword) {
+        const keyword = treatiseLibraries[i].keyword
+          ?.replace(/\+/g, '')
+          .split(';')
+          .map((data) => {
+            return {
+              id: uuidv4(),
+              name: data.toLowerCase().trim(),
+              columnId: treatiseLibraries[i].columnId,
+              title: treatiseLibraries[i].title,
+              treatiseId: treatiseLibraries[i].id,
+            };
+          });
+        treatiseLibraryKeywords = _.unionBy(treatiseLibraryKeywords, keyword, 'id');
       }
     }
     console.timeEnd('数据准备时间');
     console.time('插入执行时间');
     //插入之前每次清空表,防止产生一些无效数据,insert 这里逐条插入是因为批量插入会有最大限制且当前论文数据量大批量插入需要分组所以直接单条插入更方便
-    await Promise.all([treatiseKeywordsRepository.delete({}), termKeywordsRepository.delete({}), americaTermKeywordsRepository.delete({})]);
+    await Promise.all([
+      treatiseKeywordsRepository.delete({}),
+      termKeywordsRepository.delete({}),
+      americaTermKeywordsRepository.delete({}),
+      treatiseLibraryKeywordsRepository.delete({}),
+    ]);
+    let treatiseCount,
+      termCount,
+      americaTermCount,
+      treatiseLibraryCount = 0;
     //论文
-    let treatiseCount = 0, termCount = 0, americaTermCount = 0;
     for (let i = 0; i < treatiseKeywords.length; i++) {
       if (treatiseKeywords[i].name.replace(/\+/g, '')) {
         await treatiseKeywordsRepository.save(treatiseKeywords[i]);
@@ -157,33 +233,42 @@ export class TasksService {
         americaTermCount++;
       }
     }
+    //精选文库
+    for (let i = 0; i < treatiseLibraryKeywords.length; i++) {
+      if (treatiseLibraryKeywords[i].name.replace(/\+/g, '')) {
+        await treatiseLibraryKeywordsRepository.save(treatiseLibraryKeywords[i]);
+        treatiseLibraryCount++;
+      }
+    }
     console.timeEnd('插入执行时间');
     // 更新keywords数据准备
     console.time('更新keywords数据准备');
     const groupByTermKeywords = _.groupBy(termKeywords, 'name');
     const groupByAmericaTermKeywords = _.groupBy(americaTermsKeywords, 'name');
     const groupByTreatiseKeywords = _.groupBy(treatiseKeywords, 'name');
+    const groupByPolicyKeywords = _.groupBy(policiesKeywords, 'name');
+    const groupByTreatiseLibraryKeywords = _.groupBy(treatiseLibraryKeywords, 'name');
     //项目
-    const termKeywordData = _.uniqBy(termKeywords, 'name').map((data) => {
-      return {
-        name: data.name,
-        type: Content_Types_Enum.TERM,
-        frequency: groupByTermKeywords[data.name].length,
-      };
-    }) || [];
+    const termKeywordData =
+      _.uniqBy(termKeywords, 'name').map((data) => {
+        return {
+          name: data.name,
+          type: Content_Types_Enum.TERM,
+          frequency: groupByTermKeywords[data.name].length,
+        };
+      }) || [];
     // 美国项目
     _.uniqBy(americaTermsKeywords, 'name').map((data) => {
       const index = _.findIndex(termKeywordData, { name: data.name });
-      if (index > -1) { 
+      if (index > -1) {
         const oldData = termKeywordData[index];
         const length = groupByAmericaTermKeywords[data.name].length || 0;
         termKeywordData[index] = {
           name: data.name,
           type: Content_Types_Enum.TERM,
-          frequency:  oldData.frequency + length,
+          frequency: oldData.frequency + length,
         };
-      }
-      else {
+      } else {
         termKeywordData.push({
           name: data.name,
           type: Content_Types_Enum.TERM,
@@ -199,10 +284,37 @@ export class TasksService {
         frequency: groupByTreatiseKeywords[data.name].length,
       };
     });
+    //政策
+    const policyKeywordData = _.uniqBy(
+      policiesKeywords.map((data) => {
+        return {
+          name: data.name,
+          frequency: groupByPolicyKeywords[data.name].length,
+          type: Content_Types_Enum.POLICY,
+        };
+      }),
+      'name'
+    );
+    //精选文库
+    const treatiseLibraryKeywordData = _.uniqBy(
+      treatiseLibraryKeywords.map((data) => {
+        return {
+          name: data.name,
+          frequency: groupByTreatiseLibraryKeywords[data.name].length,
+          type: Content_Types_Enum.TREATISE_LIBRARY,
+        };
+      }),
+      'name'
+    );
+    // for (let i = 0; i < policyKeywords.length; i++) {
+    //   await keywordsRepository.save(policyKeywords[i]);
+    // }
     console.timeEnd('更新keywords数据准备');
     console.time('keywords插入执行时间');
-    let treatiseKeywordCount = 0;
-    let termKeywordCount = 0;
+    let treatiseKeywordCount,
+      termKeywordCount,
+      policyKeywordCount,
+      treatiseLibraryKeywordCount = 0;
     //先将keywords得frequency 更新为0 再全量更新keywords(目前脚本涉及哪些就更新哪些)
     await Promise.all([
       keywordsRepository
@@ -214,6 +326,16 @@ export class TasksService {
         .createQueryBuilder()
         .update({ frequency: 0 })
         .where({ type: Content_Types_Enum.TREATISE })
+        .execute(),
+      keywordsRepository
+        .createQueryBuilder()
+        .update({ frequency: 0 })
+        .where({ type: Content_Types_Enum.POLICY })
+        .execute(),
+      keywordsRepository
+        .createQueryBuilder()
+        .update({ frequency: 0 })
+        .where({ type: Content_Types_Enum.TREATISE_LIBRARY })
         .execute(),
     ]);
     //论文
@@ -228,6 +350,20 @@ export class TasksService {
       if (treatiseKeywordData[i].name.replace(/\+/g, '')) {
         await keywordsRepository.save(treatiseKeywordData[i]);
         termKeywordCount++;
+      }
+    }
+    //政策
+    for (let i = 0; i < policyKeywordData.length; i++) {
+      if (policyKeywordData[i].name.replace(/\+/g, '')) {
+        await keywordsRepository.save(policyKeywordData[i]);
+        policyKeywordCount++;
+      }
+    }
+    //精选文库
+    for (let i = 0; i < treatiseLibraryKeywordData.length; i++) {
+      if (treatiseLibraryKeywordData[i].name.replace(/\+/g, '')) {
+        await keywordsRepository.save(treatiseLibraryKeywordData[i]);
+        treatiseLibraryKeywordCount++;
       }
     }
     console.timeEnd('keywords插入执行时间');
@@ -252,7 +388,19 @@ export class TasksService {
       ' 项目Keywords长度:',
       termKeywordData.length,
       ' 项目Keywords插入/更新长度:',
-      termKeywordCount
+      termKeywordCount,
+      ' 政策Keywords长度:',
+      policyKeywordData.length,
+      ' 政策Keywords插入/更新长度:',
+      policyKeywordCount,
+      ' 精选文库treatiseLibraryKeywords长度:',
+      treatiseLibraryKeywords.length,
+      ' 精选文库treatiseLibraryKeywords插入长度:',
+      treatiseLibraryCount,
+      ' 精选文库Keywords长度:',
+      treatiseKeywordData.length,
+      ' 精选文库Keywords插入/更新长度:',
+      treatiseLibraryKeywordCount
     );
   }
 }

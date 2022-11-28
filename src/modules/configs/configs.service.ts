@@ -20,6 +20,7 @@ import {
   termTypesRepository,
   topicTypesRepository,
   treatiseKeywordsRepository,
+  treatiseLibraryKeywordsRepository,
   universitiesRepository,
 } from '../repository/repository';
 import {
@@ -320,6 +321,40 @@ export class ConfigsService {
           },
         }),
       ]);
+    }
+    if (type === Content_Types_Enum.TREATISE_LIBRARY && columnId) {
+      [data, keywords] = await Promise.all([
+        treatiseLibraryKeywordsRepository
+          .createQueryBuilder('treatise_keywords')
+          .select('COUNT(treatise_keywords.treatiseId)', 'frequency')
+          .addSelect('treatise_keywords.name', 'name')
+          .where('treatise_keywords.columnId =:columnId', {
+            columnId: columnId,
+          })
+          .groupBy('treatise_keywords.name')
+          .getRawMany(),
+        keywordsRepository.find({
+          where: {
+            type: Content_Types_Enum.TREATISE_LIBRARY,
+          },
+        }),
+      ]);
+    }
+    // when type is policy data from table keywords
+    if (type === Content_Types_Enum.POLICY && columnId) {
+      [data] = await Promise.all([
+        keywordsRepository.find({
+          where: {
+            type: Content_Types_Enum.POLICY,
+          },
+          order: {
+            search: 'desc',
+            frequency: 'desc',
+          },
+          take: 60,
+        }),
+      ]);
+      return ResultData.ok({ data: { keywords: data } });
     }
     // format data and order
     if (_.isEmpty(data)) {
