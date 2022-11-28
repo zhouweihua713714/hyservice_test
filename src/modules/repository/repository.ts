@@ -35,6 +35,7 @@ import { NSFDirectorateTypes } from '@/entities/NSFDirectorateTypes.entity';
 import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
 import { ResearchReports } from '@/entities/ResearchReports.entity';
 import { TreatiseLibraryTypes } from '@/entities/TreatiseLibraryTypes.entity';
+import { TreatiseLibraryKeywords } from '@/entities/TreatiseLibraryKeywords.entity';
 DataSource.initialize()
   .then(() => {
     // console.log('Data Source has been initialized!');
@@ -78,6 +79,7 @@ export const americaTermKeywordsRepository = DataSource.getRepository(AmericaTer
 export const treatiseLibraryRepository = DataSource.getRepository(TreatiseLibrary);
 export const researchReportsRepository = DataSource.getRepository(ResearchReports);
 export const treatiseLibraryTypesRepository = DataSource.getRepository(TreatiseLibraryTypes);
+export const treatiseLibraryKeywordsRepository = DataSource.getRepository(TreatiseLibraryKeywords);
 
 
 
