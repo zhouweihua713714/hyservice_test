@@ -88,5 +88,5 @@ export class RecommendAnalysisPoliciesResult {
     type: RecommendAnalysisPoliciesInfo,
     isArray: true,
   })
-  policies: RecommendAnalysisPoliciesInfo[];
+  analysisPolicies: RecommendAnalysisPoliciesInfo[];
 }
