@@ -40,7 +40,7 @@ jobs:
           cp ~/hy-service.container.env .env
           docker build -t hy-service:${{ github.sha }} -f Dockerfile.dev .
           docker rm -f hy-service-dev || true
-          docker run -d --add-host=host.docker.internal:host-gateway -p 80:3000 --name hy-service-dev hy-service:${{ github.sha }}
+          docker run -d --add-host=host.docker.internal:host-gateway -p 3000:3000 --name hy-service-dev hy-service:${{ github.sha }}
           docker image prune -a -f 
 
       - name: Slack Failure Notification
