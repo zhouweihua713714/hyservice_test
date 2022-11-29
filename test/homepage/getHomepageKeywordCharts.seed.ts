@@ -30,6 +30,7 @@ export const seed: TesterSeed<DataType> = {
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: 'column_01', sequenceNumber: 1 },
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: 'column_01', sequenceNumber: 1 },
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称2', parentId: 'column_02', sequenceNumber: 1 },
+      { id: `C${genCodeOfLength(8)}`, name: '栏目名称2', parentId: 'column_04', sequenceNumber: 1 },
     ]);
     const treatises = await tester.treatisesRepository.save([
       {
@@ -88,8 +89,8 @@ export const seed: TesterSeed<DataType> = {
         year: '2015',
         status: Content_Status_Enum.ACTIVE,
         enabled: true,
-        columnId: 'column_01_04'
-      }
+        columnId: 'column_01_04',
+      },
     ]);
     await tester.americaTermKeywordsRepository.save([
       {
@@ -98,6 +99,22 @@ export const seed: TesterSeed<DataType> = {
         awardNumber: americaTerms[0].awardNumber,
         // americaTerm: { awardNumber: terms[0].id },
         title: '项目标题1',
+      },
+    ]);
+    const policyType = await tester.policyTypesRepository.save({
+      id: `T${genCodeOfLength(8)}`,
+      name: '政策类型名称',
+    });
+    await tester.policiesRepository.save([
+      {
+        id: (new Date().getTime() - 50000).toString(),
+        columnId: columns[3].id,
+        type: policyType.id,
+        name: '政策名称必填',
+        keyword: '关键词',
+        ownerId: user.user.id,
+        endedAt: new Date(),
+        status: Content_Status_Enum.ACTIVE,
       },
     ]);
     return { user, normalUser };
@@ -109,6 +126,8 @@ export const seed: TesterSeed<DataType> = {
     await tester.americaTermsRepository.delete({});
     await tester.termKeywordsRepository.delete({});
     await tester.treatiseKeywordsRepository.delete({});
+    await tester.policyTypesRepository.delete({});
+    await tester.policiesRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.usersRepository.delete({});
     await tester.keywordsRepository.delete({});

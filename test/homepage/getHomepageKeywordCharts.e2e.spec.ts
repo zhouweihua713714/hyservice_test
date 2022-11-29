@@ -16,5 +16,6 @@ describe('/homepage/getHomepageKeywordCharts', () => {
     expect(result.body.data.treatiseColumns).toBeTruthy();
     expect(result.body.data.termColumns.length).toBe(2);
     expect(result.body.data.treatiseColumns.length).toBe(1);
+    expect(result.body.data.policyColumns.length).toBe(1);
   });
 });

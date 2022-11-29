@@ -108,6 +108,10 @@ export class Institutions {
   })
   url: string | null;
 
+  @ApiProperty({ description: '排序(这里c端使用该字段自主排序)', nullable: true, type: Number })
+  @Column('integer', { name: 'sequence_number', comment: '排序(这里c端使用该字段自主排序)', nullable: true })
+  sequenceNumber: number | null;
+
   @ApiProperty({ description: '状态:待发布ready,已发布active,已下架inactive' })
   @Column('character varying', {
     name: 'status',

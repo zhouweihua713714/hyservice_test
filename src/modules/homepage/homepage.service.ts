@@ -6,13 +6,18 @@ import {
   americaTermKeywordsRepository,
   columnsRepository,
   keywordsRepository,
+  policiesRepository,
   termKeywordsRepository,
   treatiseKeywordsRepository,
   websiteRepository,
 } from '../repository/repository';
 import { GetHomepageSearchResultByKeywordDto, SetHomepageDto } from './homepage.dto';
-import { Content_Types_Enum, User_Types_Enum } from '@/common/enums/common.enum';
-import { Brackets, In } from 'typeorm';
+import {
+  Content_Status_Enum,
+  Content_Types_Enum,
+  User_Types_Enum,
+} from '@/common/enums/common.enum';
+import { Brackets, In, IsNull, Like } from 'typeorm';
 
 export class HomepageService {
   /**
@@ -98,16 +103,17 @@ export class HomepageService {
         awardNumber: string;
         title: string;
       }[] = [],
+      policies: { id: string; name: string; columnId: string }[] = [],
       columns;
     // get columns
     columns = await columnsRepository.find({
       where: {
-        parentId: In(['column_01', 'column_02']),
+        parentId: In(['column_01', 'column_02', 'column_04']),
         isHide: 0,
       },
       select: ['id', 'name'],
     });
-    [termKeywords, treatiseKeywords, americaTermKeywords] = await Promise.all([
+    [termKeywords, treatiseKeywords, americaTermKeywords, policies] = await Promise.all([
       termKeywordsRepository.find({
         where: {
           name: keyword.toLowerCase(),
@@ -138,6 +144,20 @@ export class HomepageService {
             })
           ),
         },
+      }),
+      policiesRepository.find({
+        where: {
+          keyword: Like(`%${keyword.toLowerCase()}%`),
+          columnId: In(
+            columns.map((data) => {
+              return data.id;
+            })
+          ),
+          status: Content_Status_Enum.ACTIVE,
+          deletedAt: IsNull(),
+          enabled: true,
+        },
+        select: ['id', 'name', 'columnId'],
       }),
     ]);
     columns = columns.map((data) => {
@@ -212,9 +232,27 @@ export class HomepageService {
           : [],
       };
     });
+    const policyColumns = _.uniqBy(policies, 'columnId').map((data) => {
+      return {
+        id: data.columnId,
+        name: _.find(columns, function (o) {
+          return o.id === data.columnId;
+        }).name,
+        count: policies.length,
+        details: policies
+          .map((data) => {
+            return {
+              id: data.id,
+              title: data.name,
+            };
+          })
+          .slice(0, 20),
+      };
+    });
     const result = {
       termColumns: _.unionBy(termColumns, americaTermColumns, 'id'),
       treatiseColumns,
+      policyColumns: policyColumns,
     };
     return ResultData.ok({ data: { ...result } });
   }

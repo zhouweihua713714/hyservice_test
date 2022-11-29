@@ -368,10 +368,14 @@ export class PeriodicalsService {
   ): Promise<ResultData> {
     const { columnId, keyword, page, size } = params;
     // get basic condition
+    let orderCondition = 'periodicals.impactFactor';
     let basicCondition =
       'periodicals.enabled = true and periodicals.deletedAt is null and periodicals.status =:status';
     if (columnId) {
       basicCondition += ' and periodicals.columnId = :columnId';
+      if (columnId === 'column_03_01') {
+        orderCondition = 'periodicals.compositeImpactFactor';
+      }
     }
     // get periodicals and count
     let periodicals;
@@ -391,6 +395,7 @@ export class PeriodicalsService {
           'periodicals.period',
           'periodicals.articleNumber',
           'periodicals.compositeImpactFactor',
+          'periodicals.impactFactor',
           'periodicals.ISSN',
           'periodicals.citeScore',
           'periodicals.citeRate',
@@ -405,8 +410,7 @@ export class PeriodicalsService {
             qb.where('periodicals.name like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
-        .orderBy('periodicals.articleNumber', 'DESC', 'NULLS LAST')
-        .addOrderBy('periodicals.establishedAt', 'DESC', 'NULLS LAST')
+        .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -424,6 +428,7 @@ export class PeriodicalsService {
           'periodicals.period',
           'periodicals.articleNumber',
           'periodicals.compositeImpactFactor',
+          'periodicals.impactFactor',
           'periodicals.ISSN',
           'periodicals.citeScore',
           'periodicals.citeRate',
@@ -433,8 +438,7 @@ export class PeriodicalsService {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
         })
-        .orderBy('periodicals.articleNumber', 'DESC', 'NULLS LAST')
-        .addOrderBy('periodicals.establishedAt', 'DESC', 'NULLS LAST')
+        .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -519,11 +523,21 @@ export class PeriodicalsService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { columnId } = params;
-    let columnCondition;
+    let columnCondition, orderCondition, compositeImpactFactorOrderCondition;
     if (columnId) {
       columnCondition = {
         columnId: columnId,
       };
+      if (columnId === 'column_03_02') {
+        orderCondition = {
+          impactFactor: 'DESC',
+        };
+      }
+      if (columnId === 'column_03_01') {
+        compositeImpactFactorOrderCondition = {
+          compositeImpactFactor: 'DESC',
+        };
+      }
     }
     // get periodicals
     const periodicals = await periodicalsRepository.find({
@@ -536,7 +550,8 @@ export class PeriodicalsService {
       select: ['id', 'name', 'ISSN', 'type', 'minorField', 'field', 'coverUrl'],
       take: 5, // it's up to PM
       order: {
-        clicks: 'DESC',
+        ...orderCondition,
+        ...compositeImpactFactorOrderCondition,
         publishedAt: 'DESC',
       },
     });
