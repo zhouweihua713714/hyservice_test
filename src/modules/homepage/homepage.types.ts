@@ -78,4 +78,11 @@ export class GetHomepageKeywordChartsResult {
     isArray: true,
   })
   treatiseColumns: GetHomepageKeywordChartInfo[];
+
+  @ApiProperty({
+    description: '政策栏目下的数据',
+    type: GetHomepageKeywordChartInfo,
+    isArray: true,
+  })
+  policyColumns: GetHomepageKeywordChartInfo[];
 }

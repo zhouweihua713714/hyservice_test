@@ -30,6 +30,6 @@ describe('/periodicals/recommendPeriodicals', () => {
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.periodicals).toBeTruthy;
-    expect(result.body.data.periodicals.length).toBe(3);
+    expect(result.body.data.periodicals.length).toBe(2);
   });
 });
