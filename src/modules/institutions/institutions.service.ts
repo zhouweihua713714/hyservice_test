@@ -357,7 +357,7 @@ export class InstitutionsService {
         status: Content_Status_Enum.ACTIVE,
         keyword: keywords,
       })
-      .orderBy('institutions.sequenceNumber', 'DESC', 'NULLS LAST')
+      .orderBy('institutions.sequenceNumber', 'ASC', 'NULLS LAST')
       .addOrderBy('institutions.publishedAt', 'DESC')
       .skip((page - 1) * size)
       .take(size)
