@@ -5,6 +5,15 @@ export class SaveConferenceResult {
   @ApiProperty({ description: '主键id' })
   id: string;
 }
+export class ChildConferencesInfo extends PickType(Conferences, [
+  'id',
+  'name',
+  'conductedAt',
+  'period',
+  'introduction',
+  'website',
+  'picker',
+] as const) {}
 export class GetConferenceDetailResult extends PickType(Conferences, [
   'id',
   'status',
@@ -31,6 +40,7 @@ export class GetConferenceDetailResult extends PickType(Conferences, [
   'registerEndedAt',
   'picker',
   'clicks',
+  'parentId',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;
@@ -43,6 +53,12 @@ export class GetConferenceDetailResult extends PickType(Conferences, [
 
   @ApiPropertyOptional({ description: '责任人' })
   owner: string;
+
+  @ApiPropertyOptional({
+    description: '当该会议为一级会议,则子会议数组一般不为空(目前这个只有c端请求才下发)',
+    type: ChildConferencesInfo,
+  })
+  childConferences: ChildConferencesInfo[];
 }
 export class ListConferenceInfo extends PickType(Conferences, [
   'id',
@@ -51,6 +67,7 @@ export class ListConferenceInfo extends PickType(Conferences, [
   'updatedAt',
   'name',
   'clicks',
+  'parentId',
 ] as const) {
   @ApiProperty({ description: '栏目名称' })
   columnName: string;

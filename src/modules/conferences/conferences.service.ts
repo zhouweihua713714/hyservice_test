@@ -51,9 +51,7 @@ export class ConferencesService {
     }
     const columnInfo = await columnsRepository.findOneBy({ id: conferenceInfo.columnId });
     // get necessary data
-    let userInfo;
-    let fields;
-    let minorFields;
+    let userInfo, fields, minorFields, childConferences;
     if (conferenceInfo.field) {
       fields = await fieldsRepository.findBy({ id: In(conferenceInfo.field as string[]) });
     }
@@ -64,6 +62,22 @@ export class ConferencesService {
     }
     if (conferenceInfo.ownerId) {
       userInfo = await usersRepository.findOneBy({ id: conferenceInfo.ownerId });
+    }
+    // if conference is parent,then get childConferences
+    if (params.flag && conferenceInfo.parentId && conferenceInfo.parentId === '0') {
+      childConferences = await conferencesRepository.find({
+        where: {
+          status: Content_Status_Enum.ACTIVE,
+          deletedAt: IsNull(),
+          enabled: true,
+          parentId: conferenceInfo.id,
+        },
+        select: ['id', 'name', 'conductedAt', 'picker', 'period', 'introduction', 'website'],
+        order: {
+          conductedAt: 'DESC',
+          publishedAt: 'DESC',
+        },
+      });
     }
     const result = {
       fieldName: fields
@@ -85,6 +99,7 @@ export class ConferencesService {
       columnName: columnInfo ? columnInfo.name : null,
       owner: userInfo ? userInfo.mobile : null,
       ...conferenceInfo,
+      childConferences,
     };
     // update clicks
     if (params.flag) {
@@ -335,7 +350,7 @@ export class ConferencesService {
     let endedAtDateString;
     let keywords;
     let basicCondition =
-      'conferences.enabled = true and conferences.deletedAt is null and conferences.status =:status';
+      'conferences.enabled = true and conferences.deletedAt is null and conferences.status =:status and conferences.parentId =:parentId';
     if (picker && picker === Picker_Enum.Year && conductedAt) {
       basicCondition += ' and extract(year from conferences.conductedAt) =:year';
     }
@@ -383,6 +398,7 @@ export class ConferencesService {
         conductedAt: conductedAtDateString,
         endedAt: endedAtDateString,
         keyword: keywords,
+        parentId: '0',
       })
       .orderBy('conferences.conductedAt', 'DESC', 'NULLS LAST')
       .addOrderBy('conferences.publishedAt', 'DESC')
@@ -487,6 +503,13 @@ export class ConferencesService {
         'conferences.period',
         'conferences.coverUrl',
       ])
+      .where(
+        'conferences.enabled = true and conferences.deletedAt is null and conferences.status =:status and conferences.parentId !=:parentId',
+        {
+          parentId: '0',
+          status: Content_Status_Enum.ACTIVE,
+        }
+      )
       .orderBy('conferences.conductedAt', 'DESC', 'NULLS LAST')
       .addOrderBy('conferences.publishedAt', 'DESC')
       .take(4)
@@ -524,7 +547,7 @@ export class ConferencesService {
     const minorField = conferenceInfo?.minorField as string[];
     let conferences;
     let basicCondition =
-      'conferences.enabled = true and conferences.deletedAt is null and conferences.status =:status';
+      'conferences.enabled = true and conferences.deletedAt is null and conferences.status =:status and conferences.parentId =:parentId';
     if (conferenceInfo) {
       basicCondition += ' and conferences.id !=:id';
     }
@@ -546,6 +569,7 @@ export class ConferencesService {
           columnIds: columns.map((data) => {
             return data.id;
           }),
+          parentId: '0',
         })
         .andWhere('conferences.field::jsonb ?| ARRAY[:...field]', {
           field: field,
@@ -573,6 +597,7 @@ export class ConferencesService {
             columnIds: columns.map((data) => {
               return data.id;
             }),
+            parentId: '0',
           })
           .andWhere('conferences.minor_field::jsonb ?| ARRAY[:...minorField]', {
             minorField: minorField,
@@ -603,6 +628,7 @@ export class ConferencesService {
           columnIds: columns.map((data) => {
             return data.id;
           }),
+          parentId: '0',
         })
         .orderBy('RANDOM()') // it isn't a good function that treatise become a large of data
         .take(size)

@@ -82,6 +82,7 @@ export const seed: TesterSeed<DataType> = {
         minorField: [fields[1].id, fields[2].id],
         website: 'http://baidu.com',
         ownerId: user.user.id,
+        parentId:(new Date().getTime() - 50000).toString()
       },
       {
         id: (new Date().getTime() - 30000).toString(),
@@ -100,6 +101,7 @@ export const seed: TesterSeed<DataType> = {
         minorField: [fields[1].id],
         website: 'http://baidu.com',
         ownerId: user.user.id,
+        parentId:(new Date().getTime() - 50000).toString()
       },
       {
         id: (new Date().getTime() - 20000).toString(),
@@ -118,6 +120,7 @@ export const seed: TesterSeed<DataType> = {
         minorField: [fields[1].id],
         website: 'http://baidu.com',
         ownerId: user.user.id,
+        parentId:(new Date().getTime() - 50000).toString()
       },
       {
         id: (new Date().getTime() - 10000).toString(),
@@ -136,6 +139,7 @@ export const seed: TesterSeed<DataType> = {
         minorField: [fields[1].id],
         website: 'http://baidu.com',
         ownerId: user.user.id,
+        parentId:(new Date().getTime() - 50000).toString()
       },
       {
         id: new Date().getTime().toString(),
@@ -153,6 +157,7 @@ export const seed: TesterSeed<DataType> = {
         minorField: [fields[1].id],
         website: 'http://baidu.com',
         ownerId: user.user.id,
+        parentId:(new Date().getTime() - 50000).toString()
       },
     ]);
     return { user, normalUser, columns, conferences };
