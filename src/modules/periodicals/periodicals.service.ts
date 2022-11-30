@@ -368,14 +368,14 @@ export class PeriodicalsService {
   ): Promise<ResultData> {
     const { columnId, keyword, page, size } = params;
     // get basic condition
-    let orderCondition = 'periodicals.impactFactor';
+    // let orderCondition = 'periodicals.impactFactor';
     let basicCondition =
       'periodicals.enabled = true and periodicals.deletedAt is null and periodicals.status =:status';
     if (columnId) {
       basicCondition += ' and periodicals.columnId = :columnId';
-      if (columnId === 'column_03_01') {
-        orderCondition = 'periodicals.compositeImpactFactor';
-      }
+      // if (columnId === 'column_03_01') {
+      //   orderCondition = 'periodicals.compositeImpactFactor';
+      // }
     }
     // get periodicals and count
     let periodicals;
@@ -410,7 +410,8 @@ export class PeriodicalsService {
             qb.where('periodicals.name like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
-        .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')
+        .orderBy('periodicals.articleNumber', 'DESC', 'NULLS LAST')
+        .addOrderBy('periodicals.establishedAt', 'DESC', 'NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -438,7 +439,8 @@ export class PeriodicalsService {
           status: Content_Status_Enum.ACTIVE,
           columnId: columnId,
         })
-        .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')
+        .orderBy('periodicals.articleNumber', 'DESC', 'NULLS LAST')
+        .addOrderBy('periodicals.establishedAt', 'DESC', 'NULLS LAST')
         .addOrderBy('periodicals.publishedAt', 'DESC')
         .skip((page - 1) * size)
         .take(size)
@@ -523,38 +525,36 @@ export class PeriodicalsService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { columnId } = params;
-    let columnCondition, orderCondition, compositeImpactFactorOrderCondition;
+    // get basic condition
+    let orderCondition = 'periodicals.impactFactor';
+    let basicCondition =
+      'periodicals.enabled = true and periodicals.deletedAt is null and periodicals.status =:status';
     if (columnId) {
-      columnCondition = {
-        columnId: columnId,
-      };
-      if (columnId === 'column_03_02') {
-        orderCondition = {
-          impactFactor: 'DESC',
-        };
-      }
+      basicCondition += ' and periodicals.columnId = :columnId';
       if (columnId === 'column_03_01') {
-        compositeImpactFactorOrderCondition = {
-          compositeImpactFactor: 'DESC',
-        };
+        orderCondition = 'periodicals.compositeImpactFactor';
       }
     }
     // get periodicals
-    const periodicals = await periodicalsRepository.find({
-      where: {
-        ...columnCondition,
+    const [periodicals, count] = await periodicalsRepository
+      .createQueryBuilder('periodicals')
+      .select([
+        'periodicals.id',
+        'periodicals.name',
+        'periodicals.field',
+        'periodicals.minorField',
+        'periodicals.type',
+        'periodicals.ISSN',
+        'periodicals.coverUrl',
+      ])
+      .where(`${basicCondition}`, {
         status: Content_Status_Enum.ACTIVE,
-        enabled: true,
-        deletedAt: IsNull(),
-      },
-      select: ['id', 'name', 'ISSN', 'type', 'minorField', 'field', 'coverUrl'],
-      take: 5, // it's up to PM
-      order: {
-        ...orderCondition,
-        ...compositeImpactFactorOrderCondition,
-        publishedAt: 'DESC',
-      },
-    });
+        columnId: columnId,
+      })
+      .orderBy(`${orderCondition}`, 'DESC', 'NULLS LAST')
+      .addOrderBy('periodicals.publishedAt', 'DESC')
+      .take(5)
+      .getManyAndCount();
     return ResultData.ok({
       data: { periodicals: periodicals },
     });
