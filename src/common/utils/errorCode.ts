@@ -192,6 +192,10 @@ export const ErrorCode = {
       code: 20018,
       message: '当前主题类型不存在或者已经被删除',
     },
+    PARENT_CONFERENCE_NOT_FOUND_ERROR:{
+      code: 20019,
+      message: '当前的parent会议不存在或者已经被删除',
+    }
   },
   // 3xxxx
   FILES: {

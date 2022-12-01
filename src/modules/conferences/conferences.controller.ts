@@ -24,6 +24,7 @@ import {
   RecommendConferencesResult,
   RemoveConferencesResult,
   SaveConferenceResult,
+  GetParentConferencesResult,
 } from './conferences.types';
 
 @ApiTags('内容管理-会议')
@@ -36,7 +37,8 @@ import {
   SaveConferenceResult,
   ListComplexConferenceResult,
   ListRecentConferenceResult,
-  RecommendConferencesResult
+  RecommendConferencesResult,
+  GetParentConferencesResult
 )
 @Controller('/conferences')
 export class ConferencesController {
@@ -120,5 +122,14 @@ export class ConferencesController {
   recommendConferences(@Body() params: RecommendConferencesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.conferencesService.recommendConferences(params, user);
+  }
+  @Get('/getParentConferences')
+  @HttpCode(200)
+  @ApiOperation({ summary: '获取所有parent会议(一级会议标签前端自己定义加入)' })
+  @ApiResult(GetParentConferencesResult)
+  @AllowAnon()
+  getParentConferences(@Body() params: any, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.conferencesService.getParentConferences(params, user);
   }
 }

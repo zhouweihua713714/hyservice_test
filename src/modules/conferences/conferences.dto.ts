@@ -40,6 +40,10 @@ export class SaveConferenceDto {
   @MaxLength(100)
   name: string;
 
+  @ApiProperty({ description: '会议级别,默认为0' })
+  @IsString({ message: 'parentId 类型错误, 正确类型 string' })
+  parentId: string;
+
   @ApiPropertyOptional({ description: '会议缩写', type: String, nullable: true })
   @IsString({ message: 'abbreviation 类型错误, 正确类型 string' })
   @MaxLength(50)

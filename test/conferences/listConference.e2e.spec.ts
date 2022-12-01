@@ -70,12 +70,13 @@ describe('/conferences/listConference', () => {
         status: Content_Status_Enum.READY,
         columnId: tester.data.columns[1].id,
         page: 1,
-        size: 2,
+        size: 3,
       });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.conferences).toBeTruthy();
+    expect(result.body.data.conferences[0].childConferences).toBeTruthy();
     expect(result.body.data.conferences.length).toBe(2);
     expect(result.body.data.count).toBe(2);
   });
