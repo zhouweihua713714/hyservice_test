@@ -83,6 +83,18 @@ describe('/conferences/saveConference', () => {
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(20016);
   });
+  test('should not POST /conferences/saveConference with invalid parentId', async () => {
+    const result = await request(tester.server)
+      .post('/conferences/saveConference')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({
+        columnId: tester.data.columns[1].id,
+        name: '会议名称',
+        parentId:'-1'
+      });
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(20019);
+  });
   test('should POST /conferences/saveConference', async () => {
     payload.columnId = tester.data.columns[1].id;
     payload.field = [tester.data.fields[0].id];
@@ -95,12 +107,14 @@ describe('/conferences/saveConference', () => {
         status: Content_Status_Enum.READY,
         columnId: payload.columnId,
         name: '这是新增',
+        parentId: '0',
       });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
     expect(result.body.data.id).toBeTruthy();
     //save with id
     payload.id = result.body.data.id;
+    payload.parentId = result.body.data.parentId;
     const resultData = await request(tester.server)
       .post('/conferences/saveConference')
       .set('Authorization', tester.data.user.headers.authorization)

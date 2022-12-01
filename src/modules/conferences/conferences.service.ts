@@ -121,7 +121,7 @@ export class ConferencesService {
    * @returns {ResultData} 返回saveConference信息
    */
   async saveConference(params: SaveConferenceDto, user: SignInResInfo): Promise<ResultData> {
-    const { id, status, columnId, field, minorField } = params;
+    const { id, status, columnId, field, minorField, parentId } = params;
     // if user not permission, then throw error
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
@@ -151,6 +151,20 @@ export class ConferencesService {
       });
       if (!fields || (fields && fields.length !== minorField.length)) {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.MINOR_FILED_NOT_FOUND_ERROR });
+      }
+    }
+    // if parentId not found in database, then throw error
+    if (parentId && parentId !== '0') {
+      const conferenceInfo = await conferencesRepository.findOneBy({
+        id: parentId,
+        parentId: '0',
+        deletedAt: IsNull(),
+        enabled: true,
+      });
+      if (!conferenceInfo) {
+        return ResultData.fail({
+          ...ErrorCode.CONTENT_MANAGEMENT.PARENT_CONFERENCE_NOT_FOUND_ERROR,
+        });
       }
     }
     if (id) {
@@ -209,10 +223,11 @@ export class ConferencesService {
         ...statusCondition,
         ...columnCondition,
         ...nameCondition,
+        parentId: '0',
         enabled: true,
         deletedAt: IsNull(),
       },
-      select: ['id', 'columnId', 'name', 'clicks', 'status', 'updatedAt'],
+      select: ['id', 'columnId', 'name', 'clicks', 'status', 'updatedAt', 'parentId'],
       skip: (page - 1) * size,
       take: size,
       order: {
@@ -223,26 +238,41 @@ export class ConferencesService {
     if (count === 0) {
       return ResultData.ok({ data: { conferences: [], count: count } });
     }
-    // get columns
-    const columns = await columnsRepository.find({
-      where: {
-        id: In(
-          conferences.map((conference) => {
-            return conference.columnId;
-          })
-        ),
-      },
-    });
+    // get columns,childConferences
+    const [columns, childConferences] = await Promise.all([
+      columnsRepository.find({
+        where: {
+          id: In(
+            conferences.map((conference) => {
+              return conference.columnId;
+            })
+          ),
+        },
+      }),
+      conferencesRepository.find({
+        where: {
+          parentId: In(
+            conferences.map((conference) => {
+              return conference.id;
+            })
+          ),
+        },
+        select: ['id', 'columnId', 'name', 'clicks', 'status', 'updatedAt', 'parentId'],
+        order: {
+          status: 'DESC',
+          updatedAt: 'DESC',
+        },
+      }),
+    ]);
     const result = conferences.map((conference) => {
       return {
-        id: conference.id,
-        name: conference.name,
-        clicks: conference.clicks,
-        status: conference.status,
-        updatedAt: conference.updatedAt,
+        ...conference,
         columnName: _.find(columns, function (o) {
           return o.id === conference.columnId;
         })?.name,
+        childConferences: _.filter(childConferences, function (o) {
+          return o.parentId === conference.id;
+        }),
       };
     });
     return ResultData.ok({ data: { conferences: result, count: count } });
@@ -646,5 +676,26 @@ export class ConferencesService {
     return ResultData.ok({
       data: { conferences: result ? result : [] },
     });
+  }
+  /**
+   * @description 获取所有一级会议
+   * @param {ListConferenceDto} params
+   * @returns {ResultData} 返回getParentConferences信息
+   */
+  async getParentConferences(params: any, user: SignInResInfo): Promise<ResultData> {
+    // get conferences
+    const conferences = await conferencesRepository.find({
+      where: {
+        parentId: '0',
+        enabled: true,
+        deletedAt: IsNull(),
+      },
+      select: ['id', 'name'],
+      order: {
+        status: 'DESC',
+        updatedAt: 'DESC',
+      },
+    });
+    return ResultData.ok({ data: { conferences: conferences } });
   }
 }
