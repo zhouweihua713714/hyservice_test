@@ -27,15 +27,15 @@ export class Policies {
   @ApiPropertyOptional({
     description: '主题类型:数据由数据方统计提供下拉项目前暂时没有',
     type: String,
+    isArray: true,
     nullable: true,
   })
-  @Column('character varying', {
+  @Column('jsonb', {
     name: 'topic_type',
-    length: 64,
     comment: '主题类型',
     nullable: true,
   })
-  topicType: string | null;
+  topicType: object | null;
 
   @ApiPropertyOptional({
     description: '政策层级:国家级policy_level_001',

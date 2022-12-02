@@ -8,16 +8,14 @@ import {
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { Subjects } from '@/entities/Subjects.entity';
-import { TermTypes } from '@/entities/TermTypes.entity';
 import { Policies } from '@/entities/Policies.entity';
 import { constant } from '@/common/utils/constant';
+import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
 let columns: Columns[];
-let subjects: Subjects[];
-let policyType: TermTypes;
+let policyType: PolicyTypes;
 let policyInfo: Policies;
 export type DataType = {
   user: CreateUserRetType;
@@ -38,15 +36,21 @@ export const seed: TesterSeed<DataType> = {
       id: `T${genCodeOfLength(8)}`,
       name: '政策类型名称',
     });
-    const topicType = await tester.topicTypesRepository.save({
-      id: `T${genCodeOfLength(8)}`,
-      name: '政策类型名称',
-    });
+    const topicType = await tester.topicTypesRepository.save([
+      {
+        id: `T${genCodeOfLength(8)}`,
+        name: '主题类型名称',
+      },
+      {
+        id: `T${genCodeOfLength(8)}`,
+        name: '主题类型名称1',
+      },
+    ]);
     policyInfo = await tester.policiesRepository.save({
       id: new Date().getTime().toString(),
       columnId: columns[1].id,
       type: policyType.id,
-      topicType: topicType.id,
+      topicType: [topicType[0].id, topicType[1].id],
       status: Content_Status_Enum.ACTIVE,
       name: '政策名称必填',
       announceNo: '发文号',

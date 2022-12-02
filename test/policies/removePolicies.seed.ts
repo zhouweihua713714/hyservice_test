@@ -4,12 +4,10 @@ import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
 import {
   Content_Status_Enum,
-  Content_Types_Enum,
   Education_Level_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
 import { Policies } from '@/entities/Policies.entity';
 import { constant } from '@/common/utils/constant';
@@ -18,7 +16,6 @@ const { mobile, password } = samples;
 let user: CreateUserRetType;
 let normalUser: CreateUserRetType;
 let columns: Columns[];
-let subjects: Subjects[];
 let policyType: TermTypes;
 let policies: Policies[];
 export type DataType = {
@@ -41,10 +38,6 @@ export const seed: TesterSeed<DataType> = {
     columns = await tester.columnsRepository.save([
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称', parentId: '0', sequenceNumber: 1 },
       { id: `C${genCodeOfLength(8)}`, name: '栏目名称1', parentId: '1', sequenceNumber: 1 },
-    ]);
-    subjects = await tester.subjectsRepository.save([
-      { id: `S${genCodeOfLength(8)}`, name: '学科名称', type: Content_Types_Enum.TERM },
-      { id: `S${genCodeOfLength(8)}`, name: '学科名称1', type: Content_Types_Enum.PATENT },
     ]);
     policyType = await tester.policyTypesRepository.save({
       id: `T${genCodeOfLength(8)}`,
@@ -108,7 +101,7 @@ export const seed: TesterSeed<DataType> = {
   down: async (tester) => {
     await tester.policiesRepository.delete({});
     await tester.columnsRepository.delete({});
-    await tester.subjectsRepository.delete({});
+    await tester.policyTypesRepository.delete({});
     await tester.usersRepository.delete({});
     await tester.loginsRepository.delete({});
   },

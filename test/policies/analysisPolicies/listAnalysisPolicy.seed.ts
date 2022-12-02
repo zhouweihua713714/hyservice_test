@@ -8,7 +8,6 @@ import {
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { Subjects } from '@/entities/Subjects.entity';
 import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
 const { mobile, password } = samples;
 

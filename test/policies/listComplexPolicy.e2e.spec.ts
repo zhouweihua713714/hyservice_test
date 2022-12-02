@@ -38,7 +38,20 @@ describe('/policies/listComplexPolicy', () => {
     const result = await request(tester.server)
       .post('/policies/listComplexPolicy')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ topicType: '主题类型匹配', page: 1, size: 3 });
+      .send({ topicType: tester.data.topicTypes[0].id, page: 1, size: 3 });
+    // use expect by jest
+    expect(result.status).toBe(HttpStatus.OK);
+    expect(result.body.code).toBe(200);
+    expect(result.body.data.policies).toBeTruthy();
+    expect(result.body.data.policies.length).toBe(3);
+    expect(result.body.data.count).toBe(4);
+  });
+  test('should POST /policies/listComplexPolicy with educationLevel', async () => {
+    // make request
+    const result = await request(tester.server)
+      .post('/policies/listComplexPolicy')
+      .set('Authorization', tester.data.user.headers.authorization)
+      .send({ educationLevel:'basic', page: 1, size: 3 });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);
@@ -68,7 +81,7 @@ describe('/policies/listComplexPolicy', () => {
         keyword: '政策;关键词匹配;不匹配',
         columnId: tester.data.columns[1].id,
         type: tester.data.policyType.id,
-        topicType: '主题类型匹配',
+        topicType: tester.data.topicTypes[0].id,
         page: 1,
         size: 3,
       });
@@ -84,7 +97,7 @@ describe('/policies/listComplexPolicy', () => {
     const result = await request(tester.server)
       .post('/policies/listComplexPolicy')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ announcedAt: new Date(),picker:'year', page: 1, size: 3 });
+      .send({ announcedAt: new Date(), picker: 'year', page: 1, size: 3 });
     // use expect by jest
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(200);

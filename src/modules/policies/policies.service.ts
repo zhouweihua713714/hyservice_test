@@ -51,11 +51,11 @@ export class PoliciesService {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
     }
     const type = policyInfo.type ? policyInfo.type : '-1';
-    const topicType = policyInfo.topicType ? policyInfo.topicType : '-1';
+    const topicType = policyInfo.topicType ? (policyInfo.topicType as string[]) : ['-1'];
     const [columnInfo, typeInfo, topicTypeInfo] = await Promise.all([
       columnsRepository.findOneBy({ id: policyInfo.columnId }),
       policyTypesRepository.findOneBy({ id: type }),
-      topicTypesRepository.findOneBy({ id: topicType }),
+      topicTypesRepository.findBy({ id: In(topicType) }),
     ]);
     let userInfo;
     if (policyInfo.ownerId) {
@@ -66,7 +66,14 @@ export class PoliciesService {
       columnName: columnInfo ? columnInfo.name : null,
       owner: userInfo ? userInfo.mobile : null,
       ...policyInfo,
-      topicTypeName: topicType ? topicTypeInfo?.name : null,
+      topicTypeName: topicTypeInfo
+        ? _.join(
+            topicTypeInfo.map((data) => {
+              return data.name;
+            }),
+            ';'
+          )
+        : null,
     };
     // update clicks
     if (params.flag) {
@@ -107,8 +114,8 @@ export class PoliciesService {
     }
     // if topic type not found in database, then throw error
     if (topicType) {
-      const topicTypeInfo = await topicTypesRepository.findOneBy({ id: topicType });
-      if (!topicTypeInfo) {
+      const topicTypeInfo = await topicTypesRepository.findBy({ id: In(topicType) });
+      if (topicTypeInfo.length !== topicType.length) {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.TOPIC_TYPE_NOT_FOUND_ERROR });
       }
     }
@@ -317,7 +324,8 @@ export class PoliciesService {
    * @returns {ResultData} 返回listComplexPolicy信息
    */
   async listComplexPolicy(params: ListComplexPolicyDto, user: SignInResInfo): Promise<ResultData> {
-    const { keyword, type, topicType, announcedAt,picker,educationLevel, columnId, page, size } = params;
+    const { keyword, type, topicType, announcedAt, picker, educationLevel, columnId, page, size } =
+      params;
     // get basic condition
     let policies, count, keywords;
     const month = 'yyyy-mm';
@@ -329,13 +337,13 @@ export class PoliciesService {
       basicCondition += ' and policies.type =:type';
     }
     if (topicType) {
-      basicCondition += ' and policies.topicType =:topicType';
+      basicCondition += ' and policies.topic_type::jsonb ?| ARRAY[:topicType]';
     }
     if (columnId) {
       basicCondition += ' and policies.columnId =:columnId';
     }
     if (educationLevel) {
-      basicCondition += ' and policies.educationLevel::jsonb ?| ARRAY[:educationLevel]';
+      basicCondition += ' and policies.education_level::jsonb ?| ARRAY[:educationLevel]';
     }
     if (picker && picker === Picker_Enum.Year && announcedAt) {
       basicCondition += ' and extract(year from policies.announcedAt) =:year';
@@ -380,10 +388,11 @@ export class PoliciesService {
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('LOWER(policies.name) like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
-              'LOWER(policies.keyword) like any (ARRAY[:...keyword])',
-              { keyword: keywords }
-            );
+            qb.where('LOWER(policies.name) like any (ARRAY[:...keyword])', {
+              keyword: keywords,
+            }).orWhere('LOWER(policies.keyword) like any (ARRAY[:...keyword])', {
+              keyword: keywords,
+            });
           })
         )
         .orderBy('policies.announcedAt', 'DESC', 'NULLS LAST')

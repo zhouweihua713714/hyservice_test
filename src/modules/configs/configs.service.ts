@@ -217,9 +217,9 @@ export class ConfigsService {
    */
   async getTopicTypes(): Promise<ResultData> {
     const data = await topicTypesRepository.find({
-      where: {
-        id: Not('topic_type_002'),
-      },
+      // where: {
+      //   id: Not('topic_type_002'),
+      // },
       order: {
         name: 'ASC',
       },

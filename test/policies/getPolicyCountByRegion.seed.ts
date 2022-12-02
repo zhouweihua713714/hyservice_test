@@ -4,11 +4,9 @@ import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../samples';
 import {
   Content_Status_Enum,
-  Education_Level_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { constant } from '@/common/utils/constant';
 import { Policies } from '@/entities/Policies.entity';
 import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 const { mobile, password } = samples;
@@ -132,6 +130,7 @@ export const seed: TesterSeed<DataType> = {
   down: async (tester) => {
     await tester.policiesRepository.delete({});
     await tester.columnsRepository.delete({});
+    await tester.policyTypesRepository.delete({});
     await tester.usersRepository.delete({});
     await tester.loginsRepository.delete({});
   },

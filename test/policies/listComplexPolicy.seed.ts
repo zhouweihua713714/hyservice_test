@@ -11,6 +11,7 @@ import { Columns } from '@/entities/Columns.entity';
 import { constant } from '@/common/utils/constant';
 import { Policies } from '@/entities/Policies.entity';
 import { PolicyTypes } from '@/entities/PolicyTypes.entity';
+import { TopicTypes } from '@/entities/TopicTypes.entity';
 const { mobile, password } = samples;
 
 let user: CreateUserRetType;
@@ -18,12 +19,14 @@ let normalUser: CreateUserRetType;
 let columns: Columns[];
 let policyType: PolicyTypes;
 let policies: Policies[];
+let topicTypes:TopicTypes[];
 export type DataType = {
   user: CreateUserRetType;
   normalUser: CreateUserRetType;
   policies: Policies[];
   policyType: PolicyTypes;
   columns: Columns[];
+  topicTypes:TopicTypes[]
 };
 
 export const seed: TesterSeed<DataType> = {
@@ -44,12 +47,22 @@ export const seed: TesterSeed<DataType> = {
       id: `T${genCodeOfLength(8)}`,
       name: '政策类型名称',
     });
+    topicTypes = await tester.topicTypesRepository.save([
+      {
+        id: `T${genCodeOfLength(8)}`,
+        name: '主题类型名称',
+      },
+      {
+        id: `T${genCodeOfLength(8)}`,
+        name: '主题类型名称1',
+      },
+    ]);
     policies = await tester.policiesRepository.save([
       {
         id: (new Date().getTime() - 50000).toString(),
         columnId: columns[1].id,
         type: policyType.id,
-        topicType: '主题类型匹配',
+        topicType: [topicTypes[0].id, topicTypes[1].id],
         name: '政策标题匹配',
         announceNo: '发文号',
         level: constant.POLICY_LEVEL,
@@ -67,7 +80,7 @@ export const seed: TesterSeed<DataType> = {
       {
         id: (new Date().getTime() - 40000).toString(),
         columnId: columns[1].id,
-        topicType: '主题类型匹配',
+        topicType: [topicTypes[0].id, topicTypes[1].id],
         name: '不匹配',
         //无type
         announceNo: '发文号',
@@ -86,7 +99,7 @@ export const seed: TesterSeed<DataType> = {
         id: (new Date().getTime() - 30000).toString(),
         columnId: columns[1].id,
         type: policyType.id,
-        topicType: '主题类型匹配',
+        topicType: [topicTypes[0].id, topicTypes[1].id],
         name: '政策名称必填',
         announceNo: '发文号',
         level: constant.POLICY_LEVEL,
@@ -104,7 +117,7 @@ export const seed: TesterSeed<DataType> = {
         id: (new Date().getTime() - 20000).toString(),
         columnId: columns[1].id,
         type: policyType.id,
-        topicType: '主题类型匹配',
+        topicType: [topicTypes[0].id],
         name: '政策名称必填',
         announceNo: '发文号',
         level: constant.POLICY_LEVEL,
@@ -123,7 +136,7 @@ export const seed: TesterSeed<DataType> = {
         id: (new Date().getTime() - 10000).toString(),
         columnId: columns[1].id,
         type: policyType.id,
-        topicType: '----',
+        topicType: [topicTypes[1].id],
         name: '不匹配',
         announceNo: '发文号',
         level: constant.POLICY_LEVEL,
@@ -139,10 +152,12 @@ export const seed: TesterSeed<DataType> = {
         status: Content_Status_Enum.ACTIVE,
       },
     ]);
-    return { user, normalUser, policies, policyType, columns };
+    return { user, normalUser, policies, policyType, columns,topicTypes };
   },
   down: async (tester) => {
     await tester.policiesRepository.delete({});
+    await tester.topicTypesRepository.delete({});
+    await tester.policyTypesRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.subjectsRepository.delete({});
     await tester.usersRepository.delete({});
