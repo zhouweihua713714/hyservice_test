@@ -25,14 +25,14 @@ export class Policies {
   type: string | null;
 
   @ApiPropertyOptional({
-    description: '主题类型:数据由数据方统计提供下拉项目前暂时没有',
+    description: '主题类型',
     type: String,
     isArray: true,
     nullable: true,
   })
   @Column('jsonb', {
     name: 'topic_type',
-    comment: '主题类型',
+    comment: '主题类型:["string"]',
     nullable: true,
   })
   topicType: object | null;
