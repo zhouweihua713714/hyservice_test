@@ -131,6 +131,7 @@ export const seed: TesterSeed<DataType> = {
   },
   down: async (tester) => {
     await tester.policiesRepository.delete({});
+    await tester.policyTypesRepository.delete({});
     await tester.columnsRepository.delete({});
     await tester.usersRepository.delete({});
     await tester.loginsRepository.delete({});

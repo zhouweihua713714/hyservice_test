@@ -4,12 +4,9 @@ import { genCodeOfLength } from '@/common/utils/genCodeOfLength';
 import { samples } from '../../samples';
 import {
   Content_Status_Enum,
-  Content_Types_Enum,
-  Education_Level_Enum,
   User_Types_Enum,
 } from '@/common/enums/common.enum';
 import { Columns } from '@/entities/Columns.entity';
-import { constant } from '@/common/utils/constant';
 import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
 const { mobile, password } = samples;
 

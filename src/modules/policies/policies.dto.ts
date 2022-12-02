@@ -48,10 +48,10 @@ export class SavePolicyDto {
   @IsOptional()
   type: string | null;
 
-  @ApiPropertyOptional({ description: '主题类型', type: String, nullable: true })
-  @IsString({ message: 'topicType 类型错误, 正确类型 string' })
+  @ApiPropertyOptional({ description: '主题类型', type: String,isArray: true, nullable: true })
+  @IsArray({ message: 'topicType 类型错误, 正确类型 array' })
   @IsOptional()
-  topicType: string | null;
+  topicType: string[] | null;
 
   @ApiPropertyOptional({
     description: '政策层级:国家级policy_level_001',

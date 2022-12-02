@@ -14,7 +14,7 @@ const payload: SavePolicyDto = {
   name: '政策名称必填',
   columnId: 'tester.data.columns[1].id',
   type: 'tester.data.policyType.id',
-  topicType: '需要赋值',
+  topicType: ['需要赋值'],
   announceNo: '发文号',
   level: constant.POLICY_LEVEL,
   institution: '机构名称',
@@ -102,14 +102,14 @@ describe('/policies/savePolicy', () => {
     const result = await request(tester.server)
       .post('/policies/savePolicy')
       .set('Authorization', tester.data.user.headers.authorization)
-      .send({ columnId: tester.data.columns[1].id, topicType: 'invalid id', name: '政策名称' });
+      .send({ columnId: tester.data.columns[1].id, topicType: ['invalid id'], name: '政策名称' });
     expect(result.status).toBe(HttpStatus.OK);
     expect(result.body.code).toBe(20018);
   });
   test('should POST /policies/savePolicy', async () => {
     payload.columnId = tester.data.columns[1].id;
     payload.type = tester.data.policyType.id;
-    payload.topicType = tester.data.topicType.id;
+    payload.topicType = [tester.data.topicType.id];
     // save with
     const result = await request(tester.server)
       .post('/policies/savePolicy')
