@@ -41,12 +41,14 @@ import {
   GetTreatiseLibraryDetailDto,
   ListComplexTreatiseLibraryDto,
   RecommendTreatiseLibrariesDto,
+  SaveTreatiseLibraryDto,
 } from './treatiseLibrary/treatiseLibrary.dto';
 import {
   GetTreatiseLibraryCountBySortAndYearResult,
   GetTreatiseLibraryDetailResult,
   ListComplexTreatiseLibraryResult,
   RecommendTreatiseLibrariesResult,
+  SaveTreatiseLibraryResult,
 } from './treatiseLibrary/treatiseLibrary.types';
 
 @ApiTags('内容管理-论文')
@@ -72,7 +74,8 @@ import {
   ListComplexTreatiseLibraryResult,
   GetTreatiseLibraryCountBySortAndYearResult,
   GetTreatiseLibraryDetailResult,
-  RecommendTreatiseLibrariesResult
+  RecommendTreatiseLibrariesResult,
+  SaveTreatiseLibraryResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -283,5 +286,15 @@ export class TreatisesController {
   recommendTreatiseLibraries(@Body() params: RecommendTreatiseLibrariesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatiseLibraryService.recommendTreatiseLibraries(params, user);
+  }
+
+  @Post('/saveTreatiseLibrary')
+  @HttpCode(200)
+  @ApiOperation({ summary: '新增/编辑精选文库' })
+  @ApiResult(SaveTreatiseLibraryResult)
+  @ApiBearerAuth()
+  saveTreatiseLibrary(@Body() params: SaveTreatiseLibraryDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatiseLibraryService.saveTreatiseLibrary(params, user);
   }
 }

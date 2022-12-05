@@ -42,7 +42,11 @@ export class SaveTreatiseLibraryDto {
   @IsString({ message: 'columnId 类型错误, 正确类型 string' })
   columnId: string;
 
-  @ApiPropertyOptional({ description: '发表时间', type: Date, nullable: true })
+  @ApiProperty({ description: '分类id' })
+  @IsString({ message: 'sort 类型错误, 正确类型 string' })
+  sort: string;
+
+  @ApiPropertyOptional({ description: '发表时间(年)', type: Date, nullable: true })
   @IsDateString({ message: 'deliveryAt 类型错误, 正确类型 date' })
   @IsOptional()
   deliveryAt: Date | null;
@@ -91,7 +95,7 @@ export class SaveTreatiseLibraryDto {
   otherAuthorUnit: string | null;
 
   @ApiPropertyOptional({
-    description: '文章主领域(大领域之间用“;”隔开)',
+    description: '文章所属主领域(大领域之间用“;”隔开)',
     type: String,
     nullable: true,
   })
@@ -100,7 +104,7 @@ export class SaveTreatiseLibraryDto {
   field: string | null;
 
   @ApiPropertyOptional({
-    description: '文章子领域(大领域之间用“;”隔开)',
+    description: '文章所属子领域(子领域之间用“;”隔开)',
     type: String,
     nullable: true,
   })
@@ -109,7 +113,7 @@ export class SaveTreatiseLibraryDto {
   minorField: string | null;
 
   @ApiPropertyOptional({
-    description: '杂志文章主领域(大领域之间用“;”隔开)',
+    description: '杂志会议所属主领域(大领域之间用“;”隔开)',
     type: String,
     nullable: true,
   })
@@ -118,18 +122,13 @@ export class SaveTreatiseLibraryDto {
   magazineField: string | null;
 
   @ApiPropertyOptional({
-    description: '杂志文章子领域(大领域之间用“;”隔开)',
+    description: '杂志会议所属子领域(大领域之间用“;”隔开)',
     type: String,
     nullable: true,
   })
   @IsString({ message: 'magazineMinorField 类型错误, 正确类型 string' })
   @IsOptional()
   magazineMinorField: string | null;
-
-  @ApiPropertyOptional({ description: '分类', type: String, isArray: true, nullable: true })
-  @IsString({ message: 'sort 类型错误, 正确类型 string' })
-  @IsOptional()
-  sort: string | null;
 
   @ApiPropertyOptional({ description: '摘要', type: String, nullable: true })
   @IsString({ message: 'abstract 类型错误, 正确类型 string' })
@@ -150,11 +149,6 @@ export class SaveTreatiseLibraryDto {
   @IsString({ message: 'keyword 类型错误, 正确类型 string' })
   @IsOptional()
   keyword: string | null;
-
-  @ApiPropertyOptional({ description: '期刊名称', type: String, nullable: true })
-  @IsString({ message: 'periodical 类型错误, 正确类型 string' })
-  @IsOptional()
-  periodical: string | null;
 }
 export class ListTreatiseLibraryDto extends PickType(ReqListQuery, ['page', 'size'] as const) {
   @ApiPropertyOptional({ description: '论文名称,支持模糊搜索 如果为空则不传或者传null' })

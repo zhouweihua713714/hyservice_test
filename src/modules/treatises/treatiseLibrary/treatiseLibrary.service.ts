@@ -3,10 +3,9 @@ import { ResultData } from '@/common/utils/result';
 import { SignInResInfo } from '../../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
-  articleTypesRepository,
+  treatiseLibraryTypesRepository,
   columnsRepository,
   treatiseLibraryRepository,
-  treatiseLibraryTypesRepository,
   userHistoryRepository,
   usersRepository,
 } from '../../repository/repository';
@@ -93,41 +92,43 @@ export class TreatiseLibraryService {
     if (user.type !== User_Types_Enum.Administrator && user.type !== User_Types_Enum.Admin) {
       return ResultData.fail({ ...ErrorCode.AUTH.USER_NOT_PERMITTED_ERROR });
     }
-    // if sort not found in database, then throw error
-    if (sort) {
-      const articleTypeInfo = await articleTypesRepository.findBy({
-        id: sort,
-        type: Like(`%${Content_Types_Enum.TREATISE}%`),
-      });
-      if (!articleTypeInfo || (articleTypeInfo && articleTypeInfo.length !== sort.length)) {
-        return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.SORT_NOT_FOUND_ERROR });
-      }
-    }
     // if columnId not found in database, then throw error
     const columnInfo = await columnsRepository.findOneBy({ id: columnId });
     if (!columnInfo || (columnInfo && columnInfo.parentId === '0')) {
       return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.COLUMN_NOT_FOUND_ERROR });
     }
+    // if sort not found in database, then throw error
+    if (sort) {
+      const treatiseLibraryTypeInfo = await treatiseLibraryTypesRepository.findOneBy({
+        id: sort,
+        columnId: columnId,
+      });
+      if (!treatiseLibraryTypeInfo) {
+        return ResultData.fail({
+          ...ErrorCode.CONTENT_MANAGEMENT.TREATISE_LIBRARY_SORT_NOT_FOUND_ERROR,
+        });
+      }
+    }
     if (id) {
-      // if id exist get treatiseInfo
-      const treatiseInfo = await treatiseLibraryRepository.findOneBy({
+      // if id exist get treatiseLibraryInfo
+      const treatiseLibraryInfo = await treatiseLibraryRepository.findOneBy({
         id: params.id,
         deletedAt: IsNull(),
         enabled: true,
       });
-      if (!treatiseInfo) {
+      if (!treatiseLibraryInfo) {
         return ResultData.fail({ ...ErrorCode.CONTENT_MANAGEMENT.RESOURCE_NOT_FOUND_ERROR });
       }
     } else {
       params.id = new Date().getTime().toString();
     }
-    // const result = await treatiseLibraryRepository.save({
-    //   ownerId: user.id,
-    //   updatedAt: id ? new Date() : undefined,
-    //   publishedAt: status && status === Content_Status_Enum.ACTIVE ? new Date() : null,
-    //   ...params,
-    // });
-    return ResultData.ok({ data: {} });
+    const result = await treatiseLibraryRepository.save({
+      ownerId: user.id,
+      updatedAt: id ? new Date() : undefined,
+      publishedAt: status && status === Content_Status_Enum.ACTIVE ? new Date() : null,
+      ...params,
+    });
+    return ResultData.ok({ data: { ...result } });
   }
   /**
    * @description 精选文库列表
@@ -412,7 +413,7 @@ export class TreatiseLibraryService {
     user: SignInResInfo
   ): Promise<ResultData> {
     const { id } = params;
-    const treatiseInfo = await treatiseLibraryRepository.findOneBy({
+    const treatiseLibraryInfo = await treatiseLibraryRepository.findOneBy({
       id: id,
       status: Content_Status_Enum.ACTIVE,
       deletedAt: IsNull(),
@@ -426,11 +427,11 @@ export class TreatiseLibraryService {
       },
       select: ['id', 'name'],
     });
-    const sort = treatiseInfo?.sort;
-    const columnId = treatiseInfo?.columnId;
+    const sort = treatiseLibraryInfo?.sort;
+    const columnId = treatiseLibraryInfo?.columnId;
     let basicCondition =
       'treatiseLibrary.enabled = true and treatiseLibrary.deletedAt is null and treatiseLibrary.status =:status';
-    if (treatiseInfo) {
+    if (treatiseLibraryInfo) {
       basicCondition += ' and treatiseLibrary.id !=:id';
     }
     // if columns is hide, related data is hide
@@ -449,7 +450,7 @@ export class TreatiseLibraryService {
         .select(['treatiseLibrary.id', 'treatiseLibrary.title', 'treatiseLibrary.columnId'])
         .where(`${basicCondition}`, {
           status: Content_Status_Enum.ACTIVE,
-          id: treatiseInfo?.id,
+          id: treatiseLibraryInfo?.id,
           columnIds: columns.map((data) => {
             return data.id;
           }),
@@ -475,7 +476,7 @@ export class TreatiseLibraryService {
         .select(['treatiseLibrary.id', 'treatiseLibrary.title', 'treatiseLibrary.columnId'])
         .where(`${basicCondition}${idsCondition}`, {
           status: Content_Status_Enum.ACTIVE,
-          id: treatiseInfo?.id,
+          id: treatiseLibraryInfo?.id,
           ids: treatiseLibrary
             ? treatiseLibrary.map((data) => {
                 return data.id;
