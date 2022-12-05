@@ -195,7 +195,11 @@ export const ErrorCode = {
     PARENT_CONFERENCE_NOT_FOUND_ERROR:{
       code: 20019,
       message: '当前的parent会议不存在或者已经被删除',
-    }
+    },
+    TREATISE_LIBRARY_SORT_NOT_FOUND_ERROR: {
+      code: 20020,
+      message: '当前精选文库分类不存在或已经被删除',
+    },
   },
   // 3xxxx
   FILES: {

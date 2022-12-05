@@ -2,7 +2,7 @@ import { Columns } from '@/entities/Columns.entity';
 import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
-export class SaveTreatiseResult {
+export class SaveTreatiseLibraryResult {
   @ApiProperty({ description: '主键id' })
   id: string;
 }
