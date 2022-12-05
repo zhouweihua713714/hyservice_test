@@ -690,6 +690,7 @@ export class TreatisesService {
     const columns = await columnsRepository.find({
       where: {
         parentId: In(['column_02']),
+        id: treatiseInfo?.columnId,
         isHide: 0,
       },
       select: ['id', 'name'],

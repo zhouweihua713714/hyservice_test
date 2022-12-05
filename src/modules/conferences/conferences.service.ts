@@ -569,6 +569,7 @@ export class ConferencesService {
     const columns = await columnsRepository.find({
       where: {
         parentId: In(['column_06']),
+        id:conferenceInfo?.columnId,
         isHide: 0,
       },
       select: ['id', 'name'],

@@ -484,6 +484,7 @@ export class PoliciesService {
     const columns = await columnsRepository.find({
       where: {
         parentId: In(['column_04']),
+        id: policyInfo?.columnId,
         isHide: 0,
       },
       select: ['id', 'name'],

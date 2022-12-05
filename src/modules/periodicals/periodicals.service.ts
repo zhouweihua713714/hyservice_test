@@ -579,6 +579,7 @@ export class PeriodicalsService {
     const columns = await columnsRepository.find({
       where: {
         parentId: In(['column_03']),
+        id: periodicalInfo?.columnId,
         isHide: 0,
       },
       select: ['id', 'name'],

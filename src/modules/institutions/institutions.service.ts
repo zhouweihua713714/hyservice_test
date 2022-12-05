@@ -458,6 +458,7 @@ export class InstitutionsService {
     const columns = await columnsRepository.find({
       where: {
         parentId: In(['column_07']),
+        id:institutionInfo?.columnId,
         isHide: 0,
       },
       select: ['id', 'name'],
