@@ -72,7 +72,16 @@ export class ConferencesService {
           enabled: true,
           parentId: conferenceInfo.id,
         },
-        select: ['id', 'name', 'conductedAt', 'picker', 'period', 'introduction', 'website'],
+        select: [
+          'id',
+          'name',
+          'conductedAt',
+          'picker',
+          'period',
+          'introduction',
+          'website',
+          'endedAt',
+        ],
         order: {
           conductedAt: 'DESC',
           publishedAt: 'DESC',
@@ -569,7 +578,7 @@ export class ConferencesService {
     const columns = await columnsRepository.find({
       where: {
         parentId: In(['column_06']),
-        id:conferenceInfo?.columnId,
+        id: conferenceInfo?.columnId,
         isHide: 0,
       },
       select: ['id', 'name'],

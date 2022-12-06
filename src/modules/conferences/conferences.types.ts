@@ -13,6 +13,7 @@ export class ChildConferencesInfo extends PickType(Conferences, [
   'introduction',
   'website',
   'picker',
+  'endedAt',
 ] as const) {}
 export class GetConferenceDetailResult extends PickType(Conferences, [
   'id',
@@ -57,6 +58,7 @@ export class GetConferenceDetailResult extends PickType(Conferences, [
   @ApiPropertyOptional({
     description: '当该会议为一级会议,则子会议数组一般不为空(目前这个只有c端请求才下发)',
     type: ChildConferencesInfo,
+    isArray: true,
   })
   childConferences: ChildConferencesInfo[];
 }
@@ -85,6 +87,7 @@ export class ListConferenceInfo extends PickType(Conferences, [
   @ApiPropertyOptional({
     description: '当该会议为一级会议,则子会议数组一般不为空',
     type: ChildConferences,
+    isArray: true,
   })
   childConferences: ChildConferences[];
 }
@@ -173,11 +176,7 @@ export class RecommendConferencesResult {
   conferences: RecommendConferencesInfo[];
 }
 
-export class GetParentConferencesInfo extends PickType(Conferences, [
-  'id',
-  'name',
-] as const) {
-}
+export class GetParentConferencesInfo extends PickType(Conferences, ['id', 'name'] as const) {}
 export class GetParentConferencesResult {
   @ApiProperty({ description: 'parent会议数组', type: GetParentConferencesInfo, isArray: true })
   conferences: GetParentConferencesInfo[];
