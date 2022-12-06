@@ -40,6 +40,7 @@ import {
   GetTreatiseLibraryCountBySortAndYearDto,
   GetTreatiseLibraryDetailDto,
   ListComplexTreatiseLibraryDto,
+  ListTreatiseLibraryDto,
   RecommendTreatiseLibrariesDto,
   SaveTreatiseLibraryDto,
 } from './treatiseLibrary/treatiseLibrary.dto';
@@ -47,6 +48,7 @@ import {
   GetTreatiseLibraryCountBySortAndYearResult,
   GetTreatiseLibraryDetailResult,
   ListComplexTreatiseLibraryResult,
+  ListTreatiseLibraryResult,
   RecommendTreatiseLibrariesResult,
   SaveTreatiseLibraryResult,
 } from './treatiseLibrary/treatiseLibrary.types';
@@ -75,7 +77,8 @@ import {
   GetTreatiseLibraryCountBySortAndYearResult,
   GetTreatiseLibraryDetailResult,
   RecommendTreatiseLibrariesResult,
-  SaveTreatiseLibraryResult
+  SaveTreatiseLibraryResult,
+  ListTreatiseLibraryResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -296,5 +299,15 @@ export class TreatisesController {
   saveTreatiseLibrary(@Body() params: SaveTreatiseLibraryDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatiseLibraryService.saveTreatiseLibrary(params, user);
+  }
+
+  @Get('/listTreatiseLibrary')
+  @HttpCode(200)
+  @ApiOperation({ summary: '精选文库列表' })
+  @ApiResult(ListTreatiseLibraryResult)
+  @ApiBearerAuth()
+  listTreatiseLibrary(@Query() params: ListTreatiseLibraryDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatiseLibraryService.listTreatiseLibrary(params, user);
   }
 }

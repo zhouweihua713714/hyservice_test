@@ -180,7 +180,7 @@ export class TreatiseLibraryService {
       },
     });
     if (count === 0) {
-      return ResultData.ok({ data: { treatiseLibrary: [], count: count } });
+      return ResultData.ok({ data: { treatiseLibraries: [], count: count } });
     }
     // get columns
     const columns = await columnsRepository.find({
@@ -205,7 +205,7 @@ export class TreatiseLibraryService {
         })?.name,
       };
     });
-    return ResultData.ok({ data: { treatiseLibrary: result, count: count } });
+    return ResultData.ok({ data: { treatiseLibraries: result, count: count } });
   }
   /**
    * @description 操作精选文库
