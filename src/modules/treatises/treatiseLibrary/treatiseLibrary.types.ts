@@ -63,7 +63,7 @@ export class ListTreatiseLibraryInfo extends PickType(TreatiseLibrary, [
 
 export class ListTreatiseLibraryResult {
   @ApiProperty({ description: '精选文库数组', type: ListTreatiseLibraryInfo, isArray: true })
-  treatises: ListTreatiseLibraryInfo[];
+  treatiseLibraries: ListTreatiseLibraryInfo[];
 
   @ApiProperty({ description: '总数' })
   count: number;

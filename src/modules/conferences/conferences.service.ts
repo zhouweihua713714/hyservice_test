@@ -407,7 +407,7 @@ export class ConferencesService {
     }
     if (picker && picker === Picker_Enum.Month && endedAt) {
       endedAtDateString = dateFormat(endedAt, Picker_Enum.Month);
-      basicCondition += ` and to_char(conferences.endedAt,'${month}') <=:endedAt`;
+      basicCondition += ` and to_char(conferences.conductedAt,'${month}') <=:endedAt`;
     }
     if (keyword) {
       // get keywords
