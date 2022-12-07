@@ -41,6 +41,7 @@ import {
   GetTreatiseLibraryDetailDto,
   ListComplexTreatiseLibraryDto,
   ListTreatiseLibraryDto,
+  OperateTreatiseLibrariesDto,
   RecommendTreatiseLibrariesDto,
   SaveTreatiseLibraryDto,
 } from './treatiseLibrary/treatiseLibrary.dto';
@@ -49,6 +50,7 @@ import {
   GetTreatiseLibraryDetailResult,
   ListComplexTreatiseLibraryResult,
   ListTreatiseLibraryResult,
+  OperateTreatiseLibrariesResult,
   RecommendTreatiseLibrariesResult,
   SaveTreatiseLibraryResult,
 } from './treatiseLibrary/treatiseLibrary.types';
@@ -78,7 +80,8 @@ import {
   GetTreatiseLibraryDetailResult,
   RecommendTreatiseLibrariesResult,
   SaveTreatiseLibraryResult,
-  ListTreatiseLibraryResult
+  ListTreatiseLibraryResult,
+  OperateTreatiseLibrariesResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -309,5 +312,15 @@ export class TreatisesController {
   listTreatiseLibrary(@Query() params: ListTreatiseLibraryDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatiseLibraryService.listTreatiseLibrary(params, user);
+  }
+
+  @Post('/operateTreatiseLibraries')
+  @HttpCode(200)
+  @ApiOperation({ summary: '操作精选文库(发布、待发布)' })
+  @ApiResult(OperateTreatiseLibrariesResult)
+  @ApiBearerAuth()
+  operateTreatiseLibraries(@Body() params: OperateTreatiseLibrariesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatiseLibraryService.operateTreatiseLibraries(params, user);
   }
 }
