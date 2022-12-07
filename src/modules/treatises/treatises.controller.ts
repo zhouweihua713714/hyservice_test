@@ -43,6 +43,7 @@ import {
   ListTreatiseLibraryDto,
   OperateTreatiseLibrariesDto,
   RecommendTreatiseLibrariesDto,
+  RemoveTreatiseLibrariesDto,
   SaveTreatiseLibraryDto,
 } from './treatiseLibrary/treatiseLibrary.dto';
 import {
@@ -52,6 +53,7 @@ import {
   ListTreatiseLibraryResult,
   OperateTreatiseLibrariesResult,
   RecommendTreatiseLibrariesResult,
+  RemoveTreatiseLibrariesResult,
   SaveTreatiseLibraryResult,
 } from './treatiseLibrary/treatiseLibrary.types';
 
@@ -81,7 +83,8 @@ import {
   RecommendTreatiseLibrariesResult,
   SaveTreatiseLibraryResult,
   ListTreatiseLibraryResult,
-  OperateTreatiseLibrariesResult
+  OperateTreatiseLibrariesResult,
+  RemoveTreatiseLibrariesResult
 )
 @Controller('/treatises')
 export class TreatisesController {
@@ -322,5 +325,15 @@ export class TreatisesController {
   operateTreatiseLibraries(@Body() params: OperateTreatiseLibrariesDto, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.treatiseLibraryService.operateTreatiseLibraries(params, user);
+  }
+
+  @Post('/removeTreatiseLibraries')
+  @HttpCode(200)
+  @ApiOperation({ summary: '删除精选文库' })
+  @ApiResult(RemoveTreatiseLibrariesResult)
+  @ApiBearerAuth()
+  removeTreatiseLibraries(@Body() params: RemoveTreatiseLibrariesDto, @Req() req: any) {
+    const user = <SignInResInfo>req.user;
+    return this.treatiseLibraryService.removeTreatiseLibraries(params, user);
   }
 }
