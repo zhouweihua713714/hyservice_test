@@ -69,7 +69,7 @@ export class ListTreatiseLibraryResult {
   count: number;
 }
 
-export class OperateTreatiseLibraryResult {
+export class OperateTreatiseLibrariesResult {
   @ApiProperty({ description: '成功数量' })
   succeed: number;
 
@@ -77,7 +77,7 @@ export class OperateTreatiseLibraryResult {
   failed: number;
 }
 
-export class RemoveTreatiseLibraryResult extends PickType(OperateTreatiseLibraryResult, [
+export class RemoveTreatiseLibrariesResult extends PickType(OperateTreatiseLibrariesResult, [
   'succeed',
   'failed',
 ] as const) { }
