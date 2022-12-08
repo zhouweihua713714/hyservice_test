@@ -203,11 +203,7 @@ export class TermsService {
     });
     const result = terms.map((term) => {
       return {
-        id: term.id,
-        name: term.name,
-        clicks: term.clicks,
-        status: term.status,
-        updatedAt: term.updatedAt,
+        ...term,
         columnName: _.find(columns, function (o) {
           return o.id === term.columnId;
         })?.name,
@@ -363,13 +359,12 @@ export class TermsService {
         })
         .andWhere(
           new Brackets((qb) => {
-            qb.where('LOWER(terms.name) like any (ARRAY[:...keyword])', { keyword: keywords }).orWhere(
-              'LOWER(terms.keyword) like any (ARRAY[:...keyword])',
-              { keyword: keywords }
-            );
+            qb.where('LOWER(terms.name) like any (ARRAY[:...keyword])', {
+              keyword: keywords,
+            }).orWhere('LOWER(terms.keyword) like any (ARRAY[:...keyword])', { keyword: keywords });
           })
         )
-        .orderBy('terms.year', 'DESC','NULLS LAST')
+        .orderBy('terms.year', 'DESC', 'NULLS LAST')
         .addOrderBy('terms.publishedAt', 'DESC')
         .addOrderBy('terms.name', 'ASC')
         .skip((page - 1) * size)
@@ -396,7 +391,7 @@ export class TermsService {
           year: new Date(authorizedAt).getFullYear(),
           columnId: columnId,
         })
-        .orderBy('terms.year', 'DESC','NULLS LAST')
+        .orderBy('terms.year', 'DESC', 'NULLS LAST')
         .addOrderBy('terms.publishedAt', 'DESC')
         .addOrderBy('terms.name', 'ASC')
         .skip((page - 1) * size)
