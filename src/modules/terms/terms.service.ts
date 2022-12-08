@@ -894,7 +894,8 @@ export class TermsService {
     [moneyCount, types, terms] = await Promise.all([
       termsRepository
         .createQueryBuilder('terms')
-        .select('SUM(terms.money)', 'count')
+        .select('SUM(terms.money)', 'money')
+        .addSelect('COUNT(terms.id)', 'count')
         .addSelect('terms.year', 'year')
         .where(
           'terms.enabled = true and terms.deletedAt is null and terms.status =:status and terms.columnId =:columnId',
@@ -908,7 +909,8 @@ export class TermsService {
       termTypesRepository.find(),
       termsRepository
         .createQueryBuilder('terms')
-        .select('SUM(terms.money)', 'count')
+        .select('SUM(terms.money)', 'money')
+        .addSelect('COUNT(terms.id)', 'count')
         .addSelect('terms.year', 'year')
         .addSelect('terms.type', 'type')
         .where(
@@ -930,7 +932,12 @@ export class TermsService {
     });
     // get Number count
     terms = terms.map((data) => {
-      return { year: data.year, count: Number(data.count), type: data.type };
+      return {
+        year: data.year,
+        count: Number(data.count),
+        money: Number(data.money),
+        type: data.type,
+      };
     });
     moneyCount = moneyCount.map((data) => {
       return {
@@ -943,21 +950,24 @@ export class TermsService {
       moneyCount.map((data) => {
         return {
           year: data.year,
-          money: data.count,
+          money: data.money,
+          count: data.count,
           types: _.groupBy(terms, 'year')[data.year]
             ? _.filter(
                 _.orderBy(
-                  _.groupBy(terms, 'year')[data.year].map((data) => {
+                  _.groupBy(terms, 'year')[data.year].map((miniData) => {
                     return {
-                      id: data.type,
+                      id: miniData.type,
                       name: _.find(types, function (o) {
-                        return o.id === data.type;
+                        return o.id === miniData.type;
                       })
                         ? _.find(types, function (o) {
-                            return o.id === data.type;
+                            return o.id === miniData.type;
                           }).name
                         : null,
-                      money: data.count,
+                      money: miniData.money,
+                      count: miniData.count,
+                      percent: Number(((miniData.count / data.count) * 100).toFixed(1)),
                     };
                   }),
                   'id',
