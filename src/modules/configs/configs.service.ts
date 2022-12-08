@@ -21,6 +21,7 @@ import {
   topicTypesRepository,
   treatiseKeywordsRepository,
   treatiseLibraryKeywordsRepository,
+  treatiseLibraryTypesRepository,
   universitiesRepository,
 } from '../repository/repository';
 import {
@@ -373,4 +374,17 @@ export class ConfigsService {
     data = result;
     return ResultData.ok({ data: { keywords: data } });
   }
+   /**
+   * @description 获取精选文库分类数据
+   * @param {} params
+   * @returns {ResultData} 返回getTreatiseLibraryTypes信息
+   */
+    async getTreatiseLibraryTypes(): Promise<ResultData> {
+      const data = await treatiseLibraryTypesRepository.find({
+        order: {
+          name: 'ASC',
+        },
+      });
+      return ResultData.ok({ data: { treatiseLibraryTypes: data } });
+    }
 }

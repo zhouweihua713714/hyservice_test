@@ -11,6 +11,7 @@ import { PolicyTypes } from '@/entities/PolicyTypes.entity';
 import { Subjects } from '@/entities/Subjects.entity';
 import { TermTypes } from '@/entities/TermTypes.entity';
 import { TopicTypes } from '@/entities/TopicTypes.entity';
+import { TreatiseLibraryTypes } from '@/entities/TreatiseLibraryTypes.entity';
 import { Universities } from '@/entities/Universities.entity';
 import { Website } from '@/entities/Website.entity';
 import { ApiProperty, PickType } from '@nestjs/swagger';
@@ -140,4 +141,13 @@ export class GetHotKeywordsResult {
     isArray: true,
   })
   keywords: GetHotKeywordsInfo[];
+}
+
+export class GetTreatiseLibraryTypesResult {
+  @ApiProperty({
+    description: '热搜关键词TOP50',
+    type: TreatiseLibraryTypes,
+    isArray: true,
+  })
+  treatiseLibraryTypes:TreatiseLibraryTypes[];
 }

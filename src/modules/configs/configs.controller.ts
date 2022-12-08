@@ -27,6 +27,7 @@ import {
   GetSubjectsResult,
   GetTermTypesResult,
   GetTopicTypesResult,
+  GetTreatiseLibraryTypesResult,
   GetUniversitiesResult,
   SetColumnsTypeResult,
 } from './configs.types';
@@ -51,6 +52,7 @@ import {
   GetNSFDirectorateTypesResult,
   GetSearchResultByKeywordResult,
   GetHotKeywordsResult,
+  GetTreatiseLibraryTypesResult
 )
 @Controller('/configs')
 export class ConfigsController {
@@ -216,4 +218,14 @@ export class ConfigsController {
     return this.configService.getHotKeywords(params);
   }
 
+  @Get('/getTreatiseLibraryTypes')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '获取精选文库分类列表(不同栏目前端根据columnId自行过滤)',
+  })
+  @ApiResult(GetTreatiseLibraryTypesResult)
+  @AllowAnon()
+  getTreatiseLibraryTypes() {
+    return this.configService.getTreatiseLibraryTypes();
+  }
 }
