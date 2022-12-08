@@ -173,7 +173,7 @@ export class TypeCountInfo {
   @ApiProperty({ description: '项目类型id' })
   id: string;
 
-  @ApiProperty({ description: '项目名称' })
+  @ApiProperty({ description: '项目类型名称' })
   name: string;
 
   @ApiProperty({ description: '该类型下项目的总数' })
@@ -284,7 +284,12 @@ export class GetTermPercentBySubjectResult {
   subjectCounts: GetTermPercentBySubjectInfo[];
 }
 
-export class MoneyTypeInfo extends PickType(TypeCountInfo, ['id', 'name'] as const) {
+export class MoneyTypeInfo extends PickType(TypeCountInfo, [
+  'id',
+  'name',
+  'count',
+  'percent',
+] as const) {
   @ApiProperty({ description: '资助金额' })
   money: number;
 }
@@ -294,6 +299,9 @@ export class GetMoneyByYearInfo {
 
   @ApiProperty({ description: '资助金额' })
   money: number;
+
+  @ApiProperty({ description: '该年份下项目数量' })
+  count: number;
 
   @ApiProperty({
     description: '该年份下不同类型的项目资助金额(这边的排序已经按照需求id排序好)',
