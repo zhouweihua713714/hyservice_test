@@ -239,7 +239,8 @@ export class GetTermCountByYearInfo {
 
 export class GetTermCountByYearResult {
   @ApiProperty({
-    description: '项目类别时间分析(教育部人文社科项目基金有)',
+    description:
+      '项目类别时间分析(教育部人文社科项目基金有),这里0.2.0的图表types需要分组不含“教育”一组柱状图展示,含“教育”类型的一组折线图展示前端自行分组，总数就是分组后之和',
     type: GetTermCountByYearInfo,
     isArray: true,
   })
