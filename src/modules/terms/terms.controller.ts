@@ -160,7 +160,8 @@ export class TermsController {
   @Get('/getTermCountByYear')
   @HttpCode(200)
   @ApiOperation({
-    summary: '项目类型时间分析(这里目前仅有教育人文社科项目有~但api均做方便以后拓展)',
+    summary:
+      '项目类型时间分析(这里目前仅有教育人文社科项目有~v0.2.0兼容且全国教育科学规划项目也有)',
   })
   @ApiResult(GetTermCountByYearResult)
   @AllowAnon()
