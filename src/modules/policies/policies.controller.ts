@@ -7,6 +7,7 @@ import { SignInResInfo } from '../auth/auth.types';
 import {
   GetAnalysisPolicyDetailDto,
   ListAnalysisPolicyDto,
+  ListAssemblyPoliciesDto,
   ListComplexAnalysisPolicyDto,
   OperateAnalysisPoliciesDto,
   RecommendAnalysisPoliciesDto,
@@ -17,6 +18,7 @@ import { AnalysisPoliciesService } from './analysisPolicies/analysisPolicies.ser
 import {
   GetAnalysisPolicyDetailResult,
   ListAnalysisPolicyResult,
+  ListAssemblyPoliciesResult,
   ListComplexAnalysisPolicyResult,
   OperateAnalysisPoliciesResult,
   RecommendAnalysisPoliciesResult,
@@ -61,7 +63,8 @@ import {
   RecommendPoliciesResult,
   ListComplexAnalysisPolicyResult,
   GetPolicyCountByRegionResult,
-  RecommendAnalysisPoliciesResult
+  RecommendAnalysisPoliciesResult,
+  ListAssemblyPoliciesResult
 )
 @Controller('/policies')
 export class PoliciesController {
@@ -222,5 +225,16 @@ export class PoliciesController {
   getPolicyCountByRegion(@Query() params:any, @Req() req: any) {
     const user = <SignInResInfo>req.user;
     return this.policiesService.getPolicyCountByRegion(params, user);
+  }
+
+  @Post('/listAssemblyPolicies')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: '政策汇编',
+  })
+  @ApiResult(ListAssemblyPoliciesResult)
+  @AllowAnon()
+  listAssemblyPolicies(@Body() params: ListAssemblyPoliciesDto) {
+    return this.policiesService.listAssemblyPolicies(params);
   }
 }

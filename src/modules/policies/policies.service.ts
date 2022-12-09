@@ -3,6 +3,7 @@ import { ResultData } from '@/common/utils/result';
 import { SignInResInfo } from '../auth/auth.types';
 import { ErrorCode } from '@/common/utils/errorCode';
 import {
+  assemblyPoliciesRepository,
   columnsRepository,
   policiesRepository,
   policyTypesRepository,
@@ -31,6 +32,7 @@ import { constant } from '@/common/utils/constant';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { dateFormat } from '@/common/utils/dateFormat';
+import { ListResearchReportsDto } from '../reports/reports.dto';
 
 @Injectable()
 export class PoliciesService {
@@ -609,5 +611,39 @@ export class PoliciesService {
     return ResultData.ok({
       data: { regions: regions },
     });
+  }
+
+  /**
+   * @description 
+   * @param {ListAssemblyPoliciesDto} params
+   * @returns {ResultData} 返回listAssemblyPolicies信息
+   */
+  async listAssemblyPolicies(
+    params: ListResearchReportsDto,
+  ): Promise<ResultData> {
+    const { page, size } = params;
+    // get assemblyPolicies
+    const [assemblyPolicies, count] = await assemblyPoliciesRepository.findAndCount({
+      where: {
+        enabled: true,
+        deletedAt: IsNull(),
+        status: Content_Status_Enum.ACTIVE,
+      },
+      select: [
+        'id',
+        'title',
+        'downloads',
+        'page',
+        'publishedAt',
+        'coverUrl',
+        'url'
+      ],
+      skip: (page - 1) * size,
+      take: size,
+      order: {
+        publishedAt: 'DESC',
+      },
+    });
+    return ResultData.ok({ data: { assemblyPolicies, count: count } });
   }
 }
