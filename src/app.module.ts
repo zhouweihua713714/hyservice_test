@@ -63,6 +63,7 @@ import { TreatiseLibrary } from './entities/TreatiseLibrary.entity';
 import { TreatiseLibraryTypes } from './entities/TreatiseLibraryTypes.entity';
 import { ResearchReports } from './entities/ResearchReports.entity';
 import { ReportsModule } from './modules/reports/reports.module';
+import { AssemblyPolicies } from './entities/AssemblyPolicies.entity';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -133,7 +134,8 @@ import { ReportsModule } from './modules/reports/reports.module';
       TermKeywords,
       TreatiseLibrary,
       TreatiseLibraryTypes,
-      ResearchReports
+      ResearchReports,
+      AssemblyPolicies
     ]),
     HomeModule,
     AuthModule,

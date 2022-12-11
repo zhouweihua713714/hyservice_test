@@ -114,3 +114,7 @@ export class RecommendAnalysisPoliciesDto {
   @IsString({ message: '政策id 类型错误, 正确类型 string' })
   id: string;
 }
+export class ListAssemblyPoliciesDto extends PickType(ReqListQuery, [
+  'page',
+  'size',
+] as const) {}

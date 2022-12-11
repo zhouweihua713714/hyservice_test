@@ -48,6 +48,7 @@ import { TermKeywords } from '@/entities/TermKeywords.entity';
 import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
 import { TreatiseLibraryTypes } from '@/entities/TreatiseLibraryTypes.entity';
 import { ResearchReports } from '@/entities/ResearchReports.entity';
+import { AssemblyPolicies } from '@/entities/AssemblyPolicies.entity';
 export class DBTester<T = undefined> {
   app: INestApplication;
   module: TestingModule;
@@ -91,6 +92,7 @@ export class DBTester<T = undefined> {
   treatiseLibraryRepository: Repository<TreatiseLibrary>;
   treatiseLibraryTypesRepository:Repository<TreatiseLibraryTypes>;
   researchReportsRepository: Repository<ResearchReports>;
+  assemblyPoliciesRepository: Repository<AssemblyPolicies>;
   config: ConfigService;
   server: any;
 
@@ -210,6 +212,9 @@ export class DBTester<T = undefined> {
       );
       this.researchReportsRepository = this.module.get<Repository<ResearchReports>>(
         getRepositoryToken(ResearchReports)
+      );
+      this.assemblyPoliciesRepository = this.module.get<Repository<AssemblyPolicies>>(
+        getRepositoryToken(AssemblyPolicies)
       );
       this.usersDao = this.module.get<UsersDao>(UsersDao);
     });

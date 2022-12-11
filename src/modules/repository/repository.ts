@@ -36,6 +36,7 @@ import { TreatiseLibrary } from '@/entities/TreatiseLibrary.entity';
 import { ResearchReports } from '@/entities/ResearchReports.entity';
 import { TreatiseLibraryTypes } from '@/entities/TreatiseLibraryTypes.entity';
 import { TreatiseLibraryKeywords } from '@/entities/TreatiseLibraryKeywords.entity';
+import { AssemblyPolicies } from '@/entities/AssemblyPolicies.entity';
 DataSource.initialize()
   .then(() => {
     // console.log('Data Source has been initialized!');
@@ -80,6 +81,8 @@ export const treatiseLibraryRepository = DataSource.getRepository(TreatiseLibrar
 export const researchReportsRepository = DataSource.getRepository(ResearchReports);
 export const treatiseLibraryTypesRepository = DataSource.getRepository(TreatiseLibraryTypes);
 export const treatiseLibraryKeywordsRepository = DataSource.getRepository(TreatiseLibraryKeywords);
+export const assemblyPoliciesRepository = DataSource.getRepository(AssemblyPolicies);
+
 
 
 

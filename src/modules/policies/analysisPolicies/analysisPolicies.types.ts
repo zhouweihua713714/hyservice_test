@@ -1,4 +1,5 @@
 import { AnalysisPolicies } from '@/entities/AnalysisPolicies.entity';
+import { AssemblyPolicies } from '@/entities/AssemblyPolicies.entity';
 import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 
 export class SaveAnalysisPolicyResult {
@@ -89,4 +90,27 @@ export class RecommendAnalysisPoliciesResult {
     isArray: true,
   })
   analysisPolicies: RecommendAnalysisPoliciesInfo[];
+}
+
+export class AssemblyPoliciesInfo extends PickType(AssemblyPolicies, [
+  'id',
+  'title',
+  'downloads',
+  'page',
+  'publishedAt',
+] as const) {
+  @ApiProperty({ description: '下载链接' })
+  url: string;
+
+  @ApiProperty({ description: '封面链接' })
+  coverUrl: string;
+}
+
+export class ListAssemblyPoliciesResult {
+  @ApiProperty({
+    description: '汇编列表',
+    type: AssemblyPoliciesInfo,
+    isArray: true,
+  })
+  assemblyPolicies: AssemblyPoliciesInfo[];
 }
