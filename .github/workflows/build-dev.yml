@@ -25,6 +25,7 @@ jobs:
           npm install -g yarn
           yarn
           cp ~/hy-service.env .env
+          sleep 1
           #yarn test
 
       - name: Migration
