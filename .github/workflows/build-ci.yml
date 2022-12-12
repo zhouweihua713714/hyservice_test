@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux]
 
     strategy:
       matrix:
@@ -30,38 +30,9 @@ jobs:
         run: |
           npm install -g yarn
           yarn
-          export SMS_ACCESS_KEY_ID=${{secrets.SMS_ACCESS_KEY_ID}}
-          export SMS_SECRET_ACCESS_KEY=${{secrets.SMS_SECRET_ACCESS_KEY}}
-          export SMS_TEMPLATE_CODE_VERIFICATION=${{secrets.SMS_TEMPLATE_CODE_VERIFICATION}}
-          export SMS_TEMPLATE_CODE_RETRIEVAL=${{secrets.SMS_TEMPLATE_CODE_RETRIEVAL}}
-          export SMS_TEMPLATE_CODE_RESET_NODE_KEY=${{secrets.SMS_TEMPLATE_CODE_RESET_NODE_KEY}}
-          export OSS_KEY_ID=${{secrets.OSS_KEY_ID}}
-          export OSS_KEY_SECRET=${{secrets.OSS_KEY_SECRET}}
-          export OSS_REGION=${{secrets.OSS_REGION}}
-          export OSS_BUCKET=${{secrets.OSS_BUCKET}} 
-          yarn test
 
       - name: Migration
         run: |
           yarn m:check || yarn m:run
           yarn m:check
 
-      - name: Slack Failure Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: ${{ failure() }}
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: 'HY dev 环境 CI 运行失败'
-          SLACK_TITLE: HY 慧研
-          SLACK_USERNAME: BOT
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-
-      - name: Slack Failure Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: ${{ success() }}
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: 'HY dev 环境 CI 运行成功'
-          SLACK_TITLE: HY 慧研
-          SLACK_USERNAME: BOT
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

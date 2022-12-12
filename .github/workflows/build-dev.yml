@@ -43,22 +43,4 @@ jobs:
           docker run -d --add-host=host.docker.internal:host-gateway -p 3000:3000 --name hy-service-dev hy-service:${{ github.sha }}
           docker image prune -a -f 
 
-      - name: Slack Failure Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: ${{ failure() }}
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: 'HY dev service 环境更新 运行失败'
-          SLACK_TITLE: HY 慧研
-          SLACK_USERNAME: BOT
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-      - name: Slack Failure Notification
-        uses: rtCamp/action-slack-notify@v2
-        if: ${{ success() }}
-        env:
-          SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: 'HY dev service 环境更新 运行成功, http://demobox-hy.xyfolder.com/api/docs'
-          SLACK_TITLE: HY 慧研
-          SLACK_USERNAME: BOT
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
