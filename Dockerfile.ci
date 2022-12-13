@@ -16,8 +16,7 @@ RUN yarn
 
 COPY . ./
 
-SHELL [ "/bin/bash", "-c"]
-RUN yarn test
+RUN /bin/bash/ -c yarn test
 
 RUN yarn m:check || yarn m:run
 RUN yarn m:check
