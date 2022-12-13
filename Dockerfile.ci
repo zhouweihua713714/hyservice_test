@@ -12,11 +12,13 @@ RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
 WORKDIR /app/
 COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
+
+SHELL [ "/bin/bash", "-c"]
 RUN yarn
 
 COPY . ./
 
-RUN /bin/bash/ -c yarn test
+RUN yarn test
 
 RUN yarn m:check || yarn m:run
 RUN yarn m:check
