@@ -1,7 +1,7 @@
-name: build-ci
+name: build-dev
 
 on:
-  pull_request:
+  push:
     branches: [master]
 
 jobs:
@@ -20,19 +20,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: docker compose
+      - name: Build & Run
         run: |
-          cp .env.ci .env
-          docker-compose up -d
-          sleep 10
+          rm .env || true
+          cp ~/hy-service.container.env .env
+          docker build -t hy-service:${{ github.sha }} -f Dockerfile.ci .
+          docker image prune -a -f 
 
-      - name: Test
-        run: |
-          npm install -g yarn
-          yarn
-
-      - name: Migration
-        run: |
-          yarn m:check || yarn m:run
-          yarn m:check
 
