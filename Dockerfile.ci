@@ -16,7 +16,7 @@ RUN yarn
 
 COPY . ./
 SHELL [ "/bin/bash", "-c"]
-RUN source ./node_modules/.bin && yarn test
+RUN source ./node_modules/.bin/ && yarn test
 
 RUN yarn m:check || yarn m:run
 RUN yarn m:check
