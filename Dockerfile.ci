@@ -15,8 +15,7 @@ COPY yarn.lock ./yarn.lock
 RUN yarn
 
 COPY . ./
-ENV jest=./node_modules/.bin/jest
-RUN yarn test
+RUN source ./node_modules/.bin && yarn test
 
 RUN yarn m:check || yarn m:run
 RUN yarn m:check
