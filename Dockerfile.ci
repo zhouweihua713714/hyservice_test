@@ -13,11 +13,12 @@ WORKDIR /app/
 COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
 
-SHELL [ "/bin/bash", "-c"]
+
 RUN yarn
 
 COPY . ./
 
+SHELL [ "/bin/bash", "-c"]
 RUN yarn test
 
 RUN yarn m:check || yarn m:run
