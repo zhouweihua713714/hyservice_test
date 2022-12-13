@@ -16,6 +16,8 @@ RUN yarn
 
 COPY . ./
 
+RUN apk add --no-cache bash
+SHELL [ "/bin/bash", "-c"]
 RUN yarn test
 
 RUN yarn m:check || yarn m:run
