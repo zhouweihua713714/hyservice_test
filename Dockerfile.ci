@@ -15,7 +15,7 @@ COPY yarn.lock ./yarn.lock
 RUN yarn
 
 COPY . ./
-
+RUN yarn
 RUN yarn test
 
 RUN yarn m:check || yarn m:run
