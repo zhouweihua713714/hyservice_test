@@ -25,7 +25,7 @@ jobs:
         run: |
           rm .env || true
           cp ~/hy-service.container.env .env
-          docker build -t hy-service:${{ github.sha }} -f Dockerfile.ci .
+          docker build --no-cache -t hy-service:${{ github.sha }} -f Dockerfile.ci .
           docker image prune -a -f 
 
 
