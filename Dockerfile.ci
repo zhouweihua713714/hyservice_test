@@ -16,6 +16,8 @@ RUN yarn
 
 COPY . ./
 
+ENV PATH=/app/node_modules/.bin:$PATH
+
 RUN yarn test
 
 RUN yarn m:check || yarn m:run
