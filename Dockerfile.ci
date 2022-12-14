@@ -1,24 +1,13 @@
 FROM registry.cn-shanghai.aliyuncs.com/mathits/hy:base-server-image as build
 
-ENV TZ=Asia/Shanghai \
-    DEBIAN_FRONTEND=noninteractive \
-    NODE_ENV=production
-
-RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && echo ${TZ} > /etc/timezone \
-    && dpkg-reconfigure --frontend noninteractive tzdata \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app/
 COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
-
-
+RUN yarn
 COPY . ./
 
-ENV PATH=/app/node_modules/.bin:$PATH
 SHELL [ "/bin/bash", "-c"]
-RUN yarn && yarn test
+RUN yarn test
 
 RUN yarn m:check || yarn m:run
 RUN yarn m:check
