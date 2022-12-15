@@ -8,24 +8,21 @@ jobs:
   build:
     runs-on: [self-hosted, Linux]
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: yarn
-
-      - name: Build & Run
+      - name: Build
         run: |
           rm .env || true
-          cp ~/hy-service.container.env .env
+          cp ~/hy-service.container.test.env .env
           docker build -t hy-service:${{ github.sha }} -f Dockerfile.ci .
-          docker image prune -a -f 
+
+      - name: Run
+        run: |
+          docker run --rm --add-host=host.docker.internal:host-gateway --name hy-service-ci hy-service:${{ github.sha }}
+
+      - name: Clean up
+        run: |
+          docker rm -f hy-service-ci || true
 
 
