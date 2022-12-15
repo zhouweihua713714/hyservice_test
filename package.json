@@ -124,7 +124,7 @@
   },
   "jest": {
     "testTimeout": 10000,
-    "maxWorkers": 2,
+    "maxWorkers": 1,
     "moduleFileExtensions": [
       "js",
       "json",
